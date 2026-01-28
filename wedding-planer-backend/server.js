@@ -54,4 +54,13 @@ try {
   console.error(error.stack);
 }
 
+try {
+  const apiRotues = require("./routes/plano");
+  app.use('/api/plano', apiRotues);
+  console.log("✅ Rutas de plano cargadas correctamente");
+} catch (error) {
+  console.error("❌ ERROR al cargar routes/plano.js:", error.message);
+  console.error(error.stack);
+}
+
 app.listen(3000, () => console.log("🚀 Server running on http://localhost:3000"));

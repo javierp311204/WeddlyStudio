@@ -1,0 +1,140 @@
+.plano-wrapper {
+  background: #fdfaf7;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.btn-back {
+  background: white;
+  border: 1px solid #eee;
+  padding: 10px 20px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background: #333;
+  color: white;
+  transform: translateX(-5px);
+}
+
+.nav-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-action {
+  background: #d4af37;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+  background: #b8860b;
+  transform: translateY(-2px);
+}
+
+.plano-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.plano-header h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.plano-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  /* REMOVIDO: max-width: fit-content; */
+}
+
+canvas {
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  /* NO AGREGUES width/height aquí */
+}
+
+.panel-lateral {
+  position: fixed;
+  right: 20px;
+  top: 150px;
+  width: 300px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.panel-lateral h3 {
+  color: #d4af37;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.lista-invitados {
+  margin-top: 20px;
+}
+
+.lista-invitados h4 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.lista-invitados ul {
+  list-style: none;
+  padding: 0;
+}
+
+.lista-invitados li {
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge {
+  background: #f0f0f0;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.vacio {
+  color: #999;
+  font-style: italic;
+}

@@ -8,6 +8,7 @@ import { authGuard, adminGuard } from './guards/auth.guard';
 import { RegisterComponent } from './components/register/register.component';
 import { InfoBodaComponent } from './components/info-boda/info-boda.component';
 import { ListaInvitadosComponent } from './components/lista-invitados/lista-invitados.component';
+import { PlanoInteractivoComponent } from './components/plano-interactivo/plano-interactivo.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -21,6 +22,8 @@ export const routes: Routes = [
   { path: 'mesas', component: MesaManagerComponent, canActivate: [adminGuard] },
   { path: 'diseno', component: DisenoPapeleriaComponent, canActivate: [adminGuard] },
   { path: 'invitados', component: ListaInvitadosComponent, canActivate: [adminGuard] },
+  { path: 'plano', component: PlanoInteractivoComponent, canActivate: [adminGuard] },
+  
   
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

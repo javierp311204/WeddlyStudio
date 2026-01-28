@@ -1,0 +1,44 @@
+<div class="plano-wrapper">
+  <nav class="top-nav">
+    <button class="btn-back" (click)="irAlMenu()">
+      <span class="icon">🏠</span> Volver al Panel
+    </button>
+    
+    <div class="nav-actions">
+      <button class="btn-action" (click)="toggleModoEdicion()">
+        {{ modoEdicion ? '🔒 Bloquear' : '✏️ Editar' }}
+      </button>
+      <button class="btn-action" (click)="agregarMesa()">
+        ➕ Añadir Mesa
+      </button>
+    </div>
+  </nav>
+
+  <header class="plano-header">
+    <h1>🗺️ Plano Interactivo del Salón</h1>
+    <p>Arrastra las mesas para organizarlas. Click en invitados para ver detalles.</p>
+  </header>
+
+  <div class="canvas-container" style="width: 100%; height: 80vh; overflow: auto; border: 1px solid #ccc;">
+    <canvas #canvasElement id="canvas-plano"></canvas>
+  </div>
+
+  <aside class="panel-lateral" *ngIf="mesaSeleccionada">
+    <h3>{{ mesaSeleccionada.nombre }}</h3>
+    <p>Capacidad: {{ mesaSeleccionada.capacidad }}</p>
+    <p>Ocupación: {{ mesaSeleccionada.asientos.length }} / {{ mesaSeleccionada.capacidad }}</p>
+    
+    <div class="lista-invitados">
+      <h4>Invitados en esta mesa:</h4>
+      <ul>
+        <li *ngFor="let asiento of mesaSeleccionada.asientos">
+          <span *ngIf="asiento.invitado">
+            {{ asiento.invitado.nombre }}
+            <span class="badge">{{ asiento.invitado.tipo }}</span>
+          </span>
+          <span *ngIf="!asiento.invitado" class="vacio">Asiento vacío</span>
+        </li>
+      </ul>
+    </div>
+  </aside>
+</div>
