@@ -1,0 +1,57 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <button class="btn-back" routerLink="/home">
+      <span class="icon">←</span> Regresar
+    </button>
+    <h2>Crear Cuenta</h2>
+    <p>Únete a la mejor comunidad de organización de bodas</p>
+
+    <div class="input-group">
+      <label>Soy...</label>
+      <select [(ngModel)]="rol" name="rol">
+        <option value="admin">🤵 Novio/a (Crear Boda)</option>
+        <option value="invitado">🥂 Invitado (Unirse)</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>¿Cómo quieres que te llamemos? (Nick)</label>
+      <input
+        type="text"
+        [(ngModel)]="nick"
+        placeholder="Ej: El Rey de la Pista"
+      />
+    </div>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input
+        type="email"
+        [(ngModel)]="email"
+        placeholder="Tu correo electrónico"
+      />
+    </div>
+
+    <div class="input-group">
+      <label>Contraseña</label>
+      <input
+        type="password"
+        [(ngModel)]="pass"
+        placeholder="Mínimo 6 caracteres"
+      />
+    </div>
+
+    <div class="input-group">
+      <label>{{
+        rol === "admin" ? "Código de tu boda" : "Código de la invitación"
+      }}</label>
+      <input type="text" [(ngModel)]="codigoBoda" placeholder="Ej: BODA2025" />
+    </div>
+
+    <button class="btn-auth" (click)="registrar()">Crear Cuenta</button>
+
+    <div class="auth-footer">
+      ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+    </div>
+  </div>
+</div>

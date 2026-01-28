@@ -1,0 +1,53 @@
+<router-outlet></router-outlet>
+
+<div *ngIf="notifService.toastState$ | async as toast">
+  <div
+    class="toast-notification"
+    [class.show]="toast.show"
+    [class.error]="toast.type === 'error'"
+  >
+    <div class="toast-content">
+      <span class="toast-icon">
+        {{ toast.type === "success" ? "✅" : "❌" }}
+      </span>
+      <div class="toast-message">
+        <p class="toast-title">{{ toast.title }}</p>
+        <p class="toast-sub">{{ toast.message }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal-overlay"
+  *ngIf="notifService.confirmState$ | async as conf"
+  [class.active]="conf.show"
+>
+  <div class="modal-card">
+    <div class="modal-icon">⚠️</div>
+    <h3>{{ conf.title }}</h3>
+    <p>{{ conf.message }}</p>
+
+    <div class="dont-ask-container">
+      <input type="checkbox" #dontAskCheck id="dontAskCheck" />
+      <label for="dontAskCheck">No volver a preguntar</label>
+    </div>
+
+    <div class="confirm-actions">
+      <button
+        class="btn-confirm-no"
+        (click)="notifService.respondConfirmation(false, conf.key, false)"
+      >
+        Cancelar
+      </button>
+      <button
+        class="btn-confirm-si"
+        (click)="
+          notifService.respondConfirmation(true, conf.key, dontAskCheck.checked)
+        "
+      >
+        Sí, continuar
+      </button>
+    </div>
+  </div>
+</div>

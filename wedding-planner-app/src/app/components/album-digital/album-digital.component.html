@@ -1,0 +1,39 @@
+<div class="album-container">
+  <button class="btn-back" (click)="irAlHome()">
+    <span>←</span> Volver al Panel
+  </button>
+
+  <header class="album-header">
+    <span class="sub-fancy">Recuerdos compartidos</span>
+    <h1>Álbum Digital</h1>
+    <div class="boda-badge">
+      <span class="dot"></span>
+      Código: {{ codigoBoda }}
+    </div>
+
+    <br>
+
+    <label class="btn-upload-custom">
+      <span class="icon">📸</span> Subir nueva foto
+      <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden>
+    </label>
+    <p class="upload-hint">Formatos aceptados: JPG, PNG. Máx 5MB.</p>
+  </header>
+
+  <div class="photo-grid">
+    <div class="empty-state" *ngIf="fotos && fotos.length === 0">
+      <div class="empty-icon">📷</div>
+      <p>Aún no hay fotos en este álbum. ¡Sé el primero en subir una!</p>
+    </div>
+
+    <div class="card-inner" *ngFor="let foto of fotos">
+      <img [src]="foto.url" alt="Foto de la boda">
+      <div class="photo-info">
+        <div class="info-content">
+          <span class="user-name">&#64;{{ foto.usuario }}</span>
+          <span class="photo-date">{{ foto.fecha | date:'shortDate' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

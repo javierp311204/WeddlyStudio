@@ -1,0 +1,117 @@
+<div class="gestion-container">
+  <button class="btn-back" (click)="irAlHome()">
+    <span>←</span> Volver al Panel
+  </button>
+
+  <header class="gestion-header">
+    <span class="sub-fancy">Asistencia y Organización</span>
+    <h1>Lista de Invitados</h1>
+    <div class="boda-badge">
+      <span class="dot"></span>
+      Boda: {{ codigoBoda }}
+    </div>
+  </header>
+
+  <section class="add-section">
+    <div class="form-card">
+      <h3>Añadir Invitado</h3>
+      <div class="form-grid">
+        <input
+          type="text"
+          [(ngModel)]="nuevoInvitado.nombre"
+          placeholder="Nombre completo"
+        />
+        <input
+          type="email"
+          [(ngModel)]="nuevoInvitado.email"
+          placeholder="Correo electrónico"
+        />
+        <select [(ngModel)]="nuevoInvitado.tipo">
+          <option value="Familia">Familia</option>
+          <option value="Amigos">Amigos</option>
+          <option value="Trabajo">Trabajo</option>
+        </select>
+        <button class="btn-save" (click)="agregarInvitado()">
+          Guardar Invitado
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="controls-section">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        [(ngModel)]="terminoBusqueda"
+        (input)="filtrar()"
+        placeholder="Buscar por nombre o email..."
+      />
+    </div>
+
+    <!-- ✨ NUEVO FILTRO BONITO -->
+    <div class="filter-chips-container">
+      <button
+        class="filter-chip"
+        [class.active]="filtroTipo === 'Todos'"
+        (click)="cambiarFiltro('Todos')"
+      >
+        <span class="chip-icon">📋</span>
+        <span>Todos</span>
+      </button>
+      <button
+        class="filter-chip"
+        [class.active]="filtroTipo === 'Familia'"
+        (click)="cambiarFiltro('Familia')"
+      >
+        <span class="chip-icon">👨‍👩‍👧</span>
+        <span>Familia</span>
+      </button>
+      <button
+        class="filter-chip"
+        [class.active]="filtroTipo === 'Amigos'"
+        (click)="cambiarFiltro('Amigos')"
+      >
+        <span class="chip-icon">🎉</span>
+        <span>Amigos</span>
+      </button>
+      <button
+        class="filter-chip"
+        [class.active]="filtroTipo === 'Trabajo'"
+        (click)="cambiarFiltro('Trabajo')"
+      >
+        <span class="chip-icon">💼</span>
+        <span>Trabajo</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="invitados-grid">
+    <div class="invitado-card" *ngFor="let inv of invitadosFiltrados">
+      <div class="card-header">
+        <span class="tipo-tag" [ngClass]="inv.tipo.toLowerCase()">{{
+          inv.tipo
+        }}</span>
+        <button class="btn-delete" (click)="eliminarInvitado(inv._id)">
+          ×
+        </button>
+      </div>
+
+      <div class="card-body">
+        <div class="avatar">{{ inv.nombre.charAt(0) }}</div>
+        <h3>{{ inv.nombre }}</h3>
+        <p class="email">{{ inv.email || "Sin correo" }}</p>
+
+        <div class="info-badges">
+          <span class="badge-item">🍽️ {{ inv.menu }}</span>
+          <span class="badge-item">🪑 Mesa: {{ inv.mesa || "Pendiente" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="invitadosFiltrados.length === 0">
+      <div class="empty-icon">👥</div>
+      <p>No se encontraron invitados.</p>
+    </div>
+  </div>
+</div>

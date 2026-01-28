@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
+
+/* Layout */
+.editor-layout {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  background-color: #f8f5f2;
+  min-height: 100vh;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Botón Volver */
+.btn-back {
+  background: none;
+  border: none;
+  color: #8b7e74;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Panel de Controles */
+.controls-panel {
+  width: 350px;
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  height: fit-content;
+}
+
+.control-group { margin-bottom: 15px; }
+.control-group label { 
+  display: block; 
+  font-size: 0.7rem; 
+  font-weight: 600; 
+  color: #8b7e74; 
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+input[type="text"], input[type="date"], textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+/* Área de Invitación */
+.preview-canvas {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.invitacion-card {
+  width: 420px;
+  min-height: 580px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.4s ease;
+}
+
+.clasica { font-family: 'Playfair Display', serif; border: 2px solid currentColor; }
+.clasica h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; }
+
+.moderna { font-family: 'Plus Jakarta Sans', sans-serif; border-left: 15px solid currentColor; text-transform: uppercase; }
+.moderna h1 { font-weight: 800; font-size: 2.2rem; }
+
+.extra-msg { font-style: italic; margin-top: 20px; opacity: 0.8; }
+
+/* Modal Profesional */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 350px;
+  text-align: center;
+}
+
+.modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+.modal-actions button { flex: 1; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+
+.btn-outline { border: 1px solid #ddd; background: white; }
+.btn-danger { background: #bc6c25; color: white; border: none; }
+
+.btn-save {
+  width: 100%;
+  padding: 15px;
+  background: #606c38;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}

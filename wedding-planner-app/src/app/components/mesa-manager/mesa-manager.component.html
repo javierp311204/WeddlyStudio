@@ -1,0 +1,156 @@
+<div class="seating-wrapper">
+  
+  <nav class="top-nav">
+    <button class="btn-panel-back" (click)="irAlMenu()">
+      <span class="icon">🏠</span> Volver al Panel
+    </button>
+  </nav>
+
+  <header class="seating-header">
+    <div class="header-decoration"><span>✨</span></div>
+    <h1>Distribución del Salón</h1>
+    <p>Organiza los espacios y asigna a tus invitados en su lugar ideal.</p>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon-circle">👥</div>
+      <div class="stat-text">
+        <span class="stat-value">{{ totalInvitados }}</span>
+        <span class="stat-label">Invitados sentados</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-circle">⏳</div>
+      <div class="stat-text">
+        <span class="stat-value">{{ invitadosDisponibles.length - totalInvitados }}</span>
+        <span class="stat-label">Invitados sin sentar</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-circle">🍽️</div>
+      <div class="stat-text">
+        <span class="stat-value">{{ totalMesas }}</span>
+        <span class="stat-label">Mesas totales</span>
+      </div>
+    </div>
+
+    <div class="stat-card special" [class.active]="tieneMesaPresidencial">
+      <div class="stat-icon-circle">💍</div>
+      <div class="stat-text">
+        <span class="stat-value">{{ tieneMesaPresidencial ? '1' : '0' }}</span>
+        <span class="stat-label">Mesa Presidencial</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seating-content">
+    
+    <aside class="controls-panel">
+      <div class="control-card">
+        <h3><span class="title-icon">📍</span> Nueva Mesa</h3>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="nuevaMesa.nombre" placeholder="Nombre (Ej: Mesa 1...)" />
+        </div>
+        
+        <div class="select-wrapper">
+          <label class="label-clean">Tipo de ambiente:</label>
+          <select [(ngModel)]="nuevaMesa.tipo" class="select-clean">
+            <option value="invitados">Mesa de Invitados 🥂</option>
+            <option value="novios">Mesa de Novios 🤵👰</option>
+          </select>
+        </div>
+
+        <button class="btn-gold" (click)="agregarMesa()">
+          + Añadir Mesa
+        </button>
+      </div>
+
+      <div class="control-card">
+        <h3><span class="title-icon">👤</span> Sentar Invitado</h3>
+        
+        <div class="search-container">
+          <label class="label-clean">Buscar invitado registrado:</label>
+          <input
+            type="text"
+            [(ngModel)]="busquedaInvitado"
+            (input)="filtrarInvitados()"
+            placeholder="Escribe el nombre..."
+            class="search-input"
+          />
+          
+          <ul class="search-results" *ngIf="invitadosFiltrados.length > 0">
+            <li *ngFor="let inv of invitadosFiltrados" (click)="seleccionarInvitado(inv)">
+              <span class="res-name">{{ inv.nombre }}</span>
+            </li>
+          </ul>
+
+          <div class="search-info error" *ngIf="busquedaInvitado && invitadosFiltrados.length === 0 && !invitadoSeleccionado">
+            <small>No hay invitados sin mesa.</small>
+          </div>
+        </div>
+        
+        <div class="select-wrapper" style="margin: 25px 0;">
+          <label class="label-clean">Asignar a la mesa:</label>
+          <select [(ngModel)]="mesaSeleccionada" class="select-clean">
+            <option value="" disabled selected>Selecciona una mesa...</option>
+            <option *ngFor="let m of mesas" [value]="m.nombre">
+              {{ m.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <button 
+          class="btn-dark" 
+          (click)="agregarInvitadoAMesa()"
+          [disabled]="!invitadoSeleccionado || !mesaSeleccionada">
+          Confirmar Asiento
+        </button>
+
+        <div class="selected-badge" *ngIf="invitadoSeleccionado">
+          <span class="check-icon">✅</span> 
+          <span>Invitado: <strong>{{ invitadoSeleccionado.nombre }}</strong></span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="floor-plan">
+      <div *ngIf="cargando" class="loader-container">
+        <div class="spinner"></div>
+        <p>Actualizando salón...</p>
+      </div>
+
+      <div class="table-grid" *ngIf="!cargando && mesas.length > 0">
+        <div class="wedding-table-card" *ngFor="let mesa of mesas">
+          <div class="table-top" [class.mesa-presidencial]="mesa.tipo === 'novios'">
+            <div class="table-title">
+              <small *ngIf="mesa.tipo === 'novios'">Presidencial</small>
+              <strong>{{ mesa.nombre }}</strong>
+            </div>
+            <button class="btn-remove-table" (click)="eliminarMesa(mesa._id)">×</button>
+          </div>
+
+          <div class="guest-container">
+            <ul class="guest-list">
+              <li *ngFor="let inv of mesa.listaInvitados">
+                <span class="guest-dot"></span>
+                <span class="guest-name">{{ inv.nombre }}</span>
+                <button class="mini-remove" (click)="eliminarInvitado(inv._id)">×</button>
+              </li>
+              <li class="empty-msg" *ngIf="!mesa.listaInvitados || mesa.listaInvitados.length === 0">
+                Mesa vacía
+              </li>
+            </ul>
+          </div>
+        </div> 
+      </div>
+
+      <div class="no-tables-msg" *ngIf="!cargando && mesas.length === 0">
+        <div class="empty-icon">🍽️</div>
+        <p>Aún no hay mesas en el salón.</p>
+      </div>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,130 @@
+<div class="info-wrapper">
+  <div class="info-container">
+    
+    <nav class="nav-actions">
+      <button class="btn-back-link" (click)="irAlMenu()">
+        <span class="icon">←</span> Volver al Panel
+      </button>
+
+      <button
+        *ngIf="authService.isAdmin()"
+        (click)="editMode = !editMode"
+        class="btn-admin-action"
+        [class.btn-cancel]="editMode"
+      >
+        {{ editMode ? "✖ Cancelar Edición" : "🛠️ Editar Información" }}
+      </button>
+    </nav>
+
+    <header class="info-header-premium">
+      <div class="header-decoration"><span></span> ✨ <span></span></div>
+      <h1>Detalles de la Boda</h1>
+      <p class="boda-id">
+        Código de acceso: <strong>{{ authService.getCodigoBoda() }}</strong>
+      </p>
+    </header>
+
+    <div class="info-grid">
+      
+      <section class="info-card-glass" [class.is-editing]="editMode">
+        <div class="card-accent-gold"></div>
+        <div class="card-content">
+          <div class="card-title-box">
+            <span class="card-emoji">📍</span>
+            <h3>Ubicación y Fecha</h3>
+          </div>
+
+          <div class="card-body">
+            <div *ngIf="!editMode" class="view-mode">
+              <p class="txt-main" [class.empty-txt]="!bodaInfo.lugarNombre">
+                {{ bodaInfo.lugarNombre || "Lugar por confirmar" }}
+              </p>
+              <p class="txt-sub" [class.empty-txt]="!bodaInfo.direccion">
+                {{ bodaInfo.direccion || "Dirección pendiente" }}
+              </p>
+              <div class="date-pill" *ngIf="bodaInfo.fechaHora">
+                📅 {{ bodaInfo.fechaHora | date : "EEEE, d MMMM y" }} a las
+                {{ bodaInfo.fechaHora | date : "HH:mm" }}h
+              </div>
+            </div>
+
+            <div *ngIf="editMode" class="edit-mode">
+              <div class="field-group">
+                <label>Nombre del Salón / Lugar</label>
+                <input type="text" [(ngModel)]="bodaInfo.lugarNombre" placeholder="Ej: Hacienda Los Olivos" />
+              </div>
+              <div class="field-group">
+                <label>Dirección</label>
+                <input type="text" [(ngModel)]="bodaInfo.direccion" placeholder="Ej: Calle Real, 45" />
+              </div>
+              <div class="field-group">
+                <label>Fecha y Hora</label>
+                <input type="datetime-local" [(ngModel)]="bodaInfo.fechaHora" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="info-card-glass" [class.is-editing]="editMode">
+        <div class="card-accent-green"></div>
+        <div class="card-content">
+          <div class="card-title-box">
+            <span class="card-emoji">👗</span>
+            <h3>Dress Code</h3>
+          </div>
+
+          <div class="card-body">
+            <div *ngIf="!editMode" class="view-mode">
+              <div class="tag-elegant" [class.empty-tag]="!bodaInfo.dressCode">
+                {{ bodaInfo.dressCode || "Estilo por definir" }}
+              </div>
+            </div>
+
+            <div *ngIf="editMode" class="edit-mode">
+              <label>Selecciona el código:</label>
+              <select [(ngModel)]="bodaInfo.dressCode">
+                <option value="">-- Seleccionar --</option>
+                <option value="Gala (Etiqueta)">Gala (Etiqueta)</option>
+                <option value="Formal">Formal</option>
+                <option value="Cóctel">Cóctel</option>
+                <option value="Informal / Casual">Informal / Casual</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="info-card-glass" [class.is-editing]="editMode">
+        <div class="card-accent-gold"></div>
+        <div class="card-content">
+          <div class="card-title-box">
+            <span class="card-emoji">🍴</span>
+            <h3>El Menú</h3>
+          </div>
+
+          <div class="card-body">
+            <div *ngIf="!editMode" class="view-mode">
+              <p class="txt-menu" [class.empty-txt]="!bodaInfo.menuResumen">
+                {{ bodaInfo.menuResumen || "Estamos preparando una selección deliciosa. ¡Próximamente!" }}
+              </p>
+            </div>
+
+            <div *ngIf="editMode" class="edit-mode">
+              <label>Resumen del Menú:</label>
+              <textarea [(ngModel)]="bodaInfo.menuResumen" rows="4" placeholder="Ej: Cóctel de bienvenida, Solomillo..."></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="floating-save" *ngIf="editMode">
+      <button class="btn-save-gold" (click)="guardarCambios()" [disabled]="guardando">
+        <span *ngIf="!guardando">✨ Guardar Información</span>
+        <span *ngIf="guardando" class="loader-text">⌛ Guardando cambios...</span>
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="editor-layout">
+  
+  <aside class="controls-panel">
+    <button class="btn-back" (click)="irAlMenu()">
+      ⬅ Volver al Menú
+    </button>
+
+    <h3>Configuración</h3>
+
+    <div class="control-group">
+      <label>Foto de los Novios</label>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*" class="file-input">
+    </div>
+
+    <div class="control-group">
+      <label>Nombres</label>
+      <div class="input-pair">
+        <input type="text" [(ngModel)]="nombreNovia">
+        <input type="text" [(ngModel)]="nombreNovio">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Fecha del Evento</label>
+      <input type="date" [(ngModel)]="fecha">
+    </div>
+
+    <div class="control-group">
+      <label>Colores</label>
+      <div class="picker-row">
+        <div><small>Texto</small><br><input type="color" [(ngModel)]="colorTexto"></div>
+        <div><small>Fondo</small><br><input type="color" [(ngModel)]="colorFondo"></div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Mensaje Personalizado</label>
+      <textarea [(ngModel)]="textoExtra" rows="3" placeholder="Escribe algo especial..."></textarea>
+    </div>
+
+    <div class="control-group">
+      <label>Estilo</label>
+      <div class="template-selector">
+        <button (click)="cambiarPlantilla('clasica')">Clásica</button>
+        <button (click)="cambiarPlantilla('moderna')">Moderna</button>
+      </div>
+    </div>
+
+    <button class="btn-save">💾 Guardar Todo</button>
+  </aside>
+
+  <main class="preview-canvas">
+    <div class="invitacion-card" 
+         [ngClass]="plantillaActiva" 
+         [style.backgroundColor]="colorFondo" 
+         [style.color]="colorTexto"
+         [style.backgroundImage]="imagenFondo ? 'linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url(' + imagenFondo + ')' : 'none'">
+      
+      <p class="tagline">¡Nos casamos!</p>
+      
+      <h1 class="wedding-names">
+        {{ nombreNovia }} <br> & <br> {{ nombreNovio }}
+      </h1>
+
+      <div class="divider"></div>
+      
+      <p class="fecha-texto">{{ fecha | date:'EEEE, d \'de\' MMMM \'de\' y' : '' : 'es' }}</p>
+      
+      <p class="extra-msg">{{ textoExtra }}</p>
+
+      <div class="rsvp-badge">CONFIRMACIÓN ONLINE</div>
+    </div>
+  </main>
+</div>
+

@@ -1,0 +1,187 @@
+/* --- CONTENEDOR PRINCIPAL --- */
+.album-container {
+  padding: 60px 5% 100px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- BOTÓN VOLVER --- */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--warm-gray);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-bottom: 40px;
+}
+
+.btn-back:hover {
+  color: var(--gold);
+  transform: translateX(-5px);
+}
+
+/* --- CABECERA --- */
+.album-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.sub-fancy {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: var(--gold);
+  letter-spacing: 1px;
+  display: block;
+}
+
+.album-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  color: var(--dark-charcoal);
+  margin: 10px 0;
+}
+
+.boda-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--dark-charcoal);
+  border: 1px solid var(--accent-soft);
+}
+
+.boda-badge .dot {
+  width: 7px;
+  height: 7px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+/* --- BOTÓN DE SUBIDA (NUEVO ESTILO) --- */
+.btn-upload-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--dark-charcoal);
+  color: rgb(198, 197, 196);
+  padding: 18px 40px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 30px;
+  font-weight: 600;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 20px rgba(51, 47, 44, 0.15);
+}
+
+.btn-upload-custom:hover {
+  background: var(--gold);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(212, 163, 115, 0.35);
+}
+
+.upload-hint {
+  font-size: 0.75rem;
+  color: var(--warm-gray);
+  margin-top: 12px;
+}
+
+/* --- GRID Y CARDS --- */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.card-inner {
+  position: relative;
+  height: 380px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg-soft);
+  border: 1px solid var(--accent-soft);
+  transition: all 0.5s ease;
+}
+
+.card-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.card-inner:hover img {
+  transform: scale(1.1);
+}
+
+/* --- OVERLAY INFO --- */
+.photo-info {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(51, 47, 44, 0.9) 0%, transparent 60%);
+  display: flex;
+  align-items: flex-end;
+  padding: 25px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.card-inner:hover .photo-info {
+  opacity: 1;
+}
+
+.info-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.user-name {
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* --- ESTADO VACÍO --- */
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 80px 0;
+  text-align: center;
+  color: var(--warm-gray);
+  border: 2px dashed var(--accent-soft);
+  border-radius: 30px;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+/* Mejora del Grid para que las fotos respiren mejor */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+/* Asegurar que el botón de volver funcione visualmente */
+.btn-back {
+  border: none;
+  background: none;
+  padding: 0;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,11 @@
+# Evitar librerías pesadas
+node_modules/
+wedding-planer-backend/node_modules/
+wedding-planner-app/node_modules/
+
+# Evitar archivos temporales de Angular
+.angular/
+wedding-planner-app/.angular/
+
+# Evitar secretos (Importante para tu Backend)
+.env

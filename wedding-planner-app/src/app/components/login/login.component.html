@@ -1,0 +1,29 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <button class="btn-back" routerLink="/home">
+      <span class="icon">←</span> Regresar
+    </button>
+    <h2>Bienvenido</h2>
+    <p>Introduce tus credenciales para acceder</p>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input
+        type="email"
+        [(ngModel)]="email"
+        placeholder="ejemplo@correo.com"
+      />
+    </div>
+
+    <div class="input-group">
+      <label>Contraseña</label>
+      <input type="password" [(ngModel)]="pass" placeholder="••••••••" />
+    </div>
+
+    <button class="btn-auth" (click)="login()">Iniciar Sesión</button>
+
+    <div class="auth-footer">
+      ¿Aún no tienes cuenta? <a routerLink="/register">Regístrate gratis</a>
+    </div>
+  </div>
+</div>

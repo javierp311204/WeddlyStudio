@@ -1,0 +1,148 @@
+/* --- CONTENEDOR PRINCIPAL --- */
+.info-wrapper {
+  min-height: 100vh;
+  background-color: #fdfaf7;
+  padding: 40px 20px;
+}
+
+.info-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* --- HEADER PREMIUM --- */
+.info-header-premium {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.info-header-premium h1 {
+  font-family: 'Playfair Display', serif;
+  color: #283618;
+  font-size: 3rem;
+  margin: 10px 0;
+}
+
+.header-decoration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  color: #d4a373;
+}
+
+.header-decoration span {
+  height: 1px;
+  width: 50px;
+  background: #d4a373;
+  opacity: 0.5;
+}
+
+.boda-id { color: #8b7e74; font-size: 0.9rem; }
+.boda-id strong { color: #d4a373; }
+
+/* --- NAVEGACIÓN Y BOTONES --- */
+.nav-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.btn-back-link {
+  background: none; border: none;
+  color: #606c38; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.btn-admin-action {
+  background: #606c38; color: white; border: none;
+  padding: 10px 20px; border-radius: 50px;
+  font-weight: 600; cursor: pointer; transition: 0.3s;
+}
+
+.btn-cancel { background: #e63946; }
+
+/* --- TARJETAS GLASS --- */
+.info-card-glass {
+  background: white;
+  border-radius: 25px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+.card-accent-gold { height: 5px; background: #d4a373; }
+.card-accent-green { height: 5px; background: #606c38; }
+
+.card-content { padding: 30px; }
+
+.card-title-box {
+  display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
+}
+
+.card-emoji { font-size: 2rem; }
+.card-title-box h3 { margin: 0; color: #283618; font-family: 'Playfair Display', serif; }
+
+/* --- TEXTOS Y VALORES --- */
+.empty-txt { color: #ccc !important; font-style: italic; }
+.txt-main { font-size: 1.3rem; font-weight: 700; color: #606c38; margin: 0; }
+.txt-sub { color: #8b7e74; margin: 8px 0; }
+
+.date-pill {
+  display: inline-block; padding: 6px 15px; background: #fefae0;
+  border-radius: 50px; color: #bc6c25; font-weight: bold; font-size: 0.85rem;
+}
+
+.tag-elegant {
+  display: inline-block; padding: 10px 25px;
+  background: #fdfaf7; border: 2px solid #d4a373;
+  color: #d4a373; border-radius: 50px; font-weight: bold;
+}
+
+/* --- MODO EDICIÓN --- */
+.field-group { margin-bottom: 15px; }
+.field-group label {
+  display: block; font-size: 0.75rem; font-weight: 800;
+  color: #d4a373; text-transform: uppercase; margin-bottom: 5px;
+}
+
+.edit-mode input, .edit-mode select, .edit-mode textarea {
+  width: 100%; padding: 12px; border: 1px solid #eee;
+  border-radius: 12px; background: #fafafa; font-family: inherit;
+}
+
+/* --- BOTÓN GUARDAR Y ESTADO DE CARGA --- */
+.floating-save {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  z-index: 1000; width: 90%; max-width: 400px;
+}
+
+.btn-save-gold {
+  width: 100%; padding: 18px; border: none; border-radius: 50px;
+  background: linear-gradient(135deg, #d4a373, #bc6c25);
+  color: white; font-weight: bold; font-size: 1.1rem;
+  box-shadow: 0 10px 20px rgba(188, 108, 37, 0.3); cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-save-gold:disabled {
+  filter: grayscale(0.4);
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.loader-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}

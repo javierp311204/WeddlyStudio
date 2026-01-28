@@ -1,0 +1,141 @@
+/* Contenedor principal con fondo elegante */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fdfaf7 0%, #f8f9fa 100%);
+  padding: 20px;
+}
+
+/* Tarjeta Blanca Minimalista */
+.auth-card {
+  position: relative;
+  background: white;
+  width: 100%;
+  max-width: 450px;
+  padding: 50px;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+  text-align: center;
+  border: 1px solid #f0f0f0;
+}
+
+.auth-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: #283618;
+  margin-bottom: 10px;
+}
+
+.auth-card p {
+  color: #999;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+}
+
+/* Inputs Estilizados */
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #606c38;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #fbfbfb;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border-color: #d4a373;
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(212, 163, 115, 0.1);
+}
+
+/* Botón Dorado */
+.btn-auth {
+  width: 100%;
+  padding: 16px;
+  background: #d4a373;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.btn-auth:hover {
+  background: #bc8a5f;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(212, 163, 115, 0.3);
+}
+
+.btn-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  border: none;
+  color: #9e9e9e; 
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.btn-back:hover {
+  color: #616161;
+  background-color: rgba(0, 0, 0, 0.05); 
+}
+
+.btn-back .icon {
+  font-size: 1.1rem;
+}
+
+/* Enlaces inferiores */
+.auth-footer {
+  margin-top: 25px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.auth-footer a {
+  color: #d4a373;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Mensajes de error */
+.error-bubble {
+  background: #fff5f5;
+  color: #e63946;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  border: 1px solid #ffcccc;
+}

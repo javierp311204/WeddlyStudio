@@ -1,0 +1,249 @@
+<div class="main-wrapper">
+  <ng-container *ngIf="!authService.isLoggedIn()">
+    <nav class="sticky-nav" [class.visible]="showStickyNav">
+      <div class="nav-container">
+        <span class="nav-logo">✨ Vuestra Boda</span>
+        <div class="nav-actions">
+          <button class="nav-btn-outline" routerLink="/login">Acceso</button>
+          <button class="nav-btn-gold" routerLink="/register">
+            Empezar Gratis
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero-section">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <span class="pre-title">PLANIFICADOR INTEGRAL</span>
+        <h1>
+          Vuestra Boda, <br /><span class="accent"
+            >Perfectamente Organizada</span
+          >
+        </h1>
+        <p>
+          Desde la distribución de las mesas hasta el álbum de fotos digital.
+          Todo en un solo lugar.
+        </p>
+        <div class="cta-group">
+          <button class="btn-gold" routerLink="/register">
+            Empezar mi Boda
+          </button>
+          <button class="btn-outline" routerLink="/login">
+            Acceso Usuarios
+          </button>
+        </div>
+      </div>
+      <div class="scroll-indicator" (click)="scrollToContent()">
+        <span>Descubrir más</span>
+        <div class="arrow-down"></div>
+      </div>
+    </section>
+
+    <section id="marketing-content" class="info-scroll-section reveal">
+      <div class="container">
+        <div class="section-header">
+          <span class="sub">PASO A PASO</span>
+          <h2>¿Cómo funciona?</h2>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <span class="step-num">01</span>
+            <h3>Crea tu Código</h3>
+            <p>
+              Regístrate como administrador y genera un código único para tu
+              gran día.
+            </p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">02</span>
+            <h3>Organiza y Diseña</h3>
+            <p>
+              Gestiona tus mesas, añade información del evento y personaliza tu
+              guía.
+            </p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">03</span>
+            <h3>Invita a todos</h3>
+            <p>
+              Comparte el código con tus invitados para que confirmen y suban
+              sus fotos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonial-section reveal">
+      <div class="testimonial-content">
+        <p class="quote">
+          "Fue la mejor decisión para nuestra boda. Todos los invitados sabían
+          dónde sentarse y el álbum digital es un tesoro."
+        </p>
+        <span class="author">- Lucía & Carlos, Septiembre 2025</span>
+      </div>
+    </section>
+
+    <footer class="main-footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>✨ Vuestra Boda</h3>
+          <p>Haciendo que cada detalle cuente.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Ayuda</h4>
+          <a href="#">Preguntas Frecuentes</a>
+          <a href="#">Soporte</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          © 2026 Planificador de Bodas. Hecho con ❤️ para momentos inolvidables.
+        </p>
+      </div>
+    </footer>
+  </ng-container>
+
+  <ng-container *ngIf="authService.isLoggedIn()">
+    <div class="dashboard-wrapper">
+      <header class="db-nav">
+        <div class="brand">
+          <span class="logo-icon">✨</span>
+          <div>
+            <h2>
+              Panel de {{ authService.isAdmin() ? "Control" : "Invitado" }}
+            </h2>
+            <p>
+              Boda: <span>{{ authService.getCodigoBoda() }}</span>
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="nav-controls"
+          style="display: flex; align-items: center; gap: 15px"
+        >
+          <button class="help-btn" (click)="iniciarTour()" title="Ayuda">
+            ?
+          </button>
+
+          <div class="notif-wrapper">
+            <button class="notif-button" (click)="toggleNotificaciones()">
+              <span class="bell-icon">🔔</span>
+
+              <span class="notif-badge" *ngIf="notificacionesSinLeer > 0">
+                {{ notificacionesSinLeer }}
+              </span>
+            </button>
+
+            <div class="notif-dropdown" *ngIf="mostrarPanel">
+              <div class="dropdown-arrow"></div>
+
+              <div class="dropdown-header">
+                <h3>Avisos Recientes</h3>
+              </div>
+
+              <div class="notif-list">
+                <div
+                  *ngFor="let n of notificaciones"
+                  class="notif-item"
+                  [ngClass]="{ unread: !n.leida }"
+                  (click)="leerNotificacion(n)"
+                >
+                  <div class="notif-content">
+                    <p class="notif-title">{{ n.titulo }}</p>
+
+                    <p class="notif-message">{{ n.mensaje }}</p>
+
+                    <span class="notif-time">{{
+                      n.fecha | date: "shortTime"
+                    }}</span>
+                  </div>
+                </div>
+
+                <div class="notif-empty" *ngIf="notificaciones.length === 0">
+                  <p>No tienes notificaciones nuevas</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="logout-pill" (click)="authService.logout()">
+            Cerrar Sesión
+          </button>
+        </div>
+      </header>
+
+      <main class="db-content">
+        <div class="welcome-card">
+          <h1>Bienvenido, {{ authService.getUserNick() }}</h1>
+          <p>¿Qué detalle vamos a pulir hoy?</p>
+        </div>
+
+        <div class="action-grid">
+          <div
+            *ngIf="authService.isAdmin()"
+            class="glass-card borde"
+            routerLink="/mesas"
+          >
+            <div class="icon-box">🪑</div>
+            <div class="text">
+              <h3>Gestión de Mesas</h3>
+              <p>Organiza el seating plan y los grupos de invitados.</p>
+            </div>
+            <span class="arrow">→</span>
+          </div>
+
+          <div
+            *ngIf="authService.isAdmin()"
+            class="glass-card borde"
+            routerLink="/diseno"
+          >
+            <div class="icon-box">🎨</div>
+            <div class="text">
+              <h3>Papelería Digital</h3>
+              <p>Crea invitaciones y minutas con estilo único.</p>
+            </div>
+            <span class="arrow">→</span>
+          </div>
+
+          <div class="glass-card borde" (click)="irAInfoBoda()">
+            <div class="icon-box">📖</div>
+            <div class="text">
+              <h3>Guía de la Boda</h3>
+              <p>Lugar, horario, menú y código de vestimenta.</p>
+            </div>
+            <span class="arrow">→</span>
+          </div>
+
+          <div class="glass-card borde" routerLink="/album">
+            <div class="icon-box">📸</div>
+            <div class="text">
+              <h3>Álbum Compartido</h3>
+              <p>Revive y sube los mejores momentos del día.</p>
+            </div>
+            <span class="arrow">→</span>
+          </div>
+
+          <div
+            class="glass-card borde"
+            routerLink="/invitados"
+            *ngIf="authService.isAdmin()"
+          >
+            <div class="icon-box">📋</div>
+            <div class="text">
+              <h3>Lista de Invitados</h3>
+              <p>
+                Visualiza, busca y filtra a todos los asistentes de la boda.
+              </p>
+            </div>
+            <div class="arrow">
+              <span>→</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </ng-container>
+</div>

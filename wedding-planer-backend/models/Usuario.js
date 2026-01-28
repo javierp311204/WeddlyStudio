@@ -1,0 +1,11 @@
+const mongoose = require("mongoose");
+
+const UsuarioSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  pass: { type: String, required: true },
+  rol: { type: String, default: 'invitado' },
+  codigoBoda: String,
+  nick: String,
+});
+
+module.exports = mongoose.model("Usuario", UsuarioSchema);
