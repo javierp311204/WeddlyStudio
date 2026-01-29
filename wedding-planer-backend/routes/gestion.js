@@ -1,13 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Mesa = require("../models/Mesa");
-const Usuario = require("../models/Usuario");
-const Invitado = require("../models/Invitado");
-const Notificacion = require("../models/Notificacion");
 const BodaConfig = require("../models/BodaConfig");
 const autenticar = require('../middleware/auth');
-
-
 
 // --- MESAS ---
 router.get("/mesas", async (req, res) => {
@@ -17,31 +11,53 @@ router.get("/mesas", async (req, res) => {
 
     if (!boda) return res.status(404).json({ error: "Boda no encontrada" });
 
-    // Si no tienes el array de mesas aún, devolvemos uno vacío
     res.json(boda.mesas || []);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener mesas" });
   }
 });
 
-
-// POST: Agregar una mesa al array de la boda
+// POST: Agregar mesa (SINCRONIZADO con plano)
 router.post("/mesas", async (req, res) => {
   console.log("=== POST /mesas recibida ===");
   console.log("Body:", req.body);
-  console.log("Usuario autenticado:", req.usuarioData);
   
   try {
-    const { codigoBoda, nombre, tipo, capacidad } = req.body;
+    const { codigoBoda, nombre, tipo, capacidad, posicion } = req.body;
     
     console.log("Buscando boda con código:", codigoBoda);
     
-    // Buscar o crear la boda si no existe (upsert)
+    // Posición inicial (centro si no se especifica)
+    const posicionInicial = {
+      x: (posicion && posicion.x !== undefined) ? posicion.x : 50,
+      y: (posicion && posicion.y !== undefined) ? posicion.y : 50
+    };
+
+    // ✅ CREAR ASIENTOS VACÍOS (para que funcione el plano)
+    const asientosVacios = [];
+    const capacidadMesa = capacidad || 8;
+    for (let i = 0; i < capacidadMesa; i++) {
+      asientosVacios.push({
+        posicion: i,
+        ocupado: false,
+        invitado_id: null
+      });
+    }
+    
     const bodaActualizada = await BodaConfig.findOneAndUpdate(
       { codigoBoda: codigoBoda }, 
       { 
-        $push: { mesas: { nombre, tipo, capacidad } },
-        $setOnInsert: { // Estos campos solo se establecen si se crea un nuevo documento
+        $push: { 
+          mesas: { 
+            nombre, 
+            tipo, 
+            capacidad: capacidadMesa,
+            posicion: posicionInicial,
+            radio: 60,
+            asientos: asientosVacios // ⬅️ CRÍTICO para el plano
+          } 
+        },
+        $setOnInsert: {
           lugarNombre: "",
           direccion: "",
           googleMapsLink: "",
@@ -52,12 +68,12 @@ router.post("/mesas", async (req, res) => {
         }
       },
       { 
-        new: true,      // Devuelve el documento actualizado
-        upsert: true    // Crea el documento si no existe
+        new: true,
+        upsert: true
       }
     );
     
-    console.log("✅ Mesa agregada/creada exitosamente");
+    console.log("✅ Mesa agregada con asientos vacíos");
     res.json(bodaActualizada.mesas);
   } catch (error) {
     console.error("❌ Error:", error);
@@ -65,17 +81,45 @@ router.post("/mesas", async (req, res) => {
   }
 });
 
+// DELETE: Eliminar mesa (SINCRONIZADO)
 router.delete("/mesas/:id", async (req, res) => {
   console.log("=== DELETE /mesas/:id recibida ===");
   console.log("ID Mesa:", req.params.id);
-  console.log("Query:", req.query);
   
   try {
     const { codigoBoda } = req.query;
     const mesaId = req.params.id;
 
+    // Buscar la mesa antes de eliminarla
+    const boda = await BodaConfig.findOne({ codigoBoda });
+    if (!boda) {
+      return res.status(404).json({ error: "Boda no encontrada" });
+    }
+
+    const mesa = boda.mesas.id(mesaId);
+    if (!mesa) {
+      return res.status(404).json({ error: "Mesa no encontrada" });
+    }
+
+    // ✅ LIBERAR INVITADOS que estaban en esta mesa (sincronización)
+    const nombreMesa = mesa.nombre;
+    
+    // Actualizar invitados que tenían esta mesa asignada
+    await BodaConfig.updateOne(
+      { codigoBoda },
+      { 
+        $set: { 
+          "invitados.$[elem].mesa": "" 
+        } 
+      },
+      { 
+        arrayFilters: [{ "elem.mesa": nombreMesa }] 
+      }
+    );
+
+    // Eliminar la mesa
     const bodaActualizada = await BodaConfig.findOneAndUpdate(
-      { codigoBoda: codigoBoda },
+      { codigoBoda },
       { 
         $pull: { 
           mesas: { _id: mesaId }
@@ -84,12 +128,11 @@ router.delete("/mesas/:id", async (req, res) => {
       { new: true }
     );
 
-    if (!bodaActualizada) {
-      return res.status(404).json({ error: "No se encontró la boda o la mesa" });
-    }
-
-    console.log("✅ Mesa eliminada correctamente");
-    res.json({ mensaje: "Mesa eliminada correctamente", mesas: bodaActualizada.mesas });
+    console.log("✅ Mesa eliminada y invitados liberados");
+    res.json({ 
+      mensaje: "Mesa eliminada correctamente", 
+      mesas: bodaActualizada.mesas 
+    });
   } catch (error) {
     console.error("❌ Error al eliminar mesa:", error);
     res.status(500).json({ error: "Error al eliminar la mesa" });
@@ -97,22 +140,18 @@ router.delete("/mesas/:id", async (req, res) => {
 });
 
 // --- INVITADOS ---
-// GET: Obtener y filtrar invitados desde el array de BodaConfig
 router.get("/invitados", async (req, res) => {
   try {
     const { codigoBoda, busqueda, tipo } = req.query;
 
-    // Buscamos el documento de la boda específica
-    const boda = await BodaConfig.findOne({ codigoBoda: codigoBoda });
+    const boda = await BodaConfig.findOne({ codigoBoda });
 
     if (!boda) {
       return res.status(404).json({ error: "Boda no encontrada" });
     }
 
-    // Extraemos el array de invitados
     let listaInvitados = boda.invitados || [];
 
-    // Aplicamos los filtros manualmente sobre el array (JavaScript)
     if (busqueda) {
       const regex = new RegExp(busqueda, "i");
       listaInvitados = listaInvitados.filter(inv => regex.test(inv.nombre));
@@ -122,7 +161,6 @@ router.get("/invitados", async (req, res) => {
       listaInvitados = listaInvitados.filter(inv => inv.tipo === tipo);
     }
 
-    // Ordenamos por nombre
     listaInvitados.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
     res.json(listaInvitados);
@@ -132,8 +170,6 @@ router.get("/invitados", async (req, res) => {
   }
 });
 
-// POST: Agregar un invitado al array dentro de BodaConfig
-
 router.post("/invitados", async (req, res) => {
   console.log("=== POST /invitados recibida ===");
   console.log("Body:", req.body);
@@ -142,10 +178,19 @@ router.post("/invitados", async (req, res) => {
     const { codigoBoda, nombre, email, tipo, menu, mesa } = req.body;
 
     const bodaActualizada = await BodaConfig.findOneAndUpdate(
-      { codigoBoda: codigoBoda }, 
+      { codigoBoda }, 
       { 
         $push: { 
-          invitados: { nombre, email, tipo, menu, mesa, nick: "" } 
+          invitados: { 
+            nombre, 
+            email, 
+            tipo, 
+            menu, 
+            mesa: mesa || "", 
+            nick: "",
+            alergias: "",
+            confirmado: false
+          } 
         },
         $setOnInsert: {
           lugarNombre: "",
@@ -163,7 +208,7 @@ router.post("/invitados", async (req, res) => {
       }
     );
 
-    console.log("✅ Invitado agregado/creado exitosamente");
+    console.log("✅ Invitado agregado");
     res.json(bodaActualizada.invitados);
   } catch (error) {
     console.error("❌ Error:", error);
@@ -171,6 +216,7 @@ router.post("/invitados", async (req, res) => {
   }
 });
 
+// PUT: Actualizar invitado (SINCRONIZADO con asientos del plano)
 router.put('/invitados/:id', async (req, res) => {
     console.log("=== PUT /invitados/:id recibida ===");
     console.log("ID:", req.params.id);
@@ -180,32 +226,59 @@ router.put('/invitados/:id', async (req, res) => {
         const { codigoBoda, mesa } = req.body;
         const invitadoId = req.params.id;
 
-        // Actualiza el invitado específico dentro del array usando el operador posicional $
-        const bodaActualizada = await BodaConfig.findOneAndUpdate(
-            { 
-                codigoBoda: codigoBoda,
-                "invitados._id": invitadoId  // Encuentra el invitado específico
-            },
-            { 
-                $set: { 
-                    "invitados.$.mesa": mesa  // Actualiza solo el campo mesa del invitado encontrado
-                } 
-            },
-            { new: true }
-        );
-
-        if (!bodaActualizada) {
-            console.log("❌ No se encontró la boda o el invitado");
-            return res.status(404).json({ error: "Invitado o boda no encontrada" });
+        const boda = await BodaConfig.findOne({ codigoBoda });
+        if (!boda) {
+            return res.status(404).json({ error: "Boda no encontrada" });
         }
 
-        // Buscar el invitado actualizado para devolverlo
-        const invitadoActualizado = bodaActualizada.invitados.find(
-            inv => inv._id.toString() === invitadoId
-        );
+        // Buscar el invitado
+        const invitado = boda.invitados.id(invitadoId);
+        if (!invitado) {
+            return res.status(404).json({ error: "Invitado no encontrado" });
+        }
 
-        console.log(`✅ Mesa actualizada para invitado:`, invitadoActualizado);
-        res.json(invitadoActualizado);
+        const mesaAnterior = invitado.mesa;
+
+        // ✅ SINCRONIZACIÓN CON ASIENTOS
+
+        // 1. Si tenía mesa anterior, liberar ese asiento
+        if (mesaAnterior && mesaAnterior !== "") {
+            const mesaViejaObj = boda.mesas.find(m => m.nombre === mesaAnterior);
+            if (mesaViejaObj) {
+                const asientoOcupado = mesaViejaObj.asientos.find(
+                    a => a.invitado_id && a.invitado_id.toString() === invitadoId
+                );
+                if (asientoOcupado) {
+                    asientoOcupado.ocupado = false;
+                    asientoOcupado.invitado_id = null;
+                    console.log(`🔄 Liberado asiento en ${mesaAnterior}`);
+                }
+            }
+        }
+
+        // 2. Actualizar el campo mesa del invitado
+        invitado.mesa = mesa || "";
+
+        // 3. Si la nueva mesa existe, ocupar un asiento
+        if (mesa && mesa !== "") {
+            const mesaNuevaObj = boda.mesas.find(m => m.nombre === mesa);
+            if (mesaNuevaObj) {
+                // Buscar primer asiento vacío
+                const asientoLibre = mesaNuevaObj.asientos.find(a => !a.ocupado);
+                if (asientoLibre) {
+                    asientoLibre.ocupado = true;
+                    asientoLibre.invitado_id = invitadoId;
+                    console.log(`✅ Invitado asignado a asiento en ${mesa}`);
+                } else {
+                    console.log(`⚠️ Mesa ${mesa} llena, pero se actualizó el campo mesa del invitado`);
+                }
+            }
+        }
+
+        await boda.save();
+
+        console.log(`✅ Invitado actualizado y sincronizado`);
+        res.json(invitado);
         
     } catch (error) {
         console.error("❌ Error al actualizar invitado:", error);
@@ -213,27 +286,39 @@ router.put('/invitados/:id', async (req, res) => {
     }
 });
 
-// DELETE: Eliminar un invitado del array por su _id único
 router.delete("/invitados/:id", async (req, res) => {
   try {
-    const { codigoBoda } = req.query; // Pasamos el código por query string para localizar la boda
+    const { codigoBoda } = req.query;
+    const invitadoId = req.params.id;
 
-    const bodaActualizada = await BodaConfig.findOneAndUpdate(
-      { codigoBoda: codigoBoda },
-      { 
-        $pull: { 
-          invitados: { _id: req.params.id } // El operador $pull saca el objeto del array
-        } 
-      },
-      { new: true }
-    );
-
-    if (!bodaActualizada) {
-      return res.status(404).json({ error: "No se encontró la boda o el invitado" });
+    const boda = await BodaConfig.findOne({ codigoBoda });
+    if (!boda) {
+      return res.status(404).json({ error: "Boda no encontrada" });
     }
 
-    res.json({ mensaje: "Invitado eliminado correctamente", invitados: bodaActualizada.invitados });
+    // ✅ LIBERAR ASIENTO si estaba ocupado
+    for (let mesa of boda.mesas) {
+      const asiento = mesa.asientos.find(
+        a => a.invitado_id && a.invitado_id.toString() === invitadoId
+      );
+      if (asiento) {
+        asiento.ocupado = false;
+        asiento.invitado_id = null;
+        console.log(`🔄 Asiento liberado en ${mesa.nombre}`);
+      }
+    }
+
+    // Eliminar invitado
+    boda.invitados.pull(invitadoId);
+    await boda.save();
+
+    console.log("✅ Invitado eliminado y asiento liberado");
+    res.json({ 
+      mensaje: "Invitado eliminado correctamente", 
+      invitados: boda.invitados 
+    });
   } catch (error) {
+    console.error("❌ Error:", error);
     res.status(500).json({ error: "Error al eliminar el invitado" });
   }
 });
@@ -249,7 +334,6 @@ router.get("/detalles/:codigo", async (req, res) => {
   }
 });
 
-// Guardar o actualizar configuración
 router.post("/detalles", async (req, res) => {
   try {
     const { codigoBoda } = req.body;
@@ -260,33 +344,13 @@ router.post("/detalles", async (req, res) => {
       { new: true, upsert: true }
     );
 
-    const invitados = await Usuario.find({ 
-      codigoBoda: codigoBoda, 
-      rol: 'invitado' 
-    });
-
-    if (invitados.length > 0) {
-      const promesasNotifs = invitados.map(inv => {
-        return new Notificacion({
-          usuarioDestino: inv.nick, 
-          codigoBoda: codigoBoda,
-          titulo: '✨ ¡Novedades en la Boda!',
-          mensaje: 'El administrador ha actualizado la información del evento. ¡Echa un vistazo!',
-          tipo: 'info',
-          leida: false
-        }).save();
-      });
-
-      await Promise.all(promesasNotifs);
-    }
-
     res.json({ 
-      mensaje: "Configuración guardada y avisos enviados", 
+      mensaje: "Configuración guardada", 
       data: configActualizada 
     });
 
   } catch (error) {
-    console.error("❌ Error al guardar y notificar:", error);
+    console.error("❌ Error al guardar:", error);
     res.status(500).json({ error: "Error al procesar la configuración" });
   }
 });

@@ -3,42 +3,246 @@
     <button class="btn-back" (click)="irAlMenu()">
       <span class="icon">🏠</span> Volver al Panel
     </button>
-    
+
     <div class="nav-actions">
       <button class="btn-action" (click)="toggleModoEdicion()">
-        {{ modoEdicion ? '🔒 Bloquear' : '✏️ Editar' }}
+        {{ modoEdicion ? "🔒 Bloquear" : "✏️ Editar" }}
       </button>
-      <button class="btn-action" (click)="agregarMesa()">
-        ➕ Añadir Mesa
-      </button>
+      <button class="btn-action" (click)="agregarMesa()">➕ Añadir Mesa</button>
     </div>
   </nav>
 
   <header class="plano-header">
-    <h1>🗺️ Plano Interactivo del Salón</h1>
-    <p>Arrastra las mesas para organizarlas. Click en invitados para ver detalles.</p>
+    <h1>Plano Interactivo del Salón</h1>
+    <p>
+      Arrastra las mesas para organizarlas. Click en invitados para ver
+      detalles.
+    </p>
   </header>
 
-  <div class="canvas-container" style="width: 100%; height: 80vh; overflow: auto; border: 1px solid #ccc;">
+  <div
+    class="canvas-container"
+    style="width: 100%; height: 80vh; overflow: hidden; border: 1px solid #ccc"
+  >
     <canvas #canvasElement id="canvas-plano"></canvas>
   </div>
 
+  <!-- PANEL LATERAL CON DESPLEGABLE -->
   <aside class="panel-lateral" *ngIf="mesaSeleccionada">
-    <h3>{{ mesaSeleccionada.nombre }}</h3>
-    <p>Capacidad: {{ mesaSeleccionada.capacidad }}</p>
-    <p>Ocupación: {{ mesaSeleccionada.asientos.length }} / {{ mesaSeleccionada.capacidad }}</p>
-    
-    <div class="lista-invitados">
-      <h4>Invitados en esta mesa:</h4>
-      <ul>
-        <li *ngFor="let asiento of mesaSeleccionada.asientos">
-          <span *ngIf="asiento.invitado">
-            {{ asiento.invitado.nombre }}
-            <span class="badge">{{ asiento.invitado.tipo }}</span>
-          </span>
-          <span *ngIf="!asiento.invitado" class="vacio">Asiento vacío</span>
-        </li>
-      </ul>
+    <div class="panel-header">
+      <h3>{{ mesaSeleccionada.nombre }}</h3>
+      <button class="btn-close-panel" (click)="mesaSeleccionada = null">
+        ×
+      </button>
+    </div>
+
+    <div class="panel-info">
+      <div class="info-row">
+        <span class="info-label">Capacidad:</span>
+        <span class="info-value"
+          >{{ mesaSeleccionada.capacidad }} personas</span
+        >
+      </div>
+      <div class="info-row">
+        <span class="info-label">Ocupación:</span>
+        <span class="info-value">
+          {{ contarAsientosOcupados(mesaSeleccionada) }} /
+          {{ mesaSeleccionada.capacidad }}
+        </span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Tipo:</span>
+        <span class="info-value badge-tipo">{{
+          mesaSeleccionada.tipo === "novios"
+            ? "💍 Presidencial"
+            : "🍽️ Invitados"
+        }}</span>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: AGREGAR INVITADO -->
+    <div class="panel-section">
+      <h4><span class="section-icon">➕</span> Agregar Invitado</h4>
+
+      <div class="search-container">
+        <input
+          type="text"
+          [(ngModel)]="busquedaInvitado"
+          (input)="filtrarInvitados()"
+          placeholder="Buscar invitado sin mesa..."
+          class="search-input"
+        />
+
+        <ul class="search-results" *ngIf="invitadosFiltrados.length > 0">
+          <li
+            *ngFor="let inv of invitadosFiltrados"
+            (click)="seleccionarInvitado(inv)"
+          >
+            <span class="inv-name">{{ inv.nombre }}</span>
+            <span class="inv-tipo">{{ inv.tipo }}</span>
+          </li>
+        </ul>
+
+        <div
+          class="search-empty"
+          *ngIf="
+            busquedaInvitado &&
+            invitadosFiltrados.length === 0 &&
+            !invitadoSeleccionado
+          "
+        >
+          <small>No hay invitados disponibles</small>
+        </div>
+      </div>
+
+      <div class="selected-invitado" *ngIf="invitadoSeleccionado">
+        <span class="check-icon">✓</span>
+        <span>{{ invitadoSeleccionado.nombre }}</span>
+        <button class="btn-clear" (click)="limpiarBusqueda()">×</button>
+      </div>
+
+      <button
+        class="btn-primary"
+        (click)="agregarInvitadoAMesa()"
+        [disabled]="!invitadoSeleccionado"
+      >
+        <span class="btn-icon">✓</span> Confirmar Asignación
+      </button>
+    </div>
+
+    <!-- SECCIÓN: INVITADOS EN LA MESA (DESPLEGABLE) -->
+    <div class="panel-section">
+      <div class="section-header-toggle" (click)="toggleListaInvitados()">
+        <h4><span class="section-icon">👥</span> Invitados en esta mesa</h4>
+        <span class="toggle-icon" [class.rotated]="listaInvitadosAbierta"
+          >▼</span
+        >
+      </div>
+
+      <div class="desplegable-content" [class.abierto]="listaInvitadosAbierta">
+        <ul
+          class="invitados-list"
+          *ngIf="
+            mesaSeleccionada.asientos && mesaSeleccionada.asientos.length > 0
+          "
+        >
+          <li
+            *ngFor="let asiento of mesaSeleccionada.asientos"
+            class="invitado-item"
+          >
+            <div
+              *ngIf="asiento.ocupado && asiento.invitado"
+              class="invitado-ocupado"
+            >
+              <div class="invitado-info">
+                <span
+                  class="invitado-color"
+                  [style.background-color]="
+                    getColorPorTipo(asiento.invitado.tipo)
+                  "
+                >
+                </span>
+                <div class="invitado-datos">
+                  <span class="invitado-nombre">{{
+                    asiento.invitado.nombre
+                  }}</span>
+                  <span class="invitado-tipo-small">{{
+                    asiento.invitado.tipo
+                  }}</span>
+                </div>
+              </div>
+              <button
+                class="btn-remove-inv"
+                (click)="quitarInvitadoDeMesa(obtenerIdInvitado(asiento))"
+              >
+                ×
+              </button>
+            </div>
+            <div *ngIf="!asiento.ocupado" class="invitado-vacio">
+              <span class="asiento-vacio-icon">○</span>
+              <span class="asiento-vacio-text">Asiento vacío</span>
+            </div>
+          </li>
+        </ul>
+
+        <div
+          class="empty-message"
+          *ngIf="
+            !mesaSeleccionada.asientos || mesaSeleccionada.asientos.length === 0
+          "
+        >
+          <span class="empty-icon">🪑</span>
+          <p>No hay asientos configurados</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: ACCIONES DE LA MESA -->
+    <div class="panel-section panel-actions">
+      <h4><span class="section-icon">⚙️</span> Acciones</h4>
+
+      <button class="btn-danger" (click)="eliminarMesa()">
+        <span class="btn-icon">🗑️</span> Eliminar Mesa
+      </button>
     </div>
   </aside>
+</div>
+
+<!-- ✅ MODAL FUERA DEL WRAPPER - ESTO ES CRÍTICO -->
+<div class="modal-overlay" *ngIf="invitadoModalInfo" (mousedown)="cerrarModalInvitado()">
+  <!-- ✅ Modal con evento mousedown.stop para prevenir propagación -->
+  <div class="modal-invitado" (mousedown)="$event.stopPropagation()">
+    <button class="btn-close-modal" (click)="cerrarModalForzado()">×</button>
+
+    <div class="modal-header-inv">
+      <div
+        class="modal-avatar"
+        [style.background-color]="getColorPorTipo(invitadoModalInfo.tipo)"
+      >
+        {{ obtenerIniciales(invitadoModalInfo.nombre) }}
+      </div>
+      <h3>{{ invitadoModalInfo.nombre }}</h3>
+    </div>
+
+    <div class="modal-body-inv">
+      <div class="modal-info-row">
+        <span class="modal-label">👥 Categoría:</span>
+        <span
+          class="modal-badge"
+          [style.background-color]="getColorPorTipo(invitadoModalInfo.tipo)"
+        >
+          {{ invitadoModalInfo.tipo }}
+        </span>
+      </div>
+
+      <div class="modal-info-row">
+        <span class="modal-label">✉️ Confirmación:</span>
+        <span
+          class="modal-value"
+          [class.confirmado]="invitadoModalInfo.confirmado"
+        >
+          {{
+            invitadoModalInfo.confirmado ? "✅ Confirmado" : "⏳ Pendiente"
+          }}
+        </span>
+      </div>
+
+      <div class="modal-info-row" *ngIf="invitadoModalInfo.alergias">
+        <span class="modal-label">⚠️ Alergias:</span>
+        <span class="modal-value alergias">{{
+          invitadoModalInfo.alergias
+        }}</span>
+      </div>
+
+      <div class="modal-info-row" *ngIf="!invitadoModalInfo.alergias">
+        <span class="modal-label">✓ Alergias:</span>
+        <span class="modal-value">Sin alergias reportadas</span>
+      </div>
+
+      <div class="modal-info-row" *ngIf="invitadoModalInfo.email">
+        <span class="modal-label">📧 Email:</span>
+        <span class="modal-value">{{ invitadoModalInfo.email }}</span>
+      </div>
+    </div>
+  </div>
 </div>
