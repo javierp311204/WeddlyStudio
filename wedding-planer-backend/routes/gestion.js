@@ -337,6 +337,7 @@ router.get("/detalles/:codigo", async (req, res) => {
 router.post("/detalles", async (req, res) => {
   try {
     const { codigoBoda } = req.body;
+    const Notificacion = require('../models/Notificacion');
 
     const configActualizada = await BodaConfig.findOneAndUpdate(
       { codigoBoda },
@@ -344,9 +345,28 @@ router.post("/detalles", async (req, res) => {
       { new: true, upsert: true }
     );
 
+    const invitadosConNick = configActualizada.invitados.filter(inv => inv.nick && inv.nick !== "");
+
+    if (invitadosConNick.length > 0) {
+      const notificaciones = invitadosConNick.map(inv => ({
+        usuarioDestino: inv.nick,
+        tipoUsuario: 'invitado',
+        codigoBoda: codigoBoda,
+        titulo: '✨ ¡Novedades en la Boda!',
+        mensaje: 'El administrador ha actualizado la información del evento. ¡Echa un vistazo!',
+        tipo: 'info-boda',
+        ruta: '/info-boda',
+        leida: false
+      }));
+
+      await Notificacion.insertMany(notificaciones);
+      console.log(`✅ ${notificaciones.length} notificaciones creadas para invitados`);
+    }
+
     res.json({ 
-      mensaje: "Configuración guardada", 
-      data: configActualizada 
+      mensaje: "Configuración guardada y avisos enviados", 
+      data: configActualizada,
+      notificacionesEnviadas: invitadosConNick.length
     });
 
   } catch (error) {

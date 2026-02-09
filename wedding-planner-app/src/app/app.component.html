@@ -14,6 +14,9 @@
         <p class="toast-title">{{ toast.title }}</p>
         <p class="toast-sub">{{ toast.message }}</p>
       </div>
+      <button class="toast-close" (click)="notifService.hideToast()">
+        &times;
+      </button>
     </div>
   </div>
 </div>

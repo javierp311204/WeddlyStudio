@@ -46,8 +46,8 @@ export class LoginComponent {
         localStorage.setItem('rol', res.rol);
         localStorage.setItem('codigoBoda', res.codigoBoda);
         localStorage.setItem('usuarioEmail', res.email);
-
         localStorage.setItem('usuarioNick', res.nick);
+        localStorage.setItem('tipoUsuario', res.tipoUsuario || 'invitado');
 
         this.notifService.showSuccess(
           'Login exitoso',

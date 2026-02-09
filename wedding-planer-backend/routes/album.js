@@ -8,7 +8,6 @@ const Notificacion = require('../models/Notificacion');
 
 const upload = multer({ dest: 'uploads/' });
 
-// Define el esquema directamente aquí si hay problemas con el modelo
 const AlbumSchema = new mongoose.Schema({
     codigoBoda: { type: String, required: true, unique: true },
     fotos: [{
@@ -18,7 +17,6 @@ const AlbumSchema = new mongoose.Schema({
     }]
 }, { collection: 'albumes_digitales' });
 
-// Usa mongoose.models para evitar errores de recompilación
 const Album = mongoose.models.Album || mongoose.model('Album', AlbumSchema);
 
 // Ruta de prueba
@@ -26,7 +24,7 @@ router.get('/test', (req, res) => {
     res.json({ mensaje: "Test funcionando" });
 });
 
-// Ruta para subir fotos
+// ✅ Ruta para subir fotos CORREGIDA
 router.post('/subir', auth, upload.single('imagen'), async (req, res) => {
     console.log("=== POST /subir ===");
     
@@ -44,23 +42,26 @@ router.post('/subir', auth, upload.single('imagen'), async (req, res) => {
             { upsert: true, new: true }
         );
 
+        // ✅ Buscar al admin de esta boda
         const adminReal = await Usuario.findOne({ 
             codigoBoda: codigoBoda, 
             rol: 'admin' 
         });
 
         if (adminReal) {
+            // ✅ CRÍTICO: Crear notificación con tipoUsuario
             const nuevaNotif = new Notificacion({
                 usuarioDestino: adminReal.nick, 
+                tipoUsuario: 'admin', // ✅ NUEVO: Especificar que es para admin
                 codigoBoda: codigoBoda,
                 titulo: '📷 ¡Nueva foto!',
                 mensaje: `${usuario || 'Un invitado'} ha subido una foto al álbum.`,
-                tipo: 'foto',
+                tipo: 'foto', // Cambiado de 'album' a 'foto' para ser más específico
                 leida: false
             });
 
             await nuevaNotif.save();
-            console.log(`✅ Notificación enviada al admin: ${adminReal.nick}`);
+            console.log(`✅ Notificación enviada al admin: ${adminReal.nick} (tipoUsuario: admin)`);
         } else {
             console.log("⚠️ No se encontró un usuario con rol 'admin' para esta boda.");
         }

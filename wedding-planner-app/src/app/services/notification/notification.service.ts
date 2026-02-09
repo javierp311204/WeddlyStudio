@@ -38,6 +38,7 @@ export class NotificationService {
   showSuccess(title: string, message: string) {
     this.toastSubject.next({ title, message, type: 'success', show: true });
     this.autoHide();
+    
   }
 
   showError(title: string, message: string) {
@@ -50,6 +51,13 @@ export class NotificationService {
       const current = this.toastSubject.value;
       this.toastSubject.next({ ...current, show: false });
     }, 3000);
+  }
+
+  hideToast() {
+    const current = this.toastSubject.value;
+    if (current.show) {
+      this.toastSubject.next({ ...current, show: false });
+    }
   }
 
   // MÉTODOS DE CONFIRMACIÓN

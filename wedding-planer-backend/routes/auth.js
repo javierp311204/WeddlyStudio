@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Usuario = require("../models/Usuario");
 const BodaConfig = require("../models/BodaConfig");
-const bcrypt = require("bcryptjs"); // Para encriptar
-const jwt = require("jsonwebtoken"); // Para el Token
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const SECRET_KEY = "tu_clave_secreta_boda_2024"; // ¡Usa una frase larga!
+const SECRET_KEY = "tu_clave_secreta_boda_2024";
 
 // REGISTRO
 router.post("/registro", async (req, res) => {
@@ -88,7 +88,7 @@ router.post("/registro", async (req, res) => {
   }
 });
 
-// LOGIN
+// ✅ LOGIN CORREGIDO
 router.post("/login", async (req, res) => {
   try {
     const { email, pass } = req.body;
@@ -97,17 +97,18 @@ router.post("/login", async (req, res) => {
     if (!user)
       return res.status(401).json({ mensaje: "Usuario no encontrado" });
 
-    // 2. Comparar la contraseña enviada con la de la BD
     const esValida = await bcrypt.compare(pass, user.pass);
     if (!esValida)
       return res.status(401).json({ mensaje: "Contraseña incorrecta" });
 
-    // 3. Generar el Token JWT
     const token = jwt.sign(
       { id: user._id, rol: user.rol, codigoBoda: user.codigoBoda },
       SECRET_KEY,
       { expiresIn: "24h" }
     );
+
+    // ✅ CRITICAL: Determinar tipoUsuario basado en el rol
+    const tipoUsuario = user.rol === 'admin' ? 'admin' : 'invitado';
 
     res.json({
       success: true,
@@ -115,8 +116,11 @@ router.post("/login", async (req, res) => {
       rol: user.rol,
       codigoBoda: user.codigoBoda,
       nick: user.nick,
+      tipoUsuario: tipoUsuario // ✅ NUEVO: Agregar tipoUsuario
     });
+
   } catch (error) {
+    console.error("❌ Error en login:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 });

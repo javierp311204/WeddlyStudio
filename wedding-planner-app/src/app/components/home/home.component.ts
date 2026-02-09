@@ -96,7 +96,7 @@ export class HomeComponent implements OnInit {
 
     driverObj.drive();
   }
-  // Para que solo se muestre la primera vez que se registran
+
   ngAfterViewInit() {
     const nick = localStorage.getItem('usuarioNick');
     const tourKey = `tourVisto_${nick}`;
@@ -107,27 +107,28 @@ export class HomeComponent implements OnInit {
       setTimeout(() => {
         this.iniciarTour();
         localStorage.setItem(tourKey, 'true');
-      }, 1000); // Un pequeño delay para que cargue bien la vista
+      }, 1000);
     }
   }
 
   cargarNotificaciones() {
     const usuario = localStorage.getItem('usuarioNick');
     const codigo = localStorage.getItem('codigoBoda');
+    const tipoUsuario = localStorage.getItem('tipoUsuario') || 'invitado';
 
     if (usuario && codigo) {
-      // Tipamos explícitamente la respuesta como 'any' para evitar el error de tipado
-      this.notifService.getNotificaciones(usuario, codigo).subscribe({
-        next: (res: any) => {
-          // Nos aseguramos de que la respuesta sea un array antes de procesarla
-          this.notificaciones = Array.isArray(res) ? res : [];
-          this.notificacionesSinLeer = this.notificaciones.filter(
-            (n) => !n.leida,
-          ).length;
-        },
-        error: (err: any) =>
-          console.error('Error al cargar notificaciones:', err),
-      });
+      this.notifService
+        .getNotificaciones(usuario, codigo, tipoUsuario)
+        .subscribe({
+          next: (res: any) => {
+            this.notificaciones = Array.isArray(res) ? res : [];
+            this.notificacionesSinLeer = this.notificaciones.filter(
+              (n) => !n.leida,
+            ).length;
+          },
+          error: (err: any) =>
+            console.error('Error al cargar notificaciones:', err),
+        });
     }
   }
 
@@ -136,17 +137,49 @@ export class HomeComponent implements OnInit {
   }
 
   leerNotificacion(n: any) {
+    // Marcar como leída
     if (!n.leida) {
       this.notifService.marcarComoLeida(n._id).subscribe({
         next: () => {
           n.leida = true;
-          // Actualizamos el contador restando 1 de forma segura
           if (this.notificacionesSinLeer > 0) {
             this.notificacionesSinLeer--;
           }
         },
         error: (err: any) => console.error('Error al marcar como leída:', err),
       });
+    }
+
+    // Redirigir según el tipo
+    this.redirigirSegunTipo(n);
+  }
+
+  redirigirSegunTipo(notificacion: any) {
+    this.mostrarPanel = false;
+
+    if (notificacion.ruta) {
+      this.router.navigate([notificacion.ruta]);
+      return;
+    }
+
+    switch (notificacion.tipo) {
+      case 'foto':
+         this.router.navigate(['/album']);
+        break;
+      case 'album':
+        this.router.navigate(['/album']);
+        break;
+      case 'info-boda':
+        this.router.navigate(['/info-boda']);
+        break;
+      case 'mesa':
+        this.router.navigate(['/plano']);
+        break;
+      case 'info':
+      case 'general':
+        break;
+      default:
+        console.log('Tipo de notificación sin ruta:', notificacion.tipo);
     }
   }
 

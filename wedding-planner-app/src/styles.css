@@ -6,6 +6,7 @@ body { margin: 0; font-family: 'Playfair Display', serif; background-color: #fdf
    ========================================= */
 .toast-notification {
   position: fixed;
+  overflow: hidden;
   top: 25px;
   right: -500px; /* Escondida más lejos para evitar sombras visibles */
   background: white;
@@ -21,7 +22,7 @@ body { margin: 0; font-family: 'Playfair Display', serif; background-color: #fdf
   min-width: 280px;      /* Pero con un mínimo para que no se vea vacía */
   max-width: 350px;      /* Límite para que no tape toda la pantalla */
   height: auto;          /* Altura flexible según el texto */
-  display: block;        /* Cambiamos a bloque para que el contenido fluya abajo */
+  display: block;       
 }
 
 /* Cuando se muestra, le damos un margen seguro desde el borde */
@@ -35,9 +36,38 @@ body { margin: 0; font-family: 'Playfair Display', serif; background-color: #fdf
 
 .toast-content { 
   display: flex; 
-  align-items: flex-start; /* Icono arriba, no en el centro */
+  align-items: center;
+  padding-right: 30px; /* Icono arriba, no en el centro */
   gap: 15px;
   width: 100%;
+}
+
+.toast-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #666;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.toast-close:hover {
+  color: #000; /* O blanco si tu fondo es oscuro */
+}
+
+/* Si quieres que la X sea blanca en errores */
+.toast-notification.error .toast-close {
+  color: #fff;
+  opacity: 0.8;
+}
+
+.toast-notification.error .toast-close:hover {
+  opacity: 1;
 }
 
 .text-wrapper {
