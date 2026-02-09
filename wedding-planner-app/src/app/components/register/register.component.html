@@ -20,6 +20,7 @@
         type="text"
         [(ngModel)]="nick"
         placeholder="Ej: El Rey de la Pista"
+        (keyup.enter)="registrar()"
       />
     </div>
 
@@ -29,6 +30,7 @@
         type="email"
         [(ngModel)]="email"
         placeholder="Tu correo electrónico"
+        (keyup.enter)="registrar()"
       />
     </div>
 
@@ -38,6 +40,7 @@
         type="password"
         [(ngModel)]="pass"
         placeholder="Mínimo 6 caracteres"
+        (keyup.enter)="registrar()"
       />
     </div>
 
@@ -45,7 +48,7 @@
       <label>{{
         rol === "admin" ? "Código de tu boda" : "Código de la invitación"
       }}</label>
-      <input type="text" [(ngModel)]="codigoBoda" placeholder="Ej: BODA2025" />
+      <input type="text" [(ngModel)]="codigoBoda" placeholder="Ej: BODA2025" (keyup.enter)="registrar()"/>
     </div>
 
     <button class="btn-auth" (click)="registrar()">Crear Cuenta</button>

@@ -12,12 +12,13 @@
         type="email"
         [(ngModel)]="email"
         placeholder="ejemplo@correo.com"
+        (keyup.enter)="login()"
       />
     </div>
 
     <div class="input-group">
       <label>Contraseña</label>
-      <input type="password" [(ngModel)]="pass" placeholder="••••••••" />
+      <input type="password" [(ngModel)]="pass" placeholder="••••••••" (keyup.enter)="login()"/>
     </div>
 
     <button class="btn-auth" (click)="login()">Iniciar Sesión</button>
