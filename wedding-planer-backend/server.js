@@ -8,7 +8,8 @@ const app = express();
 const autenticar = require("./middleware/auth");
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' })); 
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use('/uploads', express.static('uploads'));
 
 if (!fs.existsSync('./uploads')) fs.mkdirSync('./uploads');

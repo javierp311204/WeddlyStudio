@@ -2,9 +2,91 @@ const express = require("express");
 const router = express.Router();
 const BodaConfig = require("../models/BodaConfig");
 const autenticar = require('../middleware/auth');
+const emailService = require('../services/emailService');
+
+// ============================================
+// 🔓 RUTAS PÚBLICAS (SIN AUTENTICACIÓN)
+// ============================================
+
+// GET: Configuración de papelería (PÚBLICA)
+router.get("/configuracion-boda/:codigo", async (req, res) => {
+  console.log("=== GET /configuracion-boda (PÚBLICA) ===");
+  console.log("Código:", req.params.codigo);
+  
+  try {
+    const boda = await BodaConfig.findOne({ codigoBoda: req.params.codigo });
+    
+    if (!boda) {
+      console.log("❌ Boda no encontrada");
+      return res.status(404).json({ error: "Boda no encontrada" });
+    }
+
+    const respuesta = {
+      nombreNovia: boda.papeleria?.nombreNovia || '',
+      nombreNovio: boda.papeleria?.nombreNovio || '',
+      fecha: boda.papeleria?.fecha || boda.fechaHora || '',
+      colorFondo: boda.papeleria?.colorFondo || '#ffffff',
+      colorTexto: boda.papeleria?.colorTexto || '#d4a373',
+      textoExtra: boda.papeleria?.textoExtra || '',
+      plantilla: boda.papeleria?.plantilla || 'clasica',
+      imagenFondo: boda.papeleria?.imagenFondo || null
+    };
+
+    console.log("✅ Configuración enviada");
+    res.json(respuesta);
+    
+  } catch (error) {
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Error al cargar configuración" });
+  }
+});
+
+// POST: Guardar configuración de papelería (PÚBLICA)
+router.post("/configuracion-boda", async (req, res) => {
+  console.log("=== POST /configuracion-boda (PÚBLICA) ===");
+  console.log("Body:", req.body);
+  
+  try {
+    const { codigoBoda, ...datosPapeleria } = req.body;
+
+    if (!codigoBoda) {
+      return res.status(400).json({ error: "Código de boda requerido" });
+    }
+
+    const bodaActualizada = await BodaConfig.findOneAndUpdate(
+      { codigoBoda },
+      { 
+        $set: { 
+          papeleria: datosPapeleria
+        }
+      },
+      { 
+        new: true,
+        upsert: true 
+      }
+    );
+
+    console.log("✅ Configuración guardada");
+    res.json({ 
+      mensaje: "Configuración guardada correctamente",
+      papeleria: bodaActualizada.papeleria
+    });
+    
+  } catch (error) {
+    console.error("❌ Error:", error);
+    res.status(500).json({ 
+      error: "Error al guardar configuración", 
+      detalle: error.message 
+    });
+  }
+});
+
+// ============================================
+// 🔒 RUTAS PROTEGIDAS (CON AUTENTICACIÓN)
+// ============================================
 
 // --- MESAS ---
-router.get("/mesas", async (req, res) => {
+router.get("/mesas", autenticar, async (req, res) => {
   try {
     const { codigoBoda } = req.query;
     const boda = await BodaConfig.findOne({ codigoBoda });
@@ -17,8 +99,7 @@ router.get("/mesas", async (req, res) => {
   }
 });
 
-// POST: Agregar mesa (SINCRONIZADO con plano)
-router.post("/mesas", async (req, res) => {
+router.post("/mesas", autenticar, async (req, res) => {
   console.log("=== POST /mesas recibida ===");
   console.log("Body:", req.body);
   
@@ -27,13 +108,11 @@ router.post("/mesas", async (req, res) => {
     
     console.log("Buscando boda con código:", codigoBoda);
     
-    // Posición inicial (centro si no se especifica)
     const posicionInicial = {
       x: (posicion && posicion.x !== undefined) ? posicion.x : 50,
       y: (posicion && posicion.y !== undefined) ? posicion.y : 50
     };
 
-    // ✅ CREAR ASIENTOS VACÍOS (para que funcione el plano)
     const asientosVacios = [];
     const capacidadMesa = capacidad || 8;
     for (let i = 0; i < capacidadMesa; i++) {
@@ -54,7 +133,7 @@ router.post("/mesas", async (req, res) => {
             capacidad: capacidadMesa,
             posicion: posicionInicial,
             radio: 60,
-            asientos: asientosVacios // ⬅️ CRÍTICO para el plano
+            asientos: asientosVacios
           } 
         },
         $setOnInsert: {
@@ -81,16 +160,13 @@ router.post("/mesas", async (req, res) => {
   }
 });
 
-// DELETE: Eliminar mesa (SINCRONIZADO)
-router.delete("/mesas/:id", async (req, res) => {
+router.delete("/mesas/:id", autenticar, async (req, res) => {
   console.log("=== DELETE /mesas/:id recibida ===");
-  console.log("ID Mesa:", req.params.id);
   
   try {
     const { codigoBoda } = req.query;
     const mesaId = req.params.id;
 
-    // Buscar la mesa antes de eliminarla
     const boda = await BodaConfig.findOne({ codigoBoda });
     if (!boda) {
       return res.status(404).json({ error: "Boda no encontrada" });
@@ -101,10 +177,8 @@ router.delete("/mesas/:id", async (req, res) => {
       return res.status(404).json({ error: "Mesa no encontrada" });
     }
 
-    // ✅ LIBERAR INVITADOS que estaban en esta mesa (sincronización)
     const nombreMesa = mesa.nombre;
     
-    // Actualizar invitados que tenían esta mesa asignada
     await BodaConfig.updateOne(
       { codigoBoda },
       { 
@@ -117,7 +191,6 @@ router.delete("/mesas/:id", async (req, res) => {
       }
     );
 
-    // Eliminar la mesa
     const bodaActualizada = await BodaConfig.findOneAndUpdate(
       { codigoBoda },
       { 
@@ -140,7 +213,7 @@ router.delete("/mesas/:id", async (req, res) => {
 });
 
 // --- INVITADOS ---
-router.get("/invitados", async (req, res) => {
+router.get("/invitados", autenticar, async (req, res) => {
   try {
     const { codigoBoda, busqueda, tipo } = req.query;
 
@@ -170,9 +243,8 @@ router.get("/invitados", async (req, res) => {
   }
 });
 
-router.post("/invitados", async (req, res) => {
+router.post("/invitados", autenticar, async (req, res) => {
   console.log("=== POST /invitados recibida ===");
-  console.log("Body:", req.body);
   
   try {
     const { codigoBoda, nombre, email, tipo, menu, mesa } = req.body;
@@ -216,12 +288,7 @@ router.post("/invitados", async (req, res) => {
   }
 });
 
-// PUT: Actualizar invitado (SINCRONIZADO con asientos del plano)
-router.put('/invitados/:id', async (req, res) => {
-    console.log("=== PUT /invitados/:id recibida ===");
-    console.log("ID:", req.params.id);
-    console.log("Body:", req.body);
-    
+router.put('/invitados/:id', autenticar, async (req, res) => {
     try {
         const { codigoBoda, mesa } = req.body;
         const invitadoId = req.params.id;
@@ -231,7 +298,6 @@ router.put('/invitados/:id', async (req, res) => {
             return res.status(404).json({ error: "Boda no encontrada" });
         }
 
-        // Buscar el invitado
         const invitado = boda.invitados.id(invitadoId);
         if (!invitado) {
             return res.status(404).json({ error: "Invitado no encontrado" });
@@ -239,9 +305,6 @@ router.put('/invitados/:id', async (req, res) => {
 
         const mesaAnterior = invitado.mesa;
 
-        // ✅ SINCRONIZACIÓN CON ASIENTOS
-
-        // 1. Si tenía mesa anterior, liberar ese asiento
         if (mesaAnterior && mesaAnterior !== "") {
             const mesaViejaObj = boda.mesas.find(m => m.nombre === mesaAnterior);
             if (mesaViejaObj) {
@@ -251,33 +314,24 @@ router.put('/invitados/:id', async (req, res) => {
                 if (asientoOcupado) {
                     asientoOcupado.ocupado = false;
                     asientoOcupado.invitado_id = null;
-                    console.log(`🔄 Liberado asiento en ${mesaAnterior}`);
                 }
             }
         }
 
-        // 2. Actualizar el campo mesa del invitado
         invitado.mesa = mesa || "";
 
-        // 3. Si la nueva mesa existe, ocupar un asiento
         if (mesa && mesa !== "") {
             const mesaNuevaObj = boda.mesas.find(m => m.nombre === mesa);
             if (mesaNuevaObj) {
-                // Buscar primer asiento vacío
                 const asientoLibre = mesaNuevaObj.asientos.find(a => !a.ocupado);
                 if (asientoLibre) {
                     asientoLibre.ocupado = true;
                     asientoLibre.invitado_id = invitadoId;
-                    console.log(`✅ Invitado asignado a asiento en ${mesa}`);
-                } else {
-                    console.log(`⚠️ Mesa ${mesa} llena, pero se actualizó el campo mesa del invitado`);
                 }
             }
         }
 
         await boda.save();
-
-        console.log(`✅ Invitado actualizado y sincronizado`);
         res.json(invitado);
         
     } catch (error) {
@@ -286,7 +340,7 @@ router.put('/invitados/:id', async (req, res) => {
     }
 });
 
-router.delete("/invitados/:id", async (req, res) => {
+router.delete("/invitados/:id", autenticar, async (req, res) => {
   try {
     const { codigoBoda } = req.query;
     const invitadoId = req.params.id;
@@ -296,7 +350,6 @@ router.delete("/invitados/:id", async (req, res) => {
       return res.status(404).json({ error: "Boda no encontrada" });
     }
 
-    // ✅ LIBERAR ASIENTO si estaba ocupado
     for (let mesa of boda.mesas) {
       const asiento = mesa.asientos.find(
         a => a.invitado_id && a.invitado_id.toString() === invitadoId
@@ -304,11 +357,9 @@ router.delete("/invitados/:id", async (req, res) => {
       if (asiento) {
         asiento.ocupado = false;
         asiento.invitado_id = null;
-        console.log(`🔄 Asiento liberado en ${mesa.nombre}`);
       }
     }
 
-    // Eliminar invitado
     boda.invitados.pull(invitadoId);
     await boda.save();
 
@@ -324,7 +375,7 @@ router.delete("/invitados/:id", async (req, res) => {
 });
 
 // --- CONFIGURACIÓN BODA ---
-router.get("/detalles/:codigo", async (req, res) => {
+router.get("/detalles/:codigo", autenticar, async (req, res) => {
   try {
     const config = await BodaConfig.findOne({ codigoBoda: req.params.codigo });
     if (!config) return res.status(404).json({ error: "Boda no encontrada en DB" });
@@ -334,7 +385,7 @@ router.get("/detalles/:codigo", async (req, res) => {
   }
 });
 
-router.post("/detalles", async (req, res) => {
+router.post("/detalles", autenticar, async (req, res) => {
   try {
     const { codigoBoda } = req.body;
     const Notificacion = require('../models/Notificacion');
@@ -360,7 +411,7 @@ router.post("/detalles", async (req, res) => {
       }));
 
       await Notificacion.insertMany(notificaciones);
-      console.log(`✅ ${notificaciones.length} notificaciones creadas para invitados`);
+      console.log(`✅ ${notificaciones.length} notificaciones creadas`);
     }
 
     res.json({ 
@@ -372,6 +423,107 @@ router.post("/detalles", async (req, res) => {
   } catch (error) {
     console.error("❌ Error al guardar:", error);
     res.status(500).json({ error: "Error al procesar la configuración" });
+  }
+});
+
+// ============================================
+// 📧 ENVÍO DE INVITACIONES (PÚBLICAS)
+// ============================================
+
+router.post("/enviar-invitacion-individual", async (req, res) => {
+  console.log("=== POST /enviar-invitacion-individual ===");
+  
+  try {
+    const { email, nombre, datosInvitacion, pdfBase64 } = req.body;
+
+    if (!email || !datosInvitacion) {
+      return res.status(400).json({ error: "Datos incompletos" });
+    }
+
+    let pdfBuffer = null;
+    if (pdfBase64) {
+      const base64Data = pdfBase64.replace(/^data:application\/pdf;[^,]+,/, '');
+      pdfBuffer = Buffer.from(base64Data, 'base64');
+    }
+
+    const datos = {
+      ...datosInvitacion,
+      nombreInvitado: nombre
+    };
+
+    const resultado = await emailService.enviarInvitacion(email, datos, pdfBuffer);
+
+    if (resultado.success) {
+      res.json({ 
+        mensaje: "Invitación enviada correctamente",
+        messageId: resultado.messageId 
+      });
+    } else {
+      res.status(500).json({ 
+        error: "Error al enviar el email",
+        detalle: resultado.error 
+      });
+    }
+
+  } catch (error) {
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Error al procesar la solicitud" });
+  }
+});
+
+router.post("/enviar-invitaciones-masivas", async (req, res) => {
+  console.log("=== POST /enviar-invitaciones-masivas ===");
+  
+  try {
+    const { codigoBoda, pdfBase64, datosInvitacion } = req.body;
+
+    if (!codigoBoda || !datosInvitacion) {
+      return res.status(400).json({ error: "Datos incompletos" });
+    }
+
+    const boda = await BodaConfig.findOne({ codigoBoda });
+    if (!boda) {
+      return res.status(404).json({ error: "Boda no encontrada" });
+    }
+
+    const invitadosConEmail = boda.invitados.filter(
+      inv => inv.email && inv.email.includes('@')
+    );
+
+    if (invitadosConEmail.length === 0) {
+      return res.status(400).json({ 
+        error: "No hay invitados con email válido" 
+      });
+    }
+
+    let pdfBuffer = null;
+    if (pdfBase64) {
+      const base64Data = pdfBase64.replace(/^data:application\/pdf;[^,]+,/, '');
+      pdfBuffer = Buffer.from(base64Data, 'base64');
+    }
+
+    const resultados = await emailService.enviarInvitacionMasiva(
+      invitadosConEmail,
+      datosInvitacion,
+      pdfBuffer
+    );
+
+    const exitosos = resultados.filter(r => r.success).length;
+    const fallidos = resultados.filter(r => !r.success).length;
+
+    console.log(`✅ Enviados: ${exitosos} | ❌ Fallidos: ${fallidos}`);
+
+    res.json({
+      mensaje: "Proceso de envío completado",
+      total: resultados.length,
+      exitosos,
+      fallidos,
+      detalles: resultados
+    });
+
+  } catch (error) {
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Error al procesar el envío masivo" });
   }
 });
 

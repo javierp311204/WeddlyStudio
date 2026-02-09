@@ -14,10 +14,23 @@ const InvitadoSchema = new mongoose.Schema({
   mesa: String,
   nick: { type: String, default: "" },
   registrado: { type: Boolean, default: false },
-  // Nuevos campos para el plano
+  // Campos para el plano
   alergias: { type: String, default: "" },
   notas: { type: String, default: "" },
-  confirmado: { type: Boolean, default: false }
+  confirmado: { type: Boolean, default: false },
+  
+  // ✨ NUEVOS: Para invitaciones digitales
+  uuid: { type: String, unique: true, sparse: true }, // ID único para link de invitación
+  estadoRSVP: { 
+    type: String, 
+    enum: ['pendiente', 'confirmado', 'cancelado', 'tal_vez'], 
+    default: 'pendiente' 
+  },
+  fechaRSVP: Date,
+  numAcompanantes: { type: Number, default: 0 },
+  nombreAcompanantes: [String],
+  invitacionEnviada: { type: Boolean, default: false },
+  fechaEnvioInvitacion: Date
 });
 
 const MesaSchema = new mongoose.Schema({
@@ -62,7 +75,32 @@ const BodaConfigSchema = new mongoose.Schema({
   menuResumen: String,
   invitados: [InvitadoSchema],
   mesas: [MesaSchema],
-  finca: FincaSchema 
+  finca: FincaSchema,
+  
+  // ✨ NUEVO: Configuración de papelería e invitaciones
+  configuracionPapeleria: {
+    nombreNovia: String,
+    nombreNovio: String,
+    fecha: String,
+    colorFondo: { type: String, default: '#ffffff' },
+    colorTexto: { type: String, default: '#d4a373' },
+    textoExtra: String,
+    plantilla: { type: String, default: 'clasica' },
+    imagenFondo: String,
+    templateActivo: { type: mongoose.Schema.Types.ObjectId, ref: 'Template' }
+  },
+  
+  // ✅ Alias más simple para la configuración de papelería
+  papeleria: {
+    nombreNovia: String,
+    nombreNovio: String,
+    fecha: String,
+    colorFondo: { type: String, default: '#ffffff' },
+    colorTexto: { type: String, default: '#d4a373' },
+    textoExtra: String,
+    plantilla: { type: String, default: 'clasica' },
+    imagenFondo: String
+  }
 });
 
 module.exports = mongoose.model("BodaConfig", BodaConfigSchema);

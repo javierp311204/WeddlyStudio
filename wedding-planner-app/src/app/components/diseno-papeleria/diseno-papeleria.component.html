@@ -1,75 +1,456 @@
-<div class="editor-layout">
-  
-  <aside class="controls-panel">
-    <button class="btn-back" (click)="irAlMenu()">
-      ⬅ Volver al Menú
+<div class="papeleria-container">
+  <!-- Header con navegación -->
+  <header class="editor-header">
+    <button class="btn-volver" (click)="irAlMenu()">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M19 12H5M12 19l-7-7 7-7" />
+      </svg>
+      Volver
     </button>
 
-    <h3>Configuración</h3>
+    <h1 class="titulo-principal">
+      <span class="icon">✨</span>
+      Diseño de Invitación
+    </h1>
 
-    <div class="control-group">
-      <label>Foto de los Novios</label>
-      <input type="file" (change)="onFileSelected($event)" accept="image/*" class="file-input">
-    </div>
+    <button class="btn-guardar-header" (click)="guardarConfiguracion()">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+        />
+        <polyline points="17 21 17 13 7 13 7 21" />
+        <polyline points="7 3 7 8 15 8" />
+      </svg>
+      Guardar
+    </button>
+  </header>
 
-    <div class="control-group">
-      <label>Nombres</label>
-      <div class="input-pair">
-        <input type="text" [(ngModel)]="nombreNovia">
-        <input type="text" [(ngModel)]="nombreNovio">
+  <div class="editor-body">
+    <!-- Panel lateral de controles -->
+    <aside class="panel-controles">
+      <!-- Sección: Plantilla -->
+      <section class="seccion-control">
+        <h3 class="seccion-titulo">
+          <span class="numero">1</span>
+          Elige tu Estilo
+        </h3>
+        <div class="plantillas-grid">
+          <div
+            class="plantilla-card"
+            [class.selected]="plantillaActiva === 'clasica'"
+            (click)="cambiarPlantilla('clasica')"
+          >
+            <div class="plantilla-preview clasica-preview">
+              <div class="preview-text">Aa</div>
+            </div>
+            <p class="plantilla-nombre">Clásica</p>
+            <small>Elegante y tradicional</small>
+          </div>
+
+          <div
+            class="plantilla-card"
+            [class.selected]="plantillaActiva === 'moderna'"
+            (click)="cambiarPlantilla('moderna')"
+          >
+            <div class="plantilla-preview moderna-preview">
+              <div class="preview-text">Aa</div>
+            </div>
+            <p class="plantilla-nombre">Moderna</p>
+            <small>Minimalista y sofisticada</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección: Datos de los novios -->
+      <section class="seccion-control">
+        <h3 class="seccion-titulo">
+          <span class="numero">2</span>
+          Datos de los Novios
+        </h3>
+
+        <div class="form-group">
+          <label>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Nombre de la Novia
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="nombreNovia"
+            (ngModelChange)="registrarCambio()"
+            placeholder="Ej: María"
+            class="input-elegant"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Nombre del Novio
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="nombreNovio"
+            (ngModelChange)="registrarCambio()"
+            placeholder="Ej: Juan"
+            class="input-elegant"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Fecha del Evento
+          </label>
+          <input
+            type="date"
+            [(ngModel)]="fecha"
+            (ngModelChange)="registrarCambio()"
+            class="input-elegant"
+          />
+        </div>
+      </section>
+
+      <!-- Sección: Personalización -->
+      <section class="seccion-control">
+        <h3 class="seccion-titulo">
+          <span class="numero">3</span>
+          Personalización
+        </h3>
+
+        <div class="form-group">
+          <label>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            Foto de los Novios
+          </label>
+          <div class="file-upload-wrapper">
+            <input
+              type="file"
+              id="fileInput"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              class="file-input-hidden"
+            />
+            <label for="fileInput" class="file-upload-label">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              {{ imagenFondo ? "Cambiar imagen" : "Subir imagen" }}
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Paleta de Colores</label>
+          <div class="color-pickers">
+            <div class="color-picker-item">
+              <input
+                type="color"
+                [(ngModel)]="colorTexto"
+                (ngModelChange)="registrarCambio()"
+                id="colorTexto"
+              />
+              <label for="colorTexto">
+                <span
+                  class="color-preview"
+                  [style.backgroundColor]="colorTexto"
+                ></span>
+                Texto
+              </label>
+            </div>
+            <div class="color-picker-item">
+              <input
+                type="color"
+                [(ngModel)]="colorFondo"
+                (ngModelChange)="registrarCambio()"
+                id="colorFondo"
+              />
+              <label for="colorFondo">
+                <span
+                  class="color-preview"
+                  [style.backgroundColor]="colorFondo"
+                ></span>
+                Fondo
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              />
+            </svg>
+            Mensaje Especial
+          </label>
+          <textarea
+            [(ngModel)]="textoExtra"
+            (ngModelChange)="registrarCambio()"
+            rows="4"
+            placeholder="Escribe un mensaje personalizado para tus invitados..."
+            class="textarea-elegant"
+          ></textarea>
+        </div>
+      </section>
+
+      <!-- Botón guardar inferior -->
+      <button class="btn-guardar-principal" (click)="guardarConfiguracion()">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+          />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
+        Guardar Configuración
+      </button>
+    </aside>
+
+    <!-- Vista previa de la invitación -->
+    <main class="preview-area">
+      <div class="preview-header">
+        <h2>Vista Previa</h2>
+        <p>Así verán tu invitación los invitados</p>
       </div>
-    </div>
 
-    <div class="control-group">
-      <label>Fecha del Evento</label>
-      <input type="date" [(ngModel)]="fecha">
-    </div>
+      <div class="preview-wrapper">
+        <div
+          #invitacionCard
+          class="invitacion-card"
+          [ngClass]="plantillaActiva"
+          [style.backgroundColor]="colorFondo"
+          [style.color]="colorTexto"
+          [style.backgroundImage]="
+            imagenFondo
+              ? 'linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url(' +
+                imagenFondo +
+                ')'
+              : 'none'
+          "
+        >
+          <div class="invitacion-contenido">
+            <p class="tagline">¡Nos casamos!</p>
 
-    <div class="control-group">
-      <label>Colores</label>
-      <div class="picker-row">
-        <div><small>Texto</small><br><input type="color" [(ngModel)]="colorTexto"></div>
-        <div><small>Fondo</small><br><input type="color" [(ngModel)]="colorFondo"></div>
+            <h1 class="wedding-names">
+              {{ nombreNovia }}
+              <span class="ampersand">&</span>
+              {{ nombreNovio }}
+            </h1>
+
+            <div class="divider-line"></div>
+
+            <p class="fecha-texto">
+              {{ fecha | date: "EEEE, d 'de' MMMM 'de' y" : "" : "es" }}
+            </p>
+
+            <p class="mensaje-personalizado">{{ textoExtra }}</p>
+
+            <div class="badge-confirmacion">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Confirmación Online
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+      <div class="preview-actions">
+        <button
+          class="btn-preview-action btn-primary"
+          (click)="generarPDF()"
+          [disabled]="generandoPDF"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          {{ generandoPDF ? "Generando..." : "Descargar PDF" }}
+        </button>
 
-    <div class="control-group">
-      <label>Mensaje Personalizado</label>
-      <textarea [(ngModel)]="textoExtra" rows="3" placeholder="Escribe algo especial..."></textarea>
-    </div>
+        <button
+          class="btn-preview-action btn-success"
+          (click)="abrirSelectorInvitados()"
+          [disabled]="enviandoEmail"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+            />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+          {{ enviandoEmail ? "Enviando..." : "Enviar por Email" }}
+        </button>
 
-    <div class="control-group">
-      <label>Estilo</label>
-      <div class="template-selector">
-        <button (click)="cambiarPlantilla('clasica')">Clásica</button>
-        <button (click)="cambiarPlantilla('moderna')">Moderna</button>
+        <button
+          class="btn-preview-action"
+          (click)="enviarInvitacionesMasivas()"
+          [disabled]="enviandoEmail"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          {{ enviandoEmail ? "Enviando..." : "Envío Masivo" }}
+        </button>
       </div>
-    </div>
 
-    <button class="btn-save">💾 Guardar Todo</button>
-  </aside>
+      <!-- Modal Selector de Invitados -->
+      <div class="modal-overlay" *ngIf="mostrarSelectorInvitados" (click)="cerrarSelectorInvitados()">
+        <div class="modal-selector" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3>📧 Selecciona un Invitado</h3>
+            <button class="btn-close-modal" type="button" (click)="cerrarSelectorInvitados()">
+              ✕
+            </button>
+          </div>
 
-  <main class="preview-canvas">
-    <div class="invitacion-card" 
-         [ngClass]="plantillaActiva" 
-         [style.backgroundColor]="colorFondo" 
-         [style.color]="colorTexto"
-         [style.backgroundImage]="imagenFondo ? 'linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url(' + imagenFondo + ')' : 'none'">
-      
-      <p class="tagline">¡Nos casamos!</p>
-      
-      <h1 class="wedding-names">
-        {{ nombreNovia }} <br> & <br> {{ nombreNovio }}
-      </h1>
+          <div class="modal-body">
+            <p class="modal-description">
+              Selecciona a qué invitado deseas enviarle la invitación
+            </p>
 
-      <div class="divider"></div>
-      
-      <p class="fecha-texto">{{ fecha | date:'EEEE, d \'de\' MMMM \'de\' y' : '' : 'es' }}</p>
-      
-      <p class="extra-msg">{{ textoExtra }}</p>
+            <div class="invitados-lista" *ngIf="invitadosConEmail.length > 0">
+              <div 
+                class="invitado-item" 
+                *ngFor="let invitado of invitadosConEmail"
+                (click)="seleccionarInvitado(invitado)"
+              >
+                <div class="invitado-info">
+                  <div class="invitado-nombre">{{ invitado.nombre }}</div>
+                  <div class="invitado-email">{{ invitado.email }}</div>
+                </div>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+            </div>
 
-      <div class="rsvp-badge">CONFIRMACIÓN ONLINE</div>
-    </div>
-  </main>
+            <div class="invitado-sin-email" *ngIf="invitadosConEmail.length === 0">
+              No hay invitados con email registrado
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
 </div>
-
