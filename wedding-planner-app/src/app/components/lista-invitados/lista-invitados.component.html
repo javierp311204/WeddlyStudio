@@ -1,117 +1,159 @@
-<div class="gestion-container">
-  <button class="btn-back" (click)="irAlHome()">
-    <span>←</span> Volver al Panel
+<div class="container py-4" style="max-width: 1100px; background-color: #fcfaf8; min-height: 100vh;">
+  <!-- Botón Volver -->
+  <button class="btn btn-link text-decoration-none text-start p-0 mb-4 fw-semibold" 
+          style="color: #8b5e3c;" 
+          (click)="irAlHome()">
+    <span class="me-2">←</span> Volver al Panel
   </button>
 
-  <header class="gestion-header">
-    <span class="sub-fancy">Asistencia y Organización</span>
-    <h1>Lista de Invitados</h1>
-    <div class="boda-badge">
-      <span class="dot"></span>
-      Boda: {{ codigoBoda }}
+  <!-- Header -->
+  <header class="text-center mb-5">
+    <p class="text-uppercase fw-bold mb-2" 
+       style="letter-spacing: 3px; color: #bc6c25; font-size: 0.8rem;">
+      Asistencia y Organización
+    </p>
+    <h1 class="mb-3">Lista de Invitados</h1>
+    <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill" 
+         style="background: #fefae0; color: #bc6c25;">
+      <span class="badge bg-warning rounded-circle p-1"></span>
+      <span class="small">Boda: {{ codigoBoda }}</span>
     </div>
   </header>
 
-  <section class="add-section">
-    <div class="form-card">
-      <h3>Añadir Invitado</h3>
-      <div class="form-grid">
-        <input
-          type="text"
-          [(ngModel)]="nuevoInvitado.nombre"
-          placeholder="Nombre completo"
-        />
-        <input
-          type="email"
-          [(ngModel)]="nuevoInvitado.email"
-          placeholder="Correo electrónico"
-        />
-        <select [(ngModel)]="nuevoInvitado.tipo">
-          <option value="Familia">Familia</option>
-          <option value="Amigos">Amigos</option>
-          <option value="Trabajo">Trabajo</option>
-        </select>
-        <button class="btn-save" (click)="agregarInvitado()">
-          Guardar Invitado
-        </button>
+  <!-- Formulario Añadir Invitado -->
+  <section class="mb-4">
+    <div class="card border-0 shadow-sm rounded-3">
+      <div class="card-body p-4">
+        <h3 class="h5 mb-3">Añadir Invitado</h3>
+        <div class="row g-3">
+          <div class="col-md-6 col-lg-3">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="nuevoInvitado.nombre"
+              placeholder="Nombre completo"
+            />
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <input
+              type="email"
+              class="form-control"
+              [(ngModel)]="nuevoInvitado.email"
+              placeholder="Correo electrónico"
+            />
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <select class="form-select" [(ngModel)]="nuevoInvitado.tipo">
+              <option value="Familia">Familia</option>
+              <option value="Amigos">Amigos</option>
+              <option value="Trabajo">Trabajo</option>
+            </select>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <button class="btn w-100 text-white fw-semibold" 
+                    style="background: #bc6c25;" 
+                    (click)="agregarInvitado()">
+              Guardar Invitado
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="controls-section">
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
+  <!-- Controles: Búsqueda y Filtros -->
+  <section class="mb-4">
+    <!-- Búsqueda -->
+    <div class="position-relative mb-3">
+      <span class="position-absolute top-50 start-0 translate-middle-y ms-3">🔍</span>
       <input
         type="text"
+        class="form-control ps-5"
         [(ngModel)]="terminoBusqueda"
         (input)="filtrar()"
         placeholder="Buscar por nombre o email..."
       />
     </div>
 
-    <!-- ✨ NUEVO FILTRO BONITO -->
-    <div class="filter-chips-container">
+    <!-- Filtros Chips -->
+    <div class="d-flex flex-wrap gap-2 justify-content-center">
       <button
-        class="filter-chip"
+        class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
         [class.active]="filtroTipo === 'Todos'"
         (click)="cambiarFiltro('Todos')"
       >
-        <span class="chip-icon">📋</span>
+        <span>📋</span>
         <span>Todos</span>
       </button>
       <button
-        class="filter-chip"
+        class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
         [class.active]="filtroTipo === 'Familia'"
         (click)="cambiarFiltro('Familia')"
       >
-        <span class="chip-icon">👨‍👩‍👧</span>
+        <span>👨‍👩‍👧</span>
         <span>Familia</span>
       </button>
       <button
-        class="filter-chip"
+        class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
         [class.active]="filtroTipo === 'Amigos'"
         (click)="cambiarFiltro('Amigos')"
       >
-        <span class="chip-icon">🎉</span>
+        <span>🎉</span>
         <span>Amigos</span>
       </button>
       <button
-        class="filter-chip"
+        class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
         [class.active]="filtroTipo === 'Trabajo'"
         (click)="cambiarFiltro('Trabajo')"
       >
-        <span class="chip-icon">💼</span>
+        <span>💼</span>
         <span>Trabajo</span>
       </button>
     </div>
   </section>
 
-  <div class="invitados-grid">
-    <div class="invitado-card" *ngFor="let inv of invitadosFiltrados">
-      <div class="card-header">
-        <span class="tipo-tag" [ngClass]="inv.tipo.toLowerCase()">{{
-          inv.tipo
-        }}</span>
-        <button class="btn-delete" (click)="eliminarInvitado(inv._id)">
-          ×
-        </button>
-      </div>
+  <!-- Grid de Invitados -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" *ngFor="let inv of invitadosFiltrados">
+      <div class="card border-0 shadow-sm h-100 invitado-card">
+        <div class="card-body p-4">
+          <!-- Header de la tarjeta -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge rounded-pill text-uppercase fw-bold small tipo-tag" 
+                  [ngClass]="inv.tipo.toLowerCase()">
+              {{ inv.tipo }}
+            </span>
+            <button class="btn btn-sm rounded-circle p-0 border-0" 
+                    style="width: 28px; height: 28px; background: #ffeded; color: #e63946;"
+                    (click)="eliminarInvitado(inv._id)">
+              ×
+            </button>
+          </div>
 
-      <div class="card-body">
-        <div class="avatar">{{ inv.nombre.charAt(0) }}</div>
-        <h3>{{ inv.nombre }}</h3>
-        <p class="email">{{ inv.email || "Sin correo" }}</p>
+          <!-- Avatar y nombre -->
+          <div class="text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 fw-bold fs-4"
+                 style="width: 50px; height: 50px; background: #fefae0; color: #bc6c25;">
+              {{ inv.nombre.charAt(0) }}
+            </div>
+            <h3 class="h5 mb-1" style="color: #283618;">{{ inv.nombre }}</h3>
+            <p class="text-muted small mb-3">{{ inv.email || "Sin correo" }}</p>
 
-        <div class="info-badges">
-          <span class="badge-item">🍽️ {{ inv.menu }}</span>
-          <span class="badge-item">🪑 Mesa: {{ inv.mesa || "Pendiente" }}</span>
+            <!-- Badges de información -->
+            <div class="d-flex flex-column gap-2 p-3 rounded-3" 
+                 style="background: #fcfcfc;">
+              <span class="small text-secondary">🍽️ {{ inv.menu }}</span>
+              <span class="small text-secondary">🪑 Mesa: {{ inv.mesa || "Pendiente" }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="empty-state" *ngIf="invitadosFiltrados.length === 0">
-      <div class="empty-icon">👥</div>
-      <p>No se encontraron invitados.</p>
+    <!-- Estado vacío -->
+    <div class="col-12 text-center py-5" *ngIf="invitadosFiltrados.length === 0">
+      <div class="display-1 mb-3">👥</div>
+      <p class="text-muted">No se encontraron invitados.</p>
     </div>
   </div>
 </div>

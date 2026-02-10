@@ -9,7 +9,7 @@
   --bg-white: #ffffff;
   --text-dark: #2c2c2c;
   --text-light: #6b6b6b;
-  --border: #e8e4e0;
+  --border: #d1b499;
   --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
   --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
   --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
@@ -49,13 +49,14 @@
   color: var(--text-dark);
   font-weight: 500;
   cursor: pointer;
-  transition: var(--transition);
+  transition: transform 0.2s;
 }
 
 .btn-volver:hover {
   background: var(--bg-light);
   border-color: var(--primary);
   color: var(--primary);
+  transform: translateX(-5px); 
 }
 
 .titulo-principal {
@@ -80,7 +81,7 @@
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   border: none;
   border-radius: 10px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
@@ -255,6 +256,7 @@
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border: 2px solid var(--border);
 }
 
 .form-group label svg {
@@ -380,7 +382,7 @@
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   border: none;
   border-radius: 12px;
-  color: white;
+  color: var(--text-dark);
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
@@ -480,11 +482,6 @@
   letter-spacing: 3px;
   text-transform: uppercase;
   margin-bottom: 30px;
-  /* ✅ SOMBRA OSCURA para texto claro */
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.7),
-    -1px -1px 2px rgba(0, 0, 0, 0.5),
-    0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .clasica .wedding-names {
@@ -493,20 +490,12 @@
   line-height: 1.3;
   margin: 0;
   font-weight: 400;
-  /* ✅ SOMBRA OSCURA con múltiples capas */
-  text-shadow: 
-    3px 3px 6px rgba(0, 0, 0, 0.8),
-    -2px -2px 4px rgba(0, 0, 0, 0.6),
-    0 0 15px rgba(0, 0, 0, 0.4);
 }
 
 .clasica .ampersand {
   display: block;
   font-size: 3rem;
   margin: 10px 0;
-  text-shadow: 
-    2px 2px 5px rgba(0, 0, 0, 0.7),
-    -1px -1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .clasica .divider-line {
@@ -515,10 +504,6 @@
   background: currentColor;
   margin: 30px auto;
   opacity: 0.9;
-  /* ✅ SOMBRA para la línea */
-  box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.5),
-    0 -1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .clasica .fecha-texto {
@@ -526,9 +511,6 @@
   font-weight: 500;
   margin: 20px 0;
   text-transform: capitalize;
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.7),
-    -1px -1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .clasica .mensaje-personalizado {
@@ -536,9 +518,6 @@
   font-size: 1rem;
   margin: 30px 0;
   line-height: 1.6;
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.7),
-    -1px -1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* ==================== PLANTILLA MODERNA ==================== */
@@ -553,9 +532,6 @@
   font-weight: 700;
   letter-spacing: 4px;
   margin-bottom: 30px;
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.7),
-    -1px -1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .moderna .wedding-names {
@@ -564,10 +540,6 @@
   line-height: 1.2;
   margin: 0;
   letter-spacing: 2px;
-  text-shadow: 
-    3px 3px 6px rgba(0, 0, 0, 0.8),
-    -2px -2px 4px rgba(0, 0, 0, 0.6),
-    0 0 12px rgba(0, 0, 0, 0.4);
 }
 
 .moderna .ampersand {
@@ -575,9 +547,6 @@
   font-size: 2rem;
   font-weight: 300;
   margin: 15px 0;
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.7),
-    -1px -1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .moderna .divider-line {
@@ -585,9 +554,6 @@
   height: 3px;
   background: currentColor;
   margin: 30px auto;
-  box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.6),
-    0 -1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .moderna .fecha-texto {
@@ -595,9 +561,6 @@
   font-weight: 700;
   letter-spacing: 1px;
   margin: 20px 0;
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.7),
-    -1px -1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .moderna .mensaje-personalizado {
@@ -606,9 +569,6 @@
   text-transform: none;
   margin: 30px 0;
   line-height: 1.7;
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.7),
-    -1px -1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* ✅ BADGE con mejor contraste */
@@ -627,7 +587,7 @@
   box-shadow: 
     0 4px 12px rgba(0, 0, 0, 0.4),
     0 2px 6px rgba(0, 0, 0, 0.2);
-  text-shadow: none; /* Badge no necesita text-shadow */
+  text-shadow: none; 
 }
 
 /* ==================== ACCIONES DE PREVIEW ==================== */

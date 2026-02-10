@@ -1,15 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;600&display=swap');
 
+/* ========================================
+   VARIABLES CSS (Paleta de colores)
+   ======================================== */
 :host {
-  /* Nueva Paleta: Elegancia Neutra */
-  --gold: #d4a373;         /* Dorado Bronce */
-  --accent-soft: #e9dcd0;  /* Champagne / Arena */
-  --dark-charcoal: #332f2c; /* Gris Carbón (Sustituye al verde oscuro) */
-  --text: #4a443f;         /* Marrón café muy oscuro para texto */
-  --bg-soft: #fdfaf7;      /* Blanco roto / Crema */
+  --gold: #d4a373;
+  --accent-soft: #e9dcd0;
+  --dark-charcoal: #332f2c;
+  --text: #4a443f;
+  --bg-soft: #fdfaf7;
 }
 
-/* --- RESET & WRAPPER --- */
+/* ========================================
+   ESTILOS GENERALES
+   ======================================== */
 .main-wrapper {
   min-height: 100vh;
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -17,223 +21,176 @@
   scroll-behavior: smooth;
 }
 
-/* --- NAVBAR PERSISTENTE (Sticky) --- */
+/* ========================================
+   NAVBAR STICKY - Efectos personalizados
+   ======================================== */
 .sticky-nav {
-  position: fixed;
   top: -80px;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  z-index: 1000;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.03);
-  transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.sticky-nav.visible { top: 0; }
-
-.nav-container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
+.sticky-nav.visible {
+  top: 0;
 }
 
-/* El logo ahora es gris carbón en lugar de verde */
-.nav-logo { 
-  font-family: 'Playfair Display', serif; 
-  font-weight: bold; 
-  color: var(--dark-charcoal); 
-  font-size: 1.2rem; 
+.nav-btn-gold:hover {
+  background: #bc6c25 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(188, 108, 37, 0.3);
+  transition: all 0.3s;
 }
 
-.nav-actions { display: flex; gap: 12px; }
-
-.nav-btn-gold { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
-.nav-btn-outline { background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
-
-/* --- HERO SECTION --- */
-.hero-section {
-  position: relative;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070') center/cover no-repeat;
+.nav-btn-outline:hover {
+  background: white !important;
+  color: var(--dark-charcoal) !important;
+  transition: all 0.3s;
 }
 
+/* ========================================
+   HERO SECTION - Overlay y contenido
+   ======================================== */
 .hero-overlay {
-  position: absolute;
-  inset: 0;
-  /* Overlay ahora usa tonos carbón para más elegancia */
   background: linear-gradient(to bottom, rgba(51, 47, 44, 0.3), rgba(51, 47, 44, 0.7));
 }
 
-.hero-content {
-  position: relative;
-  z-index: 1;
-  color: white;
-  max-width: 800px;
-  padding: 20px;
+/* Botones del Hero */
+.btn-gold:hover {
+  background: #bc6c25 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(188, 108, 37, 0.3);
+  transition: all 0.3s;
 }
 
-.pre-title { letter-spacing: 4px; font-size: 0.8rem; font-weight: 600; opacity: 0.9; }
-
-.hero-content h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.5rem, 8vw, 4rem);
-  margin: 1.5rem 0;
-  line-height: 1.1;
+.btn-outline:hover {
+  background: white !important;
+  color: var(--dark-charcoal) !important;
+  transition: all 0.3s;
 }
 
-.accent { color: var(--gold); }
-
-.cta-group { display: flex; gap: 15px; justify-content: center; margin-top: 2rem; }
-
-.btn-gold, .btn-outline { padding: 15px 35px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-.btn-gold { background: var(--gold); color: white; border: none; }
-.btn-gold:hover { background: #bc6c25; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(188, 108, 37, 0.3); }
-.btn-outline { background: transparent; color: white; border: 2px solid white; }
-.btn-outline:hover { background: white; color: var(--dark-charcoal); }
-
-/* --- INDICADOR SCROLL --- */
-.scroll-indicator {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  color: white;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
+/* ========================================
+   SCROLL INDICATOR - Animación
+   ======================================== */
 .arrow-down {
   width: 15px;
   height: 15px;
   border-right: 2px solid white;
   border-bottom: 2px solid white;
   transform: rotate(45deg);
-  margin: 10px auto 0;
   animation: bounce 2s infinite;
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(45deg); }
-  40% { transform: translateY(-10px) rotate(45deg); }
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0) rotate(45deg);
+  }
+  40% {
+    transform: translateY(-10px) rotate(45deg);
+  }
 }
 
-/* --- SECCIÓN MARKETING & PASOS --- */
-.info-scroll-section { padding: 100px 5%; background-color: white; text-align: center; }
-
-.sub { color: var(--gold); letter-spacing: 2px; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; }
-
-.section-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); color: var(--dark-charcoal); margin-top: 10px; }
-
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  max-width: 1200px;
-  margin: 60px auto 0;
+.scroll-indicator:hover {
+  transform: translateX(-50%) translateY(-3px);
+  transition: transform 0.3s;
 }
 
-/* Recuadros originales mantenidos, solo cambia el borde sutil a champagne */
-.step-card { 
-  padding: 40px; 
-  text-align: left; 
-  background: var(--bg-soft); 
-  border-radius: 20px; 
-  transition: 0.3s;
-  border: 1px solid var(--accent-soft); 
+/* ========================================
+   STEP CARDS - Hover effect
+   ======================================== */
+.step-card {
+  transition: all 0.3s;
 }
 
-.step-num { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--gold); opacity: 0.3; display: block; margin-bottom: 10px; }
-.step-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 15px; color: var(--dark-charcoal); }
-.step-card p { color: #8b7e74; line-height: 1.6; }
-
-/* --- TESTIMONIOS (Cambio de verde a fondo arena suave) --- */
-.testimonial-section {
-  padding: 100px 10%;
-  background: var(--accent-soft);
-  color: var(--dark-charcoal);
-  text-align: center;
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.quote { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 4vw, 2rem); font-style: italic; max-width: 900px; margin: 0 auto 30px; line-height: 1.4; }
-.author { color: var(--gold); font-weight: 600; letter-spacing: 1px; }
-
-/* --- FOOTER (Cambio de verde bosque a gris carbón profundo) --- */
-.main-footer { background: #2b2724; color: #d1c7bd; padding: 80px 10% 40px; }
-.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; max-width: 1200px; margin: 0 auto 60px; }
-.footer-brand h3 { font-family: 'Playfair Display', serif; margin-bottom: 15px; color: white; }
-.footer-brand p { color: #8b7e74; font-size: 0.9rem; }
-.footer-links h4 { margin-bottom: 20px; font-size: 1rem; color: var(--gold); }
-.footer-links a { color: #8b7e74; text-decoration: none; display: block; margin-bottom: 12px; font-size: 0.9rem; transition: 0.3s; }
-.footer-links a:hover { color: white; }
-.footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px; text-align: center; font-size: 0.8rem; color: #555; }
-
-/* --- DASHBOARD SECTION --- */
-.dashboard-wrapper { background: var(--bg-soft); min-height: 100vh; }
-.db-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.04); }
-
-/* Título de Dashboard ahora en dorado */
-.brand h2 { margin: 0; font-size: 1.1rem; color: var(--gold); }
-
-.db-content { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
-.welcome-card h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--dark-charcoal); }
-.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
-
-.glass-card {
-  background: white; padding: 25px; border-radius: 24px; display: flex; align-items: center; gap: 20px;
-  position: relative; cursor: pointer; border: 1px solid #f0f0f0; transition: 0.3s;
-}
-.glass-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 15px 35px rgba(212, 163, 115, 0.1); }
-.icon-box { font-size: 1.8rem; background: var(--bg-soft); min-width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; border-radius: 18px; }
-
-.special { border-left: 5px solid var(--gold); }
-
-.logout-pill {
-  background: linear-gradient(135deg, var(--gold) 0%, #bc6c25 100%);
-  color: white;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(212, 163, 115, 0.25);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* ========================================
+   FOOTER - Links hover
+   ======================================== */
+.footer-links a:hover {
+  color: white !important;
+  transition: color 0.3s;
 }
 
-.logout-pill::before {
-  font-size: 1.1rem;
+/* ========================================
+   DASHBOARD - Cards hover
+   ======================================== */
+.glass-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--gold) !important;
+  box-shadow: 0 15px 35px rgba(212, 163, 115, 0.1) !important;
+  transition: all 0.3s;
+}
+
+/* ========================================
+   BOTONES DE ACCIÓN
+   ======================================== */
+.help-btn:hover {
+  background: var(--gold) !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(212, 163, 115, 0.2);
+  transition: all 0.3s;
+}
+
+.notif-button:hover {
+  background: var(--bg-soft) !important;
+  border-color: var(--gold) !important;
+  transform: translateY(-2px);
+  transition: all 0.3s;
 }
 
 .logout-pill:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(212, 163, 115, 0.4);
-  background: linear-gradient(135deg, #bc6c25 0%, #8b5e3c 100%);
+  box-shadow: 0 8px 20px rgba(212, 163, 115, 0.4) !important;
+  background: linear-gradient(135deg, #bc6c25 0%, #8b5e3c 100%) !important;
+  transition: all 0.3s;
 }
 
-.logout-pill:active {
-  transform: translateY(-1px);
+/* ========================================
+   NOTIFICACIONES - Dropdown
+   ======================================== */
+.notif-dropdown {
+  animation: slideIn 0.3s ease-out;
 }
-/* El borde izquierdo que era verde ahora es gris carbón suave */
-.borde { border-left: 5px solid #8b7e74; }
 
-/* --- EFECTO DE REVELADO --- */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar personalizado para notificaciones */
+.notif-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.notif-list::-webkit-scrollbar-thumb {
+  background: var(--accent-soft);
+  border-radius: 10px;
+}
+
+.notif-item {
+  transition: background 0.2s;
+}
+
+.notif-item:hover {
+  background: var(--bg-soft) !important;
+}
+
+.notif-item.unread {
+  background: rgba(233, 220, 208, 0.15) !important;
+  border-left: 4px solid var(--gold) !important;
+}
+
+/* ========================================
+   REVEAL ANIMATION - Scroll effect
+   ======================================== */
 .reveal {
   position: relative;
   transform: translateY(50px);
@@ -246,176 +203,20 @@
   opacity: 1;
 }
 
-/* --- SISTEMA DE NOTIFICACIONES (Home) --- */
-.notif-wrapper {
-  position: relative;
-  display: inline-block;
-  margin-right: 0 !important;
-}
-
-.notif-button {
-  background: white;
-  border: 1px solid var(--accent-soft);
-  font-size: 1.3rem;
-  cursor: pointer;
-  position: relative;
-  padding: 10px;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--dark-charcoal);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-}
-
-.notif-button:hover {
-  background: var(--bg-soft);
-  border-color: var(--gold);
-  transform: translateY(-2px);
-}
-
-.notif-badge {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  background: #e63946; /* Rojo suave para alertas */
-  color: white;
-  font-size: 0.65rem;
-  padding: 2px 6px;
-  border-radius: 50px;
-  border: 2px solid white;
-  font-weight: 700;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-.notif-dropdown {
-  position: absolute;
-  top: 60px;
-  right: 0;
-  width: 320px;
-  background: white;
-  border-radius: 18px;
-  box-shadow: 0 15px 45px rgba(51, 47, 44, 0.15);
-  z-index: 1100;
-  border: 1px solid rgba(212, 163, 115, 0.1);
-  overflow: hidden;
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.dropdown-header {
-  padding: 18px 20px;
-  background: var(--bg-soft);
-  border-bottom: 1px solid var(--accent-soft);
-}
-
-.dropdown-header h3 {
-  margin: 0;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  color: var(--dark-charcoal);
-}
-
-.notif-list {
-  max-height: 380px;
-  overflow-y: auto;
-}
-
-/* Scrollbar personalizado para el panel */
-.notif-list::-webkit-scrollbar { width: 5px; }
-.notif-list::-webkit-scrollbar-thumb { background: var(--accent-soft); border-radius: 10px; }
-
-.notif-item {
-  padding: 15px 20px;
-  border-bottom: 1px solid #f9f9f9;
-  cursor: pointer;
-  transition: background 0.2s;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.notif-item:hover { background: var(--bg-soft); }
-
-.notif-item.unread {
-  background: rgba(233, 220, 208, 0.15); /* Tono champagne muy suave */
-  border-left: 4px solid var(--gold);
-}
-
-.notif-title {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--dark-charcoal);
-  margin: 0;
-}
-
-.notif-message {
-  font-size: 0.82rem;
-  color: #7a726a;
-  margin: 0;
-  line-height: 1.4;
-  white-space: normal;
-  word-wrap: break-word;
-}
-
-.notif-time {
-  font-size: 0.7rem;
-  color: #b5ada5;
-  margin-top: 4px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.notif-empty {
-  padding: 40px 20px;
-  text-align: center;
-  color: #b5ada5;
-}
-
-.notif-empty p { margin: 0; font-size: 0.9rem; font-style: italic; }
-
-.help-btn {
-  background: var(--bg-soft);
-  color: var(--gold);
-  border: 1px solid var(--accent-soft);
-  width: 34px;      
-  height: 34px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.3s;
-  flex-shrink: 0;   
-}
-
-.help-btn:hover {
-  background: var(--gold);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(212, 163, 115, 0.2);
-}
-
-/* --- POPOVER DE LUJO (DRIVER.JS) --- */
+/* ========================================
+   DRIVER.JS - Tour personalizado
+   ======================================== */
 .driver-popover {
   background: rgba(255, 255, 255, 0.9) !important;
   backdrop-filter: blur(15px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
-  border: 1px solid rgba(212, 163, 115, 0.3) !important; /* Brillo dorado sutil */
+  border: 1px solid rgba(212, 163, 115, 0.3) !important;
   border-radius: 28px !important;
   padding: 30px !important;
   box-shadow: 0 25px 50px -12px rgba(51, 47, 44, 0.25) !important;
   max-width: 380px !important;
 }
 
-/* Título con estilo tipográfico */
 .driver-popover-title {
   font-family: 'Playfair Display', serif !important;
   font-size: 1.6rem !important;
@@ -424,7 +225,6 @@
   margin-bottom: 12px !important;
 }
 
-/* Botón "Siguiente" con Gradiente y Sombra */
 .driver-popover-next-btn {
   background: linear-gradient(135deg, var(--gold) 0%, #bc6c25 100%) !important;
   color: white !important;
@@ -443,7 +243,6 @@
   box-shadow: 0 8px 20px rgba(212, 163, 115, 0.6) !important;
 }
 
-/* Botón "Anterior" Minimalista */
 .driver-popover-prev-btn {
   background: transparent !important;
   color: #8b7e74 !important;
@@ -460,7 +259,6 @@
   color: var(--dark-charcoal) !important;
 }
 
-/* El botón de cerrar (X) */
 .driver-popover-close-btn {
   color: #b5ada5 !important;
   transition: color 0.3s !important;
@@ -470,11 +268,32 @@
   color: var(--gold) !important;
 }
 
-/* Barra de progreso inferior */
 .driver-popover-progress-text {
   font-family: 'Plus Jakarta Sans', sans-serif !important;
   color: var(--gold) !important;
   opacity: 0.7;
   font-size: 0.75rem !important;
   letter-spacing: 1px !important;
+}
+
+/* ========================================
+   RESPONSIVE - Ajustes móviles
+   ======================================== */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2rem !important;
+  }
+  
+  .cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .cta-group button {
+    width: 100%;
+  }
+  
+  .notif-dropdown {
+    width: 280px !important;
+  }
 }

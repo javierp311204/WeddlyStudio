@@ -1,50 +1,30 @@
+/* Contenedor principal */
 .plano-wrapper {
   background: #fdfaf7;
+  font-family: 'Playfair Display', serif;
   min-height: 100vh;
   padding: 2rem;
-  font-family: 'Playfair Display', serif;
 }
 
-.top-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
+/* Botón volver */
 .btn-back {
-  background: white;
-  border: 1px solid #eee;
-  padding: 10px 20px;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
   color: #333;
-  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
 }
 
 .btn-back:hover {
-  background: #333;
-  color: white;
-  transform: translateX(-5px);
+  color: #d4af37;
 }
 
-.nav-actions {
-  display: flex;
-  gap: 10px;
-}
-
+/* Botones de acción */
 .btn-action {
   background: #d4af37;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
   font-weight: 600;
-  cursor: pointer;
+  padding: 10px 20px;
   transition: all 0.3s ease;
 }
 
@@ -53,31 +33,20 @@
   transform: translateY(-2px);
 }
 
-.plano-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.plano-header h1 {
-  font-size: 2.5rem;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.plano-header p {
-  color: #666;
-  font-size: 1.1rem;
-}
-
+/* Canvas - TAMAÑO ORIGINAL */
 .canvas-container {
+  background: white;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+  border: 1px solid #ccc;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  background: white;
   border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
 
 canvas {
@@ -86,7 +55,7 @@ canvas {
 }
 
 /* ============================================
-   PANEL LATERAL
+   PANEL LATERAL - POSICIÓN ORIGINAL
    ============================================ */
 .panel-lateral {
   position: fixed;
@@ -100,7 +69,7 @@ canvas {
   box-shadow: 0 10px 40px rgba(0,0,0,0.15);
   overflow-y: auto;
   animation: slideIn 0.3s ease;
-  z-index: 100; /* ✅ Panel lateral con z-index definido */
+  z-index: 100;
 }
 
 @keyframes slideIn {
@@ -119,9 +88,6 @@ canvas {
   color: white;
   padding: 20px;
   border-radius: 20px 20px 0 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -142,9 +108,6 @@ canvas {
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .btn-close-panel:hover {
@@ -157,28 +120,12 @@ canvas {
   border-bottom: 1px solid #f0f0f0;
 }
 
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.info-label {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.info-value {
-  font-weight: 600;
-  color: #333;
-}
-
 .badge-tipo {
   background: #f0f0f0;
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 0.85rem;
+  color: #666;
 }
 
 .panel-section {
@@ -190,22 +137,14 @@ canvas {
   margin: 0 0 15px 0;
   color: #333;
   font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .section-icon {
   font-size: 1.2rem;
 }
 
-/* ============================================
-   DESPLEGABLE DE INVITADOS
-   ============================================ */
+/* Desplegable */
 .section-header-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   cursor: pointer;
   user-select: none;
   padding: 5px;
@@ -242,14 +181,13 @@ canvas {
   margin-top: 15px;
 }
 
-/* BÚSQUEDA DE INVITADOS */
+/* Búsqueda */
 .search-container {
   position: relative;
   margin-bottom: 15px;
 }
 
-.search-input {
-  width: 100%;
+.form-control-sm {
   padding: 12px 15px;
   border: 2px solid #e0e0e0;
   border-radius: 12px;
@@ -258,14 +196,13 @@ canvas {
   font-family: Arial, sans-serif;
 }
 
-.search-input:focus {
+.form-control-sm:focus {
   outline: none;
   border-color: #d4af37;
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .search-results {
-  position: absolute;
   top: 100%;
   left: 0;
   right: 0;
@@ -277,7 +214,6 @@ canvas {
   overflow-y: auto;
   z-index: 100;
   box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-  list-style: none;
   padding: 0;
 }
 
@@ -285,9 +221,6 @@ canvas {
   padding: 12px 15px;
   cursor: pointer;
   transition: all 0.2s;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .search-results li:hover {
@@ -297,14 +230,13 @@ canvas {
 .inv-name {
   font-weight: 500;
   color: #333;
+  font-size: 0.9rem;
 }
 
 .inv-tipo {
   font-size: 0.8rem;
-  background: #e0e0e0;
   padding: 3px 8px;
   border-radius: 8px;
-  color: #666;
 }
 
 .search-empty {
@@ -320,9 +252,6 @@ canvas {
   border: 2px solid #4caf50;
   padding: 12px 15px;
   border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin-bottom: 15px;
 }
 
@@ -332,7 +261,6 @@ canvas {
 }
 
 .btn-clear {
-  margin-left: auto;
   background: rgba(0,0,0,0.1);
   border: none;
   width: 24px;
@@ -340,9 +268,6 @@ canvas {
   border-radius: 50%;
   cursor: pointer;
   font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: all 0.2s;
 }
 
@@ -350,21 +275,8 @@ canvas {
   background: rgba(0,0,0,0.2);
 }
 
-/* LISTA DE INVITADOS */
-.invitados-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.invitado-item {
-  margin-bottom: 10px;
-}
-
+/* Invitados */
 .invitado-ocupado {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background: #f8f8f8;
   padding: 12px;
   border-radius: 12px;
@@ -375,24 +287,10 @@ canvas {
   background: #f0f0f0;
 }
 
-.invitado-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
-
 .invitado-color {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.invitado-datos {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
 }
 
 .invitado-nombre {
@@ -415,11 +313,7 @@ canvas {
   border-radius: 50%;
   cursor: pointer;
   font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: all 0.2s;
-  flex-shrink: 0;
 }
 
 .btn-remove-inv:hover {
@@ -428,9 +322,6 @@ canvas {
 }
 
 .invitado-vacio {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   padding: 12px;
   border: 2px dashed #e0e0e0;
   border-radius: 12px;
@@ -446,9 +337,8 @@ canvas {
   font-size: 0.9rem;
 }
 
-/* BOTONES */
+/* Botones */
 .btn-primary {
-  width: 100%;
   background: #d4af37;
   color: white;
   border: none;
@@ -457,10 +347,6 @@ canvas {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   font-size: 0.95rem;
 }
 
@@ -477,7 +363,6 @@ canvas {
 }
 
 .btn-danger {
-  width: 100%;
   background: #f44336;
   color: white;
   border: none;
@@ -486,10 +371,6 @@ canvas {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   font-size: 0.95rem;
 }
 
@@ -499,36 +380,14 @@ canvas {
   box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
 }
 
-.btn-icon {
-  font-size: 1.1rem;
-}
-
-.empty-message {
-  text-align: center;
-  padding: 30px 20px;
-  color: #999;
-}
-
 .empty-icon {
   font-size: 2.5rem;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.empty-message p {
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-.panel-actions {
-  border-bottom: none;
 }
 
 /* ============================================
-   MODAL DE INFORMACIÓN DEL INVITADO
+   MODAL CRÍTICO - NO TOCAR
    ============================================ */
 .modal-overlay {
-  /* ✅ CRÍTICO: position fixed para estar sobre TODO */
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
@@ -536,14 +395,10 @@ canvas {
   bottom: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  /* ✅ CRÍTICO: z-index MUY ALTO para estar por encima de TODO */
   z-index: 99999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: rgba(0, 0, 0, 0.6) !important; /* ✅ Fondo semi-transparente directo */
+  background: rgba(0, 0, 0, 0.6) !important;
   animation: fadeIn 0.2s ease;
-  pointer-events: all !important; /* ✅ Asegurar que capture eventos */
+  pointer-events: all !important;
   opacity: 1 !important;
   visibility: visible !important;
 }
@@ -564,7 +419,6 @@ canvas {
   position: relative !important;
   animation: slideUp 0.3s ease;
   pointer-events: all !important;
-  /* ✅ CRÍTICO: z-index adicional para el modal */
   z-index: 100000 !important;
   opacity: 1 !important;
   visibility: visible !important;
@@ -595,9 +449,6 @@ canvas {
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 10;
 }
 
@@ -617,9 +468,6 @@ canvas {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin: 0 auto 15px;
   font-size: 2rem;
   font-weight: bold;
@@ -637,16 +485,8 @@ canvas {
   padding: 30px;
 }
 
-.modal-info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.modal-body-inv > div {
   padding: 15px 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.modal-info-row:last-child {
-  border-bottom: none;
 }
 
 .modal-label {
@@ -680,7 +520,7 @@ canvas {
   font-weight: 600;
 }
 
-/* SCROLLBAR DEL PANEL */
+/* Scrollbar */
 .panel-lateral::-webkit-scrollbar {
   width: 6px;
 }
@@ -699,7 +539,7 @@ canvas {
   background: #b8860b;
 }
 
-/* RESPONSIVE */
+/* Responsive */
 @media (max-width: 1400px) {
   .panel-lateral {
     width: 320px;

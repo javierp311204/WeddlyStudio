@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GestionService } from '../../services/gestion/gestion.service';
+import { NotificationService } from '../../services/notification/notification.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -28,6 +29,7 @@ export class ListaInvitadosComponent implements OnInit {
 
   constructor(
     private gestionService: GestionService,
+    private notifService: NotificationService,
     private router: Router,
   ) {}
 
@@ -48,7 +50,7 @@ export class ListaInvitadosComponent implements OnInit {
       return;
     }
 
-    // 2. Unimos los datos del formulario con el código de la boda
+   
     const datosParaEnviar = {
       ...this.nuevoInvitado,
       codigoBoda: codigo,
@@ -56,9 +58,11 @@ export class ListaInvitadosComponent implements OnInit {
 
     this.gestionService.postInvitado(datosParaEnviar).subscribe({
       next: (res) => {
-        console.log('Invitado guardado con éxito');
-        this.cargarInvitados(); // Refresca la tabla
-        // Limpia el formulario
+        this.notifService.showSuccess(
+          '¡Éxito!',
+          'Invitado añadido correctamente',
+        );
+        this.cargarInvitados();
         this.nuevoInvitado = {
           nombre: '',
           email: '',
@@ -68,7 +72,7 @@ export class ListaInvitadosComponent implements OnInit {
         };
       },
       error: (err) => {
-        // Aquí es donde te sale el error de tu imagen 3
+        
         console.error('Error al guardar:', err);
       },
     });
@@ -90,19 +94,34 @@ export class ListaInvitadosComponent implements OnInit {
   eliminarInvitado(idInvitado: string) {
     const codigoBoda = localStorage.getItem('codigoBoda');
 
-    if (confirm('¿Estás seguro de que quieres eliminar a este invitado?')) {
-      // Pasamos el ID en la URL y el codigoBoda como parámetro de consulta
-      this.gestionService.deleteInvitado(idInvitado, codigoBoda!).subscribe({
-        next: () => {
-          // Refrescamos la lista localmente para que desaparezca al instante
-          this.invitadosFiltrados = this.invitadosFiltrados.filter(
-            (i) => i._id !== idInvitado,
-          );
-          this.invitados = this.invitados.filter((i) => i._id !== idInvitado);
-        },
-        error: (err) => console.error('Error al eliminar:', err),
+    this.notifService
+      .askConfirmation(
+        'Eliminar invitado',
+        `¿Estás seguro de eliminar al invitado "${this.invitados.find((i) => i._id === idInvitado)?.nombre}"?`,
+        'delete',
+      )
+      .then((confirm) => {
+        if (confirm) {
+          this.gestionService
+            .deleteInvitado(idInvitado, codigoBoda!)
+            .subscribe({
+              next: () => {
+                this.notifService.showSuccess(
+                  '¡Eliminado!',
+                  'Invitado eliminado correctamente',
+                );
+                this.cargarInvitados();
+              },
+              error: (err) => {
+                console.error('Error:', err);
+                this.notifService.showError(
+                  'Error',
+                  'No se pudo eliminar el invitado',
+                );
+              },
+            });
+        }
       });
-    }
   }
 
   filtrar() {

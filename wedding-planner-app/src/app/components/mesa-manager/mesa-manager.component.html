@@ -1,156 +1,294 @@
-<div class="seating-wrapper">
+<div class="seating-wrapper" style="background-color: var(--cream); min-height: 100vh;">
   
-  <nav class="top-nav">
-    <button class="btn-panel-back" (click)="irAlMenu()">
-      <span class="icon">🏠</span> Volver al Panel
+  <!-- Navegación Superior -->
+  <nav class="container-fluid px-4 py-3">
+    <button class="btn btn-outline-dark rounded-pill px-4 py-2 d-flex align-items-center gap-2 btn-panel-back" 
+            (click)="irAlMenu()">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+      </svg>
+      Volver al Panel
     </button>
   </nav>
 
-  <header class="seating-header">
-    <div class="header-decoration"><span>✨</span></div>
-    <h1>Distribución del Salón</h1>
-    <p>Organiza los espacios y asigna a tus invitados en su lugar ideal.</p>
+  <!-- Header -->
+  <header class="text-center mb-5 seating-header">
+    <div class="mb-3" style="color: var(--gold); font-size: 2rem;">✦</div>
+    <h1 class="display-4 fw-bold mb-2" style="color: var(--charcoal); font-family: 'Playfair Display', serif;">
+      Distribución del Salón
+    </h1>
+    <p class="text-muted">Organiza los espacios y asigna a tus invitados en su lugar ideal.</p>
   </header>
 
-  <div class="stats-bar">
-    <div class="stat-card">
-      <div class="stat-icon-circle">👥</div>
-      <div class="stat-text">
-        <span class="stat-value">{{ totalInvitados }}</span>
-        <span class="stat-label">Invitados sentados</span>
+  <!-- Stats Bar -->
+  <div class="container mb-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 justify-content-center">
+      <!-- Invitados sentados -->
+      <div class="col">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                 style="width: 45px; height: 45px; background: var(--gold-light);">
+              <svg width="20" height="20" fill="var(--gold)" viewBox="0 0 16 16">
+                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+                <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="fs-4 fw-bold" style="color: var(--gold);">{{ totalInvitados }}</div>
+              <div class="small text-muted">Invitados sentados</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-icon-circle">⏳</div>
-      <div class="stat-text">
-        <span class="stat-value">{{ invitadosDisponibles.length - totalInvitados }}</span>
-        <span class="stat-label">Invitados sin sentar</span>
+      <!-- Invitados sin sentar -->
+      <div class="col">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 20px; border-left: 4px solid #e67e22;">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                 style="width: 45px; height: 45px; background: #fff3e0;">
+              <svg width="20" height="20" fill="#e67e22" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="fs-4 fw-bold" style="color: #e67e22;">{{ invitadosDisponibles.length - totalInvitados }}</div>
+              <div class="small text-muted">Sin sentar</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-icon-circle">🍽️</div>
-      <div class="stat-text">
-        <span class="stat-value">{{ totalMesas }}</span>
-        <span class="stat-label">Mesas totales</span>
+      <!-- Total mesas -->
+      <div class="col">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                 style="width: 45px; height: 45px; background: var(--gold-light);">
+              <svg width="20" height="20" fill="var(--gold)" viewBox="0 0 16 16">
+                <path d="M0 2.5A.5.5 0 0 1 .5 2h15a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-2zM0 12.5A.5.5 0 0 1 .5 12h15a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z"/>
+                <path d="M8 5v7"/>
+              </svg>
+            </div>
+            <div>
+              <div class="fs-4 fw-bold" style="color: var(--gold);">{{ totalMesas }}</div>
+              <div class="small text-muted">Mesas totales</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="stat-card special" [class.active]="tieneMesaPresidencial">
-      <div class="stat-icon-circle">💍</div>
-      <div class="stat-text">
-        <span class="stat-value">{{ tieneMesaPresidencial ? '1' : '0' }}</span>
-        <span class="stat-label">Mesa Presidencial</span>
+      <!-- Mesa Presidencial -->
+      <div class="col">
+        <div class="card border-0 shadow-sm h-100" 
+             style="border-radius: 20px;"
+             [class.special-active]="tieneMesaPresidencial">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                 style="width: 45px; height: 45px;"
+                 [style.background]="tieneMesaPresidencial ? 'linear-gradient(135deg, #b8860b, #d4af37)' : 'var(--gold-light)'">
+              <svg width="20" height="20" [attr.fill]="tieneMesaPresidencial ? 'white' : 'var(--gold)'" viewBox="0 0 16 16">
+                <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="fs-4 fw-bold" style="color: var(--gold);">{{ tieneMesaPresidencial ? '1' : '0' }}</div>
+              <div class="small text-muted">Mesa Presidencial</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="seating-content">
-    
-    <aside class="controls-panel">
-      <div class="control-card">
-        <h3><span class="title-icon">📍</span> Nueva Mesa</h3>
-        <div class="input-group">
-          <input type="text" [(ngModel)]="nuevaMesa.nombre" placeholder="Nombre (Ej: Mesa 1...)" />
-        </div>
-        
-        <div class="select-wrapper">
-          <label class="label-clean">Tipo de ambiente:</label>
-          <select [(ngModel)]="nuevaMesa.tipo" class="select-clean">
-            <option value="invitados">Mesa de Invitados 🥂</option>
-            <option value="novios">Mesa de Novios 🤵👰</option>
-          </select>
-        </div>
-
-        <button class="btn-gold" (click)="agregarMesa()">
-          + Añadir Mesa
-        </button>
-      </div>
-
-      <div class="control-card">
-        <h3><span class="title-icon">👤</span> Sentar Invitado</h3>
-        
-        <div class="search-container">
-          <label class="label-clean">Buscar invitado registrado:</label>
-          <input
-            type="text"
-            [(ngModel)]="busquedaInvitado"
-            (input)="filtrarInvitados()"
-            placeholder="Escribe el nombre..."
-            class="search-input"
-          />
-          
-          <ul class="search-results" *ngIf="invitadosFiltrados.length > 0">
-            <li *ngFor="let inv of invitadosFiltrados" (click)="seleccionarInvitado(inv)">
-              <span class="res-name">{{ inv.nombre }}</span>
-            </li>
-          </ul>
-
-          <div class="search-info error" *ngIf="busquedaInvitado && invitadosFiltrados.length === 0 && !invitadoSeleccionado">
-            <small>No hay invitados sin mesa.</small>
-          </div>
-        </div>
-        
-        <div class="select-wrapper" style="margin: 25px 0;">
-          <label class="label-clean">Asignar a la mesa:</label>
-          <select [(ngModel)]="mesaSeleccionada" class="select-clean">
-            <option value="" disabled selected>Selecciona una mesa...</option>
-            <option *ngFor="let m of mesas" [value]="m.nombre">
-              {{ m.nombre }}
-            </option>
-          </select>
-        </div>
-
-        <button 
-          class="btn-dark" 
-          (click)="agregarInvitadoAMesa()"
-          [disabled]="!invitadoSeleccionado || !mesaSeleccionada">
-          Confirmar Asiento
-        </button>
-
-        <div class="selected-badge" *ngIf="invitadoSeleccionado">
-          <span class="check-icon">✅</span> 
-          <span>Invitado: <strong>{{ invitadoSeleccionado.nombre }}</strong></span>
-        </div>
-      </div>
-    </aside>
-
-    <main class="floor-plan">
-      <div *ngIf="cargando" class="loader-container">
-        <div class="spinner"></div>
-        <p>Actualizando salón...</p>
-      </div>
-
-      <div class="table-grid" *ngIf="!cargando && mesas.length > 0">
-        <div class="wedding-table-card" *ngFor="let mesa of mesas">
-          <div class="table-top" [class.mesa-presidencial]="mesa.tipo === 'novios'">
-            <div class="table-title">
-              <small *ngIf="mesa.tipo === 'novios'">Presidencial</small>
-              <strong>{{ mesa.nombre }}</strong>
+  <!-- Contenido Principal -->
+  <div class="container-fluid px-4 seating-content">
+    <div class="row g-4">
+      
+      <!-- Panel de Controles (Sidebar) -->
+      <aside class="col-lg-4 col-xl-3">
+        <!-- Card: Nueva Mesa -->
+        <div class="card border-0 shadow-sm mb-4 control-card" style="border-radius: 25px;">
+          <div class="card-body p-4">
+            <h3 class="h5 mb-4 pb-3 border-bottom" style="color: var(--charcoal);">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+              </svg>
+              Nueva Mesa
+            </h3>
+            
+            <div class="mb-3">
+              <label class="form-label small text-muted">Nombre de la mesa</label>
+              <input type="text" 
+                     class="form-control" 
+                     [(ngModel)]="nuevaMesa.nombre" 
+                     placeholder="Ej: Mesa 1, Mesa VIP, Mesa Niños..."
+                     style="border-radius: 12px; background: #f9f9f9;">
             </div>
-            <button class="btn-remove-table" (click)="eliminarMesa(mesa._id)">×</button>
-          </div>
+            
+            <div class="mb-3">
+              <label class="form-label small text-muted">Tipo de mesa</label>
+              <select class="form-select" 
+                      [(ngModel)]="nuevaMesa.tipo"
+                      style="border-radius: 12px; background: #f9f9f9;">
+                <option value="invitados">Mesa de Invitados</option>
+                <option value="novios">Mesa Presidencial</option>
+              </select>
+            </div>
 
-          <div class="guest-container">
-            <ul class="guest-list">
-              <li *ngFor="let inv of mesa.listaInvitados">
-                <span class="guest-dot"></span>
-                <span class="guest-name">{{ inv.nombre }}</span>
-                <button class="mini-remove" (click)="eliminarInvitado(inv._id)">×</button>
-              </li>
-              <li class="empty-msg" *ngIf="!mesa.listaInvitados || mesa.listaInvitados.length === 0">
-                Mesa vacía
-              </li>
-            </ul>
+            <button class="btn w-100 text-white fw-semibold btn-gold" 
+                    (click)="agregarMesa()"
+                    style="background: var(--gold); border-radius: 12px; padding: 14px;">
+              Añadir Mesa
+            </button>
           </div>
-        </div> 
-      </div>
+        </div>
 
-      <div class="no-tables-msg" *ngIf="!cargando && mesas.length === 0">
-        <div class="empty-icon">🍽️</div>
-        <p>Aún no hay mesas en el salón.</p>
-      </div>
-    </main>
+        <!-- Card: Sentar Invitado -->
+        <div class="card border-0 shadow-sm control-card" style="border-radius: 25px;">
+          <div class="card-body p-4">
+            <h3 class="h5 mb-4 pb-3 border-bottom" style="color: var(--charcoal);">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+              </svg>
+              Sentar Invitado
+            </h3>
+            
+            <!-- Buscador -->
+            <div class="position-relative mb-4 search-container">
+              <label class="form-label small text-muted">Buscar invitado registrado</label>
+              <input type="text"
+                     class="form-control search-input"
+                     [(ngModel)]="busquedaInvitado"
+                     (input)="filtrarInvitados()"
+                     placeholder="Escribe el nombre..."
+                     style="border-radius: 12px; background: #f9f9f9;">
+              
+              <!-- Resultados de búsqueda -->
+              <ul class="list-unstyled position-absolute w-100 bg-white rounded-bottom shadow-lg search-results" 
+                  *ngIf="invitadosFiltrados.length > 0"
+                  style="z-index: 1000; border: 1px solid #eee; border-radius: 0 0 15px 15px; max-height: 200px; overflow-y: auto;">
+                <li *ngFor="let inv of invitadosFiltrados" 
+                    class="px-3 py-2 cursor-pointer"
+                    (click)="seleccionarInvitado(inv)"
+                    style="cursor: pointer;">
+                  {{ inv.nombre }}
+                </li>
+              </ul>
+
+              <!-- Mensaje de error -->
+              <div class="alert alert-danger small mt-2 mb-0" 
+                   *ngIf="busquedaInvitado && invitadosFiltrados.length === 0 && !invitadoSeleccionado"
+                   style="border-radius: 8px;">
+                No hay invitados sin mesa disponibles.
+              </div>
+            </div>
+            
+            <!-- Selector de Mesa -->
+            <div class="mb-3">
+              <label class="form-label small text-muted">Asignar a la mesa</label>
+              <select class="form-select" 
+                      [(ngModel)]="mesaSeleccionada"
+                      style="border-radius: 12px; background: #f9f9f9;">
+                <option value="" disabled selected>Selecciona una mesa...</option>
+                <option *ngFor="let m of mesas" [value]="m.nombre">
+                  {{ m.nombre }}
+                </option>
+              </select>
+            </div>
+
+            <button class="btn w-100 text-white fw-semibold btn-dark" 
+                    (click)="agregarInvitadoAMesa()"
+                    [disabled]="!invitadoSeleccionado || !mesaSeleccionada"
+                    style="background: var(--charcoal); border-radius: 12px; padding: 14px;">
+              Confirmar Asiento
+            </button>
+
+            <!-- Badge de invitado seleccionado -->
+            <div class="alert alert-success mt-3 mb-0 d-flex align-items-center gap-2 selected-badge" 
+                 *ngIf="invitadoSeleccionado"
+                 style="border-radius: 12px;">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+              </svg>
+              <span class="small">
+                Invitado: <strong>{{ invitadoSeleccionado.nombre }}</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Plano del Salón (Main Content) -->
+      <main class="col-lg-8 col-xl-9">
+        <!-- Loader -->
+        <div *ngIf="cargando" class="text-center py-5 loader-container">
+          <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: var(--gold);" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="text-muted">Actualizando salón...</p>
+        </div>
+
+        <!-- Grid de Mesas -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 table-grid" *ngIf="!cargando && mesas.length > 0">
+          <div class="col" *ngFor="let mesa of mesas">
+            <div class="card border-0 shadow-sm h-100 wedding-table-card" style="border-radius: 20px; overflow: hidden;">
+              <!-- Header de la mesa -->
+              <div class="card-header text-white text-center position-relative p-4 table-top"
+                   [class.mesa-presidencial]="mesa.tipo === 'novios'"
+                   [style.background]="mesa.tipo === 'novios' ? 'linear-gradient(135deg, #b8860b, #d4af37)' : 'var(--charcoal)'">
+                <small class="d-block text-uppercase mb-1" 
+                       style="opacity: 0.9; font-size: 0.7rem; letter-spacing: 1px;"
+                       *ngIf="mesa.tipo === 'novios'">
+                  Presidencial
+                </small>
+                <strong class="d-block">{{ mesa.nombre }}</strong>
+                
+                <!-- Botón eliminar -->
+                <button class="btn btn-sm position-absolute top-0 end-0 m-3 btn-remove-table" 
+                        (click)="eliminarMesa(mesa._id)"
+                        style="background: rgba(255,255,255,0.15); border: none; color: white; border-radius: 50%; width: 28px; height: 28px;">
+                  ×
+                </button>
+              </div>
+
+              <!-- Lista de invitados -->
+              <div class="card-body p-4 guest-container">
+                <ul class="list-unstyled mb-0 guest-list">
+                  <li *ngFor="let inv of mesa.listaInvitados" 
+                      class="d-flex align-items-center py-2 border-bottom"
+                      style="border-color: #eee !important; border-style: dashed !important;">
+                    <span class="rounded-circle me-3 flex-shrink-0 guest-dot" 
+                          style="width: 8px; height: 8px; background: var(--gold);"></span>
+                    <span class="flex-grow-1 small guest-name">{{ inv.nombre }}</span>
+                    <button class="btn btn-sm border-0 mini-remove" 
+                            (click)="eliminarInvitado(inv._id)"
+                            style="color: #ff4d4d; opacity: 0.5;">
+                      ×
+                    </button>
+                  </li>
+                  <li class="text-center text-muted small py-3 empty-msg" 
+                      *ngIf="!mesa.listaInvitados || mesa.listaInvitados.length === 0">
+                    Mesa vacía
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado vacío -->
+        <div class="text-center py-5 no-tables-msg" *ngIf="!cargando && mesas.length === 0">
+          <svg width="80" height="80" fill="#ccc" viewBox="0 0 16 16" class="mb-3">
+            <path d="M0 2.5A.5.5 0 0 1 .5 2h15a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-2zM0 12.5A.5.5 0 0 1 .5 12h15a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z"/>
+            <path d="M8 5v7"/>
+          </svg>
+          <p class="text-muted">Aún no hay mesas en el salón.</p>
+        </div>
+      </main>
+    </div>
   </div>
 </div>

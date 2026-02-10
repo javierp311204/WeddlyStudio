@@ -16,6 +16,7 @@ import { AuthService } from '../../services/auth/auth.service'; // Asegúrate de
 export class LoginComponent {
   email: string = '';
   pass: string = '';
+  mostrarPassword: boolean = false;
 
   private API_URL = 'http://localhost:3000/api/auth/login';
 
@@ -24,6 +25,10 @@ export class LoginComponent {
     private router: Router,
     private notifService: NotificationService,
   ) {}
+
+  togglePassword() {
+    this.mostrarPassword = !this.mostrarPassword;
+  }
 
   login() {
     if (!this.email || !this.pass) {

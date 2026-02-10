@@ -1,45 +1,53 @@
-<div class="info-wrapper">
-  <div class="info-container">
+<div class="info-wrapper min-vh-100 py-5 px-3">
+  <div class="container info-container">
     
-    <nav class="nav-actions">
-      <button class="btn-back-link" (click)="irAlMenu()">
+    <!-- Navegación -->
+    <nav class="d-flex justify-content-between align-items-center mb-4">
+      <button class="btn btn-link text-decoration-none d-flex align-items-center gap-2 p-0 btn-back-link" (click)="irAlMenu()">
         <span class="icon">←</span> Volver al Panel
       </button>
 
       <button
         *ngIf="authService.isAdmin()"
         (click)="editMode = !editMode"
-        class="btn-admin-action"
-        [class.btn-cancel]="editMode"
+        class="btn rounded-pill px-4 py-2 fw-semibold btn-admin-action"
+        [ngClass]="editMode ? 'btn-danger' : 'btn-success'"
       >
         {{ editMode ? "✖ Cancelar Edición" : "🛠️ Editar Información" }}
       </button>
     </nav>
 
-    <header class="info-header-premium">
-      <div class="header-decoration"><span></span> ✨ <span></span></div>
-      <h1>Detalles de la Boda</h1>
-      <p class="boda-id">
+    <!-- Header Premium -->
+    <header class="text-center mb-5 info-header-premium">
+      <div class="header-decoration d-flex align-items-center justify-content-center gap-3 mb-3">
+        <span class="decoration-line"></span>
+        <span class="fs-4">✨</span>
+        <span class="decoration-line"></span>
+      </div>
+      <h1 class="display-3 fw-normal mb-3">Detalles de la Boda</h1>
+      <p class="boda-id mb-0">
         Código de acceso: <strong>{{ authService.getCodigoBoda() }}</strong>
       </p>
     </header>
 
-    <div class="info-grid">
+    <!-- Grid de Cards -->
+    <div class="row g-4">
       
-      <section class="info-card-glass" [class.is-editing]="editMode">
-        <div class="card-accent-gold"></div>
-        <div class="card-content">
-          <div class="card-title-box">
-            <span class="card-emoji">📍</span>
-            <h3>Ubicación y Fecha</h3>
-          </div>
+      <!-- Card: Ubicación -->
+      <div class="col-12 col-lg-6">
+        <section class="info-card-glass h-100" [class.is-editing]="editMode">
+          <div class="card-accent-gold"></div>
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <span class="card-emoji">📍</span>
+              <h3 class="mb-0 h4">Ubicación y Fecha</h3>
+            </div>
 
-          <div class="card-body">
-            <div *ngIf="!editMode" class="view-mode">
-              <p class="txt-main" [class.empty-txt]="!bodaInfo.lugarNombre">
+            <div *ngIf="!editMode">
+              <p class="txt-main mb-2" [class.empty-txt]="!bodaInfo.lugarNombre">
                 {{ bodaInfo.lugarNombre || "Lugar por confirmar" }}
               </p>
-              <p class="txt-sub" [class.empty-txt]="!bodaInfo.direccion">
+              <p class="txt-sub mb-3" [class.empty-txt]="!bodaInfo.direccion">
                 {{ bodaInfo.direccion || "Dirección pendiente" }}
               </p>
               <div class="date-pill" *ngIf="bodaInfo.fechaHora">
@@ -48,42 +56,43 @@
               </div>
             </div>
 
-            <div *ngIf="editMode" class="edit-mode">
-              <div class="field-group">
-                <label>Nombre del Salón / Lugar</label>
-                <input type="text" [(ngModel)]="bodaInfo.lugarNombre" placeholder="Ej: Hacienda Los Olivos" />
+            <div *ngIf="editMode">
+              <div class="mb-3">
+                <label class="form-label text-uppercase fw-bold small mb-2">Nombre del Salón / Lugar</label>
+                <input type="text" class="form-control rounded-3" [(ngModel)]="bodaInfo.lugarNombre" placeholder="Ej: Hacienda Los Olivos" />
               </div>
-              <div class="field-group">
-                <label>Dirección</label>
-                <input type="text" [(ngModel)]="bodaInfo.direccion" placeholder="Ej: Calle Real, 45" />
+              <div class="mb-3">
+                <label class="form-label text-uppercase fw-bold small mb-2">Dirección</label>
+                <input type="text" class="form-control rounded-3" [(ngModel)]="bodaInfo.direccion" placeholder="Ej: Calle Real, 45" />
               </div>
-              <div class="field-group">
-                <label>Fecha y Hora</label>
-                <input type="datetime-local" [(ngModel)]="bodaInfo.fechaHora" />
+              <div class="mb-0">
+                <label class="form-label text-uppercase fw-bold small mb-2">Fecha y Hora</label>
+                <input type="datetime-local" class="form-control rounded-3" [(ngModel)]="bodaInfo.fechaHora" />
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <section class="info-card-glass" [class.is-editing]="editMode">
-        <div class="card-accent-green"></div>
-        <div class="card-content">
-          <div class="card-title-box">
-            <span class="card-emoji">👗</span>
-            <h3>Dress Code</h3>
-          </div>
+      <!-- Card: Dress Code -->
+      <div class="col-12 col-lg-6">
+        <section class="info-card-glass h-100" [class.is-editing]="editMode">
+          <div class="card-accent-green"></div>
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <span class="card-emoji">👗</span>
+              <h3 class="mb-0 h4">Dress Code</h3>
+            </div>
 
-          <div class="card-body">
-            <div *ngIf="!editMode" class="view-mode">
+            <div *ngIf="!editMode">
               <div class="tag-elegant" [class.empty-tag]="!bodaInfo.dressCode">
                 {{ bodaInfo.dressCode || "Estilo por definir" }}
               </div>
             </div>
 
-            <div *ngIf="editMode" class="edit-mode">
-              <label>Selecciona el código:</label>
-              <select [(ngModel)]="bodaInfo.dressCode">
+            <div *ngIf="editMode">
+              <label class="form-label text-uppercase fw-bold small mb-2">Selecciona el código:</label>
+              <select class="form-select rounded-3" [(ngModel)]="bodaInfo.dressCode">
                 <option value="">-- Seleccionar --</option>
                 <option value="Gala (Etiqueta)">Gala (Etiqueta)</option>
                 <option value="Formal">Formal</option>
@@ -92,37 +101,43 @@
               </select>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <section class="info-card-glass" [class.is-editing]="editMode">
-        <div class="card-accent-gold"></div>
-        <div class="card-content">
-          <div class="card-title-box">
-            <span class="card-emoji">🍴</span>
-            <h3>El Menú</h3>
-          </div>
+      <!-- Card: Menú (Full Width) -->
+      <div class="col-12">
+        <section class="info-card-glass" [class.is-editing]="editMode">
+          <div class="card-accent-gold"></div>
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <span class="card-emoji">🍴</span>
+              <h3 class="mb-0 h4">El Menú</h3>
+            </div>
 
-          <div class="card-body">
-            <div *ngIf="!editMode" class="view-mode">
-              <p class="txt-menu" [class.empty-txt]="!bodaInfo.menuResumen">
+            <div *ngIf="!editMode">
+              <p class="txt-menu mb-0" [class.empty-txt]="!bodaInfo.menuResumen">
                 {{ bodaInfo.menuResumen || "Estamos preparando una selección deliciosa. ¡Próximamente!" }}
               </p>
             </div>
 
-            <div *ngIf="editMode" class="edit-mode">
-              <label>Resumen del Menú:</label>
-              <textarea [(ngModel)]="bodaInfo.menuResumen" rows="4" placeholder="Ej: Cóctel de bienvenida, Solomillo..."></textarea>
+            <div *ngIf="editMode">
+              <label class="form-label text-uppercase fw-bold small mb-2">Resumen del Menú:</label>
+              <textarea class="form-control rounded-3" [(ngModel)]="bodaInfo.menuResumen" rows="4" placeholder="Ej: Cóctel de bienvenida, Solomillo..."></textarea>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
+
     </div>
 
+    <!-- Botón Guardar Flotante -->
     <div class="floating-save" *ngIf="editMode">
-      <button class="btn-save-gold" (click)="guardarCambios()" [disabled]="guardando">
+      <button class="btn btn-save-gold w-100 rounded-pill py-3 fw-bold shadow-lg" (click)="guardarCambios()" [disabled]="guardando">
         <span *ngIf="!guardando">✨ Guardar Información</span>
-        <span *ngIf="guardando" class="loader-text">⌛ Guardando cambios...</span>
+        <span *ngIf="guardando" class="loader-text d-flex align-items-center justify-content-center gap-2">
+          <span class="spinner-border spinner-border-sm" role="status"></span>
+          Guardando cambios...
+        </span>
       </button>
     </div>
 

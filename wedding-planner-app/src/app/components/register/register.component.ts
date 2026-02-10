@@ -18,12 +18,17 @@ export class RegisterComponent {
   rol: string = 'invitado'; 
   codigoBoda: string = '';
   nick: string = '';
+  mostrarPassword: boolean = false;
 
   constructor(
     private http: HttpClient, 
     private router: Router, 
     private notifService: NotificationService
   ) {}
+
+  togglePassword() {
+    this.mostrarPassword = !this.mostrarPassword;
+  }
 
   registrar() {
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;

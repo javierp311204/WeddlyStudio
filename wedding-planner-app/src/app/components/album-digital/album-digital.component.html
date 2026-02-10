@@ -1,39 +1,47 @@
-<div class="album-container">
-  <button class="btn-back" (click)="irAlHome()">
-    <span>←</span> Volver al Panel
-  </button>
+<div class="album-container py-4 px-3">
+  <div class="container" style="max-width: 1100px;">
+    
+    <button class="btn btn-link btn-back text-decoration-none d-flex align-items-center gap-2 p-0 mb-4" (click)="irAlHome()">
+      <span>←</span> Volver al Panel
+    </button>
 
-  <header class="album-header">
-    <span class="sub-fancy">Recuerdos compartidos</span>
-    <h1>Álbum Digital</h1>
-    <div class="boda-badge">
-      <span class="dot"></span>
-      Código: {{ codigoBoda }}
-    </div>
+    <header class="album-header text-center mb-4">
+      <span class="sub-fancy d-block small">Recuerdos compartidos</span>
+      <h1 class="display-5 fw-normal mb-3">Álbum Digital</h1>
+      <div class="boda-badge d-inline-flex align-items-center gap-2 mb-3">
+        <span class="dot"></span>
+        Código: {{ codigoBoda }}
+      </div>
 
-    <br>
+      <div class="mt-3">
+        <label class="btn btn-upload-custom d-inline-flex align-items-center gap-2 rounded-3">
+          <span class="icon">📸</span> Subir nueva foto
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden>
+        </label>
+        <p class="upload-hint small text-muted mt-2 mb-0">Formatos aceptados: JPG, PNG. Máx 5MB.</p>
+      </div>
+    </header>
 
-    <label class="btn-upload-custom">
-      <span class="icon">📸</span> Subir nueva foto
-      <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden>
-    </label>
-    <p class="upload-hint">Formatos aceptados: JPG, PNG. Máx 5MB.</p>
-  </header>
+    <div class="row g-3 photo-grid">
+      <div class="col-12" *ngIf="fotos && fotos.length === 0">
+        <div class="empty-state text-center py-5 rounded-4">
+          <div class="empty-icon mb-3">📷</div>
+          <p class="text-muted mb-0">Aún no hay fotos en este álbum. ¡Sé el primero en subir una!</p>
+        </div>
+      </div>
 
-  <div class="photo-grid">
-    <div class="empty-state" *ngIf="fotos && fotos.length === 0">
-      <div class="empty-icon">📷</div>
-      <p>Aún no hay fotos en este álbum. ¡Sé el primero en subir una!</p>
-    </div>
-
-    <div class="card-inner" *ngFor="let foto of fotos">
-      <img [src]="foto.url" alt="Foto de la boda">
-      <div class="photo-info">
-        <div class="info-content">
-          <span class="user-name">&#64;{{ foto.usuario }}</span>
-          <span class="photo-date">{{ foto.fecha | date:'shortDate' }}</span>
+      <div class="col-12 col-sm-6 col-lg-4" *ngFor="let foto of fotos">
+        <div class="card-inner rounded-4 overflow-hidden position-relative">
+          <img [src]="foto.url" alt="Foto de la boda" class="w-100 h-100 object-fit-cover">
+          <div class="photo-info position-absolute bottom-0 start-0 end-0 p-3">
+            <div class="info-content d-flex justify-content-between align-items-center text-white small">
+              <span class="user-name fw-bold">&#64;{{ foto.usuario }}</span>
+              <span class="photo-date">{{ foto.fecha | date:'shortDate' }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </div>
