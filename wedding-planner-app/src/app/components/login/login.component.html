@@ -1,41 +1,41 @@
 <div class="auth-wrapper min-vh-100 d-flex align-items-center justify-content-center p-4">
   <div class="auth-card bg-white rounded-4 shadow-sm position-relative">
-    <button class="btn btn-link btn-back position-absolute text-decoration-none d-flex align-items-center gap-2" routerLink="/home">
+    <button class="btn btn-link btn-back position-absolute text-decoration-none d-flex align-items-center gap-2" (click)="irAlHome()">
       <span class="icon">←</span> Regresar
     </button>
     
-    <div class="text-center mb-5 pt-4">
-      <h2 class="display-4 fw-normal mb-3">Bienvenido</h2>
-      <p class="text-muted">Introduce tus credenciales para acceder</p>
+    <div class="text-center mb-4 pt-3">
+      <h2 class="display-5 fw-normal mb-2">Iniciar Sesión</h2>
+      <p class="text-muted small mb-0">Accede a tu cuenta de Wedding Planner</p>
     </div>
 
     <form>
-      <div class="mb-4">
-        <label class="form-label text-uppercase fw-semibold small ls-1 mb-2">Email</label>
+      <div class="mb-3">
+        <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">Email</label>
         <input
           type="email"
-          class="form-control form-control-lg rounded-3 py-3"
+          class="form-control rounded-3"
           [(ngModel)]="email"
           name="email"
-          placeholder="ejemplo@correo.com"
+          placeholder="tu@email.com"
           (keyup.enter)="login()"
         />
       </div>
 
-      <div class="mb-4">
-        <label class="form-label text-uppercase fw-semibold small ls-1 mb-2">Contraseña</label>
+      <div class="mb-3">
+        <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">Contraseña</label>
         <div class="position-relative">
-          <input 
+          <input
             [type]="mostrarPassword ? 'text' : 'password'"
-            class="form-control form-control-lg rounded-3 py-3 pe-5" 
+            class="form-control rounded-3 pe-5"
             [(ngModel)]="pass"
             name="pass"
-            placeholder="••••••••" 
+            placeholder="Tu contraseña"
             (keyup.enter)="login()"
           />
           <button 
             type="button"
-            class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-decoration-none p-0 me-3"
+            class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-decoration-none p-0 me-2"
             (click)="togglePassword()"
             style="z-index: 10;">
             <span class="eye-icon">{{ mostrarPassword ? '👁️' : '👁️‍🗨️' }}</span>
@@ -43,16 +43,25 @@
         </div>
       </div>
 
+      <div class="text-end mb-3">
+        <a 
+          class="forgot-password-link small text-decoration-none"
+          (click)="irARecuperarPassword()"
+          style="cursor: pointer;">
+          ¿Olvidaste tu contraseña?
+        </a>
+      </div>
+
       <button 
         type="button"
-        class="btn btn-auth w-100 rounded-3 py-3 fw-semibold mt-3" 
+        class="btn btn-auth w-100 rounded-3 py-2 fw-semibold" 
         (click)="login()">
         Iniciar Sesión
       </button>
     </form>
 
-    <div class="auth-footer text-center mt-5 small text-muted">
-      ¿Aún no tienes cuenta? <a routerLink="/register" class="text-decoration-none fw-semibold">Regístrate gratis</a>
+    <div class="auth-footer text-center mt-3 small text-muted">
+      ¿No tienes cuenta? <a routerLink="/register" class="text-decoration-none fw-semibold">Regístrate</a>
     </div>
   </div>
 </div>

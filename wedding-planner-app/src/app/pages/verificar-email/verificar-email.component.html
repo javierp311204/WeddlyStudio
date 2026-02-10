@@ -1,0 +1,58 @@
+<div class="verify-wrapper min-vh-100 d-flex align-items-center justify-content-center p-4">
+  <div class="verify-card bg-white rounded-4 shadow-sm text-center">
+    
+    <!-- ESTADO: Verificando... -->
+    <div *ngIf="verificando" class="verificando-state">
+      <div class="spinner-container mb-4">
+        <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
+          <span class="visually-hidden">Verificando...</span>
+        </div>
+      </div>
+      <h2 class="display-6 fw-normal mb-2">Verificando tu email...</h2>
+      <p class="text-muted">Por favor espera un momento</p>
+    </div>
+
+    <!-- ESTADO: Verificación Exitosa ✅ -->
+    <div *ngIf="!verificando && verificacionExitosa" class="success-state">
+      <div class="icon-success mb-4">
+        <div class="checkmark-circle">
+          <div class="checkmark"></div>
+        </div>
+      </div>
+      <h2 class="display-5 fw-normal mb-3 text-success">¡Email Verificado!</h2>
+      <p class="text-muted mb-4">
+        Tu cuenta ha sido activada correctamente.<br>
+        Serás redirigido al inicio de sesión en unos segundos...
+      </p>
+      <button class="btn btn-verify w-100 rounded-3 py-2 fw-semibold" (click)="irAlLogin()">
+        Ir al Login Ahora
+      </button>
+    </div>
+
+    <!-- ESTADO: Error ❌ -->
+    <div *ngIf="!verificando && !verificacionExitosa" class="error-state">
+      <div class="icon-error mb-4">
+        <span class="error-symbol">⚠️</span>
+      </div>
+      <h2 class="display-6 fw-normal mb-3 text-danger">Verificación Fallida</h2>
+      <div class="alert alert-danger text-start mb-4" role="alert">
+        {{ mensajeError }}
+      </div>
+      <p class="text-muted small mb-4">
+        Posibles causas:<br>
+        • El enlace ha expirado (24 horas de validez)<br>
+        • El enlace ya fue usado<br>
+        • El enlace es inválido
+      </p>
+      <div class="d-grid gap-2">
+        <button class="btn btn-verify rounded-3 py-2 fw-semibold" routerLink="/register">
+          Volver a Registrarse
+        </button>
+        <button class="btn btn-outline-secondary rounded-3 py-2" routerLink="/login">
+          Ir al Login
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

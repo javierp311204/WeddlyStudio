@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http'; // Añadido HttpClientModule
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { NotificationService } from '../../services/notification/notification.service';
-import { AuthService } from '../../services/auth/auth.service'; // Asegúrate de importar tu AuthService
 
 @Component({
   selector: 'app-login',
@@ -46,7 +45,6 @@ export class LoginComponent {
 
     this.http.post<any>(this.API_URL, credenciales).subscribe({
       next: (res) => {
-
         localStorage.setItem('token', res.token);
         localStorage.setItem('rol', res.rol);
         localStorage.setItem('codigoBoda', res.codigoBoda);
@@ -59,20 +57,29 @@ export class LoginComponent {
           `¡Bienvenido de nuevo, ${res.nick || 'Invitado'}!`
         );
 
-        // Redirección común al Home
         this.router.navigate(['/home']);
       },
       error: (err) => {
-        this.notifService.showError(
-          'Error de login',
-          'Credenciales incorrectas. Inténtalo de nuevo.'
-        );
+        // ✨ MANEJAR ERROR DE EMAIL NO VERIFICADO
+        if (err.status === 403 && err.error?.emailNoVerificado) {
+          this.notifService.showError(
+            'Email no verificado',
+            'Debes verificar tu email antes de iniciar sesión. Revisa tu bandeja de entrada y spam.'
+          );
+        } else {
+          const mensaje = err.error?.mensaje || 'Credenciales incorrectas. Inténtalo de nuevo.';
+          this.notifService.showError('Error de login', mensaje);
+        }
         console.error('Error en login:', err);
       },
     });
   }
 
-  // El botón para regresar al Home desde el Login
+  // ✨ NUEVA FUNCIÓN: Ir a recuperar contraseña
+  irARecuperarPassword() {
+    this.router.navigate(['/recuperar-password']);
+  }
+
   irAlHome() {
     this.router.navigate(['/home']);
   }

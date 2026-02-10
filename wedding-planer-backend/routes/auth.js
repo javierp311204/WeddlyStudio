@@ -4,6 +4,8 @@ const Usuario = require("../models/Usuario");
 const BodaConfig = require("../models/BodaConfig");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto'); 
+const emailService = require('../services/emailService');
 
 const SECRET_KEY = "tu_clave_secreta_boda_2024";
 
@@ -69,18 +71,39 @@ router.post("/registro", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(pass, salt);
 
+    // ✨ GENERAR TOKEN DE VERIFICACIÓN
+    const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+    const tokenExpiracion = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 horas
+
     const nuevoUsuario = new Usuario({
       email: email.toLowerCase(),
       pass: hashedPass,
       rol,
       codigoBoda: codigoLimpio,
-      nick: nick
+      nick: nick,
+      emailVerificado: false,
+      tokenVerificacion: tokenVerificacion,
+      tokenExpiracion: tokenExpiracion
     });
 
     await nuevoUsuario.save();
     
+    // ✨ ENVIAR EMAIL DE VERIFICACIÓN
+    const emailEnviado = await emailService.enviarEmailVerificacion(
+      email.toLowerCase(), 
+      tokenVerificacion,
+      nick
+    );
+
+    if (!emailEnviado.success) {
+      console.warn('⚠️ Usuario creado pero no se pudo enviar el email de verificación');
+    }
+    
     console.log(`✅ Registro completado: ${email} (${rol})`);
-    res.json({ mensaje: "Usuario creado con éxito" });
+    res.json({ 
+      mensaje: "Cuenta creada. Revisa tu email para verificar tu cuenta.",
+      emailEnviado: emailEnviado.success
+    });
 
   } catch (error) {
     console.error("❌ Error en registro:", error);
@@ -88,7 +111,7 @@ router.post("/registro", async (req, res) => {
   }
 });
 
-// ✅ LOGIN CORREGIDO
+// LOGIN CON VALIDACIÓN DE EMAIL VERIFICADO
 router.post("/login", async (req, res) => {
   try {
     const { email, pass } = req.body;
@@ -96,6 +119,14 @@ router.post("/login", async (req, res) => {
 
     if (!user)
       return res.status(401).json({ mensaje: "Usuario no encontrado" });
+
+    // ✨ VALIDAR SI EL EMAIL ESTÁ VERIFICADO
+    if (!user.emailVerificado) {
+      return res.status(403).json({ 
+        mensaje: "Debes verificar tu email antes de iniciar sesión. Revisa tu bandeja de entrada.",
+        emailNoVerificado: true
+      });
+    }
 
     const esValida = await bcrypt.compare(pass, user.pass);
     if (!esValida)
@@ -107,7 +138,6 @@ router.post("/login", async (req, res) => {
       { expiresIn: "24h" }
     );
 
-    // ✅ CRITICAL: Determinar tipoUsuario basado en el rol
     const tipoUsuario = user.rol === 'admin' ? 'admin' : 'invitado';
 
     res.json({
@@ -116,12 +146,135 @@ router.post("/login", async (req, res) => {
       rol: user.rol,
       codigoBoda: user.codigoBoda,
       nick: user.nick,
-      tipoUsuario: tipoUsuario // ✅ NUEVO: Agregar tipoUsuario
+      tipoUsuario: tipoUsuario
     });
 
   } catch (error) {
     console.error("❌ Error en login:", error);
     res.status(500).json({ error: "Error en el servidor" });
+  }
+});
+
+// VERIFICAR EMAIL
+router.get("/verificar-email/:token", async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    const usuario = await Usuario.findOne({
+      tokenVerificacion: token,
+      tokenExpiracion: { $gt: Date.now() }
+    });
+
+    if (!usuario) {
+      return res.status(400).json({ 
+        error: "Token inválido o expirado. Por favor, solicita un nuevo correo de verificación." 
+      });
+    }
+
+    usuario.emailVerificado = true;
+    usuario.tokenVerificacion = undefined;
+    usuario.tokenExpiracion = undefined;
+    await usuario.save();
+
+    console.log(`✅ Email verificado: ${usuario.email}`);
+    res.json({ 
+      success: true,
+      mensaje: "¡Email verificado exitosamente! Ya puedes iniciar sesión." 
+    });
+
+  } catch (error) {
+    console.error("❌ Error verificando email:", error);
+    res.status(500).json({ error: "Error al verificar email" });
+  }
+});
+
+// SOLICITAR RECUPERACIÓN DE CONTRASEÑA
+router.post("/solicitar-recuperacion", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: "El email es obligatorio" });
+    }
+
+    const usuario = await Usuario.findOne({ email: email.toLowerCase() });
+
+    // Por seguridad, siempre respondemos éxito aunque el email no exista
+    if (!usuario) {
+      return res.json({ 
+        mensaje: "Si el email está registrado, recibirás instrucciones para recuperar tu contraseña." 
+      });
+    }
+
+    // Generar token de recuperación
+    const tokenRecuperacion = crypto.randomBytes(32).toString('hex');
+    const tokenExpiracion = new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hora
+
+    usuario.tokenVerificacion = tokenRecuperacion;
+    usuario.tokenExpiracion = tokenExpiracion;
+    await usuario.save();
+
+    // Enviar email de recuperación
+    const emailEnviado = await emailService.enviarEmailRecuperacion(
+      email.toLowerCase(), 
+      tokenRecuperacion,
+      usuario.nick
+    );
+
+    console.log(`✅ Email de recuperación enviado a ${email}`);
+    res.json({ 
+      mensaje: "Si el email está registrado, recibirás instrucciones para recuperar tu contraseña.",
+      emailEnviado: emailEnviado.success
+    });
+
+  } catch (error) {
+    console.error("❌ Error en solicitud de recuperación:", error);
+    res.status(500).json({ error: "Error al procesar la solicitud" });
+  }
+});
+
+// RESETEAR CONTRASEÑA CON TOKEN
+router.post("/resetear-password", async (req, res) => {
+  try {
+    const { token, nuevaPassword } = req.body;
+
+    if (!token || !nuevaPassword) {
+      return res.status(400).json({ error: "Token y nueva contraseña son obligatorios" });
+    }
+
+    if (nuevaPassword.length < 6) {
+      return res.status(400).json({ error: "La contraseña debe tener al menos 6 caracteres" });
+    }
+
+    const usuario = await Usuario.findOne({
+      tokenVerificacion: token,
+      tokenExpiracion: { $gt: Date.now() }
+    });
+
+    if (!usuario) {
+      return res.status(400).json({ 
+        error: "Token inválido o expirado. Por favor, solicita un nuevo correo de recuperación." 
+      });
+    }
+
+    // Hashear nueva contraseña
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(nuevaPassword, salt);
+
+    usuario.pass = hashedPass;
+    usuario.tokenVerificacion = undefined;
+    usuario.tokenExpiracion = undefined;
+    await usuario.save();
+
+    console.log(`✅ Contraseña reseteada para: ${usuario.email}`);
+    res.json({ 
+      success: true,
+      mensaje: "Contraseña actualizada exitosamente. Ya puedes iniciar sesión." 
+    });
+
+  } catch (error) {
+    console.error("❌ Error reseteando contraseña:", error);
+    res.status(500).json({ error: "Error al resetear contraseña" });
   }
 });
 

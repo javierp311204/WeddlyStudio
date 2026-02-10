@@ -123,6 +123,17 @@
   padding-right: 3rem !important;
 }
 
+.forgot-password-link {
+  color: #d4a373;
+  font-size: 0.85rem;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link:hover {
+  color: #bc8a5f;
+  text-decoration: underline !important;
+}
+
 /* Ajustes responsivos */
 @media (max-width: 576px) {
   .auth-card {

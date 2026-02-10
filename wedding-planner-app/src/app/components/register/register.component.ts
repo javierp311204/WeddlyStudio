@@ -31,35 +31,40 @@ export class RegisterComponent {
   }
 
   registrar() {
-    const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+  const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
 
-    if (!emailPattern.test(this.email.toLowerCase())) {
-      this.notifService.showError('Email Inválido', 'Por favor, ingresa un correo electrónico válido.');
-      return; 
-    }
-
-    if (!this.email || !this.pass || !this.codigoBoda || !this.nick) {
-      this.notifService.showError('Campos incompletos', 'Todos los campos son obligatorios.');
-      return;
-    }
-
-    const datos = {
-      email: this.email.toLowerCase(),
-      pass: this.pass,
-      rol: this.rol,
-      codigoBoda: this.codigoBoda.toUpperCase(),
-      nick: this.nick 
-    };
-
-    this.http.post('http://localhost:3000/api/auth/registro', datos).subscribe({
-      next: () => {
-        this.notifService.showSuccess('¡Bienvenido!', 'Registro exitoso. Redirigiendo al login...');
-        setTimeout(() => this.router.navigate(['/login']), 2000);
-      },
-      error: (err) => {
-        const mensaje = err.error?.error || 'Ocurrió un error inesperado';
-        this.notifService.showError('Error al registrarse', mensaje);
-      }
-    });
+  if (!emailPattern.test(this.email.toLowerCase())) {
+    this.notifService.showError('Email Inválido', 'Por favor, ingresa un correo electrónico válido.');
+    return; 
   }
+
+  if (!this.email || !this.pass || !this.codigoBoda || !this.nick) {
+    this.notifService.showError('Campos incompletos', 'Todos los campos son obligatorios.');
+    return;
+  }
+
+  const datos = {
+    email: this.email.toLowerCase(),
+    pass: this.pass,
+    rol: this.rol,
+    codigoBoda: this.codigoBoda.toUpperCase(),
+    nick: this.nick 
+  };
+
+  this.http.post('http://localhost:3000/api/auth/registro', datos).subscribe({
+    next: (response: any) => {
+      // ✨ NUEVO: Mostrar mensaje sobre verificación de email
+      this.notifService.showSuccess(
+        '¡Cuenta creada!', 
+        `Hemos enviado un email de verificación a ${this.email}. Por favor, revisa tu bandeja de entrada.`
+      );
+      
+      setTimeout(() => this.router.navigate(['/login']), 4000);
+    },
+    error: (err) => {
+      const mensaje = err.error?.error || 'Ocurrió un error inesperado';
+      this.notifService.showError('Error al registrarse', mensaje);
+    }
+  });
+}
 }
