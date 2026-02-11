@@ -3,6 +3,7 @@ const router = express.Router();
 const BodaConfig = require("../models/BodaConfig");
 const autenticar = require('../middleware/auth');
 const emailService = require('../services/emailService');
+const { verificarLimiteInvitados } = require('../middleware/checkLimits');
 
 // ============================================
 // 🔓 RUTAS PÚBLICAS (SIN AUTENTICACIÓN)

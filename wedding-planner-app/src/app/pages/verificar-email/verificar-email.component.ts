@@ -41,11 +41,6 @@ export class VerificarEmailComponent implements OnInit {
         next: (response: any) => {
           this.verificando = false;
           this.verificacionExitosa = true;
-          
-          // Redirigir al login después de 3 segundos
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 3000);
         },
         error: (err) => {
           this.verificando = false;

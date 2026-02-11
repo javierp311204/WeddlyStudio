@@ -68,9 +68,9 @@ class EmailService {
     const urlVerificacion = `http://localhost:4200/verificar-email?token=${tokenVerificacion}`;
 
     const mailOptions = {
-      from: `"Wedding Planner 💌" <${process.env.EMAIL_USER}>`,
+      from: `"Wedding Planner " <${process.env.EMAIL_USER}>`,
       to: destinatario,
-      subject: "✨ Verifica tu cuenta - Wedding Planner",
+      subject: "Verifica tu cuenta - Wedding Planner",
       html: `
       <!DOCTYPE html>
       <html>
@@ -162,12 +162,12 @@ class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>✨ ¡BIENVENIDO/A!</h1>
+            <h1>¡BIENVENIDO/A!</h1>
           </div>
           
           <div class="content">
             <p class="welcome">
-              Hola <strong>${nombreUsuario}</strong> 👋
+              Hola <strong>${nombreUsuario}</strong>
             </p>
             
             <div class="divider"></div>
@@ -227,9 +227,9 @@ class EmailService {
   const urlRecuperacion = `http://localhost:4200/resetear-password?token=${tokenRecuperacion}`;
 
   const mailOptions = {
-    from: `"Wedding Planner 🔐" <${process.env.EMAIL_USER}>`,
+    from: `"Wedding Planner " <${process.env.EMAIL_USER}>`,
     to: destinatario,
-    subject: '🔑 Recuperación de Contraseña - Wedding Planner',
+    subject: 'Recuperación de Contraseña - Wedding Planner',
     html: `
       <!DOCTYPE html>
       <html>
@@ -321,18 +321,18 @@ class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🔑 RECUPERACIÓN DE CONTRASEÑA</h1>
+            <h1>RECUPERACIÓN DE CONTRASEÑA</h1>
           </div>
           
           <div class="content">
             <p class="welcome">
-              Hola <strong>${nombreUsuario}</strong> 👋
+              Hola <strong>${nombreUsuario}</strong>
             </p>
             
             <div class="divider"></div>
             
             <p class="message">
-              Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en Wedding Planner.
+              Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en Wedding Planner Vuestra Boda.
             </p>
             
             <p class="message">
@@ -340,11 +340,11 @@ class EmailService {
             </p>
             
             <a href="${urlRecuperacion}" class="cta-button">
-              🔐 Restablecer Contraseña
+              Restablecer Contraseña
             </a>
             
             <div class="warning">
-              <strong>⚠️ Importante:</strong> 
+              <strong>Importante:</strong> 
               <ul style="margin: 10px 0; padding-left: 20px;">
                 <li>Este enlace expirará en 1 hora por seguridad</li>
                 <li>Si no solicitaste este cambio, ignora este correo</li>
@@ -361,7 +361,7 @@ class EmailService {
           <div class="footer">
             <p>Si no solicitaste este cambio, tu cuenta está segura.</p>
             <p style="font-size: 0.8rem; margin-top: 15px;">
-              © 2025 Wedding Planner - Creando momentos inolvidables ✨
+              © 2025 Wedding Planner - Creando momentos inolvidables 
             </p>
           </div>
         </div>

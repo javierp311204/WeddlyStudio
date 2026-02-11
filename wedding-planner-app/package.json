@@ -19,6 +19,7 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@stripe/stripe-js": "^8.7.0",
     "bootstrap": "^5.3.8",
     "driver.js": "^1.4.0",
     "fabric": "^7.1.0",
