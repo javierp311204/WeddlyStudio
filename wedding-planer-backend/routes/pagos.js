@@ -64,6 +64,8 @@ router.post('/crear-sesion-pago-unico', autenticar, async (req, res) => {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
+    console.log(`💳 Creando sesión de pago ONE-TIME para: ${usuario.email}`);
+
     // Crear sesión de Stripe Checkout para pago único
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -90,6 +92,7 @@ router.post('/crear-sesion-pago-unico', autenticar, async (req, res) => {
       cancel_url: `${process.env.FRONTEND_URL}/pricing`,
     });
 
+    console.log(`✅ Sesión creada: ${session.id}`);
     res.json({ sessionId: session.id, url: session.url });
   } catch (error) {
     console.error('Error creando sesión de pago:', error);
@@ -108,6 +111,8 @@ router.post('/crear-suscripcion', autenticar, async (req, res) => {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
+    console.log(`💳 Creando suscripción UNLIMITED para: ${usuario.email}`);
+
     // Crear o obtener cliente de Stripe
     let customerId = usuario.stripeCustomerId;
 
@@ -121,6 +126,7 @@ router.post('/crear-suscripcion', autenticar, async (req, res) => {
       customerId = customer.id;
       usuario.stripeCustomerId = customerId;
       await usuario.save();
+      console.log(`✅ Cliente Stripe creado: ${customerId}`);
     }
 
     // Crear sesión de Stripe Checkout para suscripción
@@ -152,6 +158,7 @@ router.post('/crear-suscripcion', autenticar, async (req, res) => {
       cancel_url: `${process.env.FRONTEND_URL}/pricing`,
     });
 
+    console.log(`✅ Sesión de suscripción creada: ${session.id}`);
     res.json({ sessionId: session.id, url: session.url });
   } catch (error) {
     console.error('Error creando suscripción:', error);
@@ -163,42 +170,58 @@ router.post('/crear-suscripcion', autenticar, async (req, res) => {
 // 5. WEBHOOK DE STRIPE (Eventos de pago)
 // ========================================
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  console.log('\n' + '='.repeat(80));
+  console.log('🎯 WEBHOOK RECIBIDO');
+  console.log('='.repeat(80));
+  
   const sig = req.headers['stripe-signature'];
+  console.log('📝 Firma recibida:', sig ? 'Presente ✅' : 'Ausente ❌');
 
   let event;
 
   try {
+    console.log('🔐 Verificando firma del webhook...');
     event = stripe.webhooks.constructEvent(
       req.body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+    console.log('✅ Firma verificada correctamente');
+    console.log('📦 Tipo de evento:', event.type);
   } catch (err) {
-    console.error('⚠️ Webhook signature verification failed:', err.message);
+    console.error('❌ Error de verificación de firma:', err.message);
+    console.log('='.repeat(80) + '\n');
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   // Manejar el evento
+  console.log(`🔄 Procesando evento: ${event.type}`);
+  
   switch (event.type) {
     case 'checkout.session.completed':
+      console.log('💰 Checkout completado detectado');
       const session = event.data.object;
+      console.log('📋 Metadata:', session.metadata);
       await handleCheckoutSessionCompleted(session);
       break;
 
     case 'customer.subscription.updated':
+      console.log('🔄 Suscripción actualizada');
       const subscriptionUpdated = event.data.object;
       await handleSubscriptionUpdated(subscriptionUpdated);
       break;
 
     case 'customer.subscription.deleted':
+      console.log('❌ Suscripción cancelada');
       const subscriptionDeleted = event.data.object;
       await handleSubscriptionDeleted(subscriptionDeleted);
       break;
 
     default:
-      console.log(`Unhandled event type ${event.type}`);
+      console.log(`⚠️  Evento no manejado: ${event.type}`);
   }
 
+  console.log('='.repeat(80) + '\n');
   res.json({ received: true });
 });
 
@@ -206,63 +229,122 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 // FUNCIONES AUXILIARES PARA WEBHOOKS
 // ========================================
 async function handleCheckoutSessionCompleted(session) {
-  const userId = session.metadata.userId;
-  const plan = session.metadata.plan;
+  try {
+    const userId = session.metadata.userId;
+    const plan = session.metadata.plan;
 
-  const usuario = await Usuario.findById(userId);
-  if (!usuario) return;
+    console.log(`\n🔔 Procesando checkout completado`);
+    console.log(`   User ID: ${userId}`);
+    console.log(`   Plan: ${plan}`);
 
-  if (plan === 'one_time') {
-    // Pago único
-    usuario.plan = 'one_time';
-    usuario.subscriptionStatus = 'active';
-    usuario.limites = PLANES.one_time.limites;
-    usuario.paymentHistory.push({
-      monto: 79,
-      plan: 'one_time',
-      stripePaymentId: session.payment_intent,
-      tipo: 'one_time'
-    });
-  } else if (plan === 'unlimited') {
-    // Suscripción
-    usuario.plan = 'unlimited';
-    usuario.subscriptionStatus = 'active';
-    usuario.stripeSubscriptionId = session.subscription;
-    usuario.limites = PLANES.unlimited.limites;
-    usuario.paymentHistory.push({
-      monto: 29,
-      plan: 'unlimited',
-      stripePaymentId: session.payment_intent,
-      tipo: 'subscription'
-    });
+    const usuario = await Usuario.findById(userId);
+    if (!usuario) {
+      console.error(`❌ Usuario no encontrado: ${userId}`);
+      return;
+    }
+
+    console.log(`✅ Usuario encontrado: ${usuario.email}`);
+    console.log(`   Plan actual ANTES: ${usuario.plan}`);
+    console.log(`   Límites ANTES: ${JSON.stringify(usuario.limites)}`);
+
+    if (plan === 'one_time') {
+      // Pago único
+      usuario.plan = 'one_time';
+      usuario.subscriptionStatus = 'active';
+      
+      usuario.limites.maxBodas = PLANES.one_time.limites.maxBodas;
+      usuario.limites.maxInvitados = PLANES.one_time.limites.maxInvitados;
+      usuario.limites.featuresActivas = PLANES.one_time.limites.featuresActivas;
+      
+      usuario.paymentHistory.push({
+        monto: 79,
+        plan: 'one_time',
+        stripePaymentId: session.payment_intent,
+        tipo: 'one_time'
+      });
+
+      console.log(`💎 Aplicando Plan One-Time Premium`);
+
+    } else if (plan === 'unlimited') {
+      // Suscripción
+      usuario.plan = 'unlimited';
+      usuario.subscriptionStatus = 'active';
+      usuario.stripeSubscriptionId = session.subscription;
+      
+      usuario.limites.maxBodas = PLANES.unlimited.limites.maxBodas;
+      usuario.limites.maxInvitados = PLANES.unlimited.limites.maxInvitados;
+      usuario.limites.featuresActivas = PLANES.unlimited.limites.featuresActivas;
+      
+      usuario.paymentHistory.push({
+        monto: 29,
+        plan: 'unlimited',
+        stripePaymentId: session.payment_intent,
+        tipo: 'subscription'
+      });
+
+      console.log(`👑 Aplicando Plan Unlimited`);
+    }
+
+    console.log(`💾 Guardando cambios en la base de datos...`);
+    await usuario.save();
+    
+    console.log(`✅ PAGO COMPLETADO Y GUARDADO`);
+    console.log(`   Plan actual DESPUÉS: ${usuario.plan}`);
+    console.log(`   Límites DESPUÉS: ${JSON.stringify(usuario.limites)}`);
+    console.log(`   Status: ${usuario.subscriptionStatus}`);
+
+  } catch (error) {
+    console.error('❌ Error en handleCheckoutSessionCompleted:', error);
+    console.error('Stack:', error.stack);
   }
-
-  await usuario.save();
-  console.log(`✅ Pago completado para usuario ${usuario.email} - Plan: ${plan}`);
 }
 
 async function handleSubscriptionUpdated(subscription) {
-  const usuario = await Usuario.findOne({ stripeSubscriptionId: subscription.id });
-  if (!usuario) return;
+  try {
+    console.log(`\n🔄 Actualizando suscripción: ${subscription.id}`);
+    
+    const usuario = await Usuario.findOne({ stripeSubscriptionId: subscription.id });
+    if (!usuario) {
+      console.log('⚠️ No se encontró usuario para la suscripción:', subscription.id);
+      return;
+    }
 
-  usuario.subscriptionStatus = subscription.status;
-  usuario.subscriptionEndDate = new Date(subscription.current_period_end * 1000);
-  await usuario.save();
+    console.log(`✅ Usuario encontrado: ${usuario.email}`);
+    
+    usuario.subscriptionStatus = subscription.status;
+    usuario.subscriptionEndDate = new Date(subscription.current_period_end * 1000);
+    await usuario.save();
 
-  console.log(`✅ Suscripción actualizada para ${usuario.email}`);
+    console.log(`✅ Suscripción actualizada - Status: ${subscription.status}`);
+  } catch (error) {
+    console.error('❌ Error en handleSubscriptionUpdated:', error);
+  }
 }
 
 async function handleSubscriptionDeleted(subscription) {
-  const usuario = await Usuario.findOne({ stripeSubscriptionId: subscription.id });
-  if (!usuario) return;
+  try {
+    console.log(`\n❌ Cancelando suscripción: ${subscription.id}`);
+    
+    const usuario = await Usuario.findOne({ stripeSubscriptionId: subscription.id });
+    if (!usuario) {
+      console.log('⚠️ No se encontró usuario para la suscripción:', subscription.id);
+      return;
+    }
 
-  usuario.plan = 'free';
-  usuario.subscriptionStatus = 'canceled';
-  usuario.limites = PLANES.free.limites;
-  usuario.stripeSubscriptionId = null;
-  await usuario.save();
+    console.log(`✅ Usuario encontrado: ${usuario.email}`);
+    
+    usuario.plan = 'free';
+    usuario.subscriptionStatus = 'canceled';
+    usuario.limites.maxBodas = PLANES.free.limites.maxBodas;
+    usuario.limites.maxInvitados = PLANES.free.limites.maxInvitados;
+    usuario.limites.featuresActivas = PLANES.free.limites.featuresActivas;
+    usuario.stripeSubscriptionId = null;
+    await usuario.save();
 
-  console.log(`❌ Suscripción cancelada para ${usuario.email}`);
+    console.log(`✅ Suscripción cancelada - Plan revertido a FREE`);
+  } catch (error) {
+    console.error('❌ Error en handleSubscriptionDeleted:', error);
+  }
 }
 
 // ========================================
