@@ -2,26 +2,25 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { GestionService } from '../../services/gestion/gestion.service';
 
 @Component({
   selector: 'app-mesa-manager',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './mesa-manager.component.html',
   styleUrl: './mesa-manager.component.css',
 })
 export class MesaManagerComponent implements OnInit {
   mesas: any[] = [];
 
-  // Lógica de búsqueda de invitados
-  invitadosDisponibles: any[] = []; // Todos los invitados de la boda
-  invitadosFiltrados: any[] = []; // Los que coinciden con la búsqueda
-  busquedaInvitado: string = ''; // Texto del input
-  invitadoSeleccionado: any = null; // El objeto invitado elegido
+  invitadosDisponibles: any[] = [];
+  invitadosFiltrados: any[] = [];
+  busquedaInvitado: string = '';
+  invitadoSeleccionado: any = null;
 
-  // Modelos de formulario
   nuevaMesa: any = { nombre: '', tipo: 'invitados', capacidad: 10 };
   mesaSeleccionada: string = '';
 
@@ -31,6 +30,7 @@ export class MesaManagerComponent implements OnInit {
     private gestionService: GestionService,
     private router: Router,
     private notifService: NotificationService,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit() {
@@ -47,7 +47,6 @@ export class MesaManagerComponent implements OnInit {
         this.mesas = res.mesas || [];
         this.invitadosDisponibles = res.invitados || [];
 
-        // Vinculación lógica: Invitados -> Mesas
         this.mesas.forEach((mesa) => {
           mesa.listaInvitados = this.invitadosDisponibles.filter(
             (inv: any) => inv.mesa === mesa.nombre,
@@ -63,13 +62,8 @@ export class MesaManagerComponent implements OnInit {
     });
   }
 
-  // --- Lógica del Buscador ---
   filtrarInvitados() {
-    // 1. Verificar si hay invitados cargados en la consola
-    console.log(
-      'Total invitados disponibles:',
-      this.invitadosDisponibles.length,
-    );
+    console.log('Total invitados disponibles:', this.invitadosDisponibles.length);
 
     if (!this.busquedaInvitado || this.busquedaInvitado.trim() === '') {
       this.invitadosFiltrados = [];
@@ -81,10 +75,7 @@ export class MesaManagerComponent implements OnInit {
     this.invitadosFiltrados = this.invitadosDisponibles
       .filter((inv) => {
         const coincideNombre = inv.nombre.toLowerCase().includes(term);
-        // IMPORTANTE: Verifica que no tenga mesa o que la propiedad mesa esté vacía
-        const sinMesa =
-          !inv.mesa || inv.mesa === '' || inv.mesa === 'Sin Asignar';
-
+        const sinMesa = !inv.mesa || inv.mesa === '' || inv.mesa === 'Sin Asignar';
         return coincideNombre && sinMesa;
       })
       .slice(0, 5);
@@ -98,7 +89,6 @@ export class MesaManagerComponent implements OnInit {
     this.invitadosFiltrados = [];
   }
 
-  // --- Acciones ---
   agregarMesa() {
     const miCodigo = localStorage.getItem('codigoBoda');
     if (!this.nuevaMesa.nombre || !miCodigo) return;
@@ -107,12 +97,18 @@ export class MesaManagerComponent implements OnInit {
 
     this.gestionService.postMesa(datosMesa).subscribe({
       next: () => {
-        this.notifService.showSuccess('¡Éxito!', 'Mesa añadida.');
+        this.notifService.showSuccess(
+          this.translate.instant('COMMON.SUCCESS'),
+          this.translate.instant('TABLES.TABLE_ADDED'),
+        );
         this.nuevaMesa = { nombre: '', tipo: 'invitados', capacidad: 10 };
         this.cargarDatos();
       },
       error: () =>
-        this.notifService.showError('Error', 'No se pudo crear la mesa.'),
+        this.notifService.showError(
+          this.translate.instant('COMMON.ERROR'),
+          this.translate.instant('TABLES.TABLE_ADD_ERROR'),
+        ),
     });
   }
 
@@ -120,8 +116,8 @@ export class MesaManagerComponent implements OnInit {
     const miCodigo = localStorage.getItem('codigoBoda');
     if (!this.invitadoSeleccionado || !this.mesaSeleccionada || !miCodigo) {
       this.notifService.showError(
-        'Atención',
-        'Selecciona un invitado válido y una mesa.',
+        this.translate.instant('TABLES.ATTENTION'),
+        this.translate.instant('TABLES.SELECT_GUEST_AND_TABLE'),
       );
       return;
     }
@@ -132,25 +128,23 @@ export class MesaManagerComponent implements OnInit {
       codigoBoda: miCodigo,
     };
 
-    this.gestionService
-      .updateInvitado(idInvitado, datosActualizados)
-      .subscribe({
-        next: () => {
-          this.notifService.showSuccess(
-            '¡Éxito!',
-            'Invitado asignado a la mesa.',
-          );
-          this.limpiarFormularioInvitado();
-          this.cargarDatos();
-        },
-        error: (err) => {
-          console.error('Error al asignar:', err);
-          this.notifService.showError(
-            'Error',
-            'No se pudo asignar el invitado.',
-          );
-        },
-      });
+    this.gestionService.updateInvitado(idInvitado, datosActualizados).subscribe({
+      next: () => {
+        this.notifService.showSuccess(
+          this.translate.instant('COMMON.SUCCESS'),
+          this.translate.instant('TABLES.GUEST_ASSIGNED'),
+        );
+        this.limpiarFormularioInvitado();
+        this.cargarDatos();
+      },
+      error: (err) => {
+        console.error('Error al asignar:', err);
+        this.notifService.showError(
+          this.translate.instant('COMMON.ERROR'),
+          this.translate.instant('TABLES.GUEST_ASSIGN_ERROR'),
+        );
+      },
+    });
   }
 
   limpiarFormularioInvitado() {
@@ -162,24 +156,20 @@ export class MesaManagerComponent implements OnInit {
 
   eliminarMesa(id: string) {
     const miCodigo = localStorage.getItem('codigoBoda');
-
-    // Buscar la mesa por su _id
     const mesa = this.mesas.find((m) => m._id === id);
 
-    // Verificar si tiene invitados sentados
     if (mesa && mesa.listaInvitados && mesa.listaInvitados.length > 0) {
       this.notifService.showError(
-        'Mesa ocupada',
-        `Hay ${mesa.listaInvitados.length} invitado(s) sentados. Reasígnalos primero.`,
+        this.translate.instant('TABLES.TABLE_OCCUPIED_TITLE'),
+        this.translate.instant('TABLES.TABLE_OCCUPIED_DESC', { count: mesa.listaInvitados.length }),
       );
       return;
     }
 
-    // Si no tiene invitados, proceder con la confirmación
     this.notifService
       .askConfirmation(
-        'Eliminar Mesa',
-        `¿Estás seguro de eliminar "${mesa?.nombre}"?`,
+        this.translate.instant('TABLES.DELETE_TABLE_TITLE'),
+        this.translate.instant('TABLES.DELETE_TABLE_DESC', { nombre: mesa?.nombre }),
         'delete',
       )
       .then((confirm) => {
@@ -187,16 +177,16 @@ export class MesaManagerComponent implements OnInit {
           this.gestionService.deleteMesa(id, miCodigo!).subscribe({
             next: () => {
               this.notifService.showSuccess(
-                'Eliminada',
-                'Mesa eliminada correctamente.',
+                this.translate.instant('NOTIFICATIONS.DELETED'),
+                this.translate.instant('TABLES.TABLE_DELETED'),
               );
               this.cargarDatos();
             },
             error: (err) => {
               console.error('Error al eliminar mesa:', err);
               this.notifService.showError(
-                'Error',
-                'No se pudo eliminar la mesa.',
+                this.translate.instant('COMMON.ERROR'),
+                this.translate.instant('TABLES.TABLE_DELETE_ERROR'),
               );
             },
           });
@@ -210,31 +200,30 @@ export class MesaManagerComponent implements OnInit {
 
     this.notifService
       .askConfirmation(
-        'Quitar de la mesa',
-        '¿Deseas quitar este invitado de la mesa?',
+        this.translate.instant('TABLES.REMOVE_GUEST_TITLE'),
+        this.translate.instant('TABLES.REMOVE_GUEST_DESC'),
         'warning',
       )
       .then((confirm) => {
         if (confirm) {
-          // En lugar de eliminar, actualizamos para quitar la mesa
           const datosActualizados = {
-            mesa: '', // o 'Sin Asignar'
+            mesa: '',
             codigoBoda: miCodigo,
           };
 
           this.gestionService.updateInvitado(id, datosActualizados).subscribe({
             next: () => {
               this.notifService.showSuccess(
-                'Quitado',
-                'Invitado removido de la mesa.',
+                this.translate.instant('TABLES.GUEST_REMOVED_TITLE'),
+                this.translate.instant('TABLES.GUEST_REMOVED_DESC'),
               );
               this.cargarDatos();
             },
             error: (err) => {
               console.error('Error al quitar invitado:', err);
               this.notifService.showError(
-                'Error',
-                'No se pudo quitar de la mesa.',
+                this.translate.instant('COMMON.ERROR'),
+                this.translate.instant('TABLES.GUEST_REMOVE_ERROR'),
               );
             },
           });
@@ -242,7 +231,6 @@ export class MesaManagerComponent implements OnInit {
       });
   }
 
-  // --- Getters ---
   get totalInvitados(): number {
     return this.mesas.reduce(
       (acc, m) => acc + (m.listaInvitados?.length || 0),

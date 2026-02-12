@@ -3,20 +3,20 @@
   <button class="btn btn-link text-decoration-none text-start p-0 mb-4 fw-semibold" 
           style="color: #8b5e3c;" 
           (click)="irAlHome()">
-    <span class="me-2">←</span> Volver al Panel
+    <span class="me-2">←</span> {{ 'DESIGN.BACK_TO_PANEL' | translate }}
   </button>
 
   <!-- Header -->
   <header class="text-center mb-5">
     <p class="text-uppercase fw-bold mb-2" 
        style="letter-spacing: 3px; color: #bc6c25; font-size: 0.8rem;">
-      Asistencia y Organización
+      {{ 'GUESTS.HEADER_SUBTITLE' | translate }}
     </p>
-    <h1 class="mb-3">Lista de Invitados</h1>
+    <h1 class="mb-3">{{ 'GUESTS.TITLE' | translate }}</h1>
     <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill" 
          style="background: #fefae0; color: #bc6c25;">
       <span class="badge bg-warning rounded-circle p-1"></span>
-      <span class="small">Boda: {{ codigoBoda }}</span>
+      <span class="small">{{ 'GUESTS.WEDDING_CODE_LABEL' | translate }}: {{ codigoBoda }}</span>
     </div>
   </header>
 
@@ -24,14 +24,14 @@
   <section class="mb-4">
     <div class="card border-0 shadow-sm rounded-3">
       <div class="card-body p-4">
-        <h3 class="h5 mb-3">Añadir Invitado</h3>
+        <h3 class="h5 mb-3">{{ 'GUESTS.ADD_GUEST' | translate }}</h3>
         <div class="row g-3">
           <div class="col-md-6 col-lg-3">
             <input
               type="text"
               class="form-control"
               [(ngModel)]="nuevoInvitado.nombre"
-              placeholder="Nombre completo"
+              [placeholder]="'GUESTS.PLACEHOLDER_NAME' | translate"
             />
           </div>
           <div class="col-md-6 col-lg-3">
@@ -39,21 +39,21 @@
               type="email"
               class="form-control"
               [(ngModel)]="nuevoInvitado.email"
-              placeholder="Correo electrónico"
+              placeholder="tu@email.com"
             />
           </div>
           <div class="col-md-6 col-lg-3">
             <select class="form-select" [(ngModel)]="nuevoInvitado.tipo">
-              <option value="Familia">Familia</option>
-              <option value="Amigos">Amigos</option>
-              <option value="Trabajo">Trabajo</option>
+              <option value="Familia">{{ 'GUESTS.FILTER_FAMILY' | translate }}</option>
+              <option value="Amigos">{{ 'GUESTS.FILTER_FRIENDS' | translate }}</option>
+              <option value="Trabajo">{{ 'GUESTS.FILTER_WORK' | translate }}</option>
             </select>
           </div>
           <div class="col-md-6 col-lg-3">
             <button class="btn w-100 text-white fw-semibold" 
                     style="background: #bc6c25;" 
                     (click)="agregarInvitado()">
-              Guardar Invitado
+              {{ 'GUESTS.SAVE_GUEST' | translate }}
             </button>
           </div>
         </div>
@@ -71,7 +71,7 @@
         class="form-control ps-5"
         [(ngModel)]="terminoBusqueda"
         (input)="filtrar()"
-        placeholder="Buscar por nombre o email..."
+        [placeholder]="'GUESTS.SEARCH_PLACEHOLDER_EXTENDED' | translate"
       />
     </div>
 
@@ -83,7 +83,7 @@
         (click)="cambiarFiltro('Todos')"
       >
         <span>📋</span>
-        <span>Todos</span>
+        <span>{{ 'GUESTS.FILTER_ALL' | translate }}</span>
       </button>
       <button
         class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
@@ -91,7 +91,7 @@
         (click)="cambiarFiltro('Familia')"
       >
         <span>👨‍👩‍👧</span>
-        <span>Familia</span>
+        <span>{{ 'GUESTS.FILTER_FAMILY' | translate }}</span>
       </button>
       <button
         class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
@@ -99,7 +99,7 @@
         (click)="cambiarFiltro('Amigos')"
       >
         <span>🎉</span>
-        <span>Amigos</span>
+        <span>{{ 'GUESTS.FILTER_FRIENDS' | translate }}</span>
       </button>
       <button
         class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
@@ -107,7 +107,7 @@
         (click)="cambiarFiltro('Trabajo')"
       >
         <span>💼</span>
-        <span>Trabajo</span>
+        <span>{{ 'GUESTS.FILTER_WORK' | translate }}</span>
       </button>
     </div>
   </section>
@@ -137,13 +137,13 @@
               {{ inv.nombre.charAt(0) }}
             </div>
             <h3 class="h5 mb-1" style="color: #283618;">{{ inv.nombre }}</h3>
-            <p class="text-muted small mb-3">{{ inv.email || "Sin correo" }}</p>
+            <p class="text-muted small mb-3">{{ inv.email || ('GUESTS.NO_EMAIL' | translate) }}</p>
 
             <!-- Badges de información -->
             <div class="d-flex flex-column gap-2 p-3 rounded-3" 
                  style="background: #fcfcfc;">
               <span class="small text-secondary">🍽️ {{ inv.menu }}</span>
-              <span class="small text-secondary">🪑 Mesa: {{ inv.mesa || "Pendiente" }}</span>
+              <span class="small text-secondary">🪑 {{ 'GUESTS.TABLE_LABEL' | translate }}: {{ inv.mesa || ('GUESTS.PENDING' | translate) }}</span>
             </div>
           </div>
         </div>
@@ -153,7 +153,7 @@
     <!-- Estado vacío -->
     <div class="col-12 text-center py-5" *ngIf="invitadosFiltrados.length === 0">
       <div class="display-1 mb-3">👥</div>
-      <p class="text-muted">No se encontraron invitados.</p>
+      <p class="text-muted">{{ 'GUESTS.EMPTY_STATE' | translate }}</p>
     </div>
   </div>
 </div>

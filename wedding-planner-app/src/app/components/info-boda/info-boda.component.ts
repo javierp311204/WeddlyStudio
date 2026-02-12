@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth/auth.service';
-import { NotificationService } from '../../services/notification/notification.service'; 
-import { GestionService } from '../../services/gestion/gestion.service'; // <--- Importamos tu servicio
+import { NotificationService } from '../../services/notification/notification.service';
+import { GestionService } from '../../services/gestion/gestion.service';
 
 @Component({
   selector: 'app-info-boda',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Quitamos HttpClientModule de aquí, debe ir en el app.config
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './info-boda.component.html',
   styleUrl: './info-boda.component.css'
 })
@@ -29,9 +30,10 @@ export class InfoBodaComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private notifService: NotificationService, 
-    private gestionService: GestionService, // <--- Inyectamos el servicio
-    private router: Router
+    private notifService: NotificationService,
+    private gestionService: GestionService,
+    private router: Router,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -43,7 +45,6 @@ export class InfoBodaComponent implements OnInit {
     if (!codigo) return;
 
     this.cargando = true;
-    // Usamos el método del servicio que apunta a /configuracion-boda/:codigo
     this.gestionService.getConfiguracion(codigo).subscribe({
       next: (res: any) => {
         if (res && res.codigoBoda) {
@@ -53,8 +54,11 @@ export class InfoBodaComponent implements OnInit {
       },
       error: (err: any) => {
         this.cargando = false;
-        console.error("Error al cargar:", err);
-        this.notifService.showError('Error', 'No se encontró la configuración de esta boda.');
+        console.error('Error al cargar:', err);
+        this.notifService.showError(
+          this.translate.instant('COMMON.ERROR'),
+          this.translate.instant('INFO.LOAD_ERROR')
+        );
       }
     });
   }
@@ -66,16 +70,21 @@ export class InfoBodaComponent implements OnInit {
       codigoBoda: this.authService.getCodigoBoda()
     };
 
-    // Usamos el servicio para guardar
     this.gestionService.postConfiguracion(datosParaGuardar).subscribe({
       next: () => {
         this.guardando = false;
         this.editMode = false;
-        this.notifService.showSuccess('¡Actualizado!', 'La guía de boda se guardó correctamente.');
+        this.notifService.showSuccess(
+          this.translate.instant('INFO.SAVE_SUCCESS_TITLE'),
+          this.translate.instant('INFO.SAVE_SUCCESS_DESC')
+        );
       },
       error: (err: any) => {
         this.guardando = false;
-        this.notifService.showError('Error al guardar', 'Hubo un problema con el servidor.');
+        this.notifService.showError(
+          this.translate.instant('NOTIFICATIONS.ERROR_SAVING'),
+          this.translate.instant('INFO.SAVE_ERROR_DESC')
+        );
       }
     });
   }

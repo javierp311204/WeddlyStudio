@@ -7,7 +7,7 @@
       <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
       </svg>
-      Volver al Panel
+      {{ 'DESIGN.BACK_TO_PANEL' | translate }}
     </button>
   </nav>
 
@@ -15,9 +15,9 @@
   <header class="text-center mb-5 seating-header">
     <div class="mb-3" style="color: var(--gold); font-size: 2rem;">✦</div>
     <h1 class="display-4 fw-bold mb-2" style="color: var(--charcoal); font-family: 'Playfair Display', serif;">
-      Distribución del Salón
+      {{ 'TABLES.HALL_TITLE' | translate }}
     </h1>
-    <p class="text-muted">Organiza los espacios y asigna a tus invitados en su lugar ideal.</p>
+    <p class="text-muted">{{ 'TABLES.HALL_SUBTITLE' | translate }}</p>
   </header>
 
   <!-- Stats Bar -->
@@ -37,7 +37,7 @@
             </div>
             <div>
               <div class="fs-4 fw-bold" style="color: var(--gold);">{{ totalInvitados }}</div>
-              <div class="small text-muted">Invitados sentados</div>
+              <div class="small text-muted">{{ 'TABLES.STAT_SEATED' | translate }}</div>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@
             </div>
             <div>
               <div class="fs-4 fw-bold" style="color: #e67e22;">{{ invitadosDisponibles.length - totalInvitados }}</div>
-              <div class="small text-muted">Sin sentar</div>
+              <div class="small text-muted">{{ 'TABLES.STAT_UNSEATED' | translate }}</div>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@
             </div>
             <div>
               <div class="fs-4 fw-bold" style="color: var(--gold);">{{ totalMesas }}</div>
-              <div class="small text-muted">Mesas totales</div>
+              <div class="small text-muted">{{ 'TABLES.STAT_TOTAL' | translate }}</div>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@
             </div>
             <div>
               <div class="fs-4 fw-bold" style="color: var(--gold);">{{ tieneMesaPresidencial ? '1' : '0' }}</div>
-              <div class="small text-muted">Mesa Presidencial</div>
+              <div class="small text-muted">{{ 'TABLES.STAT_PRESIDENTIAL' | translate }}</div>
             </div>
           </div>
         </div>
@@ -117,32 +117,32 @@
               <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16" class="me-2">
                 <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
               </svg>
-              Nueva Mesa
+              {{ 'TABLES.NEW_TABLE_TITLE' | translate }}
             </h3>
             
             <div class="mb-3">
-              <label class="form-label small text-muted">Nombre de la mesa</label>
+              <label class="form-label small text-muted">{{ 'TABLES.TABLE_NAME' | translate }}</label>
               <input type="text" 
                      class="form-control" 
                      [(ngModel)]="nuevaMesa.nombre" 
-                     placeholder="Ej: Mesa 1, Mesa VIP, Mesa Niños..."
+                     [placeholder]="'TABLES.TABLE_NAME_PLACEHOLDER' | translate"
                      style="border-radius: 12px; background: #f9f9f9;">
             </div>
             
             <div class="mb-3">
-              <label class="form-label small text-muted">Tipo de mesa</label>
+              <label class="form-label small text-muted">{{ 'TABLES.TABLE_TYPE' | translate }}</label>
               <select class="form-select" 
                       [(ngModel)]="nuevaMesa.tipo"
                       style="border-radius: 12px; background: #f9f9f9;">
-                <option value="invitados">Mesa de Invitados</option>
-                <option value="novios">Mesa Presidencial</option>
+                <option value="invitados">{{ 'TABLES.TYPE_GUESTS' | translate }}</option>
+                <option value="novios">{{ 'TABLES.TYPE_PRESIDENTIAL' | translate }}</option>
               </select>
             </div>
 
             <button class="btn w-100 text-white fw-semibold btn-gold" 
                     (click)="agregarMesa()"
                     style="background: var(--gold); border-radius: 12px; padding: 14px;">
-              Añadir Mesa
+              {{ 'TABLES.ADD_TABLE' | translate }}
             </button>
           </div>
         </div>
@@ -154,17 +154,17 @@
               <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16" class="me-2">
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
               </svg>
-              Sentar Invitado
+              {{ 'TABLES.SEAT_GUEST_TITLE' | translate }}
             </h3>
             
             <!-- Buscador -->
             <div class="position-relative mb-4 search-container">
-              <label class="form-label small text-muted">Buscar invitado registrado</label>
+              <label class="form-label small text-muted">{{ 'TABLES.SEARCH_GUEST_LABEL' | translate }}</label>
               <input type="text"
                      class="form-control search-input"
                      [(ngModel)]="busquedaInvitado"
                      (input)="filtrarInvitados()"
-                     placeholder="Escribe el nombre..."
+                     [placeholder]="'TABLES.SEARCH_GUEST_PLACEHOLDER' | translate"
                      style="border-radius: 12px; background: #f9f9f9;">
               
               <!-- Resultados de búsqueda -->
@@ -183,17 +183,17 @@
               <div class="alert alert-danger small mt-2 mb-0" 
                    *ngIf="busquedaInvitado && invitadosFiltrados.length === 0 && !invitadoSeleccionado"
                    style="border-radius: 8px;">
-                No hay invitados sin mesa disponibles.
+                {{ 'TABLES.NO_GUESTS_AVAILABLE' | translate }}
               </div>
             </div>
             
             <!-- Selector de Mesa -->
             <div class="mb-3">
-              <label class="form-label small text-muted">Asignar a la mesa</label>
+              <label class="form-label small text-muted">{{ 'TABLES.ASSIGN_TABLE_LABEL' | translate }}</label>
               <select class="form-select" 
                       [(ngModel)]="mesaSeleccionada"
                       style="border-radius: 12px; background: #f9f9f9;">
-                <option value="" disabled selected>Selecciona una mesa...</option>
+                <option value="" disabled selected>{{ 'TABLES.SELECT_TABLE_PLACEHOLDER' | translate }}</option>
                 <option *ngFor="let m of mesas" [value]="m.nombre">
                   {{ m.nombre }}
                 </option>
@@ -204,7 +204,7 @@
                     (click)="agregarInvitadoAMesa()"
                     [disabled]="!invitadoSeleccionado || !mesaSeleccionada"
                     style="background: var(--charcoal); border-radius: 12px; padding: 14px;">
-              Confirmar Asiento
+              {{ 'TABLES.CONFIRM_SEAT' | translate }}
             </button>
 
             <!-- Badge de invitado seleccionado -->
@@ -215,7 +215,7 @@
                 <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
               </svg>
               <span class="small">
-                Invitado: <strong>{{ invitadoSeleccionado.nombre }}</strong>
+                {{ 'TABLES.SELECTED_GUEST_LABEL' | translate }}: <strong>{{ invitadoSeleccionado.nombre }}</strong>
               </span>
             </div>
           </div>
@@ -227,9 +227,9 @@
         <!-- Loader -->
         <div *ngIf="cargando" class="text-center py-5 loader-container">
           <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: var(--gold);" role="status">
-            <span class="visually-hidden">Cargando...</span>
+            <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}</span>
           </div>
-          <p class="text-muted">Actualizando salón...</p>
+          <p class="text-muted">{{ 'TABLES.UPDATING_HALL' | translate }}</p>
         </div>
 
         <!-- Grid de Mesas -->
@@ -243,7 +243,7 @@
                 <small class="d-block text-uppercase mb-1" 
                        style="opacity: 0.9; font-size: 0.7rem; letter-spacing: 1px;"
                        *ngIf="mesa.tipo === 'novios'">
-                  Presidencial
+                  {{ 'TABLES.PRESIDENTIAL_LABEL' | translate }}
                 </small>
                 <strong class="d-block">{{ mesa.nombre }}</strong>
                 
@@ -272,7 +272,7 @@
                   </li>
                   <li class="text-center text-muted small py-3 empty-msg" 
                       *ngIf="!mesa.listaInvitados || mesa.listaInvitados.length === 0">
-                    Mesa vacía
+                    {{ 'TABLES.EMPTY_TABLE' | translate }}
                   </li>
                 </ul>
               </div>
@@ -286,7 +286,7 @@
             <path d="M0 2.5A.5.5 0 0 1 .5 2h15a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-2zM0 12.5A.5.5 0 0 1 .5 12h15a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z"/>
             <path d="M8 5v7"/>
           </svg>
-          <p class="text-muted">Aún no hay mesas en el salón.</p>
+          <p class="text-muted">{{ 'TABLES.EMPTY_STATE' | translate }}</p>
         </div>
       </main>
     </div>

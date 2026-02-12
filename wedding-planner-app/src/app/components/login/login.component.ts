@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule, TranslateModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -23,6 +24,7 @@ export class LoginComponent {
     private http: HttpClient,
     private router: Router,
     private notifService: NotificationService,
+    private translate: TranslateService
   ) {}
 
   togglePassword() {
@@ -32,8 +34,8 @@ export class LoginComponent {
   login() {
     if (!this.email || !this.pass) {
       this.notifService.showError(
-        'Campos incompletos',
-        'Por favor, introduce tus credenciales'
+        this.translate.instant('AUTH.INCOMPLETE_FIELDS_TITLE'),
+        this.translate.instant('AUTH.LOGIN_MISSING_CREDENTIALS')
       );
       return;
     }
@@ -53,29 +55,30 @@ export class LoginComponent {
         localStorage.setItem('tipoUsuario', res.tipoUsuario || 'invitado');
 
         this.notifService.showSuccess(
-          'Login exitoso',
-          `¡Bienvenido de nuevo, ${res.nick || 'Invitado'}!`
+          this.translate.instant('AUTH.LOGIN_SUCCESS_TITLE'),
+          this.translate.instant('AUTH.LOGIN_SUCCESS_DESC', { nick: res.nick || this.translate.instant('AUTH.GUEST') })
         );
 
         this.router.navigate(['/home']);
       },
       error: (err) => {
-        // ✨ MANEJAR ERROR DE EMAIL NO VERIFICADO
         if (err.status === 403 && err.error?.emailNoVerificado) {
           this.notifService.showError(
-            'Email no verificado',
-            'Debes verificar tu email antes de iniciar sesión. Revisa tu bandeja de entrada y spam.'
+            this.translate.instant('AUTH.EMAIL_NOT_VERIFIED_TITLE'),
+            this.translate.instant('AUTH.EMAIL_NOT_VERIFIED_DESC')
           );
         } else {
-          const mensaje = err.error?.mensaje || 'Credenciales incorrectas. Inténtalo de nuevo.';
-          this.notifService.showError('Error de login', mensaje);
+          const mensaje = err.error?.mensaje || this.translate.instant('AUTH.LOGIN_INVALID_CREDENTIALS');
+          this.notifService.showError(
+            this.translate.instant('AUTH.LOGIN_ERROR_TITLE'),
+            mensaje
+          );
         }
         console.error('Error en login:', err);
       },
     });
   }
 
-  // ✨ NUEVA FUNCIÓN: Ir a recuperar contraseña
   irARecuperarPassword() {
     this.router.navigate(['/recuperar-password']);
   }

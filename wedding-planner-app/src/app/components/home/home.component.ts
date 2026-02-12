@@ -4,14 +4,16 @@ import { HostListener } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { NotificacionesService } from '../../services/notificaciones/notificaciones.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { interval, Subscription } from 'rxjs';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
+import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule, LanguageSelectorComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -28,6 +30,7 @@ export class HomeComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private notifService: NotificacionesService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -51,43 +54,39 @@ export class HomeComponent implements OnInit {
     const driverObj = driver({
       showProgress: true,
       animate: true,
-      popoverClass: 'driverjs-theme', // Esta clase debe coincidir con tu CSS
+      popoverClass: 'driverjs-theme',
       overlayColor: 'rgba(51, 47, 44, 0.7)',
       stagePadding: 10,
       steps: [
         {
           element: '.nav-logo',
           popover: {
-            title: '✨ Vuestra Boda Digital',
-            description:
-              'Bienvenidos a vuestro panel personal. Aquí todo está listo para que disfrutéis del gran día.',
+            title: this.translate.instant('HOME.TOUR_STEP_1_TITLE'),
+            description: this.translate.instant('HOME.TOUR_STEP_1_DESC'),
             side: 'bottom',
           },
         },
         {
           element: '.notif-wrapper',
           popover: {
-            title: '🔔 Campana de Avisos',
-            description:
-              'No os perdáis nada. Aquí os avisaremos cuando alguien suba fotos o haya cambios de última hora.',
+            title: this.translate.instant('HOME.TOUR_STEP_2_TITLE'),
+            description: this.translate.instant('HOME.TOUR_STEP_2_DESC'),
             side: 'bottom',
           },
         },
         {
           element: '.action-grid',
           popover: {
-            title: '🚀 Accesos Rápidos',
-            description:
-              'Sube fotos al álbum, consulta tu mesa o revisa la agenda en un solo clic.',
+            title: this.translate.instant('HOME.TOUR_STEP_3_TITLE'),
+            description: this.translate.instant('HOME.TOUR_STEP_3_DESC'),
             side: 'top',
           },
         },
         {
           element: '.logout-pill',
           popover: {
-            title: '👋 Hasta pronto',
-            description:
-              'Puedes cerrar sesión aquí, aunque te recomendamos dejarla abierta para recibir avisos.',
+            title: this.translate.instant('HOME.TOUR_STEP_4_TITLE'),
+            description: this.translate.instant('HOME.TOUR_STEP_4_DESC'),
             side: 'left',
           },
         },

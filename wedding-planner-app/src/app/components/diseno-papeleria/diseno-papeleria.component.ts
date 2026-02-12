@@ -1,10 +1,11 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import localeEs from '@angular/common/locales/es';
 import { NotificationService } from '../../services/notification/notification.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -22,7 +23,7 @@ interface Invitado {
 @Component({
   selector: 'app-diseno-papeleria',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule],
   templateUrl: './diseno-papeleria.component.html',
   styleUrl: './diseno-papeleria.component.css',
 })
@@ -35,7 +36,7 @@ export class DisenoPapeleriaComponent implements OnInit {
   fecha: string = '2025-09-20';
   colorFondo: string = '#ffffff';
   colorTexto: string = '#d4a373';
-  textoExtra: string = '¡Tu presencia es nuestro mejor regalo!';
+  textoExtra: string = '';
   imagenFondo: string | null = null;
   plantillaActiva: string = 'clasica';
 
@@ -55,18 +56,39 @@ export class DisenoPapeleriaComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private notifService: NotificationService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
-    this.cargarConfiguracion();
+    console.log('🎨 Inicializando componente de diseño...');
+    
+    // Esperar a que las traducciones estén cargadas
+    this.translate.get('DESIGN.MESSAGE_PLACEHOLDER').subscribe({
+      next: (text: string) => {
+        console.log('✅ Traducciones cargadas:', text);
+        
+        // Solo actualizar si está vacío
+        if (!this.textoExtra) {
+          this.textoExtra = text;
+        }
+        
+        // Cargar configuración después de tener las traducciones
+        this.cargarConfiguracion();
+      },
+      error: (err) => {
+        console.error('❌ Error cargando traducciones:', err);
+        // Cargar configuración de todos modos
+        this.cargarConfiguracion();
+      }
+    });
   }
 
-  registrarCambio() {
+  registrarCambio(): void {
     this.cambiosRealizados = true;
   }
 
-  onFileSelected(event: any) {
+  onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -78,21 +100,27 @@ export class DisenoPapeleriaComponent implements OnInit {
     }
   }
 
-  cambiarPlantilla(tipo: string) {
+  cambiarPlantilla(tipo: string): void {
     if (this.plantillaActiva !== tipo) {
       this.plantillaActiva = tipo;
       this.registrarCambio();
     }
   }
 
-  async generarPDF() {
+  async generarPDF(): Promise<void> {
     if (!this.invitacionCard) {
-      this.notifService.showError('Error', 'No se pudo encontrar la invitación');
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'), 
+        this.translate.instant('NOTIFICATIONS.ERROR_SAVING')
+      );
       return;
     }
 
     this.generandoPDF = true;
-    this.notifService.showSuccess('Generando PDF', 'Por favor espera...');
+    this.notifService.showSuccess(
+      this.translate.instant('DESIGN.GENERATING'), 
+      this.translate.instant('COMMON.LOADING')
+    );
 
     try {
       const elemento = this.invitacionCard.nativeElement;
@@ -120,23 +148,26 @@ export class DisenoPapeleriaComponent implements OnInit {
       pdf.save(nombreArchivo);
 
       this.notifService.showSuccess(
-        '¡PDF Generado!',
-        'Tu invitación se ha descargado correctamente'
+        this.translate.instant('NOTIFICATIONS.PDF_GENERATED'),
+        this.translate.instant('NOTIFICATIONS.PDF_DOWNLOADED')
       );
     } catch (error) {
       console.error('Error al generar PDF:', error);
-      this.notifService.showError('Error', 'Hubo un problema al generar el PDF');
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'), 
+        this.translate.instant('NOTIFICATIONS.ERROR_SAVING')
+      );
     } finally {
       this.generandoPDF = false;
     }
   }
 
-  irAlMenu() {
+  irAlMenu(): void {
     if (this.cambiosRealizados) {
       this.notifService
         .askConfirmation(
-          'Confirmar salida',
-          'Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?',
+          this.translate.instant('NOTIFICATIONS.CONFIRM_EXIT'),
+          this.translate.instant('NOTIFICATIONS.UNSAVED_CHANGES'),
           'salida_sin_guardar'
         )
         .then((confirmed) => {
@@ -149,12 +180,11 @@ export class DisenoPapeleriaComponent implements OnInit {
     }
   }
 
-  confirmarSalida() {
+  confirmarSalida(): void {
     this.router.navigate(['/dashboard']);
   }
 
-  // ✅ GUARDAR - Sin autenticación (ruta pública)
-  guardarConfiguracion() {
+  guardarConfiguracion(): void {
     const datos = {
       codigoBoda: localStorage.getItem('codigoBoda'),
       nombreNovia: this.nombreNovia,
@@ -171,26 +201,24 @@ export class DisenoPapeleriaComponent implements OnInit {
       next: (res: any) => {
         this.cambiosRealizados = false;
         this.notifService.showSuccess(
-          '¡Guardado!',
-          'Configuración de papelería guardada correctamente.'
+          this.translate.instant('NOTIFICATIONS.SAVED'),
+          this.translate.instant('DESIGN.SAVE_CONFIG')
         );
       },
       error: (err) => {
         console.error('Error al guardar:', err);
         this.notifService.showError(
-          'Error',
-          'Hubo un problema al guardar la configuración.'
+          this.translate.instant('COMMON.ERROR'),
+          this.translate.instant('NOTIFICATIONS.ERROR_SAVING')
         );
       },
     });
   }
 
-  // ✅ CARGAR - Sin autenticación (ruta pública)
-  cargarConfiguracion() {
+  cargarConfiguracion(): void {
     const codigo = localStorage.getItem('codigoBoda');
 
     if (codigo) {
-      // SIN HEADERS - La ruta es pública
       this.http
         .get<any>(`${this.API_URL}/configuracion-boda/${codigo}`)
         .subscribe({
@@ -202,7 +230,12 @@ export class DisenoPapeleriaComponent implements OnInit {
               this.fecha = res.fecha || this.fecha;
               this.colorFondo = res.colorFondo || this.colorFondo;
               this.colorTexto = res.colorTexto || this.colorTexto;
-              this.textoExtra = res.textoExtra || this.textoExtra;
+              
+              // Solo usar textoExtra del servidor si existe
+              if (res.textoExtra) {
+                this.textoExtra = res.textoExtra;
+              }
+              
               this.plantillaActiva = res.plantilla || this.plantillaActiva;
               this.imagenFondo = res.imagenFondo || this.imagenFondo;
             }
@@ -211,8 +244,8 @@ export class DisenoPapeleriaComponent implements OnInit {
             console.error('❌ Error al cargar configuración:', err);
             if (err.status !== 404) {
               this.notifService.showError(
-                'Error',
-                'No se pudo cargar la configuración'
+                this.translate.instant('COMMON.ERROR'),
+                this.translate.instant('NOTIFICATIONS.ERROR_SAVING')
               );
             }
           },
@@ -220,61 +253,71 @@ export class DisenoPapeleriaComponent implements OnInit {
     }
   }
 
-  // ✅ SELECTOR DE INVITADOS - Con autenticación (ruta protegida)
-  async abrirSelectorInvitados() {
+  async abrirSelectorInvitados(): Promise<void> {
     const codigoBoda = localStorage.getItem('codigoBoda');
     const token = localStorage.getItem('token');
     
     if (!codigoBoda) {
-      this.notifService.showError('Error', 'No se encontró el código de boda');
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'), 
+        'No se encontró el código de boda'
+      );
       return;
     }
 
-    // Esta ruta SÍ necesita autenticación
     const headers = { Authorization: `Bearer ${token}` };
 
     this.http.get<Invitado[]>(
       `${this.API_URL}/invitados?codigoBoda=${codigoBoda}`,
       { headers }
     ).subscribe({
-        next: (invitados) => {
-          this.invitadosConEmail = invitados.filter(inv => inv.email && inv.email.includes('@'));
-          
-          if (this.invitadosConEmail.length === 0) {
-            this.notifService.showError(
-              'Sin invitados',
-              'No hay invitados con email registrado'
-            );
-            return;
-          }
-          
-          this.mostrarSelectorInvitados = true;
-        },
-        error: (err) => {
-          console.error('Error al cargar invitados:', err);
-          this.notifService.showError('Error', 'No se pudieron cargar los invitados');
+      next: (invitados) => {
+        this.invitadosConEmail = invitados.filter(inv => inv.email && inv.email.includes('@'));
+        
+        if (this.invitadosConEmail.length === 0) {
+          this.notifService.showError(
+            this.translate.instant('DESIGN.NO_GUESTS_EMAIL'),
+            this.translate.instant('DESIGN.NO_GUESTS_EMAIL')
+          );
+          return;
         }
-      });
+        
+        this.mostrarSelectorInvitados = true;
+      },
+      error: (err) => {
+        console.error('Error al cargar invitados:', err);
+        this.notifService.showError(
+          this.translate.instant('COMMON.ERROR'), 
+          'No se pudieron cargar los invitados'
+        );
+      }
+    });
   }
 
-  cerrarSelectorInvitados() {
+  cerrarSelectorInvitados(): void {
     this.mostrarSelectorInvitados = false;
     this.invitadosConEmail = [];
   }
 
-  async seleccionarInvitado(invitado: Invitado) {
+  async seleccionarInvitado(invitado: Invitado): Promise<void> {
     this.cerrarSelectorInvitados();
     await this.enviarEmail(invitado.email, invitado.nombre);
   }
 
-  async enviarEmail(emailDestino: string, nombreInvitado?: string) {
+  async enviarEmail(emailDestino: string, nombreInvitado?: string): Promise<void> {
     if (!this.invitacionCard) {
-      this.notifService.showError('Error', 'No se pudo encontrar la invitación');
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'), 
+        'No se pudo encontrar la invitación'
+      );
       return;
     }
 
     this.enviandoEmail = true;
-    this.notifService.showSuccess('Enviando...', 'Generando invitación');
+    this.notifService.showSuccess(
+      this.translate.instant('DESIGN.SENDING'), 
+      'Generando invitación'
+    );
 
     try {
       const elemento = this.invitacionCard.nativeElement;
@@ -319,7 +362,7 @@ export class DisenoPapeleriaComponent implements OnInit {
           next: (res: any) => {
             this.enviandoEmail = false;
             this.notifService.showSuccess(
-              '¡Enviado!',
+              this.translate.instant('NOTIFICATIONS.EMAIL_SENT'),
               `Invitación enviada a ${emailDestino}`
             );
           },
@@ -327,8 +370,8 @@ export class DisenoPapeleriaComponent implements OnInit {
             console.error('❌ Error al enviar:', err);
             this.enviandoEmail = false;
             this.notifService.showError(
-              'Error',
-              'Hubo un problema al enviar el email'
+              this.translate.instant('COMMON.ERROR'),
+              this.translate.instant('NOTIFICATIONS.ERROR_SENDING')
             );
           },
         });
@@ -336,15 +379,15 @@ export class DisenoPapeleriaComponent implements OnInit {
       console.error('❌ Error al generar PDF:', error);
       this.enviandoEmail = false;
       this.notifService.showError(
-        'Error',
+        this.translate.instant('COMMON.ERROR'),
         'Hubo un problema al generar la invitación'
       );
     }
   }
 
-  async enviarInvitacionesMasivas() {
+  async enviarInvitacionesMasivas(): Promise<void> {
     const confirmado = await this.notifService.askConfirmation(
-      'Envío Masivo',
+      this.translate.instant('DESIGN.MASS_SEND'),
       '¿Estás seguro de enviar la invitación a TODOS los invitados con email?',
       'envio_masivo'
     );
@@ -352,7 +395,10 @@ export class DisenoPapeleriaComponent implements OnInit {
     if (!confirmado) return;
 
     this.enviandoEmail = true;
-    this.notifService.showSuccess('Procesando...', 'Generando invitación para envío masivo');
+    this.notifService.showSuccess(
+      this.translate.instant('DESIGN.SENDING'), 
+      'Generando invitación para envío masivo'
+    );
 
     try {
       const elemento = this.invitacionCard.nativeElement;
@@ -396,7 +442,7 @@ export class DisenoPapeleriaComponent implements OnInit {
           next: (res: any) => {
             this.enviandoEmail = false;
             this.notifService.showSuccess(
-              '¡Completado!',
+              this.translate.instant('NOTIFICATIONS.MASS_SEND_COMPLETE'),
               `Enviadas: ${res.exitosos} | Fallidas: ${res.fallidos}`
             );
           },
@@ -404,7 +450,7 @@ export class DisenoPapeleriaComponent implements OnInit {
             console.error('Error:', err);
             this.enviandoEmail = false;
             this.notifService.showError(
-              'Error',
+              this.translate.instant('COMMON.ERROR'),
               'Hubo un problema en el envío masivo'
             );
           },
@@ -413,7 +459,7 @@ export class DisenoPapeleriaComponent implements OnInit {
       console.error('Error:', error);
       this.enviandoEmail = false;
       this.notifService.showError(
-        'Error',
+        this.translate.instant('COMMON.ERROR'),
         'Hubo un problema al generar la invitación'
       );
     }

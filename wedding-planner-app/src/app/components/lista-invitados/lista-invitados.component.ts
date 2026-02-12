@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GestionService } from '../../services/gestion/gestion.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { Router } from '@angular/router';
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-lista-invitados',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './lista-invitados.component.html',
   styleUrl: './lista-invitados.component.css',
 })
@@ -31,6 +32,7 @@ export class ListaInvitadosComponent implements OnInit {
     private gestionService: GestionService,
     private notifService: NotificationService,
     private router: Router,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +52,6 @@ export class ListaInvitadosComponent implements OnInit {
       return;
     }
 
-   
     const datosParaEnviar = {
       ...this.nuevoInvitado,
       codigoBoda: codigo,
@@ -59,8 +60,8 @@ export class ListaInvitadosComponent implements OnInit {
     this.gestionService.postInvitado(datosParaEnviar).subscribe({
       next: (res) => {
         this.notifService.showSuccess(
-          '¡Éxito!',
-          'Invitado añadido correctamente',
+          this.translate.instant('COMMON.SUCCESS'),
+          this.translate.instant('GUESTS.GUEST_ADDED'),
         );
         this.cargarInvitados();
         this.nuevoInvitado = {
@@ -72,7 +73,6 @@ export class ListaInvitadosComponent implements OnInit {
         };
       },
       error: (err) => {
-        
         console.error('Error al guardar:', err);
       },
     });
@@ -93,11 +93,12 @@ export class ListaInvitadosComponent implements OnInit {
 
   eliminarInvitado(idInvitado: string) {
     const codigoBoda = localStorage.getItem('codigoBoda');
+    const nombreInvitado = this.invitados.find((i) => i._id === idInvitado)?.nombre;
 
     this.notifService
       .askConfirmation(
-        'Eliminar invitado',
-        `¿Estás seguro de eliminar al invitado "${this.invitados.find((i) => i._id === idInvitado)?.nombre}"?`,
+        this.translate.instant('GUESTS.DELETE_CONFIRM'),
+        this.translate.instant('GUESTS.DELETE_CONFIRM_DESC', { nombre: nombreInvitado }),
         'delete',
       )
       .then((confirm) => {
@@ -107,16 +108,16 @@ export class ListaInvitadosComponent implements OnInit {
             .subscribe({
               next: () => {
                 this.notifService.showSuccess(
-                  '¡Eliminado!',
-                  'Invitado eliminado correctamente',
+                  this.translate.instant('NOTIFICATIONS.DELETED'),
+                  this.translate.instant('GUESTS.GUEST_DELETED'),
                 );
                 this.cargarInvitados();
               },
               error: (err) => {
                 console.error('Error:', err);
                 this.notifService.showError(
-                  'Error',
-                  'No se pudo eliminar el invitado',
+                  this.translate.instant('COMMON.ERROR'),
+                  this.translate.instant('GUESTS.GUEST_DELETE_ERROR'),
                 );
               },
             });

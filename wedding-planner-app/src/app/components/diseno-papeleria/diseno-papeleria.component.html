@@ -1,452 +1,270 @@
-<div class="papeleria-container">
+<div class="container-fluid min-vh-100" style="background: linear-gradient(135deg, #faf8f6 0%, #f0ebe6 100%);">
   <!-- Header con navegación -->
-  <header class="editor-header">
-    <button class="btn-volver" (click)="irAlMenu()">
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+  <header class="bg-white sticky-top shadow-sm border-bottom d-flex align-items-center justify-content-between py-3 px-4">
+    <button class="btn btn-outline-secondary d-flex align-items-center gap-2 rounded-3" (click)="irAlMenu()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M19 12H5M12 19l-7-7 7-7" />
       </svg>
-      Volver al Panel
+      {{ 'DESIGN.BACK_TO_PANEL' | translate }}
     </button>
 
-    <h1 class="titulo-principal">
-      Diseño de Invitación
+    <h1 class="h4 fw-semibold mb-0 text-dark">
+      {{ 'DESIGN.TITLE' | translate }}
     </h1>
 
-    <button class="btn-guardar-header" (click)="guardarConfiguracion()">
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path
-          d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
-        />
-        <polyline points="17 21 17 13 7 13 7 21" />
-        <polyline points="7 3 7 8 15 8" />
-      </svg>
-      Guardar
-    </button>
-  </header>
-
-  <div class="editor-body">
-    <!-- Panel lateral de controles -->
-    <aside class="panel-controles">
-      <!-- Sección: Plantilla -->
-      <section class="seccion-control">
-        <h3 class="seccion-titulo">
-          Elige tu Estilo
-        </h3>
-        <div class="plantillas-grid">
-          <div
-            class="plantilla-card"
-            [class.selected]="plantillaActiva === 'clasica'"
-            (click)="cambiarPlantilla('clasica')"
-          >
-            <div class="plantilla-preview clasica-preview">
-              <div class="preview-text">Aa</div>
-            </div>
-            <p class="plantilla-nombre">Clásica</p>
-            <small>Elegante y tradicional</small>
-          </div>
-
-          <div
-            class="plantilla-card"
-            [class.selected]="plantillaActiva === 'moderna'"
-            (click)="cambiarPlantilla('moderna')"
-          >
-            <div class="plantilla-preview moderna-preview">
-              <div class="preview-text">Aa</div>
-            </div>
-            <p class="plantilla-nombre">Moderna</p>
-            <small>Minimalista y sofisticada</small>
-          </div>
-        </div>
-      </section>
-
-      <!-- Sección: Datos de los novios -->
-      <section class="seccion-control">
-        <h3 class="seccion-titulo">
-          Datos de los Novios
-        </h3>
-
-        <div class="form-group">
-          <label>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-            Nombre de la Novia
-          </label>
-          <input
-            type="text"
-            [(ngModel)]="nombreNovia"
-            (ngModelChange)="registrarCambio()"
-            placeholder="Ej: María"
-            class="input-elegant"
-          />
-        </div>
-
-        <div class="form-group">
-          <label>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-            Nombre del Novio
-          </label>
-          <input
-            type="text"
-            [(ngModel)]="nombreNovio"
-            (ngModelChange)="registrarCambio()"
-            placeholder="Ej: Juan"
-            class="input-elegant"
-          />
-        </div>
-
-        <div class="form-group">
-          <label>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-            Fecha del Evento
-          </label>
-          <input
-            type="date"
-            [(ngModel)]="fecha"
-            (ngModelChange)="registrarCambio()"
-            class="input-elegant"
-          />
-        </div>
-      </section>
-
-      <!-- Sección: Personalización -->
-      <section class="seccion-control">
-        <h3 class="seccion-titulo">
-          Personalización
-        </h3>
-
-        <div class="form-group">
-          <label>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-            Foto de los Novios
-          </label>
-          <div class="file-upload-wrapper">
-            <input
-              type="file"
-              id="fileInput"
-              (change)="onFileSelected($event)"
-              accept="image/*"
-              class="file-input-hidden"
-            />
-            <label for="fileInput" class="file-upload-label">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="17 8 12 3 7 8" />
-                <line x1="12" y1="3" x2="12" y2="15" />
-              </svg>
-              {{ imagenFondo ? "Cambiar imagen" : "Subir imagen" }}
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Paleta de Colores</label>
-          <div class="color-pickers">
-            <div class="color-picker-item">
-              <input
-                type="color"
-                [(ngModel)]="colorTexto"
-                (ngModelChange)="registrarCambio()"
-                id="colorTexto"
-              />
-              <label for="colorTexto">
-                <span
-                  class="color-preview"
-                  [style.backgroundColor]="colorTexto"
-                ></span>
-                Texto
-              </label>
-            </div>
-            <div class="color-picker-item">
-              <input
-                type="color"
-                [(ngModel)]="colorFondo"
-                (ngModelChange)="registrarCambio()"
-                id="colorFondo"
-              />
-              <label for="colorFondo">
-                <span
-                  class="color-preview"
-                  [style.backgroundColor]="colorFondo"
-                ></span>
-                Fondo
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-              />
-            </svg>
-            Mensaje Especial
-          </label>
-          <textarea
-            [(ngModel)]="textoExtra"
-            (ngModelChange)="registrarCambio()"
-            rows="4"
-            placeholder="Escribe un mensaje personalizado para tus invitados..."
-            class="textarea-elegant"
-          ></textarea>
-        </div>
-      </section>
-
-      <!-- Botón guardar inferior -->
-      <button class="btn-guardar-principal" (click)="guardarConfiguracion()">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
-          />
+    <!-- Selector de idiomas + Botón guardar -->
+    <div class="d-flex align-items-center gap-3">
+      <button class="btn d-flex align-items-center gap-2 rounded-3 text-white fw-semibold" 
+              style="background: linear-gradient(135deg, #d4a373 0%, #b8935f 100%);"
+              (click)="guardarConfiguracion()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
           <polyline points="17 21 17 13 7 13 7 21" />
           <polyline points="7 3 7 8 15 8" />
         </svg>
-        Guardar Configuración
+        <span class="d-none d-md-inline">{{ 'COMMON.SAVE' | translate }}</span>
       </button>
+    </div>
+  </header>
+
+  <div class="row g-4 p-4" style="max-width: 1600px; margin: 0 auto;">
+    <!-- Panel lateral de controles -->
+    <aside class="col-lg-4 col-xl-3">
+      <div class="bg-white rounded-4 p-4 shadow" style="position: sticky; top: 120px;">
+        
+        <!-- Sección: Plantilla -->
+        <section class="mb-4 pb-4 border-bottom">
+          <h3 class="h5 fw-semibold mb-3 text-dark">
+            {{ 'DESIGN.STYLE_SECTION' | translate }}
+          </h3>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="border rounded-3 p-3 text-center cursor-pointer transition-all"
+                   [class.border-primary]="plantillaActiva === 'clasica'"
+                   [class.bg-light]="plantillaActiva === 'clasica'"
+                   (click)="cambiarPlantilla('clasica')">
+                <div class="rounded-3 d-flex align-items-center justify-content-center mb-3" style="height: 100px;">
+                  <div style="font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: #d4a373;">Aa</div>
+                </div>
+                <p class="fw-semibold mb-1 text-dark">{{ 'DESIGN.CLASSIC' | translate }}</p>
+                <small class="text-muted">{{ 'DESIGN.CLASSIC_DESC' | translate }}</small>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="border rounded-3 p-3 text-center cursor-pointer transition-all"
+                   [class.border-primary]="plantillaActiva === 'moderna'"
+                   [class.bg-light]="plantillaActiva === 'moderna'"
+                   (click)="cambiarPlantilla('moderna')">
+                <div class="rounded-3 d-flex align-items-center justify-content-center mb-3" style="height: 100px;">
+                  <div style="font-weight: 800; font-size: 2rem; color: #d4a373;">Aa</div>
+                </div>
+                <p class="fw-semibold mb-1 text-dark">{{ 'DESIGN.MODERN' | translate }}</p>
+                <small class="text-muted">{{ 'DESIGN.MODERN_DESC' | translate }}</small>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección: Datos de los novios -->
+        <section class="mb-4 pb-4 border-bottom">
+          <h3 class="h5 fw-semibold mb-3 text-dark">
+            {{ 'DESIGN.COUPLE_SECTION' | translate }}
+          </h3>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              {{ 'DESIGN.BRIDE_NAME' | translate }}
+            </label>
+            <input type="text" class="form-control rounded-3" 
+                   [(ngModel)]="nombreNovia" 
+                   (ngModelChange)="registrarCambio()" 
+                   placeholder="Ej: María">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              {{ 'DESIGN.GROOM_NAME' | translate }}
+            </label>
+            <input type="text" class="form-control rounded-3" 
+                   [(ngModel)]="nombreNovio" 
+                   (ngModelChange)="registrarCambio()" 
+                   placeholder="Ej: Juan">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              {{ 'DESIGN.EVENT_DATE' | translate }}
+            </label>
+            <input type="date" class="form-control rounded-3" 
+                   [(ngModel)]="fecha" 
+                   (ngModelChange)="registrarCambio()">
+          </div>
+        </section>
+
+        <!-- Sección: Personalización -->
+        <section class="mb-4 pb-4 border-bottom">
+          <h3 class="h5 fw-semibold mb-3 text-dark">
+            {{ 'DESIGN.CUSTOMIZATION_SECTION' | translate }}
+          </h3>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              {{ 'DESIGN.COUPLE_PHOTO' | translate }}
+            </label>
+            <div class="position-relative">
+              <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" class="d-none">
+              <label for="fileInput" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 rounded-3" style="cursor: pointer;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                {{ imagenFondo ? ('DESIGN.CHANGE_IMAGE' | translate) : ('DESIGN.UPLOAD_IMAGE' | translate) }}
+              </label>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">{{ 'DESIGN.COLOR_PALETTE' | translate }}</label>
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="position-relative">
+                  <input type="color" [(ngModel)]="colorTexto" (ngModelChange)="registrarCambio()" id="colorTexto" class="position-absolute opacity-0 w-100 h-100" style="cursor: pointer;">
+                  <label for="colorTexto" class="border rounded-3 p-3 d-flex flex-column align-items-center gap-2 w-100" style="cursor: pointer;">
+                    <span class="rounded-3 border" [style.backgroundColor]="colorTexto" style="width: 40px; height: 40px;"></span>
+                    <span class="small">{{ 'DESIGN.TEXT_COLOR' | translate }}</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="position-relative">
+                  <input type="color" [(ngModel)]="colorFondo" (ngModelChange)="registrarCambio()" id="colorFondo" class="position-absolute opacity-0 w-100 h-100" style="cursor: pointer;">
+                  <label for="colorFondo" class="border rounded-3 p-3 d-flex flex-column align-items-center gap-2 w-100" style="cursor: pointer;">
+                    <span class="rounded-3 border" [style.backgroundColor]="colorFondo" style="width: 40px; height: 40px;"></span>
+                    <span class="small">{{ 'DESIGN.BACKGROUND_COLOR' | translate }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              {{ 'DESIGN.SPECIAL_MESSAGE' | translate }}
+            </label>
+            <textarea class="form-control rounded-3" 
+                      [(ngModel)]="textoExtra" 
+                      (ngModelChange)="registrarCambio()" 
+                      rows="4" 
+                      [placeholder]="'DESIGN.MESSAGE_PLACEHOLDER' | translate"></textarea>
+          </div>
+        </section>
+
+        <!-- Botón guardar móvil -->
+        <button class="btn w-100 d-flex align-items-center justify-content-center gap-2 fw-bold rounded-3 py-3 text-white" 
+                style="background: linear-gradient(135deg, #d4a373 0%, #b8935f 100%);"
+                (click)="guardarConfiguracion()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+          </svg>
+          {{ 'DESIGN.SAVE_CONFIG' | translate }}
+        </button>
+      </div>
     </aside>
 
-    <!-- Vista previa de la invitación -->
-    <main class="preview-area">
-      <div class="preview-header">
-        <h2>Vista Previa</h2>
-        <p>Así verán tu invitación los invitados</p>
+    <!-- Vista previa -->
+    <main class="col-lg-8 col-xl-9">
+      <div class="bg-white rounded-4 p-4 shadow-sm mb-3">
+        <h2 class="h5 mb-1 fw-semibold text-dark">{{ 'DESIGN.PREVIEW' | translate }}</h2>
+        <p class="text-muted mb-0 small">{{ 'DESIGN.PREVIEW_SUBTITLE' | translate }}</p>
       </div>
 
-      <div class="preview-wrapper">
-        <div
-          #invitacionCard
-          class="invitacion-card"
-          [ngClass]="plantillaActiva"
-          [style.backgroundColor]="colorFondo"
-          [style.color]="colorTexto"
-          [style.backgroundImage]="
-            imagenFondo
-              ? 'linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url(' +
-                imagenFondo +
-                ')'
-              : 'none'
-          "
-        >
-          <div class="invitacion-contenido">
-            <p class="tagline">¡Nos casamos!</p>
-
-            <h1 class="wedding-names">
+      <div class="bg-white rounded-4 shadow p-5 mb-3 d-flex align-items-center justify-content-center" style="min-height: 700px;">
+        <div #invitacionCard class="rounded-4 shadow-lg" [ngClass]="plantillaActiva" [style.backgroundColor]="colorFondo" [style.color]="colorTexto" style="width: 450px; min-height: 650px; padding: 50px 40px;">
+          <div class="text-center">
+            <p class="tagline mb-4">{{ 'DESIGN.INVITATION_TEXT' | translate }}</p>
+            <h1 class="wedding-names mb-0">
               {{ nombreNovia }}
-              <span class="ampersand">&</span>
+              <span class="ampersand d-block my-2">&</span>
               {{ nombreNovio }}
             </h1>
-
-            <div class="divider-line"></div>
-
-            <p class="fecha-texto">
-              {{ fecha | date: "EEEE, d 'de' MMMM 'de' y" : "" : "es" }}
-            </p>
-
-            <p class="mensaje-personalizado">{{ textoExtra }}</p>
-
-            <div class="badge-confirmacion">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              Confirmación Online
+            <div class="divider-line mx-auto my-4" style="width: 120px; height: 2px; background: currentColor;"></div>
+            <p class="fecha-texto mb-3">{{ fecha | date: "EEEE, d 'de' MMMM 'de' y" : "" : "es" }}</p>
+            <p class="mensaje-personalizado my-4">{{ textoExtra }}</p>
+            <div class="badge-confirmacion d-inline-flex align-items-center gap-2 rounded-pill px-4 py-3 fw-semibold" style="background: currentColor; color: white;">
+              {{ 'DESIGN.ONLINE_CONFIRMATION' | translate }}
             </div>
           </div>
         </div>
       </div>
-      <div class="preview-actions">
-        <button
-          class="btn-preview-action btn-primary"
-          (click)="generarPDF()"
-          [disabled]="generandoPDF"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
+
+      <!-- Botones de acción -->
+      <div class="d-flex flex-wrap gap-3 justify-content-center">
+        <button class="btn btn-primary d-flex align-items-center gap-2 rounded-3 px-4"
+                (click)="generarPDF()"
+                [disabled]="generandoPDF">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
           </svg>
-          {{ generandoPDF ? "Generando..." : "Descargar PDF" }}
+          {{ generandoPDF ? ('DESIGN.GENERATING' | translate) : ('DESIGN.DOWNLOAD_PDF' | translate) }}
         </button>
 
-        <button
-          class="btn-preview-action btn-success"
-          (click)="abrirSelectorInvitados()"
-          [disabled]="enviandoEmail"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-            />
-            <polyline points="22,6 12,13 2,6" />
+        <button class="btn btn-success d-flex align-items-center gap-2 rounded-3 px-4"
+                (click)="abrirSelectorInvitados()"
+                [disabled]="enviandoEmail">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
           </svg>
-          {{ enviandoEmail ? "Enviando..." : "Enviar por Email" }}
+          {{ enviandoEmail ? ('DESIGN.SENDING' | translate) : ('DESIGN.SEND_EMAIL' | translate) }}
         </button>
 
-        <button
-          class="btn-preview-action"
-          (click)="enviarInvitacionesMasivas()"
-          [disabled]="enviandoEmail"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        <button class="btn btn-outline-secondary d-flex align-items-center gap-2 rounded-3 px-4"
+                (click)="enviarInvitacionesMasivas()"
+                [disabled]="enviandoEmail">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
-          {{ enviandoEmail ? "Enviando..." : "Envío Masivo" }}
+          {{ enviandoEmail ? ('DESIGN.SENDING' | translate) : ('DESIGN.MASS_SEND' | translate) }}
         </button>
       </div>
 
       <!-- Modal Selector de Invitados -->
-      <div class="modal-overlay" *ngIf="mostrarSelectorInvitados" (click)="cerrarSelectorInvitados()">
-        <div class="modal-selector" (click)="$event.stopPropagation()">
-          <div class="modal-header">
-            <h3>📧 Selecciona un Invitado</h3>
-            <button class="btn-close-modal" type="button" (click)="cerrarSelectorInvitados()">
-              ✕
-            </button>
-          </div>
-
-          <div class="modal-body">
-            <p class="modal-description">
-              Selecciona a qué invitado deseas enviarle la invitación
-            </p>
-
-            <div class="invitados-lista" *ngIf="invitadosConEmail.length > 0">
-              <div 
-                class="invitado-item" 
-                *ngFor="let invitado of invitadosConEmail"
-                (click)="seleccionarInvitado(invitado)"
-              >
-                <div class="invitado-info">
-                  <div class="invitado-nombre">{{ invitado.nombre }}</div>
-                  <div class="invitado-email">{{ invitado.email }}</div>
-                </div>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </div>
+      <div class="modal fade show d-block" *ngIf="mostrarSelectorInvitados" 
+           style="background-color: rgba(0,0,0,0.5);"
+           (click)="cerrarSelectorInvitados()">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" (click)="$event.stopPropagation()">
+          <div class="modal-content rounded-4 shadow-lg">
+            <div class="modal-header border-bottom-0">
+              <h3 class="modal-title h5 fw-bold">{{ 'DESIGN.MODAL_SELECT_GUEST' | translate }}</h3>
+              <button type="button" class="btn-close" (click)="cerrarSelectorInvitados()"></button>
             </div>
-
-            <div class="invitado-sin-email" *ngIf="invitadosConEmail.length === 0">
-              No hay invitados con email registrado
+            <div class="modal-body">
+              <p class="text-muted mb-3">{{ 'DESIGN.MODAL_SELECT_DESC' | translate }}</p>
+              <div class="d-flex flex-column gap-2" *ngIf="invitadosConEmail.length > 0">
+                <div class="border rounded-3 p-3 cursor-pointer hover-card" 
+                     *ngFor="let invitado of invitadosConEmail" 
+                     (click)="seleccionarInvitado(invitado)">
+                  <div class="fw-semibold text-dark">{{ invitado.nombre }}</div>
+                  <div class="small text-muted">{{ invitado.email }}</div>
+                </div>
+              </div>
+              <div class="text-muted text-center py-5" *ngIf="invitadosConEmail.length === 0">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-3 text-muted">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <p>{{ 'DESIGN.NO_GUESTS_EMAIL' | translate }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
     </main>
   </div>
 </div>

@@ -68,9 +68,9 @@ class EmailService {
     const urlVerificacion = `http://localhost:4200/verificar-email?token=${tokenVerificacion}`;
 
     const mailOptions = {
-      from: `"Wedding Planner " <${process.env.EMAIL_USER}>`,
+      from: `"Weddly Studio " <${process.env.EMAIL_USER}>`,
       to: destinatario,
-      subject: "Verifica tu cuenta - Wedding Planner",
+      subject: "Verifica tu cuenta - Weddly Studio",
       html: `
       <!DOCTYPE html>
       <html>
@@ -173,7 +173,7 @@ class EmailService {
             <div class="divider"></div>
             
             <p class="message">
-              ¡Gracias por registrarte en Wedding Planner!<br>
+              ¡Gracias por registrarte en Weddly Studio!<br>
               Estás a un solo paso de comenzar a organizar la boda perfecta.
             </p>
             
@@ -480,7 +480,7 @@ class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>💌 ¡NOS CASAMOS!</h1>
+            <h1>¡NOS CASAMOS!</h1>
           </div>
           
           <div class="content">
@@ -497,7 +497,7 @@ class EmailService {
             </div>
             
             <p class="fecha">
-              📅 ${new Date(fecha).toLocaleDateString("es-ES", {
+               ${new Date(fecha).toLocaleDateString("es-ES", {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
@@ -522,7 +522,7 @@ class EmailService {
           </div>
           
           <div class="footer">
-            <p>Esperamos verte en nuestro gran día ✨</p>
+            <p>Esperamos verte en nuestro gran día</p>
             <p style="font-size: 0.8rem; margin-top: 15px;">
               Este es un mensaje automático, por favor no responder a este correo.
             </p>
@@ -532,9 +532,6 @@ class EmailService {
       </html>
     `;
   }
-
-  // Enviar email de verificación de cuenta
-
 }
 
 module.exports = new EmailService();

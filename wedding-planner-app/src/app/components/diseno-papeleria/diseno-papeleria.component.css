@@ -1,529 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&display=swap');
 
-/* ==================== VARIABLES ==================== */
-:root {
-  --primary: #d4a373;
-  --primary-dark: #b8935f;
-  --secondary: #8b7e74;
-  --bg-light: #faf8f6;
-  --bg-white: #ffffff;
-  --text-dark: #2c2c2c;
-  --text-light: #6b6b6b;
-  --border: #d1b499;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
-  --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
-  --radius: 16px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ==================== ESTILOS PERSONALIZADOS PARA PLANTILLAS ==================== */
 
-/* ==================== LAYOUT PRINCIPAL ==================== */
-.papeleria-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #faf8f6 0%, #f0ebe6 100%);
-  font-family: 'Montserrat', sans-serif;
-}
-
-/* ==================== HEADER ==================== */
-.editor-header {
-  background: var(--bg-white);
-  padding: 20px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-bottom: 1px solid var(--border);
-}
-
-.btn-volver {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: transparent;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  color: var(--text-dark);
-  font-weight: 500;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.btn-volver:hover {
-  background: var(--bg-light);
-  border-color: var(--primary);
-  color: var(--primary);
-  transform: translateX(-5px); 
-}
-
-.titulo-principal {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-dark);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-}
-
-.titulo-principal .icon {
-  font-size: 1.8rem;
-}
-
-.btn-guardar-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  border: none;
-  border-radius: 10px;
-  color: rgb(0, 0, 0);
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-guardar-header:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-/* ==================== BODY DEL EDITOR ==================== */
-.editor-body {
-  display: grid;
-  grid-template-columns: 420px 1fr;
-  gap: 30px;
-  padding: 30px 40px;
-  max-width: 1600px;
-  margin: 0 auto;
-}
-
-/* ==================== PANEL DE CONTROLES ==================== */
-.panel-controles {
-  background: var(--bg-white);
-  border-radius: var(--radius);
-  padding: 30px;
-  box-shadow: var(--shadow-md);
-  height: fit-content;
-  max-height: calc(100vh - 140px);
-  overflow-y: auto;
-  position: sticky;
-  top: 120px;
-}
-
-.panel-controles::-webkit-scrollbar {
-  width: 6px;
-}
-
-.panel-controles::-webkit-scrollbar-track {
-  background: var(--bg-light);
-  border-radius: 10px;
-}
-
-.panel-controles::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 10px;
-}
-
-/* ==================== SECCIONES ==================== */
-.seccion-control {
-  margin-bottom: 30px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid var(--border);
-}
-
-.seccion-control:last-of-type {
-  border-bottom: none;
-}
-
-.seccion-titulo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-dark);
-}
-
-.seccion-titulo .numero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: white;
-  border-radius: 50%;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-/* ==================== PLANTILLAS ==================== */
-.plantillas-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-.plantilla-card {
-  cursor: pointer;
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  padding: 15px;
-  text-align: center;
-  transition: var(--transition);
-  background: var(--bg-white);
-}
-
-.plantilla-card:hover {
-  border-color: var(--primary);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-
-.plantilla-card.selected {
-  border-color: var(--primary);
-  background: linear-gradient(135deg, rgba(212, 163, 115, 0.08) 0%, rgba(212, 163, 115, 0.02) 100%);
-  box-shadow: var(--shadow-md);
-}
-
-.plantilla-preview {
-  width: 100%;
-  height: 100px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  position: relative;
-  overflow: hidden;
-}
-
-.clasica-preview {
-  background: linear-gradient(135deg, #f8f6f4 0%, #ffffff 100%);
-  border: 2px solid currentColor;
-}
-
-.clasica-preview .preview-text {
-  font-family: 'Great Vibes', cursive;
-  font-size: 2.5rem;
-  color: var(--primary);
-}
-
-.moderna-preview {
-  background: linear-gradient(135deg, #2c2c2c 0%, #4a4a4a 100%);
-  border-left: 6px solid var(--primary);
-}
-
-.moderna-preview .preview-text {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 800;
-  font-size: 2rem;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.plantilla-nombre {
-  font-weight: 600;
-  color: var(--text-dark);
-  margin: 8px 0 4px;
-}
-
-.plantilla-card small {
-  color: var(--text-light);
-  font-size: 0.85rem;
-}
-
-/* ==================== FORMULARIOS ==================== */
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--secondary);
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border: 2px solid var(--border);
-}
-
-.form-group label svg {
-  color: var(--primary);
-}
-
-.input-elegant,
-.textarea-elegant,
-.select-elegant {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.95rem;
-  color: var(--text-dark);
-  transition: var(--transition);
-  background: var(--bg-white);
-}
-
-.input-elegant:focus,
-.textarea-elegant:focus,
-.select-elegant:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
-}
-
-.textarea-elegant {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.select-elegant {
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b7e74' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 40px;
-}
-
-/* ==================== FILE UPLOAD ==================== */
-.file-upload-wrapper {
-  position: relative;
-}
-
-.file-input-hidden {
-  display: none;
-}
-
-.file-upload-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px;
-  border: 2px dashed var(--border);
-  border-radius: 10px;
-  background: var(--bg-light);
-  cursor: pointer;
-  transition: var(--transition);
-  font-weight: 500;
-  color: var(--text-dark);
-}
-
-.file-upload-label:hover {
-  border-color: var(--primary);
-  background: rgba(212, 163, 115, 0.05);
-  color: var(--primary);
-}
-
-/* ==================== COLOR PICKERS ==================== */
-.color-pickers {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-.color-picker-item {
-  position: relative;
-}
-
-.color-picker-item input[type="color"] {
-  position: absolute;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-.color-picker-item label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 12px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: var(--transition);
-  background: var(--bg-white);
-  text-transform: none;
-  font-weight: 500;
-}
-
-.color-picker-item label:hover {
-  border-color: var(--primary);
-}
-
-.color-preview {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  border: 2px solid var(--border);
-  box-shadow: var(--shadow-sm);
-}
-
-/* ==================== BOTÓN GUARDAR PRINCIPAL ==================== */
-.btn-guardar-principal {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  border: none;
-  border-radius: 12px;
-  color: var(--text-dark);
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--shadow-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.btn-guardar-principal:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* ==================== ÁREA DE PREVIEW ==================== */
-.preview-area {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.preview-header {
-  background: var(--bg-white);
-  padding: 25px 30px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-}
-
-.preview-header h2 {
-  margin: 0 0 5px 0;
-  font-size: 1.4rem;
-  color: var(--text-dark);
-  font-weight: 600;
-}
-
-.preview-header p {
-  margin: 0;
-  color: var(--text-light);
-  font-size: 0.95rem;
-}
-
-.preview-wrapper {
-  background: var(--bg-white);
-  padding: 60px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 700px;
-}
-
-/* ==================== INVITACIÓN CARD ==================== */
-.invitacion-card {
-  width: 450px;
-  min-height: 650px;
-  padding: 50px 40px;
-  box-shadow: var(--shadow-lg);
-  border-radius: 20px;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  transition: var(--transition);
-  position: relative;
-}
-
-.invitacion-contenido {
-  text-align: center;
-  z-index: 2;
-  position: relative;
-}
-
-/* ✅ MEJORA: Overlay semitransparente para legibilidad */
-.invitacion-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: inherit;
-  border-radius: inherit;
-  z-index: 1;
-}
-
-/* ==================== PLANTILLA CLÁSICA ==================== */
+/* Plantilla Clásica */
 .clasica {
   font-family: 'Cormorant Garamond', serif;
-  border: 3px solid currentColor;
-}
-
-.clasica .tagline {
-  font-size: 1.1rem;
-  font-weight: 500;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 30px;
+  border: 3px solid currentColor !important;
 }
 
 .clasica .wedding-names {
   font-family: 'Great Vibes', cursive;
   font-size: 4rem;
-  line-height: 1.3;
-  margin: 0;
   font-weight: 400;
 }
 
 .clasica .ampersand {
-  display: block;
   font-size: 3rem;
-  margin: 10px 0;
 }
 
-.clasica .divider-line {
-  width: 120px;
-  height: 2px;
-  background: currentColor;
-  margin: 30px auto;
-  opacity: 0.9;
+.clasica .tagline {
+  font-size: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .clasica .fecha-texto {
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin: 20px 0;
-  text-transform: capitalize;
+  font-size: 1.1rem;
 }
 
 .clasica .mensaje-personalizado {
-  font-style: italic;
   font-size: 1rem;
-  margin: 30px 0;
   line-height: 1.6;
 }
 
-/* ==================== PLANTILLA MODERNA ==================== */
+/* Plantilla Moderna */
 .moderna {
   font-family: 'Montserrat', sans-serif;
-  border-left: 20px solid currentColor;
+  border-left: 20px solid currentColor !important;
   text-transform: uppercase;
 }
 
@@ -531,274 +44,248 @@
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 4px;
-  margin-bottom: 30px;
 }
 
 .moderna .wedding-names {
   font-weight: 800;
   font-size: 3rem;
-  line-height: 1.2;
-  margin: 0;
   letter-spacing: 2px;
 }
 
 .moderna .ampersand {
-  display: block;
   font-size: 2rem;
   font-weight: 300;
-  margin: 15px 0;
-}
-
-.moderna .divider-line {
-  width: 100px;
-  height: 3px;
-  background: currentColor;
-  margin: 30px auto;
 }
 
 .moderna .fecha-texto {
-  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 1px;
-  margin: 20px 0;
+  font-size: 0.95rem;
 }
 
 .moderna .mensaje-personalizado {
-  font-size: 0.9rem;
-  font-weight: 500;
   text-transform: none;
-  margin: 30px 0;
-  line-height: 1.7;
-}
-
-/* ✅ BADGE con mejor contraste */
-.badge-confirmacion {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: currentColor;
-  color: var(--bg-white);
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-top: 30px;
-  letter-spacing: 1px;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.4),
-    0 2px 6px rgba(0, 0, 0, 0.2);
-  text-shadow: none; 
-}
-
-/* ==================== ACCIONES DE PREVIEW ==================== */
-.preview-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
-.btn-preview-action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background: var(--bg-white);
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  color: var(--text-dark);
   font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* ==================== UTILIDADES ==================== */
+
+/* Cursor pointer para elementos clicables */
+.cursor-pointer {
   cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
 }
 
-.btn-preview-action:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+/* Transiciones suaves */
+.transition-all {
+  transition: all 0.3s ease;
 }
 
-.btn-preview-action:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
+/* Hover para cards de plantilla */
+.border:hover {
+  transform: translateY(-4px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Hover específico para cards de invitados en el modal */
+.hover-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hover-card:hover {
+  border-color: #d4a373 !important;
+  background: rgba(212, 163, 115, 0.05) !important;
+  transform: translateX(5px);
+}
+
+/* ==================== SCROLLBAR PERSONALIZADO ==================== */
+
+/* Scrollbar para panel de controles */
+.col-lg-4 > div::-webkit-scrollbar {
+  width: 6px;
+}
+
+.col-lg-4 > div::-webkit-scrollbar-track {
+  background: #faf8f6;
+  border-radius: 10px;
+}
+
+.col-lg-4 > div::-webkit-scrollbar-thumb {
+  background: #d4a373;
+  border-radius: 10px;
+}
+
+.col-lg-4 > div::-webkit-scrollbar-thumb:hover {
+  background: #b8935f;
+}
+
+/* Scrollbar para el modal */
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar-thumb {
+  background: #d4a373;
+  border-radius: 10px;
+}
+
+/* ==================== ANIMACIONES ==================== */
+
+/* Animación para botones deshabilitados */
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
 
-.generando-pdf {
+.btn:disabled {
   animation: pulse 1.5s ease-in-out infinite;
+  cursor: not-allowed;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%) !important;
-  color: white !important;
-  border-color: #4a90e2 !important;
-}
-
-.btn-success {
-  background: linear-gradient(135deg, #27ae60 0%, #229954 100%) !important;
-  color: white !important;
-  border-color: #27ae60 !important;
-}
-
-/* ==================== MODAL SELECTOR ==================== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  animation: fadeIn 0.3s ease;
-}
-
+/* Fade in para el modal */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.modal-selector {
-  background: white;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow-lg);
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
   }
 }
 
-.modal-header {
-  padding: 25px 30px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.modal-header h3 {
-  margin: 0;
-  font-size: 1.4rem;
-  color: var(--text-dark);
-  font-weight: 600;
-}
-
-.btn-close-modal {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--text-light);
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: var(--transition);
-}
-
-.btn-close-modal:hover {
-  background: var(--bg-light);
-  color: var(--text-dark);
-}
-
-.modal-body {
-  padding: 20px 30px;
-  overflow-y: auto;
-  flex: 1;
-}
-
-.modal-description {
-  color: var(--text-light);
-  margin-bottom: 20px;
-  line-height: 1.6;
-}
-
-.invitados-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.invitado-item {
-  padding: 15px 20px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg-white);
-}
-
-.invitado-item:hover {
-  border-color: var(--primary);
-  background: rgba(212, 163, 115, 0.05);
-  transform: translateX(5px);
-}
-
-.invitado-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.invitado-nombre {
-  font-weight: 600;
-  color: var(--text-dark);
-  font-size: 1rem;
-}
-
-.invitado-email {
-  font-size: 0.85rem;
-  color: var(--text-light);
-}
-
-.invitado-sin-email {
-  color: var(--text-light);
-  padding: 30px;
-  text-align: center;
-  font-style: italic;
+.modal.show .modal-dialog {
+  animation: fadeIn 0.2s ease-out;
 }
 
 /* ==================== RESPONSIVE ==================== */
-@media (max-width: 1200px) {
-  .editor-body {
-    grid-template-columns: 1fr;
-  }
 
-  .panel-controles {
-    position: static;
-    max-height: none;
+/* Ajustes para tablets */
+@media (max-width: 992px) {
+  .clasica .wedding-names {
+    font-size: 3rem;
   }
-
-  .preview-wrapper {
-    padding: 40px 20px;
+  
+  .moderna .wedding-names {
+    font-size: 2.5rem;
   }
+  
+  aside .sticky-top {
+    position: relative !important;
+    top: auto !important;
+  }
+}
 
-  .invitacion-card {
-    width: 100%;
-    max-width: 450px;
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+  .clasica .wedding-names {
+    font-size: 2.5rem;
+  }
+  
+  .moderna .wedding-names {
+    font-size: 2rem;
+  }
+  
+  .invitacionCard {
+    width: 350px !important;
+    padding: 40px 30px !important;
+  }
+  
+  header h1 {
+    font-size: 1.25rem !important;
+  }
+}
+
+/* ==================== MEJORAS VISUALES ==================== */
+
+/* Sombra suave para las cards */
+.shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Efectos de hover para botones */
+.btn-primary:hover,
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
+}
+
+/* Inputs con mejor UX */
+.form-control:focus,
+.form-select:focus {
+  border-color: #d4a373;
+  box-shadow: 0 0 0 0.2rem rgba(212, 163, 115, 0.25);
+}
+
+/* Badge de confirmación */
+.badge-confirmacion {
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.badge-confirmacion:hover {
+  transform: scale(1.05);
+}
+
+/* ==================== ACCESIBILIDAD ==================== */
+
+/* Mejor contraste para focus */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #d4a373;
+  outline-offset: 2px;
+}
+
+/* Skip navigation link para screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ==================== PRINT STYLES ==================== */
+
+@media print {
+  header,
+  aside,
+  .btn,
+  .modal {
+    display: none !important;
+  }
+  
+  .invitacionCard {
+    box-shadow: none !important;
+    border: 2px solid #000 !important;
   }
 }

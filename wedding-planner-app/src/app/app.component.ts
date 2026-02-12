@@ -3,11 +3,13 @@ import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { NotificationService } from './services/notification/notification.service';
 import { PlanLimitsWidgetComponent } from './components/plan-limits-widget/plan-limits-widget.component';
+import { LanguageService } from './services/language/language.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent],
+  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent, TranslateModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -15,7 +17,12 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   title = 'wedding-planner-app';
 
-  constructor(public authService: AuthService, public notifService: NotificationService, private router: Router) {}
+  constructor(public authService: AuthService, public notifService: NotificationService, private router: Router, private languageService: LanguageService) {}
+
+    ngOnInit(): void {
+    this.languageService.initLanguage();
+    console.log('✅ App inicializada con idioma:', this.languageService.getCurrentLanguage());
+  }
 
   salir() {
     this.authService.logout();

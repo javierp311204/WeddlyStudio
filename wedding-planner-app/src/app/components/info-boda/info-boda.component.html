@@ -4,7 +4,7 @@
     <!-- Navegación -->
     <nav class="d-flex justify-content-between align-items-center mb-4">
       <button class="btn btn-link text-decoration-none d-flex align-items-center gap-2 p-0 btn-back-link" (click)="irAlMenu()">
-        <span class="icon">←</span> Volver al Panel
+        <span class="icon">←</span> {{ 'DESIGN.BACK_TO_PANEL' | translate }}
       </button>
 
       <button
@@ -13,7 +13,7 @@
         class="btn rounded-pill px-4 py-2 fw-semibold btn-admin-action"
         [ngClass]="editMode ? 'btn-danger' : 'btn-success'"
       >
-        {{ editMode ? "✖ Cancelar Edición" : "🛠️ Editar Información" }}
+        {{ editMode ? ('INFO.CANCEL_EDIT' | translate) : ('INFO.EDIT_INFO' | translate) }}
       </button>
     </nav>
 
@@ -24,9 +24,9 @@
         <span class="fs-4">✨</span>
         <span class="decoration-line"></span>
       </div>
-      <h1 class="display-3 fw-normal mb-3">Detalles de la Boda</h1>
+      <h1 class="display-3 fw-normal mb-3">{{ 'INFO.TITLE' | translate }}</h1>
       <p class="boda-id mb-0">
-        Código de acceso: <strong>{{ authService.getCodigoBoda() }}</strong>
+        {{ 'INFO.ACCESS_CODE' | translate }}: <strong>{{ authService.getCodigoBoda() }}</strong>
       </p>
     </header>
 
@@ -40,33 +40,33 @@
           <div class="card-body p-4">
             <div class="d-flex align-items-center gap-3 mb-4">
               <span class="card-emoji">📍</span>
-              <h3 class="mb-0 h4">Ubicación y Fecha</h3>
+              <h3 class="mb-0 h4">{{ 'INFO.LOCATION_TITLE' | translate }}</h3>
             </div>
 
             <div *ngIf="!editMode">
               <p class="txt-main mb-2" [class.empty-txt]="!bodaInfo.lugarNombre">
-                {{ bodaInfo.lugarNombre || "Lugar por confirmar" }}
+                {{ bodaInfo.lugarNombre || ('INFO.VENUE_PENDING' | translate) }}
               </p>
               <p class="txt-sub mb-3" [class.empty-txt]="!bodaInfo.direccion">
-                {{ bodaInfo.direccion || "Dirección pendiente" }}
+                {{ bodaInfo.direccion || ('INFO.ADDRESS_PENDING' | translate) }}
               </p>
               <div class="date-pill" *ngIf="bodaInfo.fechaHora">
-                📅 {{ bodaInfo.fechaHora | date : "EEEE, d MMMM y" }} a las
+                📅 {{ bodaInfo.fechaHora | date : "EEEE, d MMMM y" }} {{ 'INFO.DATE_AT' | translate }}
                 {{ bodaInfo.fechaHora | date : "HH:mm" }}h
               </div>
             </div>
 
             <div *ngIf="editMode">
               <div class="mb-3">
-                <label class="form-label text-uppercase fw-bold small mb-2">Nombre del Salón / Lugar</label>
-                <input type="text" class="form-control rounded-3" [(ngModel)]="bodaInfo.lugarNombre" placeholder="Ej: Hacienda Los Olivos" />
+                <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.VENUE_LABEL' | translate }}</label>
+                <input type="text" class="form-control rounded-3" [(ngModel)]="bodaInfo.lugarNombre" [placeholder]="'INFO.VENUE_PLACEHOLDER' | translate" />
               </div>
               <div class="mb-3">
-                <label class="form-label text-uppercase fw-bold small mb-2">Dirección</label>
-                <input type="text" class="form-control rounded-3" [(ngModel)]="bodaInfo.direccion" placeholder="Ej: Calle Real, 45" />
+                <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.ADDRESS_LABEL' | translate }}</label>
+                <input type="text" class="form-control rounded-3" [(ngModel)]="bodaInfo.direccion" [placeholder]="'INFO.ADDRESS_PLACEHOLDER' | translate" />
               </div>
               <div class="mb-0">
-                <label class="form-label text-uppercase fw-bold small mb-2">Fecha y Hora</label>
+                <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.DATE_LABEL' | translate }}</label>
                 <input type="datetime-local" class="form-control rounded-3" [(ngModel)]="bodaInfo.fechaHora" />
               </div>
             </div>
@@ -81,23 +81,23 @@
           <div class="card-body p-4">
             <div class="d-flex align-items-center gap-3 mb-4">
               <span class="card-emoji">👗</span>
-              <h3 class="mb-0 h4">Dress Code</h3>
+              <h3 class="mb-0 h4">{{ 'INFO.DRESSCODE_TITLE' | translate }}</h3>
             </div>
 
             <div *ngIf="!editMode">
               <div class="tag-elegant" [class.empty-tag]="!bodaInfo.dressCode">
-                {{ bodaInfo.dressCode || "Estilo por definir" }}
+                {{ bodaInfo.dressCode || ('INFO.DRESSCODE_PENDING' | translate) }}
               </div>
             </div>
 
             <div *ngIf="editMode">
-              <label class="form-label text-uppercase fw-bold small mb-2">Selecciona el código:</label>
+              <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.DRESSCODE_SELECT_LABEL' | translate }}</label>
               <select class="form-select rounded-3" [(ngModel)]="bodaInfo.dressCode">
-                <option value="">-- Seleccionar --</option>
-                <option value="Gala (Etiqueta)">Gala (Etiqueta)</option>
-                <option value="Formal">Formal</option>
-                <option value="Cóctel">Cóctel</option>
-                <option value="Informal / Casual">Informal / Casual</option>
+                <option value="">{{ 'INFO.DRESSCODE_PLACEHOLDER' | translate }}</option>
+                <option value="Gala (Etiqueta)">{{ 'INFO.DRESSCODE_GALA' | translate }}</option>
+                <option value="Formal">{{ 'INFO.DRESSCODE_FORMAL' | translate }}</option>
+                <option value="Cóctel">{{ 'INFO.DRESSCODE_COCKTAIL' | translate }}</option>
+                <option value="Informal / Casual">{{ 'INFO.DRESSCODE_CASUAL' | translate }}</option>
               </select>
             </div>
           </div>
@@ -111,18 +111,18 @@
           <div class="card-body p-4">
             <div class="d-flex align-items-center gap-3 mb-4">
               <span class="card-emoji">🍴</span>
-              <h3 class="mb-0 h4">El Menú</h3>
+              <h3 class="mb-0 h4">{{ 'INFO.MENU_TITLE' | translate }}</h3>
             </div>
 
             <div *ngIf="!editMode">
               <p class="txt-menu mb-0" [class.empty-txt]="!bodaInfo.menuResumen">
-                {{ bodaInfo.menuResumen || "Estamos preparando una selección deliciosa. ¡Próximamente!" }}
+                {{ bodaInfo.menuResumen || ('INFO.MENU_PENDING' | translate) }}
               </p>
             </div>
 
             <div *ngIf="editMode">
-              <label class="form-label text-uppercase fw-bold small mb-2">Resumen del Menú:</label>
-              <textarea class="form-control rounded-3" [(ngModel)]="bodaInfo.menuResumen" rows="4" placeholder="Ej: Cóctel de bienvenida, Solomillo..."></textarea>
+              <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.MENU_LABEL' | translate }}</label>
+              <textarea class="form-control rounded-3" [(ngModel)]="bodaInfo.menuResumen" rows="4" [placeholder]="'INFO.MENU_PLACEHOLDER' | translate"></textarea>
             </div>
           </div>
         </section>
@@ -133,10 +133,10 @@
     <!-- Botón Guardar Flotante -->
     <div class="floating-save" *ngIf="editMode">
       <button class="btn btn-save-gold w-100 rounded-pill py-3 fw-bold shadow-lg" (click)="guardarCambios()" [disabled]="guardando">
-        <span *ngIf="!guardando">✨ Guardar Información</span>
+        <span *ngIf="!guardando">✨ {{ 'INFO.SAVE_BTN' | translate }}</span>
         <span *ngIf="guardando" class="loader-text d-flex align-items-center justify-content-center gap-2">
           <span class="spinner-border spinner-border-sm" role="status"></span>
-          Guardando cambios...
+          {{ 'INFO.SAVING' | translate }}
         </span>
       </button>
     </div>

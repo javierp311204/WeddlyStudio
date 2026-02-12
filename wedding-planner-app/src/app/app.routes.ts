@@ -29,9 +29,10 @@ export const routes: Routes = [
   { path: 'album', component: AlbumDigitalComponent, canActivate: [authGuard] },
   { path: 'dashboard', component: HomeComponent, canActivate: [authGuard] },
   { path: 'info-boda', component: InfoBodaComponent, canActivate: [authGuard] },
+  { path: 'diseno', component: DisenoPapeleriaComponent, canActivate: [adminGuard]},
   
   { path: 'mesas', component: MesaManagerComponent, canActivate: [adminGuard, PlanGuard], data: { planRequerido: 'one_time' } },
-  { path: 'diseno', component: DisenoPapeleriaComponent, canActivate: [adminGuard, PlanGuard], data: { planRequerido: 'one_time' } },
+  // { path: 'diseno', component: DisenoPapeleriaComponent, canActivate: [adminGuard, PlanGuard], data: { planRequerido: 'one_time' } },
   { path: 'plano', component: PlanoInteractivoComponent, canActivate: [adminGuard, PlanGuard], data: { planRequerido: 'one_time' } },
 
   { path: 'pricing', component: PricingComponent, canActivate: [adminGuard] },
