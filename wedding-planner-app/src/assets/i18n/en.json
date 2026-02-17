@@ -24,59 +24,59 @@
   },
 
   "HOME": {
-  "BRAND": "Weddly Studio",
-  "ACCESS_BTN": "Sign In",
-  "START_FREE_BTN": "Start Free",
-  "HERO_SUBTITLE": "Weddly Studio",
-  "HERO_TITLE_1": "Your Wedding,",
-  "HERO_TITLE_2": "Perfectly Organized",
-  "HERO_DESCRIPTION": "From table arrangements to the digital photo album. Everything in one place.",
-  "START_WEDDING_BTN": "Start My Wedding",
-  "USER_ACCESS_BTN": "User Access",
-  "DISCOVER_MORE": "Discover More",
-  "STEP_BY_STEP": "STEP BY STEP",
-  "HOW_IT_WORKS": "How does it work?",
-  "STEP_1_TITLE": "Create Your Code",
-  "STEP_1_DESC": "Register as an administrator and generate a unique code for your big day.",
-  "STEP_2_TITLE": "Organize and Design",
-  "STEP_2_DESC": "Manage your tables, add event information and customize your guide.",
-  "STEP_3_TITLE": "Invite Everyone",
-  "STEP_3_DESC": "Share the code with your guests so they can confirm and upload their photos.",
-  "TESTIMONIAL_TEXT": "It was the best decision for our wedding. All guests knew where to sit and the digital album is a treasure.",
-  "TESTIMONIAL_AUTHOR": "- Lucia & Carlos, September 2025",
-  "FOOTER_TAGLINE": "Making every detail count.",
-  "FOOTER_HELP": "Help",
-  "FOOTER_FAQ": "Frequently Asked Questions",
-  "FOOTER_SUPPORT": "Support",
-  "FOOTER_COPYRIGHT": "© 2026 Weddly Studio. Made with ❤️ for unforgettable moments.",
-  "DASHBOARD_PANEL": "Panel",
-  "DASHBOARD_CONTROL": "Control",
-  "DASHBOARD_GUEST": "Guest",
-  "DASHBOARD_WEDDING": "Wedding",
-  "HELP": "Help",
-  "NOTIFICATIONS_RECENT": "Recent Notices",
-  "NO_NOTIFICATIONS": "You have no new notifications",
-  "LOGOUT_BTN": "Logout",
-  "WELCOME": "Welcome",
-  "WELCOME_SUBTITLE": "What detail are we going to polish today?",
-  "CARD_TABLES_TITLE": "Table Management",
-  "CARD_TABLES_DESC": "Organize the seating plan and guest groups.",
-  "CARD_DESIGN_TITLE": "Digital Stationery",
-  "CARD_DESIGN_DESC": "Create invitations and programs with unique style.",
-  "CARD_GUIDE_TITLE": "Wedding Guide",
-  "CARD_GUIDE_DESC": "Venue, schedule, menu and dress code.",
-  "CARD_ALBUM_TITLE": "Shared Album",
-  "CARD_ALBUM_DESC": "Relive and upload the best moments of the day.",
-  "CARD_GUESTS_TITLE": "Guest List",
-  "CARD_GUESTS_DESC": "View, search and filter all wedding attendees.",
-  "TOUR_STEP_1_TITLE": "✨ Weddly Studio",
-  "TOUR_STEP_1_DESC": "Welcome to your personal dashboard. Everything is ready for you to enjoy your big day.",
-  "TOUR_STEP_2_TITLE": "🔔 Notification Bell",
-  "TOUR_STEP_2_DESC": "Don't miss anything. We'll notify you when someone uploads photos or there are last-minute changes.",
-  "TOUR_STEP_3_TITLE": "🚀 Quick Access",
-  "TOUR_STEP_3_DESC": "Upload photos to the album, check your table or review the schedule in one click.",
-  "TOUR_STEP_4_TITLE": "👋 See You Soon",
-  "TOUR_STEP_4_DESC": "You can logout here, although we recommend keeping it open to receive notifications."
+    "BRAND": "Weddly Studio",
+    "ACCESS_BTN": "Sign In",
+    "START_FREE_BTN": "Start Free",
+    "HERO_SUBTITLE": "Weddly Studio",
+    "HERO_TITLE_1": "Your Wedding,",
+    "HERO_TITLE_2": "Perfectly Organized",
+    "HERO_DESCRIPTION": "From table arrangements to the digital photo album. Everything in one place.",
+    "START_WEDDING_BTN": "Start My Wedding",
+    "USER_ACCESS_BTN": "User Access",
+    "DISCOVER_MORE": "Discover More",
+    "STEP_BY_STEP": "STEP BY STEP",
+    "HOW_IT_WORKS": "How does it work?",
+    "STEP_1_TITLE": "Create Your Code",
+    "STEP_1_DESC": "Register as an administrator and generate a unique code for your big day.",
+    "STEP_2_TITLE": "Organize and Design",
+    "STEP_2_DESC": "Manage your tables, add event information and customize your guide.",
+    "STEP_3_TITLE": "Invite Everyone",
+    "STEP_3_DESC": "Share the code with your guests so they can confirm and upload their photos.",
+    "TESTIMONIAL_TEXT": "It was the best decision for our wedding. All guests knew where to sit and the digital album is a treasure.",
+    "TESTIMONIAL_AUTHOR": "- Lucia & Carlos, September 2025",
+    "FOOTER_TAGLINE": "Making every detail count.",
+    "FOOTER_HELP": "Help",
+    "FOOTER_FAQ": "Frequently Asked Questions",
+    "FOOTER_SUPPORT": "Support",
+    "FOOTER_COPYRIGHT": "© 2026 Weddly Studio. Made with ❤️ for unforgettable moments.",
+    "DASHBOARD_PANEL": "Panel",
+    "DASHBOARD_CONTROL": "Control",
+    "DASHBOARD_GUEST": "Guest",
+    "DASHBOARD_WEDDING": "Wedding",
+    "HELP": "Help",
+    "NOTIFICATIONS_RECENT": "Recent Notices",
+    "NO_NOTIFICATIONS": "You have no new notifications",
+    "LOGOUT_BTN": "Logout",
+    "WELCOME": "Welcome",
+    "WELCOME_SUBTITLE": "What detail are we going to polish today?",
+    "CARD_TABLES_TITLE": "Table Management",
+    "CARD_TABLES_DESC": "Organize the seating plan and guest groups.",
+    "CARD_DESIGN_TITLE": "Digital Stationery",
+    "CARD_DESIGN_DESC": "Create invitations and programs with unique style.",
+    "CARD_GUIDE_TITLE": "Wedding Guide",
+    "CARD_GUIDE_DESC": "Venue, schedule, menu and dress code.",
+    "CARD_ALBUM_TITLE": "Shared Album",
+    "CARD_ALBUM_DESC": "Relive and upload the best moments of the day.",
+    "CARD_GUESTS_TITLE": "Guest List",
+    "CARD_GUESTS_DESC": "View, search and filter all wedding attendees.",
+    "TOUR_STEP_1_TITLE": "✨ Weddly Studio",
+    "TOUR_STEP_1_DESC": "Welcome to your personal dashboard. Everything is ready for you to enjoy your big day.",
+    "TOUR_STEP_2_TITLE": "🔔 Notification Bell",
+    "TOUR_STEP_2_DESC": "Don't miss anything. We'll notify you when someone uploads photos or there are last-minute changes.",
+    "TOUR_STEP_3_TITLE": "🚀 Quick Access",
+    "TOUR_STEP_3_DESC": "Upload photos to the album, check your table or review the schedule in one click.",
+    "TOUR_STEP_4_TITLE": "👋 See You Soon",
+    "TOUR_STEP_4_DESC": "You can logout here, although we recommend keeping it open to receive notifications."
   },
 
   "NAV": {
@@ -172,18 +172,18 @@
     "BACK_TO_PANEL": "Back to Panel",
     "PREVIEW": "Preview",
     "PREVIEW_SUBTITLE": "This is how your guests will see your invitation",
-    
+
     "STYLE_SECTION": "Choose Your Style",
     "CLASSIC": "Classic",
     "CLASSIC_DESC": "Elegant and traditional",
     "MODERN": "Modern",
     "MODERN_DESC": "Minimalist and sophisticated",
-    
+
     "COUPLE_SECTION": "Couple's Information",
     "BRIDE_NAME": "Bride's Name",
     "GROOM_NAME": "Groom's Name",
     "EVENT_DATE": "Event Date",
-    
+
     "CUSTOMIZATION_SECTION": "Customization",
     "COUPLE_PHOTO": "Couple's Photo",
     "UPLOAD_IMAGE": "Upload image",
@@ -193,18 +193,18 @@
     "BACKGROUND_COLOR": "Background",
     "SPECIAL_MESSAGE": "Special Message",
     "MESSAGE_PLACEHOLDER": "Write a personalized message for your guests...",
-    
+
     "SAVE_CONFIG": "Save Configuration",
     "DOWNLOAD_PDF": "Download PDF",
     "SEND_EMAIL": "Send by Email",
     "MASS_SEND": "Mass Send",
     "GENERATING": "Generating...",
     "SENDING": "Sending...",
-    
+
     "MODAL_SELECT_GUEST": "Select a Guest",
     "MODAL_SELECT_DESC": "Select which guest you want to send the invitation to",
     "NO_GUESTS_EMAIL": "No guests with registered email",
-    
+
     "INVITATION_TEXT": "We're getting married!",
     "ONLINE_CONFIRMATION": "Online Confirmation"
   },
@@ -327,7 +327,7 @@
     "FOREVER_FREE": "Free forever",
     "SECURE_PAYMENT": "100% Secure Payment",
     "SECURE_DESC": "We process payments securely with Stripe. We do not store credit card information.",
-    
+
     "FEATURES": {
       "ONE_WEDDING": "1 active wedding",
       "UP_TO_50": "Up to 50 guests",
@@ -383,5 +383,124 @@
     "REDIRECTING": "You will be redirected to home in a few seconds...",
     "GO_HOME_NOW": "Go to Home Now",
     "TRANSACTION_ID": "Transaction ID"
+  },
+
+  "CHECKLIST": {
+    "TITLE": "Wedding Checklist",
+    "SUBTITLE": "Organize your wedding step by step",
+    "BACK_TO_PANEL": "Back to Panel",
+    "NEW_TASK": "New Task",
+    "LOADING": "Loading your checklist...",
+
+    "STATS": {
+      "TOTAL": "Total Tasks",
+      "COMPLETED": "Completed",
+      "IN_PROGRESS": "In Progress",
+      "PENDING": "Pending",
+      "GENERAL_PROGRESS": "Overall Progress"
+    },
+
+    "PHASES": {
+      "SIX_MONTHS": "6 Months Before",
+      "THREE_MONTHS": "3 Months Before",
+      "ONE_MONTH": "1 Month Before",
+      "ONE_WEEK": "1 Week Before",
+      "ONE_DAY": "1 Day Before"
+    },
+
+    "FILTERS": {
+      "TITLE": "Filters",
+      "STATUS": "Status",
+      "ALL": "All",
+      "PENDING": "Pending",
+      "IN_PROGRESS": "In Progress",
+      "COMPLETED": "Completed",
+      "CATEGORY": "Category",
+      "SEARCH": "Search",
+      "SEARCH_PLACEHOLDER": "Search task...",
+      "NEW_TASK_PHASE": "New Task in this Phase"
+    },
+
+    "CATEGORIES": {
+      "VENUE": "Venue",
+      "CATERING": "Catering",
+      "INVITATIONS": "Invitations",
+      "DECORATION": "Decoration",
+      "MUSIC": "Music",
+      "PHOTOGRAPHY": "Photography",
+      "LEGAL": "Legal/Documents",
+      "OTHER": "Other"
+    },
+
+    "TASK": {
+      "COMPLETED": "Completed",
+      "IN_PROGRESS": "In Progress",
+      "PENDING": "Pending",
+      "DUE_DATE": "Due date",
+      "REMINDER_ACTIVE": "Reminder active",
+      "MARK_PROGRESS": "In Progress",
+      "TOGGLE_REMINDER": "Remind",
+      "REMOVE_REMINDER": "Remove",
+      "EDIT": "Edit",
+      "DELETE": "Delete",
+      "NO_CATEGORY": "No category"
+    },
+
+    "MODALS": {
+      "INIT_TITLE": "Welcome to the Checklist!",
+      "INIT_DESC": "Would you like us to create a checklist with predefined tasks for your wedding? It includes all essential tasks organized by phases.",
+      "INIT_EMPTY": "Create empty",
+      "INIT_WITH_TASKS": "Yes, create with tasks",
+      "CREATING": "Creating...",
+
+      "NEW_TASK_TITLE": "New Task",
+      "EDIT_TASK_TITLE": "Edit Task",
+      "TASK_TITLE": "Title",
+      "TASK_TITLE_REQUIRED": "Title *",
+      "TASK_TITLE_PLACEHOLDER": "E.g.: Book ceremony venue",
+      "TASK_DESC": "Description",
+      "TASK_DESC_PLACEHOLDER": "Additional details about the task...",
+      "TASK_PHASE": "Phase",
+      "TASK_PHASE_REQUIRED": "Phase *",
+      "TASK_CATEGORY": "Category",
+      "TASK_STATUS": "Status",
+      "TASK_DUE_DATE": "Due Date (optional)",
+      "TASK_NOTES": "Notes",
+      "TASK_NOTES_PLACEHOLDER": "Additional notes...",
+      "CANCEL": "Cancel",
+      "SAVE": "Save Task",
+      "SAVING": "Saving..."
+    },
+
+    "NOTIFICATIONS": {
+      "CHECKLIST_CREATED": "Checklist created!",
+      "CHECKLIST_CREATED_DESC": "Predefined tasks have been added",
+      "TASK_CREATED": "Created",
+      "TASK_CREATED_DESC": "New task added to checklist",
+      "TASK_UPDATED": "Updated",
+      "TASK_UPDATED_DESC": "Task successfully modified",
+      "TASK_DELETED": "Deleted",
+      "TASK_DELETED_DESC": "Task removed from checklist",
+      "DELETE_CONFIRM": "Delete task?",
+      "DELETE_CONFIRM_DESC": "Are you sure you want to delete \"{{titulo}}\"?",
+      "TITLE_REQUIRED": "Title is required",
+      "PHASE_REQUIRED": "You must select a phase",
+      "REMINDER_ON": "Reminder activated",
+      "REMINDER_ON_DESC": "A notification will be sent 3 days before",
+      "REMINDER_OFF": "Reminder deactivated",
+      "REMINDER_OFF_DESC": "Notification has been cancelled",
+      "ERROR_LOAD": "Could not load checklist",
+      "ERROR_CREATE": "Could not create checklist",
+      "ERROR_SAVE": "Could not save task",
+      "ERROR_DELETE": "Could not delete task",
+      "ERROR_UPDATE": "Could not update status",
+      "ERROR_REMINDER": "Could not configure reminder",
+      "NO_WEDDING_CODE": "Wedding code not found"
+    },
+
+    "EMPTY_STATE": {
+      "NO_TASKS": "No tasks match the filters",
+      "NO_TASKS_PHASE": "No tasks in this phase yet"
+    }
   }
 }

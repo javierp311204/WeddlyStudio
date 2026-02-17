@@ -71,5 +71,14 @@ try {
   console.error("❌ ERROR al cargar routes/pagos.js:", error.message);
 }
 
+try {
+  const tareasRoutes = require('./routes/tareas');
+  app.use('/api/checklist', tareasRoutes);
+  console.log("✅ Rutas de tareas cargadas correctamente");
+} catch (error) {
+  console.error("❌ ERROR al cargar routes/tareas.js:", error.message);
+}
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

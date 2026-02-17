@@ -15,6 +15,7 @@ import { RecuperarPasswordComponent } from './pages/recuperar-password/recuperar
 import { PricingComponent } from './pages/pricing/pricing.component';
 import { PagoExitosoComponent } from './pages/pago-exitoso/pago-exitoso.component';
 import { PlanGuard } from './guards/plan.guard';
+import { ChecklistBodaComponent } from './components/checklist-boda/checklist-boda.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -30,6 +31,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: HomeComponent, canActivate: [authGuard] },
   { path: 'info-boda', component: InfoBodaComponent, canActivate: [authGuard] },
   { path: 'diseno', component: DisenoPapeleriaComponent, canActivate: [adminGuard]},
+  { path: 'checklist', component: ChecklistBodaComponent, canActivate: [adminGuard] },
   
   { path: 'mesas', component: MesaManagerComponent, canActivate: [adminGuard, PlanGuard], data: { planRequerido: 'one_time' } },
   // { path: 'diseno', component: DisenoPapeleriaComponent, canActivate: [adminGuard, PlanGuard], data: { planRequerido: 'one_time' } },

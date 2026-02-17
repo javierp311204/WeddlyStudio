@@ -1,0 +1,340 @@
+<!-- src/app/components/checklist-boda/checklist-boda.component.html -->
+
+<div class="checklist-wrapper">
+
+  <!-- HEADER -->
+  <header class="cl-header">
+    <div class="cl-header-inner">
+      <button class="btn-back" (click)="volverAlPanel()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        {{ 'CHECKLIST.BACK_TO_PANEL' | translate }}
+      </button>
+
+      <div class="cl-header-title">
+        <h1>{{ 'CHECKLIST.TITLE' | translate }}</h1>
+        <p>{{ 'CHECKLIST.SUBTITLE' | translate }}</p>
+      </div>
+
+      <button class="btn-primary" (click)="abrirModalNuevaTarea()">
+        {{ 'CHECKLIST.NEW_TASK' | translate }}
+      </button>
+    </div>
+  </header>
+
+  <!-- LOADER -->
+  <div *ngIf="cargando" class="loader-state">
+    <div class="loader-ring"></div>
+    <p>{{ 'CHECKLIST.LOADING' | translate }}</p>
+  </div>
+
+  <!-- EMPTY: no hay checklist y no está cargando -->
+  <div *ngIf="!cargando && fases.length === 0 && !mostrarModalInicializar" class="loader-state">
+    <p style="color: var(--muted); font-size: 0.9rem;">
+      {{ 'CHECKLIST.EMPTY_STATE.NO_TASKS_PHASE' | translate }}
+    </p>
+    <button class="btn-primary" (click)="mostrarModalInicializar = true">
+      {{ 'CHECKLIST.MODALS.INIT_WITH_TASKS' | translate }}
+    </button>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div *ngIf="!cargando && fases.length > 0" class="cl-body">
+
+    <!-- ESTADÍSTICAS -->
+    <section *ngIf="estadisticas" class="stats-row">
+      <div class="stat-item">
+        <span class="stat-number">{{ estadisticas.total }}</span>
+        <span class="stat-label">{{ 'CHECKLIST.STATS.TOTAL' | translate }}</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" style="color: var(--green);">{{ estadisticas.completadas }}</span>
+        <span class="stat-label">{{ 'CHECKLIST.STATS.COMPLETED' | translate }}</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" style="color: var(--amber);">{{ estadisticas.enProgreso }}</span>
+        <span class="stat-label">{{ 'CHECKLIST.STATS.IN_PROGRESS' | translate }}</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" style="color: var(--muted);">{{ estadisticas.pendientes }}</span>
+        <span class="stat-label">{{ 'CHECKLIST.STATS.PENDING' | translate }}</span>
+      </div>
+
+      <!-- Progreso global -->
+      <div class="stat-progress">
+        <div class="progress-label">
+          <span>{{ 'CHECKLIST.STATS.GENERAL_PROGRESS' | translate }}</span>
+          <span class="progress-pct">{{ estadisticas?.porcentajeTotal || 0 }}%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" [style.width.%]="estadisticas?.porcentajeTotal || 0"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PESTAÑAS DE FASES -->
+    <nav class="phases-nav">
+      <button *ngFor="let fase of fases"
+              class="phase-btn"
+              [class.active]="faseActiva === fase.fase"
+              (click)="cambiarFase(fase.fase)">
+        <span class="phase-btn-title">{{ fase.titulo }}</span>
+        <span class="phase-btn-pct">{{ fase.progreso }}%</span>
+      </button>
+    </nav>
+
+    <!-- PANEL DE FASE ACTIVA -->
+    <div *ngIf="faseActualData" class="phase-panel">
+
+      <!-- SIDEBAR -->
+      <aside class="cl-sidebar">
+        <div class="sidebar-phase-info">
+          <h2>{{ faseActualData.titulo }}</h2>
+          <p>{{ faseActualData.descripcion }}</p>
+
+          <div class="sidebar-progress">
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" [style.width.%]="faseActualData.progreso"></div>
+            </div>
+            <span class="sidebar-progress-text">
+              {{ getTareasCompletadas(faseActualData) }} / {{ faseActualData.tareas.length }}
+            </span>
+          </div>
+        </div>
+
+        <div class="sidebar-filters">
+          <p class="filter-heading">{{ 'CHECKLIST.FILTERS.TITLE' | translate }}</p>
+
+          <div class="filter-group">
+            <label>{{ 'CHECKLIST.FILTERS.STATUS' | translate }}</label>
+            <select [(ngModel)]="filtroEstado">
+              <option value="todas">{{ 'CHECKLIST.FILTERS.ALL' | translate }}</option>
+              <option value="pendiente">{{ 'CHECKLIST.FILTERS.PENDING' | translate }}</option>
+              <option value="en_progreso">{{ 'CHECKLIST.FILTERS.IN_PROGRESS' | translate }}</option>
+              <option value="completada">{{ 'CHECKLIST.FILTERS.COMPLETED' | translate }}</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>{{ 'CHECKLIST.FILTERS.CATEGORY' | translate }}</label>
+            <select [(ngModel)]="filtroCategoria">
+              <option value="todas">{{ 'CHECKLIST.FILTERS.ALL' | translate }}</option>
+              <option *ngFor="let cat of CATEGORIAS | keyvalue" [value]="cat.key">
+                {{ cat.value.nombre }}
+              </option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>{{ 'CHECKLIST.FILTERS.SEARCH' | translate }}</label>
+            <input type="text"
+                   [(ngModel)]="busqueda"
+                   [placeholder]="'CHECKLIST.FILTERS.SEARCH_PLACEHOLDER' | translate">
+          </div>
+
+          <button class="btn-secondary w-full" (click)="abrirModalNuevaTarea(faseActiva)">
+            {{ 'CHECKLIST.FILTERS.NEW_TASK_PHASE' | translate }}
+          </button>
+        </div>
+      </aside>
+
+      <!-- LISTA DE TAREAS -->
+      <main class="tasks-list">
+
+        <div *ngIf="tareasFiltradas.length === 0" class="empty-state">
+          <p>{{ 'CHECKLIST.EMPTY_STATE.NO_TASKS' | translate }}</p>
+          <button class="btn-secondary" (click)="abrirModalNuevaTarea(faseActiva)">
+            {{ 'CHECKLIST.NEW_TASK' | translate }}
+          </button>
+        </div>
+
+        <div *ngFor="let tarea of tareasFiltradas; let i = index"
+             class="task-card"
+             [class.is-done]="tarea.estado === 'completada'"
+             [style.animation-delay]="i * 40 + 'ms'">
+
+          <!-- Checkbox -->
+          <label class="task-check" [for]="'t-' + tarea._id">
+            <input type="checkbox"
+                   [id]="'t-' + tarea._id"
+                   [checked]="tarea.estado === 'completada'"
+                   (change)="cambiarEstadoTarea(tarea, tarea.estado === 'completada' ? 'pendiente' : 'completada')">
+            <span class="check-box"></span>
+          </label>
+
+          <!-- Contenido -->
+          <div class="task-content">
+            <div class="task-top">
+              <h4 class="task-title" [class.done-text]="tarea.estado === 'completada'">
+                {{ tarea.titulo }}
+              </h4>
+              <span class="estado-pill" [attr.data-estado]="tarea.estado">
+                {{ getEstadoLabel(tarea.estado) }}
+              </span>
+            </div>
+
+            <p *ngIf="tarea.descripcion" class="task-desc" [class.done-text]="tarea.estado === 'completada'">
+              {{ tarea.descripcion }}
+            </p>
+
+            <div class="task-meta">
+              <span class="meta-tag">
+                {{ CATEGORIAS[tarea.categoria] ? CATEGORIAS[tarea.categoria].nombre : ('CHECKLIST.TASK.NO_CATEGORY' | translate) }}
+              </span>
+              <span *ngIf="tarea.fechaLimite" class="meta-tag">
+                {{ tarea.fechaLimite | date:'dd MMM yyyy' }}
+              </span>
+              <span *ngIf="tarea.recordatorio?.activo" class="meta-tag meta-reminder">
+                {{ 'CHECKLIST.TASK.REMINDER_ACTIVE' | translate }}
+              </span>
+            </div>
+
+            <div class="task-actions">
+              <button *ngIf="tarea.estado === 'pendiente'"
+                      class="action-btn"
+                      (click)="cambiarEstadoTarea(tarea, 'en_progreso')">
+                {{ 'CHECKLIST.TASK.MARK_PROGRESS' | translate }}
+              </button>
+              <button class="action-btn"
+                      [class.active-reminder]="tarea.recordatorio?.activo"
+                      (click)="toggleRecordatorio(tarea)">
+                {{ (tarea.recordatorio?.activo ? 'CHECKLIST.TASK.REMOVE_REMINDER' : 'CHECKLIST.TASK.TOGGLE_REMINDER') | translate }}
+              </button>
+              <button class="action-btn" (click)="abrirModalEditarTarea(tarea)">
+                {{ 'CHECKLIST.TASK.EDIT' | translate }}
+              </button>
+              <button class="action-btn action-danger" (click)="eliminarTarea(tarea)">
+                {{ 'CHECKLIST.TASK.DELETE' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MODAL: INICIALIZAR CHECKLIST
+       (fuera del *ngIf del contenido principal)
+       ============================================ -->
+  <div *ngIf="mostrarModalInicializar"
+       class="modal-overlay"
+       (click)="cerrarModales()">
+    <div class="modal-box modal-centered" (click)="$event.stopPropagation()">
+      <div class="modal-welcome">
+        <h2>{{ 'CHECKLIST.MODALS.INIT_TITLE' | translate }}</h2>
+        <p>{{ 'CHECKLIST.MODALS.INIT_DESC' | translate }}</p>
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="cerrarModales()">
+            {{ 'CHECKLIST.MODALS.INIT_EMPTY' | translate }}
+          </button>
+          <button class="btn-primary" (click)="inicializarChecklist()" [disabled]="inicializando">
+            {{ (inicializando ? 'CHECKLIST.MODALS.CREATING' : 'CHECKLIST.MODALS.INIT_WITH_TASKS') | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MODAL: NUEVA / EDITAR TAREA
+       (fuera del *ngIf del contenido principal)
+       ============================================ -->
+  <div *ngIf="mostrarModalNuevaTarea || mostrarModalEditarTarea"
+       class="modal-overlay"
+       (click)="cerrarModales()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+
+      <div class="modal-head">
+        <h3>{{ (mostrarModalEditarTarea ? 'CHECKLIST.MODALS.EDIT_TASK_TITLE' : 'CHECKLIST.MODALS.NEW_TASK_TITLE') | translate }}</h3>
+        <button class="modal-close" (click)="cerrarModales()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-col full">
+            <label>{{ 'CHECKLIST.MODALS.TASK_TITLE_REQUIRED' | translate }}</label>
+            <input type="text"
+                   [(ngModel)]="tareaActual.titulo"
+                   [placeholder]="'CHECKLIST.MODALS.TASK_TITLE_PLACEHOLDER' | translate">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col full">
+            <label>{{ 'CHECKLIST.MODALS.TASK_DESC' | translate }}</label>
+            <textarea [(ngModel)]="tareaActual.descripcion"
+                      rows="3"
+                      [placeholder]="'CHECKLIST.MODALS.TASK_DESC_PLACEHOLDER' | translate"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label>{{ 'CHECKLIST.MODALS.TASK_PHASE_REQUIRED' | translate }}</label>
+            <select [(ngModel)]="tareaActual.fase">
+              <option *ngFor="let fase of FASES_BODA | keyvalue" [value]="fase.key">
+                {{ fase.value.titulo }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-col">
+            <label>{{ 'CHECKLIST.MODALS.TASK_CATEGORY' | translate }}</label>
+            <select [(ngModel)]="tareaActual.categoria">
+              <option *ngFor="let cat of CATEGORIAS | keyvalue" [value]="cat.key">
+                {{ cat.value.nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label>{{ 'CHECKLIST.MODALS.TASK_STATUS' | translate }}</label>
+            <select [(ngModel)]="tareaActual.estado">
+              <option value="pendiente">{{ 'CHECKLIST.TASK.PENDING' | translate }}</option>
+              <option value="en_progreso">{{ 'CHECKLIST.TASK.IN_PROGRESS' | translate }}</option>
+              <option value="completada">{{ 'CHECKLIST.TASK.COMPLETED' | translate }}</option>
+            </select>
+          </div>
+
+          <div class="form-col">
+            <label>{{ 'CHECKLIST.MODALS.TASK_DUE_DATE' | translate }}</label>
+            <input type="date" [(ngModel)]="tareaActual.fechaLimite">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col full">
+            <label>{{ 'CHECKLIST.MODALS.TASK_NOTES' | translate }}</label>
+            <textarea [(ngModel)]="tareaActual.notas"
+                      rows="2"
+                      [placeholder]="'CHECKLIST.MODALS.TASK_NOTES_PLACEHOLDER' | translate"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn-secondary" (click)="cerrarModales()">
+          {{ 'CHECKLIST.MODALS.CANCEL' | translate }}
+        </button>
+        <button class="btn-primary" (click)="guardarTarea()" [disabled]="guardando">
+          {{ (guardando ? 'CHECKLIST.MODALS.SAVING' : 'CHECKLIST.MODALS.SAVE') | translate }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
