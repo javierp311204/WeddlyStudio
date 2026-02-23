@@ -76,7 +76,16 @@
     "TOUR_STEP_3_TITLE": "🚀 Quick Access",
     "TOUR_STEP_3_DESC": "Upload photos to the album, check your table or review the schedule in one click.",
     "TOUR_STEP_4_TITLE": "👋 See You Soon",
-    "TOUR_STEP_4_DESC": "You can logout here, although we recommend keeping it open to receive notifications."
+    "TOUR_STEP_4_DESC": "You can logout here, although we recommend keeping it open to receive notifications.",
+    "CARD_CHECKLIST_TITLE": "Wedding Checklist",
+    "CARD_CHECKLIST_DESC": "Manage all your wedding tasks and phases",
+    "CHECKLIST_PREVIEW_TITLE": "Checklist Progress",
+    "CHECKLIST_PREVIEW_SEE_ALL": "See all",
+    "CHECKLIST_PREVIEW_PROGRESS": "Overall progress",
+    "CHECKLIST_STATS_TOTAL": "Total",
+    "CHECKLIST_STATS_COMPLETED": "Completed",
+    "CHECKLIST_STATS_IN_PROGRESS": "In progress",
+    "CHECKLIST_STATS_PENDING": "Pending"
   },
 
   "NAV": {

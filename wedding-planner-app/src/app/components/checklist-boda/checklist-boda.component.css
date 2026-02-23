@@ -640,7 +640,9 @@
   inset: 0;
   background: rgba(30, 28, 25, 0.45);
   backdrop-filter: blur(4px);
-  z-index: 200;
+  z-index: 10001;        /* ← mayor que el global */
+  opacity: 1 !important; /* ← sobreescribe el opacity: 0 global */
+  pointer-events: all !important; /* ← sobreescribe el pointer-events: none global */
   display: flex;
   align-items: center;
   justify-content: center;

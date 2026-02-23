@@ -9,11 +9,22 @@ import { interval, Subscription } from 'rxjs';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
+import {
+  TareasService,
+  EstadisticasChecklist,
+} from '../../services/tareas/tareas.service';
+import { ChecklistPreviewComponent } from '../checklist-preview/checklist-preview.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, LanguageSelectorComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    TranslateModule,
+    LanguageSelectorComponent,
+    ChecklistPreviewComponent
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -23,6 +34,7 @@ export class HomeComponent implements OnInit {
   mostrarPanel: boolean = false;
   notificaciones: any[] = [];
   notificacionesSinLeer: number = 0;
+  estadisticasChecklist: EstadisticasChecklist | null = null;
 
   private notifSubscription?: Subscription;
 
@@ -30,7 +42,8 @@ export class HomeComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private notifService: NotificacionesService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private tareasService: TareasService,
   ) {}
 
   ngOnInit() {
@@ -41,6 +54,10 @@ export class HomeComponent implements OnInit {
     this.notifSubscription = interval(30000).subscribe(() => {
       this.cargarNotificaciones();
     });
+
+    if (this.authService.isAdmin()) {
+      this.cargarEstadisticasChecklist();
+    }
   }
 
   ngOnDestroy() {
@@ -163,7 +180,7 @@ export class HomeComponent implements OnInit {
 
     switch (notificacion.tipo) {
       case 'foto':
-         this.router.navigate(['/album']);
+        this.router.navigate(['/album']);
         break;
       case 'album':
         this.router.navigate(['/album']);
@@ -180,6 +197,16 @@ export class HomeComponent implements OnInit {
       default:
         console.log('Tipo de notificación sin ruta:', notificacion.tipo);
     }
+  }
+
+  cargarEstadisticasChecklist() {
+    const codigoBoda = localStorage.getItem('codigoBoda') || '';
+    if (!codigoBoda) return;
+
+    this.tareasService.getEstadisticas(codigoBoda).subscribe({
+      next: (stats) => (this.estadisticasChecklist = stats),
+      error: () => (this.estadisticasChecklist = null),
+    });
   }
 
   // --- TUS RUTAS ORIGINALES (MANTENIDAS) ---

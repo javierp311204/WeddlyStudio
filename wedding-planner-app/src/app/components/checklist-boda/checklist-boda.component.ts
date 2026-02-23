@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -49,6 +49,7 @@ export class ChecklistBodaComponent implements OnInit {
     private notifService: NotificationService,
     private router: Router,
     private translate: TranslateService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -71,30 +72,32 @@ export class ChecklistBodaComponent implements OnInit {
   // ============================================
 
   async verificarYCargarChecklist(): Promise<void> {
-    this.cargando = true;
+  this.cargando = true;
+  console.log('1. Iniciando verificación, codigoBoda:', this.codigoBoda);
 
-    try {
-      const verificacion = await this.tareasService
-        .verificarChecklist(this.codigoBoda)
-        .toPromise();
+  try {
+    const verificacion = await this.tareasService
+      .verificarChecklist(this.codigoBoda)
+      .toPromise();
 
-      if (verificacion && verificacion.existe) {
-        await this.cargarTareas();
-        await this.cargarEstadisticas();
-      } else {
-        // No existe checklist — mostrar modal de bienvenida
-        this.mostrarModalInicializar = true;
-      }
-    } catch (error: any) {
-      console.error('Error verificando checklist:', error);
-      this.notifService.showError(
-        this.translate.instant('COMMON.ERROR'),
-        this.translate.instant('CHECKLIST.NOTIFICATIONS.ERROR_LOAD')
-      );
-    } finally {
-      this.cargando = false;
+    console.log('2. Respuesta verificación:', verificacion);
+
+    if (verificacion && verificacion.existe) {
+      await this.cargarTareas();
+      await this.cargarEstadisticas();
+    } else {
+      console.log('3. No existe checklist, mostrando modal...');
+      this.mostrarModalInicializar = true;
+      this.cdr.detectChanges();
+      console.log('4. mostrarModalInicializar =', this.mostrarModalInicializar);
     }
+  } catch (error: any) {
+    console.error('ERROR:', error);
+  } finally {
+    console.log('5. finally - cargando = false, mostrarModalInicializar =', this.mostrarModalInicializar);
+    this.cargando = false;
   }
+}
 
   async inicializarChecklist(): Promise<void> {
     this.inicializando = true;

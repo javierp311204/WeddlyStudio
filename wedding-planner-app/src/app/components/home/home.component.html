@@ -265,6 +265,7 @@
 
         <!-- Action Grid -->
         <div class="row row-cols-1 row-cols-lg-2 g-4 action-grid">
+
           <!-- Gestión de Mesas -->
           <div class="col" *ngIf="authService.isAdmin()">
             <div class="card border-0 rounded-4 glass-card borde h-100" 
@@ -359,7 +360,34 @@
               </div>
             </div>
           </div>
+
+          <!-- ✅ Checklist de Boda -->
+          <div class="col" *ngIf="authService.isAdmin()">
+            <div class="card border-0 rounded-4 glass-card borde h-100"
+                 routerLink="/checklist"
+                 style="cursor: pointer; transition: all 0.3s; border-left: 5px solid #8b7e74 !important;">
+              <div class="card-body p-4 d-flex align-items-center gap-3">
+                <div class="icon-box rounded-4 d-flex align-items-center justify-content-center flex-shrink-0"
+                     style="font-size: 1.8rem; background: var(--bg-soft); width: 65px; height: 65px;">
+                  ✅
+                </div>
+                <div class="flex-grow-1">
+                  <h3 class="h5 mb-1">{{ 'HOME.CARD_CHECKLIST_TITLE' | translate }}</h3>
+                  <p class="small text-muted mb-0">{{ 'HOME.CARD_CHECKLIST_DESC' | translate }}</p>
+                </div>
+                <span class="fs-4">→</span>
+              </div>
+            </div>
+          </div>
+
         </div>
+        <!-- /action-grid -->
+
+        <!-- ✅ Checklist Preview -->
+        <div class="mt-5" *ngIf="authService.isAdmin()">
+          <app-checklist-preview />
+        </div>
+
       </main>
     </div>
   </ng-container>
