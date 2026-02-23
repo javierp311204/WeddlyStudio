@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 
@@ -13,20 +13,30 @@ import { NotificationService } from '../../services/notification/notification.se
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   email: string = '';
   pass: string = '';
-  rol: string = 'invitado'; 
+  rol: string = 'invitado';
   codigoBoda: string = '';
   nick: string = '';
   mostrarPassword: boolean = false;
 
   constructor(
-    private http: HttpClient, 
-    private router: Router, 
+    private http: HttpClient,
+    private router: Router,
     private notifService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private route: ActivatedRoute
   ) {}
+
+  ngOnInit(): void {
+    // Leer código de boda de la URL si viene de una invitación
+    const codigo = this.route.snapshot.queryParamMap.get('codigo');
+    if (codigo) {
+      this.codigoBoda = codigo.toUpperCase();
+      this.rol = 'invitado'; // Si viene con código, forzar rol invitado
+    }
+  }
 
   togglePassword() {
     this.mostrarPassword = !this.mostrarPassword;
@@ -40,7 +50,7 @@ export class RegisterComponent {
         this.translate.instant('AUTH.INVALID_EMAIL_TITLE'),
         this.translate.instant('AUTH.INVALID_EMAIL_DESC')
       );
-      return; 
+      return;
     }
 
     if (!this.email || !this.pass || !this.codigoBoda || !this.nick) {
@@ -56,7 +66,7 @@ export class RegisterComponent {
       pass: this.pass,
       rol: this.rol,
       codigoBoda: this.codigoBoda.toUpperCase(),
-      nick: this.nick 
+      nick: this.nick
     };
 
     this.http.post('http://localhost:3000/api/auth/registro', datos).subscribe({
@@ -65,7 +75,6 @@ export class RegisterComponent {
           this.translate.instant('AUTH.ACCOUNT_CREATED_TITLE'),
           this.translate.instant('AUTH.ACCOUNT_CREATED_DESC', { email: this.email })
         );
-        
         setTimeout(() => this.router.navigate(['/login']), 4000);
       },
       error: (err) => {

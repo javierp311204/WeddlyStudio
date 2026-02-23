@@ -4,9 +4,8 @@ const Usuario = require("../models/Usuario");
 const BodaConfig = require("../models/BodaConfig");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const crypto = require('crypto'); 
-const emailService = require('../services/emailService');
-const { verificarLimiteBodas } = require('../middleware/checkLimits');
+const crypto = require("crypto");
+const emailService = require("../services/emailService");
 
 const SECRET_KEY = "tu_clave_secreta_boda_2024";
 
@@ -36,38 +35,38 @@ router.post("/registro", async (req, res) => {
         return res.status(400).json({ error: "Este código de boda ya está en uso. Elige otro." });
       }
 
-      // ✨ NUEVO: Verificar límite de bodas para usuarios existentes
-      if (existeEmail) {
-        const bodasActivas = await BodaConfig.countDocuments({ 
-          adminEmail: email.toLowerCase() 
-        });
-
-        if (bodasActivas >= existeEmail.limites.maxBodas && existeEmail.limites.maxBodas !== Infinity) {
-          return res.status(403).json({ 
-            error: "Límite de bodas alcanzado",
-            mensaje: `Tu plan ${existeEmail.plan} permite máximo ${existeEmail.limites.maxBodas} boda(s).`,
-            limiteAlcanzado: true,
-            planRecomendado: 'unlimited'
-          });
-        }
-      }
-
       const nuevaBoda = new BodaConfig({
         codigoBoda: codigoLimpio,
         adminEmail: email.toLowerCase(),
-        invitados: [] 
+        invitados: [],
       });
       await nuevaBoda.save();
       console.log(`✨ Boda creada exitosamente: ${codigoLimpio}`);
 
     } else if (rol === "invitado") {
-      // ... tu código de invitado existente ...
+      if (!bodaExiste) {
+        return res.status(400).json({ error: "Código de boda no encontrado." });
+      }
+
+      // Vincular con invitado existente si el email coincide
+      const Invitado = require("../models/Invitado");
+      const invitadoExistente = await Invitado.findOne({
+        email: email.toLowerCase(),
+        codigoBoda: codigoLimpio,
+      });
+
+      if (invitadoExistente) {
+        invitadoExistente.registrado = true;
+        invitadoExistente.nick = nick;
+        await invitadoExistente.save();
+        console.log(`✅ Invitado vinculado: ${email}`);
+      }
     }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(pass, salt);
 
-    const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+    const tokenVerificacion = crypto.randomBytes(32).toString("hex");
     const tokenExpiracion = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     const nuevoUsuario = new Usuario({
@@ -78,26 +77,25 @@ router.post("/registro", async (req, res) => {
       nick: nick,
       emailVerificado: false,
       tokenVerificacion: tokenVerificacion,
-      tokenExpiracion: tokenExpiracion
-      // Los límites se asignan automáticamente por el default 'free'
+      tokenExpiracion: tokenExpiracion,
     });
 
     await nuevoUsuario.save();
-    
+
     const emailEnviado = await emailService.enviarEmailVerificacion(
-      email.toLowerCase(), 
+      email.toLowerCase(),
       tokenVerificacion,
       nick
     );
 
     if (!emailEnviado.success) {
-      console.warn('⚠️ Usuario creado pero no se pudo enviar el email de verificación');
+      console.warn("⚠️ Usuario creado pero no se pudo enviar el email de verificación");
     }
-    
+
     console.log(`✅ Registro completado: ${email} (${rol})`);
-    res.json({ 
+    res.json({
       mensaje: "Cuenta creada. Revisa tu email para verificar tu cuenta.",
-      emailEnviado: emailEnviado.success
+      emailEnviado: emailEnviado.success,
     });
 
   } catch (error) {
@@ -106,7 +104,7 @@ router.post("/registro", async (req, res) => {
   }
 });
 
-// LOGIN CON VALIDACIÓN DE EMAIL VERIFICADO
+// LOGIN
 router.post("/login", async (req, res) => {
   try {
     const { email, pass } = req.body;
@@ -115,11 +113,10 @@ router.post("/login", async (req, res) => {
     if (!user)
       return res.status(401).json({ mensaje: "Usuario no encontrado" });
 
-    // ✨ VALIDAR SI EL EMAIL ESTÁ VERIFICADO
     if (!user.emailVerificado) {
-      return res.status(403).json({ 
+      return res.status(403).json({
         mensaje: "Debes verificar tu email antes de iniciar sesión. Revisa tu bandeja de entrada.",
-        emailNoVerificado: true
+        emailNoVerificado: true,
       });
     }
 
@@ -133,15 +130,13 @@ router.post("/login", async (req, res) => {
       { expiresIn: "24h" }
     );
 
-    const tipoUsuario = user.rol === 'admin' ? 'admin' : 'invitado';
-
     res.json({
       success: true,
       token,
       rol: user.rol,
       codigoBoda: user.codigoBoda,
       nick: user.nick,
-      tipoUsuario: tipoUsuario
+      tipoUsuario: user.rol === "admin" ? "admin" : "invitado",
     });
 
   } catch (error) {
@@ -157,12 +152,12 @@ router.get("/verificar-email/:token", async (req, res) => {
 
     const usuario = await Usuario.findOne({
       tokenVerificacion: token,
-      tokenExpiracion: { $gt: Date.now() }
+      tokenExpiracion: { $gt: Date.now() },
     });
 
     if (!usuario) {
-      return res.status(400).json({ 
-        error: "Token inválido o expirado. Por favor, solicita un nuevo correo de verificación." 
+      return res.status(400).json({
+        error: "Token inválido o expirado. Por favor, solicita un nuevo correo de verificación.",
       });
     }
 
@@ -172,9 +167,9 @@ router.get("/verificar-email/:token", async (req, res) => {
     await usuario.save();
 
     console.log(`✅ Email verificado: ${usuario.email}`);
-    res.json({ 
+    res.json({
       success: true,
-      mensaje: "¡Email verificado exitosamente! Ya puedes iniciar sesión." 
+      mensaje: "¡Email verificado exitosamente! Ya puedes iniciar sesión.",
     });
 
   } catch (error) {
@@ -194,32 +189,29 @@ router.post("/solicitar-recuperacion", async (req, res) => {
 
     const usuario = await Usuario.findOne({ email: email.toLowerCase() });
 
-    // Por seguridad, siempre respondemos éxito aunque el email no exista
     if (!usuario) {
-      return res.json({ 
-        mensaje: "Si el email está registrado, recibirás instrucciones para recuperar tu contraseña." 
+      return res.json({
+        mensaje: "Si el email está registrado, recibirás instrucciones para recuperar tu contraseña.",
       });
     }
 
-    // Generar token de recuperación
-    const tokenRecuperacion = crypto.randomBytes(32).toString('hex');
-    const tokenExpiracion = new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hora
+    const tokenRecuperacion = crypto.randomBytes(32).toString("hex");
+    const tokenExpiracion = new Date(Date.now() + 1 * 60 * 60 * 1000);
 
     usuario.tokenVerificacion = tokenRecuperacion;
     usuario.tokenExpiracion = tokenExpiracion;
     await usuario.save();
 
-    // Enviar email de recuperación
     const emailEnviado = await emailService.enviarEmailRecuperacion(
-      email.toLowerCase(), 
+      email.toLowerCase(),
       tokenRecuperacion,
       usuario.nick
     );
 
     console.log(`✅ Email de recuperación enviado a ${email}`);
-    res.json({ 
+    res.json({
       mensaje: "Si el email está registrado, recibirás instrucciones para recuperar tu contraseña.",
-      emailEnviado: emailEnviado.success
+      emailEnviado: emailEnviado.success,
     });
 
   } catch (error) {
@@ -228,7 +220,7 @@ router.post("/solicitar-recuperacion", async (req, res) => {
   }
 });
 
-// RESETEAR CONTRASEÑA CON TOKEN
+// RESETEAR CONTRASEÑA
 router.post("/resetear-password", async (req, res) => {
   try {
     const { token, nuevaPassword } = req.body;
@@ -243,16 +235,15 @@ router.post("/resetear-password", async (req, res) => {
 
     const usuario = await Usuario.findOne({
       tokenVerificacion: token,
-      tokenExpiracion: { $gt: Date.now() }
+      tokenExpiracion: { $gt: Date.now() },
     });
 
     if (!usuario) {
-      return res.status(400).json({ 
-        error: "Token inválido o expirado. Por favor, solicita un nuevo correo de recuperación." 
+      return res.status(400).json({
+        error: "Token inválido o expirado. Por favor, solicita un nuevo correo de recuperación.",
       });
     }
 
-    // Hashear nueva contraseña
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(nuevaPassword, salt);
 
@@ -262,9 +253,9 @@ router.post("/resetear-password", async (req, res) => {
     await usuario.save();
 
     console.log(`✅ Contraseña reseteada para: ${usuario.email}`);
-    res.json({ 
+    res.json({
       success: true,
-      mensaje: "Contraseña actualizada exitosamente. Ya puedes iniciar sesión." 
+      mensaje: "Contraseña actualizada exitosamente. Ya puedes iniciar sesión.",
     });
 
   } catch (error) {
