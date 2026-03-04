@@ -1,0 +1,121 @@
+# ─────────────────────────────────────────────
+# WEDDLY STUDIO — Docker Compose
+# Servicios: API + PostgreSQL + Redis + PgAdmin
+# ─────────────────────────────────────────────
+
+name: weddly
+
+services:
+
+  # ── API Node.js ───────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development          # Cambia a "runner" para producción
+    container_name: weddly_api
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-weddly}:${POSTGRES_PASSWORD:-weddly_secret}@postgres:5432/${POSTGRES_DB:-weddly_db}
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - .:/app                     # Hot reload en desarrollo
+      - /app/node_modules          # Excluir node_modules del bind mount
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - weddly_network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ── PostgreSQL ────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: weddly_postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-weddly}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-weddly_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-weddly_db}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - weddly_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-weddly} -d ${POSTGRES_DB:-weddly_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ── Redis ─────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: weddly_redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_secret}
+    volumes:
+      - redis_data:/data
+    networks:
+      - weddly_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD:-redis_secret}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── PgAdmin (solo desarrollo) ─────────────
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: weddly_pgadmin
+    restart: unless-stopped
+    profiles:
+      - dev                        # Solo con: docker compose --profile dev up
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@weddly.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./docker/pgadmin/servers.json:/pgadmin4/servers.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - weddly_network
+
+# ── Volúmenes ─────────────────────────────────
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  uploads_data:
+    driver: local
+
+# ── Red ───────────────────────────────────────
+networks:
+  weddly_network:
+    driver: bridge

@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Weddly Local",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "weddly_db",
+      "Username": "weddly",
+      "SSLMode": "prefer",
+      "PassFile": "/pgpass"
+    }
+  }
+}

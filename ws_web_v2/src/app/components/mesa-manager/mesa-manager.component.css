@@ -1,0 +1,137 @@
+/* ========================================
+   VARIABLES CSS
+   ======================================== */
+:host {
+  --gold: #d4af37;
+  --gold-light: #f4ece1;
+  --charcoal: #333333;
+  --cream: #fdfaf7;
+  --shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* ========================================
+   ESTILOS GENERALES
+   ======================================== */
+.seating-wrapper {
+  font-family: 'Playfair Display', serif;
+}
+
+/* ========================================
+   BOTÓN VOLVER - Hover effect
+   ======================================== */
+.btn-panel-back:hover {
+  background: var(--charcoal) !important;
+  color: white !important;
+  transform: translateX(-5px);
+  transition: all 0.3s ease;
+}
+
+/* ========================================
+   STATS CARDS - Efecto especial presidencial
+   ======================================== */
+.special-active {
+  border: 2px solid var(--gold) !important;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2) !important;
+}
+
+/* ========================================
+   BUSCADOR - Resultados hover
+   ======================================== */
+.search-results li:hover {
+  background: #f8f4e9;
+  color: var(--gold);
+  transition: all 0.2s;
+}
+
+/* Scrollbar para resultados */
+.search-results::-webkit-scrollbar {
+  width: 5px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+  background: var(--gold-light);
+  border-radius: 10px;
+}
+
+/* ========================================
+   BOTONES - Hover effects
+   ======================================== */
+.btn-gold:hover {
+  background: #b8860b !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+  transition: all 0.3s;
+}
+
+.btn-dark:hover:not(:disabled) {
+  background: #1a1a1a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+}
+
+.btn-dark:disabled {
+  background: #ccc !important;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   TARJETAS DE MESA - Hover effect
+   ======================================== */
+.wedding-table-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wedding-table-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.1) !important;
+}
+
+/* ========================================
+   BOTÓN ELIMINAR MESA - Hover
+   ======================================== */
+.btn-remove-table:hover {
+  background: rgba(255, 77, 77, 0.9) !important;
+  transform: scale(1.1);
+  transition: all 0.2s;
+}
+
+/* ========================================
+   MINI BOTÓN ELIMINAR INVITADO - Hover
+   ======================================== */
+.mini-remove:hover {
+  opacity: 1 !important;
+  transform: scale(1.2);
+  transition: all 0.2s;
+}
+
+/* ========================================
+   RESPONSIVE - Ajustes móviles
+   ======================================== */
+@media (max-width: 768px) {
+  .seating-content {
+    padding: 0 1rem !important;
+  }
+  
+  .seating-header h1 {
+    font-size: 2rem !important;
+  }
+}
+
+/* ========================================
+   ANIMACIONES SUAVES
+   ======================================== */
+.control-card, .wedding-table-card {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

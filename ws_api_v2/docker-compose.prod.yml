@@ -1,0 +1,43 @@
+# ─────────────────────────────────────────────
+# WEDDLY — Docker Compose PRODUCCIÓN
+# Uso: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# ─────────────────────────────────────────────
+
+name: weddly
+
+services:
+
+  api:
+    build:
+      target: runner              # Usa el stage de producción
+    restart: always
+    environment:
+      NODE_ENV: production
+    volumes:
+      - uploads_data:/app/uploads # Solo el volumen, sin bind mount de código
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+  postgres:
+    restart: always
+    ports: []                     # No exponer puerto en producción
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+  redis:
+    restart: always
+    ports: []                     # No exponer puerto en producción
+
+  # PgAdmin no se incluye en producción
+  pgadmin:
+    profiles:
+      - disabled

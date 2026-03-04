@@ -1,0 +1,41 @@
+<div class="success-wrapper min-vh-100 d-flex align-items-center justify-content-center p-4">
+  <div class="success-card bg-white rounded-4 shadow-sm text-center">
+    
+    <!-- Animación de éxito -->
+    <div class="success-animation mb-4">
+      <div class="checkmark-circle-large">
+        <div class="checkmark-large"></div>
+      </div>
+    </div>
+
+    <h1 class="display-5 fw-bold text-success mb-3">¡Pago Exitoso!</h1>
+    
+    <p class="lead text-muted mb-4">
+      Tu pago se ha procesado correctamente.<br>
+      Ya tienes acceso a todas las funciones premium.
+    </p>
+
+    <div class="alert alert-success text-start mb-4" role="alert">
+      <strong>✓ ¿Qué sigue?</strong>
+      <ul class="mb-0 mt-2 ps-3">
+        <li>Tu plan ya está activo</li>
+        <li>Puedes comenzar a usar todas las funciones</li>
+        <li>Recibirás un email de confirmación</li>
+      </ul>
+    </div>
+
+    <p class="small text-muted mb-4">
+      Serás redirigido al inicio en unos segundos...
+    </p>
+
+    <button 
+      class="btn btn-success w-100 rounded-3 py-3 fw-semibold"
+      (click)="irAlHome()">
+      Ir al Inicio Ahora
+    </button>
+
+    <p class="small text-muted mt-3 mb-0">
+      ID de transacción: <code>{{ sessionId }}</code>
+    </p>
+  </div>
+</div>

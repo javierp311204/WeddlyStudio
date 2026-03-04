@@ -1,0 +1,84 @@
+<!-- register.component.html — migrado a API v2 -->
+<!-- Cambios: nick→first_name+last_name | rol/codigoBoda eliminados del form -->
+
+<div class="auth-wrapper min-vh-100 d-flex align-items-center justify-content-center p-4">
+  <div class="auth-card bg-white rounded-4 shadow-sm position-relative">
+    <button class="btn btn-link btn-back position-absolute text-decoration-none d-flex align-items-center gap-2" routerLink="/home">
+      <span class="icon">←</span> {{ 'COMMON.BACK' | translate }}
+    </button>
+    
+    <div class="text-center mb-4 pt-3">
+      <h2 class="display-5 fw-normal mb-2">{{ 'AUTH.REGISTER_TITLE' | translate }}</h2>
+      <p class="text-muted small mb-0">{{ 'AUTH.REGISTER_SUBTITLE' | translate }}</p>
+    </div>
+
+    <form>
+      <!-- v2: first_name + last_name en lugar de nick -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">
+            {{ 'AUTH.FIRST_NAME' | translate }}
+          </label>
+          <input type="text" class="form-control rounded-3"
+                 [(ngModel)]="first_name" name="first_name"
+                 placeholder="Ej: María" (keyup.enter)="registrar()" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">
+            {{ 'AUTH.LAST_NAME' | translate }}
+          </label>
+          <input type="text" class="form-control rounded-3"
+                 [(ngModel)]="last_name" name="last_name"
+                 placeholder="Ej: García" (keyup.enter)="registrar()" />
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">
+            {{ 'AUTH.EMAIL' | translate }}
+          </label>
+          <input type="email" class="form-control rounded-3"
+                 [(ngModel)]="email" name="email"
+                 placeholder="tu@email.com" (keyup.enter)="registrar()" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">
+            {{ 'AUTH.PASSWORD' | translate }}
+          </label>
+          <div class="position-relative">
+            <input [type]="mostrarPassword ? 'text' : 'password'"
+                   class="form-control rounded-3 pe-5"
+                   [(ngModel)]="pass" name="pass"
+                   [placeholder]="'AUTH.PASSWORD_PLACEHOLDER' | translate"
+                   (keyup.enter)="registrar()" />
+            <button type="button"
+                    class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-decoration-none p-0 me-2"
+                    (click)="togglePassword()" style="z-index: 10;">
+              <span class="eye-icon">{{ mostrarPassword ? '👁️' : '👁️‍🗨️' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- v2: rol y codigoBoda ya NO se envían al register.
+           Si venía de una invitación, se muestra informativo. -->
+      <div class="mb-3" *ngIf="codigoBodaReferencia">
+        <div class="alert alert-info small py-2 px-3 mb-0">
+          📎 Llegarás a la boda con código <strong>{{ codigoBodaReferencia }}</strong>.
+          Tras registrarte, el organizador te añadirá a la boda.
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-auth w-100 rounded-3 py-2 fw-semibold mt-2"
+              (click)="registrar()">
+        {{ 'AUTH.REGISTER_TITLE' | translate }}
+      </button>
+    </form>
+
+    <div class="auth-footer text-center mt-3 small text-muted">
+      {{ 'AUTH.ALREADY_HAVE_ACCOUNT' | translate }}
+      <a routerLink="/login" class="text-decoration-none fw-semibold">{{ 'AUTH.LOGIN' | translate }}</a>
+    </div>
+  </div>
+</div>

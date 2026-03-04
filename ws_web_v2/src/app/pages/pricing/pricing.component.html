@@ -1,0 +1,113 @@
+<div class="pricing-wrapper min-vh-100">
+  <!-- Header -->
+  <div class="pricing-header text-center py-5">
+    <button class="btn btn-link position-absolute top-0 start-0 m-4 text-decoration-none"
+            (click)="irAlHome()">
+      <span class="fs-5">←</span> Volver al inicio
+    </button>
+    <h1 class="display-4 fw-bold mb-3">Elige tu plan perfecto</h1>
+    <p class="lead text-muted mb-0">Selecciona el plan que mejor se adapte a tus necesidades</p>
+  </div>
+
+  <!-- Skeleton Loading -->
+  <div *ngIf="cargando" class="container">
+    <div class="row justify-content-center g-4">
+      <div class="col-md-4" *ngFor="let i of [1,2,3]">
+        <div class="card skeleton-card">
+          <div class="skeleton-header"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Planes -->
+  <div *ngIf="!cargando" class="container pb-5">
+    <div class="row justify-content-center g-4">
+
+      <div class="col-lg-4 col-md-6" *ngFor="let plan of planes">
+        <div class="pricing-card h-100"
+             [class.featured]="plan.id === 'subscription'"
+             [class.current-plan]="esPlanActual(plan.id)">
+
+          <!-- Badge -->
+          <div class="plan-badge" *ngIf="getPlanBadge(plan.id)">
+            {{ getPlanBadge(plan.id) }}
+          </div>
+
+          <!-- Header -->
+          <div class="card-header text-center border-0 bg-transparent pt-4 pb-3">
+            <div class="plan-icon mb-3">
+              <span *ngIf="plan.id === 'free'">🎁</span>
+              <span *ngIf="plan.id === 'one_time'">💎</span>
+              <!-- v2: 'subscription' reemplaza a 'unlimited' -->
+              <span *ngIf="plan.id === 'subscription'">👑</span>
+            </div>
+            <!-- v2: plan.name (antes plan.nombre) -->
+            <h3 class="plan-name mb-2">{{ plan.name }}</h3>
+            <div class="plan-price mb-2">
+              <!-- v2: plan.price (antes plan.precio) -->
+              <span class="currency" *ngIf="+plan.price > 0">$</span>
+              <span class="amount">{{ plan.price }}</span>
+              <span class="period" *ngIf="plan.id === 'subscription'">/mes</span>
+              <span class="period" *ngIf="plan.id === 'one_time'">único</span>
+            </div>
+            <p class="text-muted small mb-0" *ngIf="plan.id === 'free'">Para siempre gratis</p>
+            <p class="text-muted small mb-0" *ngIf="plan.id === 'one_time'">Pago único, sin mensualidades</p>
+            <p class="text-muted small mb-0" *ngIf="plan.id === 'subscription'">Cancela cuando quieras</p>
+          </div>
+
+          <!-- Features -->
+          <div class="card-body px-4 pb-4">
+            <ul class="features-list list-unstyled mb-4">
+              <!-- v2: plan.features (antes plan.caracteristicas) -->
+              <li *ngFor="let feature of (plan.features ?? plan.caracteristicas ?? [])"
+                  class="feature-item">
+                <span class="check-icon">✓</span>
+                <span>{{ feature }}</span>
+              </li>
+            </ul>
+
+            <!-- CTA Button -->
+            <button class="btn btn-plan w-100 py-3 fw-semibold"
+                    [class.btn-current]="esPlanActual(plan.id)"
+                    [class.btn-featured]="plan.id === 'subscription' && !esPlanActual(plan.id)"
+                    [disabled]="procesandoPago || esPlanActual(plan.id)"
+                    (click)="seleccionarPlan(plan.id)">
+
+              <span *ngIf="procesandoPago && !esPlanActual(plan.id)">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Procesando...
+              </span>
+              <span *ngIf="!procesandoPago && esPlanActual(plan.id)">✓ Plan Actual</span>
+              <span *ngIf="!procesandoPago && !esPlanActual(plan.id) && plan.id === 'free'">
+                Empezar Gratis
+              </span>
+              <span *ngIf="!procesandoPago && !esPlanActual(plan.id) && plan.id !== 'free'">
+                Seleccionar Plan
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Garantías -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <div class="guarantee-section text-center p-4 rounded-4">
+          <h4 class="mb-3">🔒 Pago 100% Seguro</h4>
+          <p class="text-muted mb-0">
+            Procesamos pagos de forma segura con Stripe.
+            No almacenamos información de tarjetas de crédito.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

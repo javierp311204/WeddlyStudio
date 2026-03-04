@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&display=swap');
+
+/* ==================== ESTILOS PERSONALIZADOS PARA PLANTILLAS ==================== */
+
+/* Plantilla Clásica */
+.clasica {
+  font-family: 'Cormorant Garamond', serif;
+  border: 3px solid currentColor !important;
+}
+
+.clasica .wedding-names {
+  font-family: 'Great Vibes', cursive;
+  font-size: 4rem;
+  font-weight: 400;
+}
+
+.clasica .ampersand {
+  font-size: 3rem;
+}
+
+.clasica .tagline {
+  font-size: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.clasica .fecha-texto {
+  font-size: 1.1rem;
+}
+
+.clasica .mensaje-personalizado {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Plantilla Moderna */
+.moderna {
+  font-family: 'Montserrat', sans-serif;
+  border-left: 20px solid currentColor !important;
+  text-transform: uppercase;
+}
+
+.moderna .tagline {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.moderna .wedding-names {
+  font-weight: 800;
+  font-size: 3rem;
+  letter-spacing: 2px;
+}
+
+.moderna .ampersand {
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+.moderna .fecha-texto {
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-size: 0.95rem;
+}
+
+.moderna .mensaje-personalizado {
+  text-transform: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* ==================== UTILIDADES ==================== */
+
+/* Cursor pointer para elementos clicables */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Transiciones suaves */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* Hover para cards de plantilla */
+.border:hover {
+  transform: translateY(-4px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover específico para cards de invitados en el modal */
+.hover-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hover-card:hover {
+  border-color: #d4a373 !important;
+  background: rgba(212, 163, 115, 0.05) !important;
+  transform: translateX(5px);
+}
+
+/* ==================== SCROLLBAR PERSONALIZADO ==================== */
+
+/* Scrollbar para panel de controles */
+.col-lg-4 > div::-webkit-scrollbar {
+  width: 6px;
+}
+
+.col-lg-4 > div::-webkit-scrollbar-track {
+  background: #faf8f6;
+  border-radius: 10px;
+}
+
+.col-lg-4 > div::-webkit-scrollbar-thumb {
+  background: #d4a373;
+  border-radius: 10px;
+}
+
+.col-lg-4 > div::-webkit-scrollbar-thumb:hover {
+  background: #b8935f;
+}
+
+/* Scrollbar para el modal */
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar-thumb {
+  background: #d4a373;
+  border-radius: 10px;
+}
+
+/* ==================== ANIMACIONES ==================== */
+
+/* Animación para botones deshabilitados */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.btn:disabled {
+  animation: pulse 1.5s ease-in-out infinite;
+  cursor: not-allowed;
+}
+
+/* Fade in para el modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal.show .modal-dialog {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+/* Ajustes para tablets */
+@media (max-width: 992px) {
+  .clasica .wedding-names {
+    font-size: 3rem;
+  }
+  
+  .moderna .wedding-names {
+    font-size: 2.5rem;
+  }
+  
+  aside .sticky-top {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+  .clasica .wedding-names {
+    font-size: 2.5rem;
+  }
+  
+  .moderna .wedding-names {
+    font-size: 2rem;
+  }
+  
+  .invitacionCard {
+    width: 350px !important;
+    padding: 40px 30px !important;
+  }
+  
+  header h1 {
+    font-size: 1.25rem !important;
+  }
+}
+
+/* ==================== MEJORAS VISUALES ==================== */
+
+/* Sombra suave para las cards */
+.shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Efectos de hover para botones */
+.btn-primary:hover,
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
+}
+
+/* Inputs con mejor UX */
+.form-control:focus,
+.form-select:focus {
+  border-color: #d4a373;
+  box-shadow: 0 0 0 0.2rem rgba(212, 163, 115, 0.25);
+}
+
+/* Badge de confirmación */
+.badge-confirmacion {
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.badge-confirmacion:hover {
+  transform: scale(1.05);
+}
+
+/* ==================== ACCESIBILIDAD ==================== */
+
+/* Mejor contraste para focus */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #d4a373;
+  outline-offset: 2px;
+}
+
+/* Skip navigation link para screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ==================== PRINT STYLES ==================== */
+
+@media print {
+  header,
+  aside,
+  .btn,
+  .modal {
+    display: none !important;
+  }
+  
+  .invitacionCard {
+    box-shadow: none !important;
+    border: 2px solid #000 !important;
+  }
+}

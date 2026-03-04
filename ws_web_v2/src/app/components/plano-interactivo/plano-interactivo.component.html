@@ -1,0 +1,218 @@
+<div class="plano-wrapper min-vh-100 p-3">
+  <div class="container-fluid" style="max-width: 1400px;">
+
+    <!-- Navegación superior -->
+    <nav class="d-flex justify-content-between align-items-center mb-3">
+      <button class="btn btn-link btn-back text-decoration-none d-flex align-items-center gap-2 p-0" (click)="irAlMenu()">
+        <span class="icon">🏠</span> Volver al Panel
+      </button>
+      <div class="d-flex gap-2">
+        <button class="btn btn-action rounded-3 px-3 py-2" (click)="toggleModoEdicion()">
+          {{ modoEdicion ? "🔒 Bloquear" : "✏️ Editar" }}
+        </button>
+        <button class="btn btn-action rounded-3 px-3 py-2" (click)="agregarMesa()">
+          ➕ Añadir Mesa
+        </button>
+      </div>
+    </nav>
+
+    <!-- Header compacto -->
+    <header class="text-center mb-3">
+      <h1 class="h3 mb-1">Plano Interactivo del Salón</h1>
+      <p class="small text-muted mb-0">Arrastra las mesas para organizarlas. Click en una mesa para ver detalles.</p>
+    </header>
+
+    <!-- Canvas -->
+    <div class="canvas-container rounded-4 p-2 mx-auto" style="width: 100%; height: 80vh; overflow: hidden;">
+      <canvas #canvasElement id="canvas-plano"></canvas>
+    </div>
+
+    <!-- PANEL LATERAL -->
+    <aside class="panel-lateral rounded-4 shadow position-fixed" *ngIf="mesaSeleccionada">
+      <div class="panel-header rounded-top-4 d-flex justify-content-between align-items-center p-3 position-sticky top-0">
+        <!-- v2: mesaSeleccionada.name (antes mesaSeleccionada.nombre) -->
+        <h3 class="h5 mb-0">{{ mesaSeleccionada.name }}</h3>
+        <button class="btn-close-panel d-flex align-items-center justify-content-center"
+                (click)="mesaSeleccionada = null">×</button>
+      </div>
+
+      <!-- Info básica -->
+      <div class="panel-info p-3 border-bottom">
+        <div class="d-flex justify-content-between align-items-center py-1">
+          <span class="small text-muted">Capacidad:</span>
+          <!-- v2: mesaSeleccionada.max_capacity (antes mesaSeleccionada.capacidad) -->
+          <span class="fw-semibold small">{{ mesaSeleccionada.max_capacity }} personas</span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center py-1">
+          <span class="small text-muted">Ocupación:</span>
+          <!-- v2: contarAsientosOcupados cuenta los invitados con table_id === mesa.id -->
+          <span class="fw-semibold small">{{ contarAsientosOcupados(mesaSeleccionada) }} / {{ mesaSeleccionada.max_capacity }}</span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center py-1">
+          <span class="small text-muted">Tipo:</span>
+          <!-- v2: mesaSeleccionada.shape: 'round'|'rectangular' (antes mesaSeleccionada.tipo) -->
+          <span class="badge-tipo small rounded-pill px-2">
+            {{ mesaSeleccionada.shape === 'rectangular' ? '⬛ Rectangular' : '⭕ Redonda' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Agregar invitado -->
+      <div class="panel-section p-3 border-bottom">
+        <h4 class="h6 mb-2 d-flex align-items-center gap-2">
+          <span class="section-icon">➕</span> Agregar Invitado
+        </h4>
+
+        <div class="search-container position-relative mb-2">
+          <input type="text"
+                 [(ngModel)]="busquedaInvitado"
+                 (input)="filtrarInvitados()"
+                 placeholder="Buscar invitado sin mesa..."
+                 class="form-control form-control-sm rounded-3" />
+
+          <ul class="search-results position-absolute w-100 list-unstyled mb-0"
+              *ngIf="invitadosFiltrados.length > 0">
+            <!-- v2: getNombreCompleto(inv) + inv.group (antes inv.nombre + inv.tipo) -->
+            <li *ngFor="let inv of invitadosFiltrados"
+                (click)="seleccionarInvitado(inv)"
+                class="d-flex justify-content-between align-items-center p-2">
+              <span class="inv-name small">{{ getNombreCompleto(inv) }}</span>
+              <span class="inv-tipo badge bg-secondary">{{ inv.group }}</span>
+            </li>
+          </ul>
+
+          <div class="search-empty text-center py-2"
+               *ngIf="busquedaInvitado && invitadosFiltrados.length === 0 && !invitadoSeleccionado">
+            <small class="text-muted fst-italic">No hay invitados disponibles</small>
+          </div>
+        </div>
+
+        <div class="selected-invitado d-flex align-items-center gap-2 p-2 rounded-3 mb-2"
+             *ngIf="invitadoSeleccionado">
+          <span class="check-icon">✓</span>
+          <!-- v2: getNombreCompleto() -->
+          <span class="small flex-grow-1">{{ getNombreCompleto(invitadoSeleccionado) }}</span>
+          <button class="btn-clear d-flex align-items-center justify-content-center"
+                  (click)="limpiarBusqueda()">×</button>
+        </div>
+
+        <button class="btn btn-primary w-100 rounded-3 py-2 small d-flex align-items-center justify-content-center gap-2"
+                (click)="agregarInvitadoAMesa()"
+                [disabled]="!invitadoSeleccionado">
+          <span class="btn-icon">✓</span> Confirmar Asignación
+        </button>
+      </div>
+
+      <!-- Lista de invitados en la mesa -->
+      <div class="panel-section p-3 border-bottom">
+        <div class="section-header-toggle d-flex justify-content-between align-items-center rounded-3 p-2"
+             (click)="toggleListaInvitados()">
+          <h4 class="h6 mb-0 d-flex align-items-center gap-2">
+            <span class="section-icon">👥</span> Invitados en esta mesa
+          </h4>
+          <span class="toggle-icon" [class.rotated]="listaInvitadosAbierta">▼</span>
+        </div>
+
+        <div class="desplegable-content" [class.abierto]="listaInvitadosAbierta">
+          <!-- v2: listaInvitados = invitados filtrados por table_id (no hay asientos) -->
+          <ul class="list-unstyled mb-0 mt-2"
+              *ngIf="getInvitadosDeMesa(mesaSeleccionada).length > 0">
+            <li *ngFor="let inv of getInvitadosDeMesa(mesaSeleccionada)" class="mb-2">
+              <div class="invitado-ocupado d-flex justify-content-between align-items-center p-2 rounded-3">
+                <div class="d-flex align-items-center gap-2 flex-grow-1">
+                  <!-- v2: getColorPorGrupo(inv.group) en lugar de getColorPorTipo(inv.tipo) -->
+                  <span class="invitado-color rounded-circle"
+                        [style.background-color]="getColorPorGrupo(inv.group)"></span>
+                  <div class="d-flex flex-column">
+                    <span class="invitado-nombre small">{{ getNombreCompleto(inv) }}</span>
+                    <span class="invitado-tipo-small">{{ inv.group }}</span>
+                  </div>
+                </div>
+                <!-- v2: inv.id en lugar de obtenerIdInvitado(asiento) -->
+                <button class="btn-remove-inv d-flex align-items-center justify-content-center"
+                        (click)="quitarInvitadoDeMesa(inv.id)">×</button>
+              </div>
+            </li>
+          </ul>
+
+          <div class="text-center py-3"
+               *ngIf="getInvitadosDeMesa(mesaSeleccionada).length === 0">
+            <span class="empty-icon d-block mb-2">🪑</span>
+            <p class="small text-muted mb-0">No hay invitados asignados</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="panel-section p-3">
+        <h4 class="h6 mb-2 d-flex align-items-center gap-2">
+          <span class="section-icon">⚙️</span> Acciones
+        </h4>
+        <button class="btn btn-danger w-100 rounded-3 py-2 small d-flex align-items-center justify-content-center gap-2"
+                (click)="eliminarMesa()">
+          <span class="btn-icon">🗑️</span> Eliminar Mesa
+        </button>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- MODAL invitado — fuera del wrapper -->
+<div class="modal-overlay d-flex align-items-center justify-content-center"
+     *ngIf="invitadoModalInfo"
+     (mousedown)="cerrarModalInvitado()">
+  <div class="modal-invitado rounded-4 shadow-lg position-relative"
+       (mousedown)="$event.stopPropagation()">
+    <button class="btn-close-modal position-absolute d-flex align-items-center justify-content-center"
+            (click)="cerrarModalForzado()">×</button>
+
+    <div class="modal-header-inv text-center rounded-top-4 p-4">
+      <div class="modal-avatar d-flex align-items-center justify-content-center mx-auto mb-3"
+           [style.background-color]="getColorPorGrupo(invitadoModalInfo.group)">
+        <!-- v2: obtenerIniciales recibe first_name+last_name -->
+        {{ obtenerIniciales(getNombreCompleto(invitadoModalInfo)) }}
+      </div>
+      <h3 class="h4 mb-0">{{ getNombreCompleto(invitadoModalInfo) }}</h3>
+    </div>
+
+    <div class="modal-body-inv p-4">
+      <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+        <span class="modal-label small fw-semibold text-muted">👥 Categoría:</span>
+        <!-- v2: invitadoModalInfo.group (antes invitadoModalInfo.tipo) -->
+        <span class="modal-badge small rounded-pill px-3 py-1 text-white"
+              [style.background-color]="getColorPorGrupo(invitadoModalInfo.group)">
+          {{ invitadoModalInfo.group }}
+        </span>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+        <span class="modal-label small fw-semibold text-muted">✉️ Confirmación:</span>
+        <!-- v2: invitadoModalInfo.rsvp_status (antes invitadoModalInfo.confirmado boolean) -->
+        <span class="modal-value small"
+              [class.confirmado]="invitadoModalInfo.rsvp_status === 'confirmed'">
+          {{ invitadoModalInfo.rsvp_status === 'confirmed' ? '✅ Confirmado' :
+             invitadoModalInfo.rsvp_status === 'declined'  ? '❌ Declinado'  : '⏳ Pendiente' }}
+        </span>
+      </div>
+
+      <!-- v2: invitadoModalInfo.allergies (antes invitadoModalInfo.alergias) -->
+      <div class="d-flex justify-content-between align-items-center py-2 border-bottom"
+           *ngIf="invitadoModalInfo.allergies">
+        <span class="modal-label small fw-semibold text-muted">⚠️ Alergias:</span>
+        <span class="modal-value small alergias">{{ invitadoModalInfo.allergies }}</span>
+      </div>
+      <div class="d-flex justify-content-between align-items-center py-2 border-bottom"
+           *ngIf="!invitadoModalInfo.allergies">
+        <span class="modal-label small fw-semibold text-muted">✓ Alergias:</span>
+        <span class="modal-value small">Sin alergias reportadas</span>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center py-2"
+           *ngIf="invitadoModalInfo.email">
+        <span class="modal-label small fw-semibold text-muted">📧 Email:</span>
+        <span class="modal-value small">{{ invitadoModalInfo.email }}</span>
+      </div>
+    </div>
+  </div>
+</div>

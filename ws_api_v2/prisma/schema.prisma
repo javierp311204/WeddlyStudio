@@ -1,0 +1,499 @@
+// ============================================================
+// WEDDLY STUDIO — Prisma Schema
+// PostgreSQL · Multi-tenant · Soft Delete Global
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum GlobalRole {
+  user
+  admin
+  superadmin
+}
+
+enum WeddingRole {
+  bride
+  groom
+  planner
+  guest
+}
+
+enum WeddingStatus {
+  active
+  readonly
+  archived
+  cancelled
+}
+
+enum PlanType {
+  free
+  one_time
+  subscription
+}
+
+enum RsvpStatus {
+  pending
+  confirmed
+  declined
+}
+
+enum PhotoStatus {
+  pending
+  approved
+  rejected
+  deleted
+}
+
+enum TaskStatus {
+  pending
+  in_progress
+  completed
+  cancelled
+}
+
+enum EventType {
+  task
+  custom
+}
+
+enum InvitationTemplate {
+  elegant
+  modern
+  rustic
+  minimalist
+}
+
+enum SendStatus {
+  sent
+  failed
+}
+
+enum SubscriptionStatus {
+  active
+  cancelled
+  past_due
+  trialing
+  inactive
+}
+
+enum PaymentStatus {
+  pending
+  completed
+  failed
+  refunded
+}
+
+enum GuestShape {
+  round
+  rectangular
+}
+
+// ─────────────────────────────────────────────
+// 4.1 USERS
+// ─────────────────────────────────────────────
+
+model User {
+  id                 String    @id @default(uuid()) @db.Uuid
+  first_name         String    @db.VarChar(100)
+  last_name          String    @db.VarChar(100)
+  nickname           String?   @db.VarChar(50)
+  email              String    @unique @db.VarChar(255)
+  password_hash      String?   @db.VarChar(255)        // null si login con Google
+  phone              String?   @db.VarChar(30)
+  gender             String?   @db.VarChar(20)
+  language           String    @default("es") @db.VarChar(10)
+  two_factor_enabled Boolean   @default(false)
+  two_factor_secret  String?   @db.VarChar(255)
+  role_global        GlobalRole @default(user)
+  google_id          String?   @unique @db.VarChar(255)
+  avatar_url         String?   @db.VarChar(500)
+  created_at         DateTime  @default(now())
+  updated_at         DateTime  @updatedAt
+  deleted_at         DateTime? // soft delete
+  email_verified               Boolean   @default(false)
+  email_verification_token     String?   @unique @db.VarChar(255)
+  email_verification_expires   DateTime?
+
+  // Relaciones
+  wedding_roles      UserWeddingRole[]
+  weddings_created   Wedding[]          @relation("WeddingCreatedBy")
+  photos_uploaded    Photo[]            @relation("PhotoUploadedBy")
+  photos_approved    Photo[]            @relation("PhotoApprovedBy")
+  tasks_assigned     Task[]             @relation("TaskAssignedTo")
+  invitations_sent   InvitationSend[]   @relation("InvitationSentBy")
+  subscriptions      Subscription[]
+  payments           Payment[]
+  activity_logs      ActivityLog[]
+
+  @@index([email])
+  @@index([deleted_at])
+  @@index([email_verification_token])
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────
+// 4.2 WEDDINGS
+// ─────────────────────────────────────────────
+
+model Wedding {
+  id               String        @id @default(uuid()) @db.Uuid
+  name             String        @db.VarChar(200)
+  wedding_date     DateTime
+  location_name    String?       @db.VarChar(200)
+  address          String?       @db.VarChar(500)
+  dress_code       String?       @db.VarChar(200)
+  menu_description String?       @db.Text
+  rsvp_deadline    DateTime?
+  plan_type        PlanType      @default(free)
+  status           WeddingStatus @default(active)
+  created_by       String        @db.Uuid
+  archived_at      DateTime?
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+  deleted_at       DateTime?     // soft delete
+
+  // Relaciones
+  creator          User          @relation("WeddingCreatedBy", fields: [created_by], references: [id])
+  user_roles       UserWeddingRole[]
+  guests           Guest[]
+  tables           Table[]
+  photos           Photo[]
+  tasks            Task[]
+  events           Event[]
+  invitations      Invitation[]
+  payments         Payment[]
+  activity_logs    ActivityLog[]
+
+  @@index([created_by])
+  @@index([status])
+  @@index([wedding_date])
+  @@index([deleted_at])
+  @@map("weddings")
+}
+
+// ─────────────────────────────────────────────
+// 4.3 USER_WEDDING_ROLES (Tabla pivote M:N)
+// ─────────────────────────────────────────────
+
+model UserWeddingRole {
+  id          String      @id @default(uuid()) @db.Uuid
+  user_id     String      @db.Uuid
+  wedding_id  String      @db.Uuid
+  role        WeddingRole
+  assigned_at DateTime    @default(now())
+
+  // Relaciones
+  user        User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  wedding     Wedding     @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, wedding_id, role])  // Un usuario no puede tener el mismo rol dos veces en la misma boda
+  @@index([wedding_id])
+  @@index([user_id])
+  @@map("user_wedding_roles")
+}
+
+// ─────────────────────────────────────────────
+// 4.4 GUESTS
+// ─────────────────────────────────────────────
+
+model Guest {
+  id               String     @id @default(uuid()) @db.Uuid
+  wedding_id       String     @db.Uuid
+  parent_guest_id  String?    @db.Uuid   // null = invitado principal, UUID = acompañante (+1)
+  first_name       String     @db.VarChar(100)
+  last_name        String?    @db.VarChar(100)
+  email            String?    @db.VarChar(255)
+  phone            String?    @db.VarChar(30)
+  rsvp_status      RsvpStatus @default(pending)
+  allergies        String?    @db.Text
+  dietary_notes    String?    @db.Text
+  invitation_code  String?    @unique @db.VarChar(50)
+  table_id         String?    @db.Uuid
+  seat_number      Int?
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
+  deleted_at       DateTime?  // soft delete
+
+  // Relaciones
+  wedding          Wedding    @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
+  table            Table?     @relation(fields: [table_id], references: [id], onDelete: SetNull)
+  parent           Guest?     @relation("GuestPlusOne", fields: [parent_guest_id], references: [id], onDelete: Cascade)
+  companions       Guest[]    @relation("GuestPlusOne")
+  invitation_sends InvitationSend[]
+
+  @@index([wedding_id])
+  @@index([table_id])
+  @@index([parent_guest_id])
+  @@index([rsvp_status])
+  @@index([deleted_at])
+  @@map("guests")
+}
+
+// ─────────────────────────────────────────────
+// 4.5 TABLES
+// ─────────────────────────────────────────────
+
+model Table {
+  id           String     @id @default(uuid()) @db.Uuid
+  wedding_id   String     @db.Uuid
+  name         String     @db.VarChar(100)
+  shape        GuestShape @default(round)
+  pos_x        Float      @default(50)
+  pos_y        Float      @default(50)
+  max_capacity Int        @default(10)
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+
+  // Relaciones
+  wedding      Wedding    @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
+  guests       Guest[]
+
+  @@index([wedding_id])
+  @@map("tables")
+}
+
+// ─────────────────────────────────────────────
+// 4.6 PHOTOS
+// ─────────────────────────────────────────────
+
+model Photo {
+  id           String      @id @default(uuid()) @db.Uuid
+  wedding_id   String      @db.Uuid
+  uploaded_by  String      @db.Uuid
+  approved_by  String?     @db.Uuid
+  url          String      @db.VarChar(1000)  // S3 URL
+  thumbnail_url String?    @db.VarChar(1000)
+  file_size    Int?        // bytes
+  mime_type    String?     @db.VarChar(50)
+  status       PhotoStatus @default(pending)
+  caption      String?     @db.Text
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+  deleted_at   DateTime?   // soft delete
+
+  // Relaciones
+  wedding      Wedding     @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
+  uploader     User        @relation("PhotoUploadedBy", fields: [uploaded_by], references: [id])
+  approver     User?       @relation("PhotoApprovedBy", fields: [approved_by], references: [id])
+
+  @@index([wedding_id])
+  @@index([status])
+  @@index([deleted_at])
+  @@map("photos")
+}
+
+// ─────────────────────────────────────────────
+// 4.7 TASKS
+// ─────────────────────────────────────────────
+
+model Task {
+  id               String     @id @default(uuid()) @db.Uuid
+  wedding_id       String     @db.Uuid
+  template_id      String?    @db.Uuid
+  title            String     @db.VarChar(255)
+  description      String?    @db.Text
+  phase            String?    @db.VarChar(50)   // ej: "6_months", "1_month", "1_week"
+  category         String?    @db.VarChar(50)   // ej: "venue", "catering", "music"
+  status           TaskStatus @default(pending)
+  assigned_user_id String?    @db.Uuid
+  due_date         DateTime?
+  completed_at     DateTime?
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
+
+  // Relaciones
+  wedding          Wedding    @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
+  assigned_user    User?      @relation("TaskAssignedTo", fields: [assigned_user_id], references: [id], onDelete: SetNull)
+
+  @@index([wedding_id])
+  @@index([status])
+  @@index([assigned_user_id])
+  @@map("tasks")
+}
+
+// ─────────────────────────────────────────────
+// 4.8 EVENTS
+// ─────────────────────────────────────────────
+
+model Event {
+  id               String    @id @default(uuid()) @db.Uuid
+  wedding_id       String    @db.Uuid
+  title            String    @db.VarChar(255)
+  description      String?   @db.Text
+  event_type       EventType @default(custom)
+  start_date       DateTime
+  end_date         DateTime?
+  google_event_id  String?   @db.VarChar(255)  // para sync con Google Calendar
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+
+  // Relaciones
+  wedding          Wedding   @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
+
+  @@index([wedding_id])
+  @@index([start_date])
+  @@map("events")
+}
+
+// ─────────────────────────────────────────────
+// 4.9 INVITATIONS
+// ─────────────────────────────────────────────
+
+model Invitation {
+  id              String             @id @default(uuid()) @db.Uuid
+  wedding_id      String             @db.Uuid
+  template_type   InvitationTemplate @default(elegant)
+  background      String?            @db.VarChar(100)
+  primary_color   String?            @db.VarChar(20)
+  secondary_color String?            @db.VarChar(20)
+  custom_text     String?            @db.Text
+  pdf_url         String?            @db.VarChar(1000)
+  created_at      DateTime           @default(now())
+  updated_at      DateTime           @updatedAt
+
+  // Relaciones
+  wedding         Wedding            @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
+  sends           InvitationSend[]
+
+  @@index([wedding_id])
+  @@map("invitations")
+}
+
+// ─────────────────────────────────────────────
+// 4.10 INVITATION_SENDS
+// ─────────────────────────────────────────────
+
+model InvitationSend {
+  id            String     @id @default(uuid()) @db.Uuid
+  invitation_id String     @db.Uuid
+  guest_id      String     @db.Uuid
+  sent_by       String     @db.Uuid
+  status        SendStatus @default(sent)
+  error_message String?    @db.Text
+  sent_at       DateTime   @default(now())
+
+  // Relaciones
+  invitation    Invitation @relation(fields: [invitation_id], references: [id], onDelete: Cascade)
+  guest         Guest      @relation(fields: [guest_id], references: [id], onDelete: Cascade)
+  sender        User       @relation("InvitationSentBy", fields: [sent_by], references: [id])
+
+  @@index([invitation_id])
+  @@index([guest_id])
+  @@map("invitation_sends")
+}
+
+// ─────────────────────────────────────────────
+// 4.11 PLANS
+// ─────────────────────────────────────────────
+
+model Plan {
+  id             String  @id @default(uuid()) @db.Uuid
+  name           String  @unique @db.VarChar(100)
+  price          Decimal @db.Decimal(10, 2)
+  currency       String  @default("EUR") @db.VarChar(3)
+  max_weddings   Int     @default(1)       // -1 = ilimitado
+  max_photos     Int     @default(20)      // -1 = ilimitado
+  max_guests     Int     @default(40)      // -1 = ilimitado
+  features_json  Json                      // features habilitadas como objeto
+  is_active      Boolean @default(true)
+  created_at     DateTime @default(now())
+
+  // Relaciones
+  subscriptions  Subscription[]
+
+  @@map("plans")
+}
+
+// ─────────────────────────────────────────────
+// 4.12 SUBSCRIPTIONS
+// ─────────────────────────────────────────────
+
+model Subscription {
+  id                      String             @id @default(uuid()) @db.Uuid
+  user_id                 String             @db.Uuid
+  plan_id                 String             @db.Uuid
+  stripe_subscription_id  String?            @unique @db.VarChar(255)
+  paypal_subscription_id  String?            @unique @db.VarChar(255)
+  status                  SubscriptionStatus @default(inactive)
+  current_period_start    DateTime?
+  current_period_end      DateTime?
+  cancel_at_period_end    Boolean            @default(false)
+  created_at              DateTime           @default(now())
+  updated_at              DateTime           @updatedAt
+
+  // Relaciones
+  user                    User               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  plan                    Plan               @relation(fields: [plan_id], references: [id])
+
+  @@index([user_id])
+  @@index([status])
+  @@map("subscriptions")
+}
+
+// ─────────────────────────────────────────────
+// 4.13 PAYMENTS
+// ─────────────────────────────────────────────
+
+model Payment {
+  id               String        @id @default(uuid()) @db.Uuid
+  user_id          String        @db.Uuid
+  wedding_id       String?       @db.Uuid
+  stripe_payment_id  String?     @unique @db.VarChar(255)
+  paypal_payment_id  String?     @unique @db.VarChar(255)
+  amount           Decimal       @db.Decimal(10, 2)
+  currency         String        @default("EUR") @db.VarChar(3)
+  status           PaymentStatus @default(pending)
+  description      String?       @db.VarChar(500)
+  invoice_pdf_url  String?       @db.VarChar(1000)
+  metadata_json    Json?         // datos extra del webhook
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  // Relaciones
+  user             User          @relation(fields: [user_id], references: [id])
+  wedding          Wedding?      @relation(fields: [wedding_id], references: [id], onDelete: SetNull)
+
+  @@index([user_id])
+  @@index([wedding_id])
+  @@index([status])
+  @@map("payments")
+}
+
+// ─────────────────────────────────────────────
+// 4.14 ACTIVITY_LOGS
+// ─────────────────────────────────────────────
+
+model ActivityLog {
+  id              String   @id @default(uuid()) @db.Uuid
+  user_id         String?  @db.Uuid           // null = acción del sistema
+  wedding_id      String?  @db.Uuid
+  entity_type     String   @db.VarChar(50)    // ej: "guest", "table", "photo"
+  entity_id       String   @db.VarChar(36)    // UUID de la entidad afectada
+  action          String   @db.VarChar(50)    // ej: "create", "update", "delete", "approve"
+  old_value_json  Json?                       // estado anterior
+  new_value_json  Json?                       // estado nuevo
+  ip_address      String?  @db.VarChar(45)
+  user_agent      String?  @db.VarChar(500)
+  created_at      DateTime @default(now())
+
+  // Relaciones
+  user            User?    @relation(fields: [user_id], references: [id], onDelete: SetNull)
+  wedding         Wedding? @relation(fields: [wedding_id], references: [id], onDelete: SetNull)
+
+  @@index([user_id])
+  @@index([wedding_id])
+  @@index([entity_type, entity_id])
+  @@index([created_at])
+  @@map("activity_logs")
+}

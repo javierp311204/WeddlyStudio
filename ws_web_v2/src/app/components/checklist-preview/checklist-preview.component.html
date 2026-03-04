@@ -1,0 +1,68 @@
+<!-- checklist-preview.component.html — migrado a API v2 -->
+<!-- Cambios: estadisticas.completadas→totals.completed | enProgreso→in_progress | porcentajeTotal→percentage -->
+
+<div class="checklist-preview" *ngIf="!cargando && totals">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h5 fw-semibold mb-0"
+        style="font-family: 'Playfair Display', serif; color: var(--dark-charcoal);">
+      {{ 'HOME.CHECKLIST_PREVIEW_TITLE' | translate }}
+    </h2>
+    <a routerLink="/checklist"
+       class="small fw-semibold text-decoration-none"
+       style="color: var(--gold);">
+      {{ 'HOME.CHECKLIST_PREVIEW_SEE_ALL' | translate }} →
+    </a>
+  </div>
+
+  <!-- Barra de progreso global — v2: totals.percentage -->
+  <div class="card border-0 rounded-4 p-4 mb-3"
+       style="background: var(--bg-soft); border: 1px solid var(--accent-soft) !important;">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <span class="small fw-semibold" style="color: var(--dark-charcoal);">
+        {{ 'HOME.CHECKLIST_PREVIEW_PROGRESS' | translate }}
+      </span>
+      <span class="small fw-bold" style="color: var(--gold);">
+        {{ totals?.percentage || 0 }}%
+      </span>
+    </div>
+    <div class="progress rounded-pill" style="height: 8px; background: var(--accent-soft);">
+      <div class="progress-bar rounded-pill"
+           role="progressbar"
+           [style.width.%]="totals?.percentage || 0"
+           style="background: linear-gradient(90deg, var(--gold), #bc6c25);">
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats — v2: completed / in_progress / pending (antes: completadas / enProgreso / pendientes) -->
+  <div class="row g-3">
+    <div class="col-6 col-md-3">
+      <div class="stat-card card border-0 rounded-4 p-3 text-center">
+        <span class="stat-num" style="color: var(--dark-charcoal);">{{ totals.total }}</span>
+        <span class="stat-label">{{ 'HOME.CHECKLIST_STATS_TOTAL' | translate }}</span>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card card border-0 rounded-4 p-3 text-center">
+        <!-- v2: totals.completed -->
+        <span class="stat-num" style="color: #5c7a4e;">{{ totals.completed }}</span>
+        <span class="stat-label">{{ 'HOME.CHECKLIST_STATS_COMPLETED' | translate }}</span>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card card border-0 rounded-4 p-3 text-center">
+        <!-- v2: totals.in_progress -->
+        <span class="stat-num" style="color: #b07030;">{{ totals.in_progress }}</span>
+        <span class="stat-label">{{ 'HOME.CHECKLIST_STATS_IN_PROGRESS' | translate }}</span>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card card border-0 rounded-4 p-3 text-center">
+        <!-- v2: totals.pending -->
+        <span class="stat-num" style="color: #8b7e74;">{{ totals.pending }}</span>
+        <span class="stat-label">{{ 'HOME.CHECKLIST_STATS_PENDING' | translate }}</span>
+      </div>
+    </div>
+  </div>
+</div>

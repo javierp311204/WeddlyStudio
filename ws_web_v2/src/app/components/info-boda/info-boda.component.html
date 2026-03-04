@@ -1,0 +1,160 @@
+<div class="info-wrapper min-vh-100 py-5 px-3">
+  <div class="container info-container">
+
+    <!-- Navegación -->
+    <nav class="d-flex justify-content-between align-items-center mb-4">
+      <button class="btn btn-link text-decoration-none d-flex align-items-center gap-2 p-0 btn-back-link" (click)="irAlMenu()">
+        <span class="icon">←</span> {{ 'DESIGN.BACK_TO_PANEL' | translate }}
+      </button>
+      <button *ngIf="authService.isAdmin()"
+              (click)="editMode = !editMode"
+              class="btn rounded-pill px-4 py-2 fw-semibold btn-admin-action"
+              [ngClass]="editMode ? 'btn-danger' : 'btn-success'">
+        {{ editMode ? ('INFO.CANCEL_EDIT' | translate) : ('INFO.EDIT_INFO' | translate) }}
+      </button>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center mb-5 info-header-premium">
+      <div class="header-decoration d-flex align-items-center justify-content-center gap-3 mb-3">
+        <span class="decoration-line"></span>
+        <span class="fs-4">✨</span>
+        <span class="decoration-line"></span>
+      </div>
+      <h1 class="display-3 fw-normal mb-3">{{ 'INFO.TITLE' | translate }}</h1>
+      <p class="boda-id mb-0">
+        {{ 'INFO.ACCESS_CODE' | translate }}:
+        <!-- v2: weddingId (UUID) — authService.getWeddingId() -->
+        <strong>{{ authService.getWeddingId() }}</strong>
+      </p>
+    </header>
+
+    <!-- Grid de Cards -->
+    <div class="row g-4">
+
+      <!-- Card: Ubicación -->
+      <div class="col-12 col-lg-6">
+        <section class="info-card-glass h-100" [class.is-editing]="editMode">
+          <div class="card-accent-gold"></div>
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <span class="card-emoji">📍</span>
+              <h3 class="mb-0 h4">{{ 'INFO.LOCATION_TITLE' | translate }}</h3>
+            </div>
+
+            <div *ngIf="!editMode">
+              <!-- v2: bodaInfo.venue_name (antes bodaInfo.lugarNombre) -->
+              <p class="txt-main mb-2" [class.empty-txt]="!bodaInfo.venue_name">
+                {{ bodaInfo.venue_name || ('INFO.VENUE_PENDING' | translate) }}
+              </p>
+              <!-- v2: bodaInfo.venue_address (antes bodaInfo.direccion) -->
+              <p class="txt-sub mb-3" [class.empty-txt]="!bodaInfo.venue_address">
+                {{ bodaInfo.venue_address || ('INFO.ADDRESS_PENDING' | translate) }}
+              </p>
+              <!-- v2: bodaInfo.date ISO string (antes bodaInfo.fechaHora) -->
+              <div class="date-pill" *ngIf="bodaInfo.date">
+                📅 {{ bodaInfo.date | date : "EEEE, d MMMM y" }} {{ 'INFO.DATE_AT' | translate }}
+                {{ bodaInfo.date | date : "HH:mm" }}h
+              </div>
+            </div>
+
+            <div *ngIf="editMode">
+              <div class="mb-3">
+                <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.VENUE_LABEL' | translate }}</label>
+                <!-- v2: bodaInfo.venue_name -->
+                <input type="text" class="form-control rounded-3"
+                       [(ngModel)]="bodaInfo.venue_name"
+                       [placeholder]="'INFO.VENUE_PLACEHOLDER' | translate" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.ADDRESS_LABEL' | translate }}</label>
+                <!-- v2: bodaInfo.venue_address -->
+                <input type="text" class="form-control rounded-3"
+                       [(ngModel)]="bodaInfo.venue_address"
+                       [placeholder]="'INFO.ADDRESS_PLACEHOLDER' | translate" />
+              </div>
+              <div class="mb-0">
+                <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.DATE_LABEL' | translate }}</label>
+                <!-- v2: bodaInfo.date (datetime-local → ISO string) -->
+                <input type="datetime-local" class="form-control rounded-3" [(ngModel)]="bodaInfo.date" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Card: Dress Code -->
+      <div class="col-12 col-lg-6">
+        <section class="info-card-glass h-100" [class.is-editing]="editMode">
+          <div class="card-accent-green"></div>
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <span class="card-emoji">👗</span>
+              <h3 class="mb-0 h4">{{ 'INFO.DRESSCODE_TITLE' | translate }}</h3>
+            </div>
+
+            <div *ngIf="!editMode">
+              <!-- v2: bodaInfo.dress_code (antes bodaInfo.dressCode) -->
+              <div class="tag-elegant" [class.empty-tag]="!bodaInfo.dress_code">
+                {{ bodaInfo.dress_code || ('INFO.DRESSCODE_PENDING' | translate) }}
+              </div>
+            </div>
+
+            <div *ngIf="editMode">
+              <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.DRESSCODE_SELECT_LABEL' | translate }}</label>
+              <select class="form-select rounded-3" [(ngModel)]="bodaInfo.dress_code">
+                <option value="">{{ 'INFO.DRESSCODE_PLACEHOLDER' | translate }}</option>
+                <option value="Gala (Etiqueta)">{{ 'INFO.DRESSCODE_GALA' | translate }}</option>
+                <option value="Formal">{{ 'INFO.DRESSCODE_FORMAL' | translate }}</option>
+                <option value="Cóctel">{{ 'INFO.DRESSCODE_COCKTAIL' | translate }}</option>
+                <option value="Informal / Casual">{{ 'INFO.DRESSCODE_CASUAL' | translate }}</option>
+              </select>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Card: Notas / Menú (Full Width) -->
+      <div class="col-12">
+        <section class="info-card-glass" [class.is-editing]="editMode">
+          <div class="card-accent-gold"></div>
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <span class="card-emoji">🍴</span>
+              <h3 class="mb-0 h4">{{ 'INFO.MENU_TITLE' | translate }}</h3>
+            </div>
+
+            <div *ngIf="!editMode">
+              <!-- v2: bodaInfo.notes (antes bodaInfo.menuResumen) -->
+              <p class="txt-menu mb-0" [class.empty-txt]="!bodaInfo.notes">
+                {{ bodaInfo.notes || ('INFO.MENU_PENDING' | translate) }}
+              </p>
+            </div>
+
+            <div *ngIf="editMode">
+              <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.MENU_LABEL' | translate }}</label>
+              <textarea class="form-control rounded-3"
+                        [(ngModel)]="bodaInfo.notes"
+                        rows="4"
+                        [placeholder]="'INFO.MENU_PLACEHOLDER' | translate"></textarea>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <!-- Botón Guardar Flotante -->
+    <div class="floating-save" *ngIf="editMode">
+      <button class="btn btn-save-gold w-100 rounded-pill py-3 fw-bold shadow-lg"
+              (click)="guardarCambios()" [disabled]="guardando">
+        <span *ngIf="!guardando">✨ {{ 'INFO.SAVE_BTN' | translate }}</span>
+        <span *ngIf="guardando" class="loader-text d-flex align-items-center justify-content-center gap-2">
+          <span class="spinner-border spinner-border-sm" role="status"></span>
+          {{ 'INFO.SAVING' | translate }}
+        </span>
+      </button>
+    </div>
+
+  </div>
+</div>
