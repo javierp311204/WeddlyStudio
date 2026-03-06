@@ -37,4 +37,5 @@ guestRouter.delete('/:guestId', validate(guestIdParamSchema), guestController.re
 
 // ─── Ruta pública RSVP (sin auth) bajo /api/rsvp ────────────────
 export const rsvpRouter = Router();
+rsvpRouter.get('/:code/info', guestController.getRsvpInfo);
 rsvpRouter.patch('/:code', validate(publicRsvpSchema), guestController.publicRsvp);

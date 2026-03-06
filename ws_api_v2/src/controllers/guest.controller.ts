@@ -133,6 +133,13 @@ export class GuestController {
       next(err);
     }
   }
+
+  async getRsvpInfo(req: Request, res: Response, next: NextFunction) {
+  try {
+    const data = await guestService.getRsvpInfo(req.params.code);
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+}
 }
 
 export default new GuestController();

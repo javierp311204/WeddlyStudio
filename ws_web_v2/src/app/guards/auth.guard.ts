@@ -40,3 +40,20 @@ export const adminGuard = () => {
   router.navigate(['/home']);
   return false;
 };
+
+/** Guard para el dueño/organizador de una boda (cualquier role_global) */
+export const weddingOwnerGuard = () => {
+  const router = inject(Router);
+  const token     = localStorage.getItem('token');
+  const weddingId = localStorage.getItem('weddingId');
+  const rol       = localStorage.getItem('rol');
+
+  // Superadmin siempre pasa
+  if (token && (rol === 'admin' || rol === 'superadmin')) return true;
+
+  // Usuario normal con boda activa también pasa
+  if (token && weddingId) return true;
+
+  router.navigate(['/home']);
+  return false;
+};

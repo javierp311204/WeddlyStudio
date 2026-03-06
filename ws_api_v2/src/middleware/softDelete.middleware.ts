@@ -10,10 +10,10 @@ const SOFT_DELETE_MODELS: Prisma.ModelName[] = [
   'User',
   'Wedding',
   'Guest',
-  'Table',
-  'Task',
+  // 'Table',
+  // 'Task',
   'Photo',
-  'Invitation',
+  // 'Invitation',
   'Payment',
 ];
 

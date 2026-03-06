@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap, switchMap, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export interface LoginResponse {
   success: boolean;
@@ -31,14 +30,20 @@ export interface RegisterPayload {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // FIX: era 3001, todos los demás servicios usan 3000
   private API_URL = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) {}
 
   // ─── Login ──────────────────────────────────────────────────
+  // FIX: eliminado el switchMap que llamaba a GET /api/weddings justo
+  // tras el login. Ese GET podía interceptarse como 401 si el token
+  // aún no estaba propagado, lo que disparaba clearSession() → logout.
+  // La carga de bodas ahora la hace HomeComponent en su ngOnInit.
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.API_URL}/auth/login`, { email, password }).pipe(
+    return this.http.post<LoginResponse>(
+      `${this.API_URL}/auth/login`,
+      { email, password }
+    ).pipe(
       tap(res => {
         if (res.success) {
           localStorage.setItem('token',         res.data.access_token);
@@ -49,23 +54,6 @@ export class AuthService {
           localStorage.setItem('lastName',      res.data.user.last_name);
           localStorage.setItem('rol',           res.data.user.role_global);
         }
-      }),
-      // Tras guardar el token, cargar la primera boda activa del usuario
-      // para que getWeddingId() funcione en toda la app
-      switchMap(res => {
-        if (!res.success) return of(res);
-        return this.http.get<any>(`${this.API_URL}/weddings`).pipe(
-          tap(bodas => {
-            // La API devuelve { success, data: [...] } o { weddings: [...] }
-            const lista: any[] = bodas?.data ?? bodas?.weddings ?? [];
-            if (lista.length > 0) {
-              localStorage.setItem('weddingId', lista[0].id);
-            }
-          }),
-          catchError(() => of(res)), // si falla, login sigue siendo válido
-          // devolver el LoginResponse original al componente
-          switchMap(() => of(res))
-        );
       })
     );
   }
@@ -100,63 +88,41 @@ export class AuthService {
     });
   }
 
-  // ─── Helpers ────────────────────────────────────────────────
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+  // ─── Cargar boda activa ──────────────────────────────────────
+  // Llamado por HomeComponent tras login para obtener el weddingId
+  loadActiveWedding(): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/weddings`);
   }
+
+  // ─── Helpers ────────────────────────────────────────────────
+  isLoggedIn(): boolean { return !!localStorage.getItem('token'); }
 
   isAdmin(): boolean {
     const role = localStorage.getItem('rol');
     return role === 'admin' || role === 'superadmin';
   }
 
-  getUserId(): string {
-    return localStorage.getItem('userId') || '';
+  isWeddingOwner(): boolean {
+    const rol       = localStorage.getItem('rol');
+    const weddingId = localStorage.getItem('weddingId');
+    return (rol === 'admin' || rol === 'superadmin') || !!weddingId;
   }
 
-  getUserEmail(): string {
-    return localStorage.getItem('userEmail') || '';
-  }
+  getUserId():    string { return localStorage.getItem('userId')    || ''; }
+  getUserEmail(): string { return localStorage.getItem('userEmail') || ''; }
+  getFirstName(): string { return localStorage.getItem('firstName') || ''; }
+  getUserNick():  string { return localStorage.getItem('firstName') || ''; }
 
-  getFirstName(): string {
-    return localStorage.getItem('firstName') || '';
-  }
-
-  /** Compatibilidad con código que usaba getUserNick() */
-  getUserNick(): string {
-    return localStorage.getItem('firstName') || '';
-  }
-
-  /**
-   * UUID de la boda activa. Se rellena automáticamente tras el login.
-   * v2: sustituye a getCodigoBoda().
-   */
-  getWeddingId(): string {
-    return localStorage.getItem('weddingId') || '';
-  }
-
-  /**
-   * Permite cambiar la boda activa manualmente (si el usuario tiene varias).
-   */
-  setWeddingId(weddingId: string): void {
-    localStorage.setItem('weddingId', weddingId);
-  }
+  getWeddingId(): string { return localStorage.getItem('weddingId') || ''; }
+  setWeddingId(id: string): void { localStorage.setItem('weddingId', id); }
 
   // ─── Logout ──────────────────────────────────────────────────
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('firstName');
-    localStorage.removeItem('lastName');
-    localStorage.removeItem('rol');
-    localStorage.removeItem('weddingId');
-    // Limpiar claves del backend viejo
-    localStorage.removeItem('nick');
-    localStorage.removeItem('codigoBoda');
-    localStorage.removeItem('usuarioEmail');
-    localStorage.removeItem('usuarioNick');
+    [
+      'token','refresh_token','userId','userEmail',
+      'firstName','lastName','rol','weddingId',
+      'nick','codigoBoda','usuarioEmail','usuarioNick'
+    ].forEach(k => localStorage.removeItem(k));
     window.location.href = '/home';
   }
 }

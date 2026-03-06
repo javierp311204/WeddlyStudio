@@ -1,0 +1,173 @@
+<div class="onboarding-shell">
+
+  <div class="bg-decoration">
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="bg-circle bg-circle-3"></div>
+  </div>
+
+  <div class="ob-logo">✨ Weddly Studio</div>
+
+  <div class="ob-card">
+
+    <!-- Barra de progreso -->
+    <div class="progress-bar-wrapper" *ngIf="paso > 1 && paso < 6">
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="progreso"></div>
+      </div>
+      <span class="progress-label">Paso {{ paso }} de {{ totalPasos }}</span>
+    </div>
+
+    <!-- PASO 1 — Bienvenida -->
+    <div class="ob-step" *ngIf="paso === 1">
+      <div class="step-emoji">💍</div>
+      <h1 class="step-title">¡Bienvenido/a a Weddly!</h1>
+      <p class="step-desc">Vamos a configurar tu boda en pocos minutos.<br>Solo necesitamos algunos datos básicos para empezar.</p>
+      <div class="features-list">
+        <div class="feature-item"><span class="feature-icon">👥</span><span>Gestión completa de invitados</span></div>
+        <div class="feature-item"><span class="feature-icon">🪑</span><span>Plano de mesas interactivo</span></div>
+        <div class="feature-item"><span class="feature-icon">✅</span><span>Checklist inteligente</span></div>
+        <div class="feature-item"><span class="feature-icon">📸</span><span>Álbum digital colaborativo</span></div>
+      </div>
+      <button class="btn-primary" (click)="siguiente()">Comenzar 🎊</button>
+    </div>
+
+    <!-- PASO 2 — Datos básicos -->
+    <div class="ob-step" *ngIf="paso === 2">
+      <div class="step-emoji">📋</div>
+      <h2 class="step-title">Datos de tu boda</h2>
+      <p class="step-desc">Cuéntanos los detalles básicos de vuestro gran día.</p>
+      <div class="form-group">
+        <label class="form-label">Nombre de la boda <span class="required">*</span></label>
+        <input type="text" class="form-input" [(ngModel)]="nombre" placeholder="Ej: La boda de Ana y Carlos" maxlength="200" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fecha del evento <span class="required">*</span></label>
+        <input type="date" class="form-input" [(ngModel)]="fecha" [min]="fechaMin" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ciudad <span class="required">*</span></label>
+        <input type="text" class="form-input" [(ngModel)]="ciudad" placeholder="Ej: Madrid, Barcelona..." maxlength="200" />
+      </div>
+      <div class="error-msg" *ngIf="error">{{ error }}</div>
+      <div class="btn-row">
+        <button class="btn-secondary" (click)="anterior()">← Atrás</button>
+        <button class="btn-primary" (click)="siguiente()" [disabled]="cargando">
+          <span *ngIf="!cargando">Continuar →</span>
+          <span *ngIf="cargando" class="spinner"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- PASO 3 — Invitados -->
+    <div class="ob-step" *ngIf="paso === 3">
+      <div class="step-emoji">👥</div>
+      <h2 class="step-title">¿Cuántos invitados esperáis?</h2>
+      <p class="step-desc">Una estimación nos ayuda a preparar todo mejor.</p>
+      <div class="slider-wrapper">
+        <div class="slider-value">{{ estimadoInvitados }}</div>
+        <div class="slider-label">invitados aproximados</div>
+        <input type="range" class="slider" [(ngModel)]="estimadoInvitados" min="1" max="500" step="5" />
+        <div class="slider-range"><span>1</span><span>500+</span></div>
+      </div>
+      <div class="plan-hint" *ngIf="estimadoInvitados > 50">
+        <span>💡</span>
+        <span>Con más de 50 invitados, considera nuestro plan PRO para acceso completo.</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" (click)="anterior()">← Atrás</button>
+        <button class="btn-primary" (click)="siguiente()">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 4 — Prioridad -->
+    <div class="ob-step" *ngIf="paso === 4">
+      <div class="step-emoji">🎯</div>
+      <h2 class="step-title">¿Por dónde quieres empezar?</h2>
+      <p class="step-desc">Elige el módulo que más te urge organizar ahora mismo.</p>
+      <div class="priority-grid">
+        <div class="priority-card" *ngFor="let p of prioridades"
+             [class.selected]="prioridad === p.key"
+             (click)="seleccionarPrioridad(p.key)">
+          <span class="priority-emoji">{{ p.emoji }}</span>
+          <div>
+            <div class="priority-label">{{ p.label }}</div>
+            <div class="priority-desc">{{ p.desc }}</div>
+          </div>
+          <div class="priority-check" *ngIf="prioridad === p.key">✓</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" (click)="anterior()">← Atrás</button>
+        <button class="btn-primary" (click)="siguiente()">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 5 — Primera acción -->
+    <div class="ob-step" *ngIf="paso === 5">
+      <ng-container *ngIf="prioridad === 'invitados'">
+        <div class="step-emoji">👤</div>
+        <h2 class="step-title">Añade tu primer invitado</h2>
+        <p class="step-desc">Empieza tu lista con alguien especial. Puedes saltarte este paso.</p>
+        <div class="form-group">
+          <label class="form-label">Nombre</label>
+          <input type="text" class="form-input" [(ngModel)]="primerInvitadoNombre" placeholder="Nombre" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Apellido</label>
+          <input type="text" class="form-input" [(ngModel)]="primerInvitadoApellido" placeholder="Apellido" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email (opcional)</label>
+          <input type="email" class="form-input" [(ngModel)]="primerInvitadoEmail" placeholder="email@ejemplo.com" />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="prioridad !== 'invitados'">
+        <div class="step-emoji">🚀</div>
+        <h2 class="step-title">¡Todo listo para empezar!</h2>
+        <p class="step-desc">Tu boda está configurada. Accederás directamente al módulo que elegiste.</p>
+        <div class="ready-card">
+          <span style="font-size:2rem;">{{ getPrioridadEmoji() }}</span>
+          <div>Irás directo a <strong>{{ getPrioridadLabel() }}</strong></div>
+        </div>
+      </ng-container>
+      <div class="btn-row">
+        <button class="btn-secondary" (click)="anterior()">← Atrás</button>
+        <button class="btn-primary" (click)="siguiente()" [disabled]="cargando">
+          <span *ngIf="!cargando">Finalizar →</span>
+          <span *ngIf="cargando" class="spinner"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- PASO 6 — Confirmación -->
+    <div class="ob-step" *ngIf="paso === 6">
+      <div class="step-emoji confetti-anim">🎉</div>
+      <h2 class="step-title">¡Tu boda está lista!</h2>
+      <p class="step-desc">Hemos configurado todo para que puedas empezar a planificar.</p>
+      <div class="summary-card">
+        <div class="summary-row">
+          <span class="summary-icon">💍</span>
+          <div><div class="summary-key">Boda</div><div class="summary-val">{{ nombre }}</div></div>
+        </div>
+        <div class="summary-row">
+          <span class="summary-icon">📅</span>
+          <div><div class="summary-key">Fecha</div><div class="summary-val">{{ fecha | date:'longDate':'':'es' }}</div></div>
+        </div>
+        <div class="summary-row">
+          <span class="summary-icon">📍</span>
+          <div><div class="summary-key">Ciudad</div><div class="summary-val">{{ ciudad }}</div></div>
+        </div>
+        <div class="summary-row">
+          <span class="summary-icon">👥</span>
+          <div><div class="summary-key">Invitados estimados</div><div class="summary-val">{{ estimadoInvitados }}</div></div>
+        </div>
+      </div>
+      <div class="btn-column">
+        <button class="btn-primary" (click)="irAModulo()">Ir a {{ getPrioridadLabel() }} →</button>
+        <button class="btn-ghost" (click)="irAlDashboard()">Ver el dashboard principal</button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -70,16 +70,15 @@ export const sendInvitationSchema = z.object({
   body: z.object({
     guest_ids: z
       .array(z.string().uuid('ID de invitado inválido'))
-      .min(1, 'Debes seleccionar al menos un invitado')
-      .max(500, 'Máximo 500 invitados por envío')
+      .min(1)
+      .max(500)
       .optional(),
     send_to_all: z.boolean().optional().default(false),
-    // Si send_to_all=true se ignora guest_ids y se envía a todos los guests con email
-  }),
-}).refine(
-  data => data.body.send_to_all || (data.body.guest_ids && data.body.guest_ids.length > 0),
-  { message: 'Debes indicar guest_ids o activar send_to_all', path: ['body'] },
-);
+  }).refine(   // ← refine dentro de body, no en el objeto raíz
+    data => data.send_to_all === true || (data.guest_ids && data.guest_ids.length > 0),
+    { message: 'Debes indicar guest_ids o activar send_to_all' },
+  ),
+});
 
 // ─── Listar envíos ───────────────────────────────────────────────
 export const listSendsSchema = z.object({

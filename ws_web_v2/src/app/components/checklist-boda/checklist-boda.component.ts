@@ -128,22 +128,17 @@ export class ChecklistBodaComponent implements OnInit {
 
   async cargarTareas(): Promise<void> {
     try {
-      // v2: GET /api/weddings/:weddingId/tasks
-      // Devuelve { tasks, grouped, totals }
-      const response = await this.tareasService
-        .getChecklist(this.weddingId)
-        .toPromise();
+      const response = await this.tareasService.getChecklist(this.weddingId).toPromise();
 
-      if (response) {
-        // Guardar estadísticas desde `totals`
-        this.estadisticas = response.totals || null;
+      const payload = (response as any)?.data ?? response;  // ← extraer .data
 
-        if (!response.tasks || response.tasks.length === 0) {
-          this.mostrarModalInicializar = true;
-          this.cdr.detectChanges();
-        } else {
-          this.organizarTareasPorFase(response.tasks);
-        }
+      this.estadisticas = payload?.totals ?? null;
+
+      if (!payload?.tasks || payload.tasks.length === 0) {
+        this.mostrarModalInicializar = true;
+        this.cdr.detectChanges();
+      } else {
+        this.organizarTareasPorFase(payload.tasks);
       }
     } catch (error: any) {
       console.error('Error cargando tareas:', error);

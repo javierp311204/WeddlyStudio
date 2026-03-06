@@ -347,6 +347,22 @@ export class GuestService {
       codigo_invitacion: g.invitation_code,
     }));
   }
+
+  async getRsvpInfo(code: string) {
+  const guest = await prisma.guest.findUnique({
+    where: { invitation_code: code },
+    select: {
+      first_name: true,
+      last_name: true,
+      rsvp_status: true,
+      wedding: {
+        select: { name: true, wedding_date: true, location_name: true }
+      }
+    }
+  });
+  if (!guest) throw new AppError('Código de invitación inválido', 404);
+  return guest;
+  }
 }
 
 export default new GuestService();

@@ -131,7 +131,7 @@
               <span class="fs-3">✨</span>
               <div>
                 <h2 class="h5 mb-0 fw-semibold" style="color: var(--gold);">
-                  {{ 'HOME.DASHBOARD_PANEL' | translate }} {{ authService.isAdmin() ? ('HOME.DASHBOARD_CONTROL' | translate) : ('HOME.DASHBOARD_GUEST' | translate) }}
+                  {{ 'HOME.DASHBOARD_PANEL' | translate }} {{ authService.isWeddingOwner() ? ('HOME.DASHBOARD_CONTROL' | translate) : ('HOME.DASHBOARD_GUEST' | translate) }}
                 </h2>
                 <p class="small mb-0 text-muted">
                   {{ 'HOME.DASHBOARD_WEDDING' | translate }}:
@@ -215,7 +215,7 @@
         <!-- Action Grid -->
         <div class="row row-cols-1 row-cols-lg-2 g-4 action-grid">
 
-          <div class="col" *ngIf="authService.isAdmin()">
+          <div class="col" *ngIf="authService.isWeddingOwner()">
             <div class="card border-0 rounded-4 glass-card borde h-100" routerLink="/mesas"
                  style="cursor: pointer; transition: all 0.3s; border-left: 5px solid #8b7e74 !important;">
               <div class="card-body p-4 d-flex align-items-center gap-3">
@@ -230,7 +230,7 @@
             </div>
           </div>
 
-          <div class="col" *ngIf="authService.isAdmin()">
+          <div class="col" *ngIf="authService.isWeddingOwner()">
             <div class="card border-0 rounded-4 glass-card borde h-100" routerLink="/diseno"
                  style="cursor: pointer; transition: all 0.3s; border-left: 5px solid #8b7e74 !important;">
               <div class="card-body p-4 d-flex align-items-center gap-3">
@@ -275,7 +275,7 @@
             </div>
           </div>
 
-          <div class="col" *ngIf="authService.isAdmin()">
+          <div class="col" *ngIf="authService.isWeddingOwner()">
             <div class="card border-0 rounded-4 glass-card borde h-100" routerLink="/invitados"
                  style="cursor: pointer; transition: all 0.3s; border-left: 5px solid #8b7e74 !important;">
               <div class="card-body p-4 d-flex align-items-center gap-3">
@@ -290,7 +290,7 @@
             </div>
           </div>
 
-          <div class="col" *ngIf="authService.isAdmin()">
+          <div class="col" *ngIf="authService.isWeddingOwner()">
             <div class="card border-0 rounded-4 glass-card borde h-100" routerLink="/checklist"
                  style="cursor: pointer; transition: all 0.3s; border-left: 5px solid #8b7e74 !important;">
               <div class="card-body p-4 d-flex align-items-center gap-3">
@@ -308,7 +308,7 @@
         </div>
 
         <!-- Checklist Preview -->
-        <div class="mt-5" *ngIf="authService.isAdmin()">
+        <div class="mt-5" *ngIf="authService.isWeddingOwner()">
           <app-checklist-preview />
         </div>
 

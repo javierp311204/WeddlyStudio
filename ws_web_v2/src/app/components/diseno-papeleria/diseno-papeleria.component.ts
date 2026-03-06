@@ -256,8 +256,46 @@ export class DisenoPapeleriaComponent implements OnInit {
 
   async seleccionarInvitado(invitado: InvitadoV2): Promise<void> {
     this.cerrarSelectorInvitados();
-    const nombre = `${invitado.first_name} ${invitado.last_name}`.trim();
-    await this.enviarEmail(invitado.email, nombre);
+    this.enviandoEmail = true;
+
+    try {
+      // 1. Crear invitación (diseño)
+      const invRes = await this.http.post<any>(
+        `${this.apiUrl}/weddings/${this.weddingId}/invitations`,
+        {
+          template_type: this.plantillaActiva === 'clasica' ? 'elegant'
+                      : this.plantillaActiva === 'moderna' ? 'modern'
+                      : this.plantillaActiva,
+          primary_color:   this.colorTexto,
+          secondary_color: this.colorFondo,
+          custom_text:     this.textoExtra,
+        },
+        this.getHeaders()
+      ).toPromise();
+
+      const invitationId = invRes?.data?.id ?? invRes?.id;
+      if (!invitationId) throw new Error('No se pudo crear la invitación');
+
+      // 2. Enviar al invitado seleccionado
+      await this.http.post<any>(
+        `${this.apiUrl}/invitations/${invitationId}/send`,
+        { guest_ids: [invitado.id], send_to_all: false },
+        this.getHeaders()
+      ).toPromise();
+
+      this.notifService.showSuccess(
+        'Invitación enviada',
+        `Se envió correctamente a ${this.getNombreCompleto(invitado)}`
+      );
+    } catch (err: any) {
+      console.error('Error enviando invitación:', err);
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'),
+        err?.error?.message || 'No se pudo enviar la invitación'
+      );
+    } finally {
+      this.enviandoEmail = false;
+    }
   }
 
   // ⚠️ v2: El endpoint de envío individual no existe en v2.
@@ -275,10 +313,47 @@ export class DisenoPapeleriaComponent implements OnInit {
   // ⚠️ v2: El envío masivo en v2 se hace a través de POST /api/invitations/:id/send
   // que envía a todos los invitados con email automáticamente.
   async enviarInvitacionesMasivas(): Promise<void> {
-    this.notifService.showError(
-      'Funcionalidad pendiente',
-      'En v2 el envío masivo se gestiona desde el módulo de Invitaciones: crea una invitación y usa "Enviar a todos".'
-    );
+    this.enviandoEmail = true;
+
+    try {
+      // 1. Crear invitación
+      const invRes = await this.http.post<any>(
+        `${this.apiUrl}/weddings/${this.weddingId}/invitations`,
+        {
+          template_type: this.plantillaActiva === 'clasica' ? 'elegant'
+                      : this.plantillaActiva === 'moderna' ? 'modern'
+                      : this.plantillaActiva,
+          primary_color:   this.colorTexto,
+          secondary_color: this.colorFondo,
+          custom_text:     this.textoExtra,
+        },
+        this.getHeaders()
+      ).toPromise();
+
+      const invitationId = invRes?.data?.id ?? invRes?.id;
+      if (!invitationId) throw new Error('No se pudo crear la invitación');
+
+      // 2. Enviar a todos
+      const sendRes = await this.http.post<any>(
+        `${this.apiUrl}/invitations/${invitationId}/send`,
+        { send_to_all: true },
+        this.getHeaders()
+      ).toPromise();
+
+      const result = sendRes?.data ?? sendRes;
+      this.notifService.showSuccess(
+        'Invitaciones enviadas',
+        result?.message || `${result?.sent} invitaciones enviadas correctamente`
+      );
+    } catch (err: any) {
+      console.error('Error en envío masivo:', err);
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'),
+        err?.error?.message || 'No se pudieron enviar las invitaciones'
+      );
+    } finally {
+      this.enviandoEmail = false;
+    }
   }
 
   // Helper para el template
