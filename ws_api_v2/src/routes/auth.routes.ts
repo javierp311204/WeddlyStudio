@@ -21,3 +21,5 @@ router.post('/resend-verification',                                   authContro
 // Rutas protegidas
 router.get('/me', authenticate, authController.me);
 router.patch('/change-password', authenticate, validate(changePasswordSchema), authController.changePassword);
+
+export default router;

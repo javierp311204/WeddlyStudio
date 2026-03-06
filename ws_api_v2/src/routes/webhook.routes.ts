@@ -6,7 +6,7 @@ import { subscriptionService } from '../services/subscription.service';
 const router = Router();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-02-25.clover',
+  apiVersion: '2024-11-20.acacia' as any,
 });
 
 // ─────────────────────────────────────────────────────────────
