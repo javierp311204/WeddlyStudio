@@ -367,10 +367,6 @@ export class ChecklistBodaComponent implements OnInit {
     this.tareaActual = this.getTareaVacia();
   }
 
-  volverAlPanel(): void {
-    this.router.navigate(['/home']);
-  }
-
   getEstadoLabel(estado: string): string {
     // v2: estados en inglés
     const claves: { [key: string]: string } = {

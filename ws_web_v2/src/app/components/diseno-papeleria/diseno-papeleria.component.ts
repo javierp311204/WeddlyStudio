@@ -204,18 +204,6 @@ export class DisenoPapeleriaComponent implements OnInit {
     }
   }
 
-  irAlMenu(): void {
-    if (this.cambiosRealizados) {
-      this.notifService.askConfirmation(
-        this.translate.instant('NOTIFICATIONS.CONFIRM_EXIT'),
-        this.translate.instant('NOTIFICATIONS.UNSAVED_CHANGES'),
-        'salida_sin_guardar'
-      ).then((confirmed) => { if (confirmed) this.router.navigate(['/dashboard']); });
-    } else {
-      this.router.navigate(['/dashboard']);
-    }
-  }
-
   async abrirSelectorInvitados(): Promise<void> {
     if (!this.weddingId) {
       this.notifService.showError(this.translate.instant('COMMON.ERROR'), 'No se encontró el weddingId');

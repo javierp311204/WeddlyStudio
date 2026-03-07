@@ -1,0 +1,294 @@
+/* ── Variables ───────────────────────────────────────────────── */
+:host {
+  --sw:          240px;
+  --sw-col:       68px;
+  --bg:          #1e1a17;
+  --bg-hover:    rgba(212, 163, 115, 0.09);
+  --bg-active:   rgba(212, 163, 115, 0.16);
+  --border:      rgba(255, 255, 255, 0.07);
+  --text-dim:    #6e6056;
+  --text-bright: #e8ddd4;
+  --ease:        cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+}
+
+/* ── Shell ──────────────────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: 0; bottom: 0; left: 0;
+  width: var(--sw);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  z-index: 1050;
+  overflow: hidden;
+  transition: width 0.28s var(--ease);
+  box-shadow: 3px 0 28px rgba(0, 0, 0, 0.22);
+  border-right: 1px solid var(--border);
+}
+
+.sidebar.collapsed { width: var(--sw-col); }
+
+/* ── Header: logo a la izquierda, toggle a la derecha ────────
+   El .sidebar-logo tiene flex:1 para empujar el botón al extremo
+   derecho, sin importar si el sidebar está colapsado o no.
+   ──────────────────────────────────────────────────────────── */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 10px 12px 16px;
+  flex-shrink: 0;
+  min-width: 0;
+  /* altura fija para evitar saltos */
+  height: 60px;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;          /* ocupa todo el espacio libre */
+  min-width: 0;
+  overflow: hidden;
+}
+
+.logo-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(1.15);
+}
+
+.logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: #d4a373;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity 0.22s var(--ease), max-width 0.22s var(--ease);
+  max-width: 140px;
+}
+
+/* Collapse button — siempre pegado a la derecha del header */
+.collapse-btn {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-left: auto;   /* empuja a la derecha dentro del flex */
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 163, 115, 0.2);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-dim);
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+}
+
+.collapse-btn:hover {
+  background: var(--bg-hover);
+  color: #d4a373;
+  border-color: rgba(212, 163, 115, 0.45);
+}
+
+/* ── Profile ────────────────────────────────────────────────── */
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 12px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.profile-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6b4226, #d4a373);
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(212, 163, 115, 0.28);
+}
+
+.profile-info {
+  min-width: 0;
+  overflow: hidden;
+  transition: opacity 0.22s var(--ease);
+}
+
+.profile-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-role {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin: 0;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Divider ────────────────────────────────────────────────── */
+.sidebar-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 14px;
+  flex-shrink: 0;
+}
+
+/* ── Nav ────────────────────────────────────────────────────── */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 8px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-nav::-webkit-scrollbar { width: 3px; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Nav item ───────────────────────────────────────────────── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 9px;
+  border-radius: 9px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  transition: background 0.16s, color 0.16s;
+  position: relative;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+}
+
+.nav-item:hover  { background: var(--bg-hover); color: #d4a373; }
+.nav-item.active { background: var(--bg-active); color: #d4a373; font-weight: 700; }
+
+.active-bar {
+  display: none;
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 52%;
+  background: #d4a373;
+  border-radius: 2px 0 0 2px;
+}
+.nav-item.active .active-bar { display: block; }
+
+/* ── Icons & labels ─────────────────────────────────────────── */
+.nav-emoji {
+  font-size: 1rem;
+  width: 22px;
+  min-width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.nav-label {
+  overflow: hidden;
+  white-space: nowrap;
+  transition: opacity 0.22s var(--ease), max-width 0.22s var(--ease);
+  max-width: 160px;
+}
+
+/* ── Collapsed state ────────────────────────────────────────── */
+.collapsed .logo-text {
+  opacity: 0;
+  max-width: 0;
+}
+
+.collapsed .profile-info {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.collapsed .nav-label {
+  opacity: 0;
+  max-width: 0;
+  pointer-events: none;
+}
+
+/* ── Spacer ─────────────────────────────────────────────────── */
+.sidebar-spacer { flex: 1; }
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.sidebar-footer {
+  padding: 6px 8px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+/* Fila de idioma */
+.footer-lang {
+  cursor: default;
+}
+.footer-lang:hover { background: var(--bg-hover); }
+
+/*
+  lang-selector: siempre clickable.
+  Al colapsar se oculta visualmente (opacity + max-width)
+  pero NO se bloquea con pointer-events.
+*/
+.lang-selector {
+  display: block;
+  overflow: hidden;
+  max-width: 160px;
+  transition: opacity 0.22s var(--ease), max-width 0.22s var(--ease);
+  white-space: nowrap;
+}
+
+.collapsed .lang-selector {
+  opacity: 0;
+  max-width: 0;
+}
+
+/* Logout */
+.logout-btn { color: var(--text-dim); }
+.logout-btn:hover { color: #e07070; background: rgba(224, 112, 112, 0.08); }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  :host { --sw: var(--sw-col); }
+
+  .logo-text,
+  .profile-info,
+  .nav-label,
+  .lang-selector {
+    opacity: 0 !important;
+    max-width: 0 !important;
+    pointer-events: none !important;
+  }
+}

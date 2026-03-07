@@ -73,27 +73,6 @@
 /* ========================================
    BOTONES
    ======================================== */
-.btn-back {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.btn-back:hover {
-  background: var(--bg);
-  border-color: var(--gold);
-  color: var(--gold-dark);
-}
 
 .btn-primary {
   background: var(--gold);

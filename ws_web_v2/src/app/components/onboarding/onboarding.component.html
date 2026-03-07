@@ -32,24 +32,57 @@
       <button class="btn-primary" (click)="siguiente()">Comenzar 🎊</button>
     </div>
 
-    <!-- PASO 2 — Datos básicos -->
+    <!-- PASO 2 — Datos de la boda (obligatorios + opcionales) -->
     <div class="ob-step" *ngIf="paso === 2">
       <div class="step-emoji">📋</div>
       <h2 class="step-title">Datos de tu boda</h2>
-      <p class="step-desc">Cuéntanos los detalles básicos de vuestro gran día.</p>
+      <p class="step-desc">Cuéntanos los detalles de vuestro gran día. Los campos con <span class="required">*</span> son obligatorios.</p>
+
+      <!-- Bloque obligatorio -->
       <div class="form-group">
         <label class="form-label">Nombre de la boda <span class="required">*</span></label>
-        <input type="text" class="form-input" [(ngModel)]="nombre" placeholder="Ej: La boda de Ana y Carlos" maxlength="200" />
+        <input type="text" class="form-input" [(ngModel)]="nombre"
+               placeholder="Ej: La boda de Ana y Carlos" maxlength="200" />
       </div>
+
       <div class="form-group">
         <label class="form-label">Fecha del evento <span class="required">*</span></label>
         <input type="date" class="form-input" [(ngModel)]="fecha" [min]="fechaMin" />
       </div>
+
       <div class="form-group">
-        <label class="form-label">Ciudad <span class="required">*</span></label>
-        <input type="text" class="form-input" [(ngModel)]="ciudad" placeholder="Ej: Madrid, Barcelona..." maxlength="200" />
+        <label class="form-label">Lugar / Nombre del salón <span class="required">*</span></label>
+        <input type="text" class="form-input" [(ngModel)]="ciudad"
+               placeholder="Ej: Hacienda Los Olivos" maxlength="200" />
       </div>
+
+      <!-- Separador opcional -->
+      <div class="optional-divider">
+        <span>Opcional — puedes añadirlo ahora o más tarde desde Info de Boda</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Dirección</label>
+        <input type="text" class="form-input" [(ngModel)]="direccion"
+               placeholder="Ej: Calle Real, 45, Madrid" maxlength="300" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Dress Code</label>
+        <select class="form-input" [(ngModel)]="dresscode">
+          <option value="">— Sin especificar —</option>
+          <option *ngFor="let opt of dresscodeOpciones" [value]="opt.value">{{ opt.label }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Descripción del menú</label>
+        <textarea class="form-input" [(ngModel)]="menu" rows="3"
+                  placeholder="Ej: Cóctel de bienvenida, Solomillo al punto..."></textarea>
+      </div>
+
       <div class="error-msg" *ngIf="error">{{ error }}</div>
+
       <div class="btn-row">
         <button class="btn-secondary" (click)="anterior()">← Atrás</button>
         <button class="btn-primary" (click)="siguiente()" [disabled]="cargando">
@@ -156,7 +189,15 @@
         </div>
         <div class="summary-row">
           <span class="summary-icon">📍</span>
-          <div><div class="summary-key">Ciudad</div><div class="summary-val">{{ ciudad }}</div></div>
+          <div><div class="summary-key">Lugar</div><div class="summary-val">{{ ciudad }}</div></div>
+        </div>
+        <div class="summary-row" *ngIf="direccion">
+          <span class="summary-icon">🗺️</span>
+          <div><div class="summary-key">Dirección</div><div class="summary-val">{{ direccion }}</div></div>
+        </div>
+        <div class="summary-row" *ngIf="dresscode">
+          <span class="summary-icon">👗</span>
+          <div><div class="summary-key">Dress Code</div><div class="summary-val">{{ dresscode }}</div></div>
         </div>
         <div class="summary-row">
           <span class="summary-icon">👥</span>

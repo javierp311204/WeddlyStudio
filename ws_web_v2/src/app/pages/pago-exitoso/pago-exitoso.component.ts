@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
-// ✅ Sin cambios para v2 — lee session_id de Stripe, redirige a /home
-
 @Component({
   selector: 'app-pago-exitoso',
   standalone: true,
@@ -12,16 +10,17 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
   styleUrl: './pago-exitoso.component.css',
 })
 export class PagoExitosoComponent implements OnInit {
-  sessionId: string = '';
+  sessionId = '';
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.sessionId = this.route.snapshot.queryParamMap.get('session_id') || '';
-    setTimeout(() => this.router.navigate(['/home']), 5000);
+    // Redirige a /dashboard (no a /home) tras 5 segundos
+    setTimeout(() => this.router.navigate(['/dashboard']), 5000);
   }
 
-  irAlHome() {
-    this.router.navigate(['/home']);
+  irAlDashboard() {
+    this.router.navigate(['/dashboard']);
   }
 }

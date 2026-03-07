@@ -18,24 +18,36 @@ export class OnboardingComponent implements OnInit {
   cargando = false;
   error = '';
 
-  // Paso 2
-  nombre = '';
-  fecha = '';
-  ciudad = '';
+  // Paso 2a — datos obligatorios
+  nombre    = '';   // wedding.name
+  fecha     = '';   // wedding.wedding_date
+  ciudad    = '';   // wedding.location_name  (nombre del lugar/salón)
+
+  // Paso 2b — datos opcionales (mismos que info-boda)
+  direccion = '';   // wedding.address
+  dresscode = '';   // wedding.dress_code
+  menu      = '';   // wedding.menu_description
 
   // Paso 3
   estimadoInvitados = 50;
 
   // Paso 4
-  prioridad: string = 'invitados';
+  prioridad = 'invitados';
 
   // Paso 5
-  primerInvitadoNombre = '';
+  primerInvitadoNombre   = '';
   primerInvitadoApellido = '';
-  primerInvitadoEmail = '';
+  primerInvitadoEmail    = '';
 
   weddingId = '';
-  fechaMin = new Date().toISOString().split('T')[0];
+  fechaMin  = new Date().toISOString().split('T')[0];
+
+  dresscodeOpciones = [
+    { value: 'Gala (Etiqueta)',   label: '👔 Gala (Etiqueta)' },
+    { value: 'Formal',            label: '🎩 Formal' },
+    { value: 'Cóctel',            label: '🥂 Cóctel' },
+    { value: 'Informal / Casual', label: '👗 Informal / Casual' },
+  ];
 
   prioridades = [
     { key: 'invitados',    emoji: '👥', label: 'Gestión de invitados',   desc: 'Añade y organiza tu lista de invitados' },
@@ -53,7 +65,7 @@ export class OnboardingComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.getWeddingId()) {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/dashboard']);
     }
   }
 
@@ -74,7 +86,7 @@ export class OnboardingComponent implements OnInit {
 
     if (this.paso === 2) {
       if (!this.nombre.trim() || !this.fecha || !this.ciudad.trim()) {
-        this.error = 'Por favor completa todos los campos obligatorios.';
+        this.error = 'El nombre de la boda, la fecha y el lugar son obligatorios.';
         return;
       }
       this.crearBoda();
@@ -95,11 +107,20 @@ export class OnboardingComponent implements OnInit {
 
   crearBoda() {
     this.cargando = true;
-    this.gestionService.crearBoda({
-      name: this.nombre,
-      wedding_date: new Date(this.fecha + 'T12:00:00').toISOString(),
-      location_name: this.ciudad,
-    }).subscribe({
+
+    // Campos obligatorios siempre presentes
+    const payload: any = {
+      name:          this.nombre.trim(),
+      wedding_date:  new Date(this.fecha + 'T12:00:00').toISOString(),
+      location_name: this.ciudad.trim(),
+    };
+
+    // Campos opcionales: solo si el usuario los rellenó
+    if (this.direccion.trim())  payload.address          = this.direccion.trim();
+    if (this.dresscode)         payload.dress_code       = this.dresscode;
+    if (this.menu.trim())       payload.menu_description = this.menu.trim();
+
+    this.gestionService.crearBoda(payload).subscribe({
       next: (res: any) => {
         const boda = res?.data ?? res;
         this.weddingId = boda.id;
@@ -119,11 +140,11 @@ export class OnboardingComponent implements OnInit {
     this.cargando = true;
     this.gestionService.postInvitado(this.weddingId, {
       first_name: this.primerInvitadoNombre,
-      last_name: this.primerInvitadoApellido || undefined,
-      email: this.primerInvitadoEmail || undefined,
+      last_name:  this.primerInvitadoApellido || undefined,
+      email:      this.primerInvitadoEmail    || undefined,
     }).subscribe({
-      next: () => { this.cargando = false; this.paso++; },
-      error: () => { this.cargando = false; this.paso++; }, // avanza aunque falle
+      next:  () => { this.cargando = false; this.paso++; },
+      error: () => { this.cargando = false; this.paso++; },
     });
   }
 
@@ -132,7 +153,7 @@ export class OnboardingComponent implements OnInit {
   }
 
   irAlDashboard() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/dashboard']);
   }
 
   irAModulo() {
@@ -143,6 +164,6 @@ export class OnboardingComponent implements OnInit {
       album:        '/album',
       invitaciones: '/diseno',
     };
-    this.router.navigate([rutas[this.prioridad] ?? '/home']);
+    this.router.navigate([rutas[this.prioridad] ?? '/dashboard']);
   }
 }

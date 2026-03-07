@@ -6,20 +6,22 @@ import { PlanLimitsWidgetComponent } from './components/plan-limits-widget/plan-
 import { LanguageService } from './services/language/language.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent, TranslateModule],
+  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent, TranslateModule, SidebarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 
 export class AppComponent {
   title = 'wedding-planner-app';
+  isSidebarCollapsed = false;
 
   constructor(public authService: AuthService, public notifService: NotificationService, private router: Router, private languageService: LanguageService) {}
 
-    ngOnInit(): void {
+  ngOnInit(): void {
     this.languageService.initLanguage();
     console.log('✅ App inicializada con idioma:', this.languageService.getCurrentLanguage());
   }

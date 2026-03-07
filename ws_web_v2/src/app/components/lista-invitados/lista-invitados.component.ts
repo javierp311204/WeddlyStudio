@@ -57,10 +57,6 @@ export class ListaInvitadosComponent implements OnInit {
     this.cargarInvitados();
   }
 
-  irAlHome() {
-    this.router.navigate(['/home']);
-  }
-
   agregarInvitado() {
     if (!this.weddingId) {
       console.error('No se encontró el weddingId');

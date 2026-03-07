@@ -4,19 +4,6 @@
   min-height: 100vh;
 }
 
-/* --- BOTÓN VOLVER --- */
-.btn-back {
-  color: #8b7e74;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.btn-back:hover {
-  color: #d4a373;
-  transform: translateX(-3px);
-}
-
 /* --- CABECERA COMPACTA --- */
 .sub-fancy {
   font-family: 'Playfair Display', serif;

@@ -136,14 +136,14 @@ export const paymentService = {
       : { paypal_payment_id: data.paypalPaymentId };
 
     const payment = await prisma.payment.findFirst({ where });
-    if (!payment) throw new AppError('Pago no encontrado para marcar como completado', 404);
+    if (!payment) return null; // ← antes lanzaba AppError, ahora retorna null
 
     return prisma.payment.update({
       where: { id: payment.id },
       data:  {
-        status:           'completed',
-        invoice_pdf_url:  data.invoicePdfUrl,
-        metadata_json:    data.metadataJson as any,
+        status:          'completed',
+        invoice_pdf_url: data.invoicePdfUrl,
+        metadata_json:   data.metadataJson as any,
       },
     });
   },

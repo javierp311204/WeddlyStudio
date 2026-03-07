@@ -54,7 +54,7 @@ export class LoginComponent {
 
         // HomeComponent se encarga de cargar el weddingId y redirigir
         // a /onboarding si el usuario no tiene boda todavía
-        this.router.navigate(['/home']);
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         const mensaje =

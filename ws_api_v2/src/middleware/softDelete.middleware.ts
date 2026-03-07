@@ -14,7 +14,7 @@ const SOFT_DELETE_MODELS: Prisma.ModelName[] = [
   // 'Task',
   'Photo',
   // 'Invitation',
-  'Payment',
+  // 'Payment',
 ];
 
 export const softDeleteMiddleware: Prisma.Middleware = async (params, next) => {

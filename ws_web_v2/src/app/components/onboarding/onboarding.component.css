@@ -463,6 +463,24 @@
   display: inline-block;
 }
 
+.optional-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 16px;
+  color: #9a8878;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.optional-divider::before,
+.optional-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(212, 163, 115, 0.25);
+}
+
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Responsive ────────────────────────────────────── */

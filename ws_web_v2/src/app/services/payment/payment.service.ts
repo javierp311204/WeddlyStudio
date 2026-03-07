@@ -1,174 +1,131 @@
-// src/app/services/payment/payment.service.ts
-// Actualizado para Weddly API v2
-//
-// CAMBIOS PRINCIPALES vs backend viejo:
-// - /api/pagos/planes                      → /api/plans  (público, sin auth)
-// - /api/pagos/mi-plan                     → /api/subscriptions/current
-// - /api/pagos/verificar-limites           → incluido en /api/subscriptions/current
-// - /api/pagos/crear-sesion-pago-unico     → /api/payments/checkout/stripe
-// - /api/pagos/crear-suscripcion           → /api/payments/checkout/stripe  (mode distinto)
-// - /api/pagos/cancelar-suscripcion        → DELETE /api/subscriptions/current/cancel
-// - Se añade soporte para PayPal
-
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface StripeCheckoutResponse {
-  success: boolean;
-  data: {
-    url:        string;
-    session_id: string;
-  };
-}
-
-export interface PaypalOrderResponse {
-  success: boolean;
-  data: {
-    order_id:     string;
-    approval_url: string;
-  };
-}
 
 @Injectable({ providedIn: 'root' })
 export class PaymentService {
-  private API_URL = 'http://localhost:3000/api';
+
+  private apiUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) {}
 
-  // ════════════════════════════════════════
-  // PLANES
-  // ════════════════════════════════════════
+  private getHeaders(): { headers: HttpHeaders } {
+    const token = localStorage.getItem('token');
+    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
+  }
 
-  /**
-   * Lista planes activos. Público, sin auth.
-   * Antes: GET /api/pagos/planes
-   */
+  // ─────────────────────────────────────────────────────────
+  // PLANES — público, sin auth
+  // GET /api/plans
+  // ─────────────────────────────────────────────────────────
+
   getPlanes(): Observable<any> {
-    return this.http.get(`${this.API_URL}/plans`);
+    return this.http.get(`${this.apiUrl}/plans`);
   }
 
-  // ════════════════════════════════════════
+  // ─────────────────────────────────────────────────────────
   // SUSCRIPCIÓN ACTUAL
-  // ════════════════════════════════════════
+  // GET /api/subscriptions/current
+  // ─────────────────────────────────────────────────────────
 
-  /**
-   * Devuelve la suscripción activa + datos del plan.
-   * Si no hay suscripción activa, devuelve el plan Free con { is_free: true }.
-   * Antes: GET /api/pagos/mi-plan
-   */
   getMiPlan(): Observable<any> {
-    return this.http.get(`${this.API_URL}/subscriptions/current`);
+    return this.http.get(`${this.apiUrl}/subscriptions/current`, this.getHeaders());
   }
 
-  /**
-   * Historial paginado de pagos.
-   * Filtros opcionales: status, page, limit
-   */
-  getHistorialPagos(page = 1, limit = 20, status?: string): Observable<any> {
-    let url = `${this.API_URL}/payments?page=${page}&limit=${limit}`;
-    if (status) url += `&status=${status}`;
-    return this.http.get(url);
-  }
+  // ─────────────────────────────────────────────────────────
+  // CANCELAR SUSCRIPCIÓN
+  // DELETE /api/subscriptions/current/cancel
+  // ─────────────────────────────────────────────────────────
 
-  // ════════════════════════════════════════
-  // CHECKOUT — STRIPE
-  // ════════════════════════════════════════
-
-  /**
-   * Crea una Stripe Checkout Session para pago único (one_time).
-   * Redirige automáticamente al usuario a la URL de Stripe.
-   * Antes: POST /api/pagos/crear-sesion-pago-unico
-   */
-  async crearPagoUnico(planId: string, weddingId?: string): Promise<void> {
-    try {
-      const response = await this.http.post<StripeCheckoutResponse>(
-        `${this.API_URL}/payments/checkout/stripe`,
-        { plan_id: planId, wedding_id: weddingId, interval: 'month' },
-      ).toPromise();
-
-      if (response?.data?.url) {
-        window.location.href = response.data.url;
-      } else {
-        throw new Error('No se recibió URL de checkout de Stripe');
-      }
-    } catch (error) {
-      console.error('[PaymentService] Error creando pago único:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Crea una Stripe Checkout Session para suscripción recurrente.
-   * Antes: POST /api/pagos/crear-suscripcion
-   */
-  async crearSuscripcion(planId: string, weddingId?: string, interval: 'month' | 'year' = 'month'): Promise<void> {
-    try {
-      const response = await this.http.post<StripeCheckoutResponse>(
-        `${this.API_URL}/payments/checkout/stripe`,
-        { plan_id: planId, wedding_id: weddingId, interval },
-      ).toPromise();
-
-      if (response?.data?.url) {
-        window.location.href = response.data.url;
-      } else {
-        throw new Error('No se recibió URL de checkout de Stripe');
-      }
-    } catch (error) {
-      console.error('[PaymentService] Error creando suscripción:', error);
-      throw error;
-    }
-  }
-
-  // ════════════════════════════════════════
-  // CHECKOUT — PAYPAL (nuevo)
-  // ════════════════════════════════════════
-
-  /**
-   * Crea una PayPal Order y redirige al usuario a PayPal para aprobarla.
-   */
-  async crearPagoPaypal(planId: string, weddingId?: string): Promise<void> {
-    try {
-      const response = await this.http.post<PaypalOrderResponse>(
-        `${this.API_URL}/payments/checkout/paypal`,
-        { plan_id: planId, wedding_id: weddingId },
-      ).toPromise();
-
-      if (response?.data?.approval_url) {
-        window.location.href = response.data.approval_url;
-      } else {
-        throw new Error('No se recibió approval_url de PayPal');
-      }
-    } catch (error) {
-      console.error('[PaymentService] Error creando pago PayPal:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Captura una orden PayPal tras la aprobación del usuario.
-   * Llamar desde la página /pago-exitoso con el orderId de los query params.
-   */
-  capturarOrdenPaypal(orderId: string): Observable<any> {
-    return this.http.post(
-      `${this.API_URL}/payments/checkout/paypal/capture/${orderId}`,
-      {},
+  cancelarSuscripcion(cancelImmediately = false): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/subscriptions/current/cancel`,
+      { ...this.getHeaders(), body: { cancel_immediately: cancelImmediately } }
     );
   }
 
-  // ════════════════════════════════════════
-  // CANCELACIÓN
-  // ════════════════════════════════════════
+  // ─────────────────────────────────────────────────────────
+  // STRIPE CHECKOUT
+  // POST /api/payments/checkout/stripe
+  // Devuelve { url, session_id } → el frontend redirige a url
+  // ─────────────────────────────────────────────────────────
+
+  crearSesionStripe(planId: string, weddingId?: string, interval: 'month' | 'year' = 'month'): Observable<any> {
+    const body: any = { plan_id: planId, interval };
+    if (weddingId) body.wedding_id = weddingId;
+    return this.http.post(`${this.apiUrl}/payments/checkout/stripe`, body, this.getHeaders());
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // PAYPAL ORDER
+  // POST /api/payments/checkout/paypal
+  // Devuelve { order_id, approval_url } → el frontend redirige a approval_url
+  // ─────────────────────────────────────────────────────────
+
+  crearOrdenPaypal(planId: string, weddingId?: string): Observable<any> {
+    const body: any = { plan_id: planId };
+    if (weddingId) body.wedding_id = weddingId;
+    return this.http.post(`${this.apiUrl}/payments/checkout/paypal`, body, this.getHeaders());
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // PAYPAL CAPTURE
+  // POST /api/payments/checkout/paypal/capture/:orderId
+  // ─────────────────────────────────────────────────────────
+
+  capturarPaypal(orderId: string): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/payments/checkout/paypal/capture/${orderId}`,
+      {},
+      this.getHeaders()
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // HISTORIAL DE PAGOS
+  // GET /api/payments?page=1&limit=20&status=completed
+  // ─────────────────────────────────────────────────────────
+
+  getHistorial(page = 1, limit = 20, status?: string): Observable<any> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('limit', limit);
+    if (status) params = params.set('status', status);
+    return this.http.get(`${this.apiUrl}/payments`, { ...this.getHeaders(), params });
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // DETALLE DE UN PAGO
+  // GET /api/payments/:paymentId
+  // ─────────────────────────────────────────────────────────
+
+  getPago(paymentId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/payments/${paymentId}`, this.getHeaders());
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // HELPERS usados desde pricing.component.ts
+  // Encapsulan la lógica de: crear sesión → redirigir al checkout
+  // ─────────────────────────────────────────────────────────
 
   /**
-   * Cancela la suscripción activa.
-   * Por defecto cancela al final del período (el usuario mantiene acceso hasta que venza).
-   * Con cancelImmediately=true cancela de inmediato.
-   * Antes: POST /api/pagos/cancelar-suscripcion
+   * Plan one_time: crea sesión Stripe y redirige al checkout.
+   * El plan one_time NO es una suscripción recurrente — usa payment_intent.
    */
-  cancelarSuscripcion(cancelImmediately = false): Observable<any> {
-    return this.http.delete(`${this.API_URL}/subscriptions/current/cancel`, {
-      body: { cancel_immediately: cancelImmediately },
-    });
+  async crearPagoUnico(planId: string, weddingId?: string): Promise<void> {
+    const res: any = await this.crearSesionStripe(planId, weddingId).toPromise();
+    const url = res?.data?.url ?? res?.url;
+    if (url) window.location.href = url;
+    else throw new Error('No se recibió URL de Stripe');
+  }
+
+  /**
+   * Plan subscription: crea sesión Stripe con billing_period_end y redirige.
+   */
+  async crearSuscripcion(planId: string, weddingId?: string): Promise<void> {
+    const res: any = await this.crearSesionStripe(planId, weddingId, 'month').toPromise();
+    const url = res?.data?.url ?? res?.url;
+    if (url) window.location.href = url;
+    else throw new Error('No se recibió URL de Stripe');
   }
 }

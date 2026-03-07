@@ -96,7 +96,4 @@ export class AlbumDigitalComponent implements OnInit {
       });
   }
 
-  irAlHome() {
-    this.router.navigate(['/home']);
-  }
 }

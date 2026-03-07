@@ -6,7 +6,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
-import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
 import { TareasService } from '../../services/tareas/tareas.service';
 import { ChecklistPreviewComponent } from '../checklist-preview/checklist-preview.component';
 
@@ -17,7 +16,6 @@ import { ChecklistPreviewComponent } from '../checklist-preview/checklist-previe
     CommonModule,
     RouterModule,
     TranslateModule,
-    LanguageSelectorComponent,
     ChecklistPreviewComponent,
   ],
   templateUrl: './home.component.html',
@@ -28,7 +26,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   mostrarPanel     = false;
   cargandoBoda     = false;
 
-  // v2: Notificaciones pendientes de implementar
   notificaciones:        any[] = [];
   notificacionesSinLeer: number = 0;
   estadisticasChecklist: any = null;
@@ -43,19 +40,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    // Sin sesión → mostrar home público sin redirigir.
-    // Permite que el botón "Volver" del login lleve aquí sin bucles.
-    if (!this.authService.isLoggedIn()) {
-      return;
-    }
+    if (!this.authService.isLoggedIn()) return;
 
-    // Con sesión → verificar si tiene boda activa
     const weddingId = this.authService.getWeddingId();
 
     if (weddingId) {
       this.inicializarHome();
     } else {
-      // Consultar API — solo redirige a onboarding si la lista viene vacía
       this.cargandoBoda = true;
       this.authService.loadActiveWedding().subscribe({
         next: (res: any) => {
@@ -69,11 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.router.navigate(['/onboarding']);
           }
         },
-        error: () => {
-          this.cargandoBoda = false;
-          // 401 lo gestiona el interceptor → clearSession + /login
-          // Otros errores: no redirigir para no romper navegación pública
-        },
+        error: () => { this.cargandoBoda = false; },
       });
     }
   }
@@ -91,9 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() { this.checklistSub?.unsubscribe(); }
-
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   iniciarTour() {
     driver({
@@ -102,10 +87,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       overlayColor: 'rgba(51, 47, 44, 0.7)',
       stagePadding: 10,
       steps: [
-        { element: '.nav-logo',      popover: { title: this.translate.instant('HOME.TOUR_STEP_1_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_1_DESC'), side: 'bottom' } },
-        { element: '.notif-wrapper', popover: { title: this.translate.instant('HOME.TOUR_STEP_2_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_2_DESC'), side: 'bottom' } },
-        { element: '.action-grid',   popover: { title: this.translate.instant('HOME.TOUR_STEP_3_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_3_DESC'), side: 'top'    } },
-        { element: '.logout-pill',   popover: { title: this.translate.instant('HOME.TOUR_STEP_4_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_4_DESC'), side: 'left'   } },
+        { element: '.sidebar',      popover: { title: this.translate.instant('HOME.TOUR_STEP_1_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_1_DESC'), side: 'right' } },
+        { element: '.action-grid',  popover: { title: this.translate.instant('HOME.TOUR_STEP_3_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_3_DESC'), side: 'top'   } },
+        { element: '.logout-btn',   popover: { title: this.translate.instant('HOME.TOUR_STEP_4_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_4_DESC'), side: 'right' } },
       ],
     }).drive();
   }
@@ -128,10 +112,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (mapa[n.tipo]) this.router.navigate([mapa[n.tipo]]);
   }
 
-  irAInfoBoda()  { this.router.navigate(['/info-boda']);        }
-  irAMesas()     { this.router.navigate(['/mesa-manager']);     }
-  irAPapeleria() { this.router.navigate(['/diseno-papeleria']); }
-  verMiMesa()    { this.router.navigate(['/mi-asiento']);       }
+  irAInfoBoda()  { this.router.navigate(['/info-boda']); }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {

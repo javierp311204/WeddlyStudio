@@ -1,6 +1,21 @@
-<router-outlet></router-outlet>
+<!-- ── Layout autenticado: sidebar izquierdo + contenido ──────── -->
+<ng-container *ngIf="authService.isLoggedIn()">
+  <div class="app-shell" [class.sidebar-collapsed]="isSidebarCollapsed">
+    <app-sidebar (collapsedChange)="isSidebarCollapsed = $event" />
+    <main class="app-main">
+      <router-outlet />
+    </main>
+  </div>
+</ng-container>
 
-<!-- Toast Notification -->
+<!-- ── Layout público: sin sidebar ───────────────────────────── -->
+<ng-container *ngIf="!authService.isLoggedIn()">
+  <router-outlet />
+</ng-container>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- Toast Notification                                          -->
+<!-- ════════════════════════════════════════════════════════════ -->
 <div *ngIf="notifService.toastState$ | async as toast">
   <div
     class="toast-notification position-fixed shadow-lg rounded-4"
@@ -9,18 +24,22 @@
   >
     <div class="toast-content d-flex align-items-start gap-3 position-relative">
       <span class="toast-icon fs-4">
-        {{ toast.type === "success" ? "✅" : "❌" }}
+        {{ toast.type === 'success' ? '✅' : '❌' }}
       </span>
       <div class="text-wrapper flex-grow-1">
         <p class="toast-title fw-bold mb-1">{{ toast.title }}</p>
         <p class="toast-sub small mb-0">{{ toast.message }}</p>
       </div>
-      <button class="toast-close position-absolute btn-close" (click)="notifService.hideToast()" aria-label="Close"></button>
+      <button class="toast-close position-absolute btn-close"
+              (click)="notifService.hideToast()"
+              aria-label="Close"></button>
     </div>
   </div>
 </div>
 
-<!-- Modal de Confirmación -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- Modal de Confirmación                                       -->
+<!-- ════════════════════════════════════════════════════════════ -->
 <div
   class="modal-overlay position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
   *ngIf="notifService.confirmState$ | async as conf"
@@ -40,17 +59,13 @@
       <button
         class="btn btn-confirm-no flex-fill rounded-3 py-2 fw-semibold text-uppercase small"
         (click)="notifService.respondConfirmation(false, conf.key, false)"
-      >
-        Cancelar
-      </button>
+      >Cancelar</button>
       <button
         class="btn btn-confirm-si flex-fill rounded-3 py-2 fw-semibold text-uppercase small"
         (click)="notifService.respondConfirmation(true, conf.key, dontAskCheck.checked)"
-      >
-        Sí, continuar
-      </button>
+      >Sí, continuar</button>
     </div>
   </div>
 </div>
 
-<app-plan-limits-widget></app-plan-limits-widget>
+<app-plan-limits-widget />

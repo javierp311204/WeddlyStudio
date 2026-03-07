@@ -4,24 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { NotificationService } from '../../services/notification/notification.service';
-import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-
-// ─────────────────────────────────────────────────────────────
-// MIGRACIÓN v2:
-//  • GestionService.getConfiguracion()  → GET  /api/weddings/:weddingId
-//  • GestionService.postConfiguracion() → PATCH /api/weddings/:weddingId
-//  • codigoBoda → weddingId (UUID)
-//  • Campos:
-//      bodaInfo.lugarNombre → wedding.venue_name
-//      bodaInfo.direccion   → wedding.venue_address
-//      bodaInfo.fechaHora   → wedding.date  (ISO string)
-//      bodaInfo.dressCode   → wedding.dress_code  (campo custom si existe)
-//      bodaInfo.menuResumen → wedding.notes  (o campo custom)
-//
-//  NOTA: Si GestionService aún no tiene los métodos v2, esta implementación
-//  llama directamente al HttpClient como referencia. Adapta al servicio.
-// ─────────────────────────────────────────────────────────────
 
 @Component({
   selector: 'app-info-boda',
@@ -31,19 +14,19 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
   styleUrl: './info-boda.component.css'
 })
 export class InfoBodaComponent implements OnInit {
-  editMode: boolean = false;
-  cargando: boolean = false;
-  guardando: boolean = false;
-  weddingId: string = '';
+  editMode  = false;
+  cargando  = false;
+  guardando = false;
+  weddingId = '';
 
-  // v2: mapeados a los campos del schema Wedding de v2
+  // Todos los campos en un solo objeto, con nombres consistentes con el template y el schema
   bodaInfo: any = {
-    name: '',               // wedding.name
-    venue_name: '',         // campo custom / notes
-    venue_address: '',      // campo custom
-    date: '',               // wedding.date (ISO)
-    dress_code: '',         // campo custom
-    menu_summary: '',       // campo custom / notes
+    name:          '',   // wedding.name
+    venue_name:    '',   // wedding.location_name
+    venue_address: '',   // wedding.address
+    date:          '',   // wedding.wedding_date (ISO string, cortado a datetime-local)
+    dress_code:    '',   // wedding.dress_code
+    notes:         '',   // wedding.menu_description
   };
 
   private apiUrl = 'http://localhost:3000/api';
@@ -51,7 +34,6 @@ export class InfoBodaComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private notifService: NotificationService,
-    private router: Router,
     private translate: TranslateService,
     private http: HttpClient,
   ) {}
@@ -70,24 +52,21 @@ export class InfoBodaComponent implements OnInit {
     if (!this.weddingId) return;
     this.cargando = true;
 
-    // v2: GET /api/weddings/:weddingId
     this.http.get<any>(`${this.apiUrl}/weddings/${this.weddingId}`, this.getHeaders()).subscribe({
-      next: (res: any) => {
+      next: (res) => {
         const w = res?.data ?? res;
-        // Mapear campos v2 → modelo local
         this.bodaInfo = {
-          name:          w.name        || '',
-          venue_name:    w.venue_name  || '',
-          venue_address: w.venue_address || '',
-          date:          w.date        ? w.date.substring(0, 16) : '', // datetime-local
-          dress_code:    w.dress_code  || '',
-          menu_summary:  w.menu_summary || w.notes || '',
+          name:          w.name             || '',
+          venue_name:    w.location_name    || '',
+          venue_address: w.address          || '',
+          date:          w.wedding_date     ? new Date(w.wedding_date).toISOString().substring(0, 16) : '',
+          dress_code:    w.dress_code       || '',
+          notes:         w.menu_description || '',
         };
         this.cargando = false;
       },
-      error: (err: any) => {
+      error: () => {
         this.cargando = false;
-        console.error('Error al cargar boda:', err);
         this.notifService.showError(
           this.translate.instant('COMMON.ERROR'),
           this.translate.instant('INFO.LOAD_ERROR')
@@ -99,41 +78,35 @@ export class InfoBodaComponent implements OnInit {
   guardarCambios() {
     this.guardando = true;
 
-    // v2: PATCH /api/weddings/:weddingId
-    // Solo enviar campos que acepta el schema Wedding de v2
+    // Mapeamos de vuelta a los nombres reales del schema
     const payload: any = {
-      name:          this.bodaInfo.name,
-      date:          this.bodaInfo.date || undefined,
-      venue_name:    this.bodaInfo.venue_name  || undefined,
-      venue_address: this.bodaInfo.venue_address || undefined,
-      dress_code:    this.bodaInfo.dress_code  || undefined,
-      notes:         this.bodaInfo.menu_summary || undefined,
+      name:             this.bodaInfo.name          || undefined,
+      wedding_date:     this.bodaInfo.date          ? new Date(this.bodaInfo.date).toISOString() : undefined,
+      location_name:    this.bodaInfo.venue_name    || undefined,
+      address:          this.bodaInfo.venue_address || undefined,
+      dress_code:       this.bodaInfo.dress_code    || undefined,
+      menu_description: this.bodaInfo.notes         || undefined,
     };
 
-    // Limpiar undefined para no mandar campos vacíos
+    // Eliminar claves undefined antes de enviar
     Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
 
     this.http.patch(`${this.apiUrl}/weddings/${this.weddingId}`, payload, this.getHeaders()).subscribe({
       next: () => {
         this.guardando = false;
-        this.editMode = false;
+        this.editMode  = false;
         this.notifService.showSuccess(
           this.translate.instant('INFO.SAVE_SUCCESS_TITLE'),
           this.translate.instant('INFO.SAVE_SUCCESS_DESC')
         );
       },
-      error: (err: any) => {
+      error: () => {
         this.guardando = false;
-        console.error('Error al guardar:', err);
         this.notifService.showError(
           this.translate.instant('NOTIFICATIONS.ERROR_SAVING'),
           this.translate.instant('INFO.SAVE_ERROR_DESC')
         );
       }
     });
-  }
-
-  irAlMenu() {
-    this.router.navigate(['/home']);
   }
 }

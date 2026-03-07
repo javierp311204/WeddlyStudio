@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import Stripe from 'stripe';
 import { paymentService } from '../services/payment.service';
 import { subscriptionService } from '../services/subscription.service';
+import prisma from '../config/db';
 
 const router = Router();
 
@@ -58,6 +59,34 @@ router.post('/stripe', async (req: Request, res: Response) => {
             await subscriptionService.upgradePlan(user_id, 'one_time', wedding_id);
           }
         }
+        break;
+      }
+
+      // ── Checkout completado (one_time) ────────────────────────
+      case 'checkout.session.completed': {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const { user_id, plan_id, plan_name, wedding_id } = session.metadata ?? {};
+
+        if (!user_id) {
+          console.warn('[Stripe Webhook] checkout.session sin metadata user_id');
+          break;
+        }
+
+        // Marcar pago como completado por payment_intent
+        const paymentIntentId = session.payment_intent as string;
+        if (paymentIntentId) {
+          await paymentService.markCompleted({
+            stripePaymentId: paymentIntentId,
+            metadataJson: { session_id: session.id },
+          });
+        }
+
+        // Actualizar plan de la boda
+        if (plan_name?.toLowerCase().includes('one')) {
+          await subscriptionService.upgradePlan(user_id, 'one_time', wedding_id);
+          console.log(`[Stripe Webhook] Plan one_time activado para user ${user_id}, boda ${wedding_id}`);
+        }
+
         break;
       }
 

@@ -266,6 +266,35 @@ body {
   text-shadow: none !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   APP SHELL — sidebar izquierdo + contenido principal
+   ═══════════════════════════════════════════════════════════════ */
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  --sw: 240px; /* sincronizado con sidebar.component.css */
+}
+
+.app-shell.sidebar-collapsed {
+  --sw: 68px;
+}
+
+.app-main {
+  margin-left: var(--sw);
+  flex: 1;
+  min-width: 0;
+  transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #fdfaf7; /* --bg-soft de la app */
+  min-height: 100vh;
+}
+
+/* Móvil: sidebar siempre colapsado → 68px */
+@media (max-width: 768px) {
+  .app-shell        { --sw: 68px; }
+  .app-shell.sidebar-collapsed { --sw: 68px; }
+}
+
 /* --- RESPONSIVE --- */
 @media (max-width: 576px) {
   .toast-notification {

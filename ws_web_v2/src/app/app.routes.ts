@@ -14,6 +14,7 @@ import { PlanGuard } from './guards/plan.guard';
 import { VerificarEmailComponent } from './pages/verificar-email/verificar-email.component';
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { RsvpComponent } from './components/rsvp/rsvp.component';
+import { PricingComponent } from './pages/pricing/pricing.component';
 
 export const routes: Routes = [
 
@@ -35,6 +36,7 @@ export const routes: Routes = [
   { path: 'diseno',    component: DisenoPapeleriaComponent, canActivate: [weddingOwnerGuard] },
   { path: 'checklist', component: ChecklistBodaComponent,   canActivate: [weddingOwnerGuard] },
   { path: 'invitados', component: ListaInvitadosComponent,  canActivate: [weddingOwnerGuard] },
+  { path: 'pricing', component: PricingComponent,  canActivate: [weddingOwnerGuard] },
 
   // ── Rutas admin + plan de pago ──────────────────────────────
   {
