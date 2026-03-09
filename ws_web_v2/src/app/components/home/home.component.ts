@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           const lista: any[] = res?.data ?? res?.weddings ?? [];
           if (lista.length > 0) {
             this.authService.setWeddingId(lista[0].id);
-            localStorage.setItem('weddingRole', lista[0].myRole ?? 'bride');
+            localStorage.setItem('weddingRole', lista[0].myRole ?? 'owner');
             this.inicializarHome();
           } else {
             this.router.navigate(['/onboarding']);

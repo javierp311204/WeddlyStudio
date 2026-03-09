@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 
 // ─────────────────────────────────────────────────────────────
@@ -16,7 +17,7 @@ import { NotificationService } from '../../services/notification/notification.se
 @Component({
   selector: 'app-resetear-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './resetear-password.component.html',
   styleUrl: './resetear-password.component.css',
 })
@@ -39,6 +40,7 @@ export class ResetearPasswordComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private notifService: NotificationService,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit() {
@@ -46,7 +48,7 @@ export class ResetearPasswordComponent implements OnInit {
 
     if (!tokenParam) {
       this.tokenInvalido = true;
-      this.mensajeError = 'Token de recuperación no encontrado en la URL.';
+      this.mensajeError = this.translate.instant('PASSWORD_RESET.ERROR_INVALID');
     } else {
       this.token = tokenParam;
     }
@@ -62,15 +64,24 @@ export class ResetearPasswordComponent implements OnInit {
 
   resetearPassword() {
     if (!this.nuevaPassword || !this.confirmarPassword) {
-      this.notifService.showError('Campos incompletos', 'Por favor, completa todos los campos.');
+      this.notifService.showError(
+        this.translate.instant('PASSWORD_RESET.ERROR_TITLE'),
+        this.translate.instant('PASSWORD_RESET.ERROR_SHORT')
+      );
       return;
     }
-    if (this.nuevaPassword.length < 6) {
-      this.notifService.showError('Contraseña débil', 'La contraseña debe tener al menos 6 caracteres.');
+    if (this.nuevaPassword.length < 8) {
+      this.notifService.showError(
+        this.translate.instant('PASSWORD_RESET.ERROR_TITLE'),
+        this.translate.instant('PASSWORD_RESET.ERROR_SHORT')
+      );
       return;
     }
     if (this.nuevaPassword !== this.confirmarPassword) {
-      this.notifService.showError('Contraseñas no coinciden', 'Las contraseñas ingresadas no son iguales.');
+      this.notifService.showError(
+        this.translate.instant('PASSWORD_RESET.ERROR_TITLE'),
+        this.translate.instant('PASSWORD_RESET.ERROR_MISMATCH')
+      );
       return;
     }
 
@@ -85,8 +96,8 @@ export class ResetearPasswordComponent implements OnInit {
         this.procesando = false;
         this.resetExitoso = true;
         this.notifService.showSuccess(
-          '¡Contraseña actualizada!',
-          'Tu contraseña ha sido cambiada exitosamente.',
+          this.translate.instant('PASSWORD_RESET.SUCCESS_TITLE'),
+          this.translate.instant('PASSWORD_RESET.SUCCESS_DESC'),
         );
         setTimeout(() => this.router.navigate(['/login']), 3000);
       },
@@ -95,8 +106,11 @@ export class ResetearPasswordComponent implements OnInit {
         const mensaje =
           err.error?.message ||
           err.error?.error ||
-          'Error al resetear la contraseña. El token puede haber expirado.';
-        this.notifService.showError('Error', mensaje);
+          this.translate.instant('PASSWORD_RESET.ERROR_INVALID');
+        this.notifService.showError(
+          this.translate.instant('PASSWORD_RESET.ERROR_TITLE'),
+          mensaje
+        );
 
         if (err.status === 400 || err.status === 404) {
           this.tokenInvalido = true;

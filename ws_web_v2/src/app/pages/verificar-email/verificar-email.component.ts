@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-verificar-email',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './verificar-email.component.html',
   styleUrl: './verificar-email.component.css',
 })
@@ -19,6 +20,7 @@ export class VerificarEmailComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit() {
@@ -27,7 +29,7 @@ export class VerificarEmailComponent implements OnInit {
 
     if (!token) {
       this.verificando = false;
-      this.mensajeError = 'Token de verificación no encontrado.';
+      this.mensajeError = this.translate.instant('VERIFICATION.ERROR_GENERAL');
       return;
     }
 
@@ -49,7 +51,7 @@ export class VerificarEmailComponent implements OnInit {
         this.verificando = false;
         this.verificacionExitosa = false;
         this.mensajeError =
-          err.error?.message ?? 'El token es inválido o ha expirado.';
+          err.error?.message ?? this.translate.instant('VERIFICATION.ERROR_GENERAL');
       },
     });
   }

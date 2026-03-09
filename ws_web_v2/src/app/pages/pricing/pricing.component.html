@@ -12,8 +12,8 @@
 
     <div class="header-content">
       <span class="header-eyebrow">✦ Weddly Studio</span>
-      <h1 class="header-title">Elige tu plan perfecto</h1>
-      <p class="header-subtitle">Sin sorpresas. Sin letra pequeña. Cancela cuando quieras.</p>
+      <h1 class="header-title">{{ 'PRICING.TITLE' | translate }}</h1>
+      <p class="header-subtitle">{{ 'PRICING.SUBTITLE' | translate }}</p>
     </div>
   </header>
 
@@ -40,7 +40,7 @@
 
       <!-- Badge -->
       <div class="plan-badge" *ngIf="plan.badge || esPlanActual(plan.tipo)">
-        <span *ngIf="esPlanActual(plan.tipo)">✓ Plan actual</span>
+        <span *ngIf="esPlanActual(plan.tipo)">{{ 'PRICING.CURRENT_PLAN_BADGE' | translate }}</span>
         <span *ngIf="!esPlanActual(plan.tipo)">{{ plan.badge }}</span>
       </div>
 
@@ -86,16 +86,16 @@
 
         <span *ngIf="isProcesando(plan.id)" class="btn-inner">
           <span class="spinner"></span>
-          Redirigiendo...
+          {{ 'PRICING.REDIRECTING' | translate }}
         </span>
         <span *ngIf="!isProcesando(plan.id) && esPlanActual(plan.tipo)" class="btn-inner">
-          ✓ Plan actual
+          {{ 'PRICING.CURRENT_PLAN_BADGE' | translate }}
         </span>
         <span *ngIf="!isProcesando(plan.id) && !esPlanActual(plan.tipo) && plan.tipo === 'free'" class="btn-inner">
-          Empezar gratis
+          {{ 'PRICING.START_FREE' | translate }}
         </span>
         <span *ngIf="!isProcesando(plan.id) && !esPlanActual(plan.tipo) && plan.tipo !== 'free'" class="btn-inner">
-          Elegir {{ plan.nombre }}
+          {{ 'PRICING.SELECT_PLAN_WITH_NAME' | translate }} {{ plan.nombre }}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -108,11 +108,11 @@
   <!-- Footer garantía -->
   <footer class="pricing-footer" *ngIf="!cargando">
     <div class="guarantee-row">
-      <span class="guarantee-item">🔒 Pago seguro con Stripe</span>
+      <span class="guarantee-item">{{ 'PRICING.SECURE_PAYMENT' | translate }}</span>
       <span class="guarantee-sep">·</span>
-      <span class="guarantee-item">📧 Factura por email</span>
+      <span class="guarantee-item">{{ 'PRICING.INVOICE_EMAIL' | translate }}</span>
       <span class="guarantee-sep">·</span>
-      <span class="guarantee-item">↩️ Cancela cuando quieras</span>
+      <span class="guarantee-item">{{ 'PRICING.CANCEL_ANYTIME' | translate }}</span>
     </div>
   </footer>
 

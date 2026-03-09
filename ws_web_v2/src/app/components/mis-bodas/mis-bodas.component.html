@@ -9,28 +9,28 @@
     <!-- ── Header ── -->
     <div class="mb-header">
       <div>
-        <p class="mb-header__eyebrow">Mi cuenta</p>
-        <h1 class="mb-header__title">Mis Bodas</h1>
+        <p class="mb-header__eyebrow">{{ 'WEDDINGS.EYEBROW' | translate }}</p>
+        <h1 class="mb-header__title">{{ 'WEDDINGS.TITLE' | translate }}</h1>
       </div>
       <button class="mb-new-btn" (click)="abrirNuevaBoda()">
         <span class="mb-new-btn__icon">+</span>
-        <span>Nueva boda</span>
+        <span>{{ 'WEDDINGS.NEW_WEDDING' | translate }}</span>
       </button>
     </div>
 
     <!-- ── Loading ── -->
     <div class="mb-loading" *ngIf="cargando">
       <div class="mb-spinner"></div>
-      <p>Cargando bodas...</p>
+      <p>{{ 'WEDDINGS.LOADING' | translate }}</p>
     </div>
 
     <!-- ── Estado vacío ── -->
     <div class="mb-empty" *ngIf="!cargando && bodas.length === 0">
       <span class="mb-empty__icon">💒</span>
-      <h2 class="mb-empty__title">Aún no tienes bodas</h2>
-      <p class="mb-empty__desc">Crea tu primera boda para empezar a organizarlo todo.</p>
+      <h2 class="mb-empty__title">{{ 'WEDDINGS.EMPTY_TITLE' | translate }}</h2>
+      <p class="mb-empty__desc">{{ 'WEDDINGS.EMPTY_DESC' | translate }}</p>
       <button class="mb-new-btn" (click)="abrirNuevaBoda()">
-        <span>+ Crear mi primera boda</span>
+        <span>{{ 'WEDDINGS.CREATE_FIRST' | translate }}</span>
       </button>
     </div>
 
@@ -45,7 +45,7 @@
       >
         <!-- Badge activa -->
         <div class="mb-card__active-badge" *ngIf="boda.id === activaId">
-          <span>✓ Boda activa</span>
+          <span>{{ 'WEDDINGS.ACTIVE_BADGE' | translate }}</span>
         </div>
 
         <!-- Header de la tarjeta -->
@@ -75,15 +75,15 @@
         <div class="mb-card__stats">
           <div class="mb-stat">
             <span class="mb-stat__num">{{ boda._count.guests }}</span>
-            <span class="mb-stat__label">invitados</span>
+            <span class="mb-stat__label">{{ 'WEDDINGS.GUESTS' | translate }}</span>
           </div>
           <div class="mb-stat">
             <span class="mb-stat__num">{{ boda._count.tables }}</span>
-            <span class="mb-stat__label">mesas</span>
+            <span class="mb-stat__label">{{ 'WEDDINGS.TABLES' | translate }}</span>
           </div>
           <div class="mb-stat">
             <span class="mb-stat__num">{{ boda._count.tasks }}</span>
-            <span class="mb-stat__label">tareas</span>
+            <span class="mb-stat__label">{{ 'WEDDINGS.TASKS' | translate }}</span>
           </div>
         </div>
 
@@ -93,7 +93,7 @@
             class="mb-card__select-btn"
             [class.mb-card__select-btn--active]="boda.id === activaId"
           >
-            {{ boda.id === activaId ? '✓ Activa' : 'Seleccionar' }}
+            {{ boda.id === activaId ? ('WEDDINGS.ACTIVE' | translate) : ('WEDDINGS.SELECT' | translate) }}
           </button>
 
           <button
@@ -112,7 +112,7 @@
       <div class="mb-card mb-card--new" (click)="abrirNuevaBoda()">
         <div class="mb-card--new__inner">
           <span class="mb-card--new__icon">+</span>
-          <p class="mb-card--new__text">Nueva boda</p>
+          <p class="mb-card--new__text">{{ 'WEDDINGS.NEW_WEDDING' | translate }}</p>
         </div>
       </div>
 
@@ -125,16 +125,16 @@
 <div class="mb-backdrop" *ngIf="showNuevaModal" (click)="cerrarNuevaModal()">
   <div class="mb-modal" (click)="$event.stopPropagation()">
     <button class="mb-modal__close" (click)="cerrarNuevaModal()">×</button>
-    <h3 class="mb-modal__title">Nueva boda</h3>
-    <p class="mb-modal__subtitle">Completa los datos básicos, podrás añadir más información después.</p>
+    <h3 class="mb-modal__title">{{ 'WEDDINGS.MODAL_NEW_TITLE' | translate }}</h3>
+    <p class="mb-modal__subtitle">{{ 'WEDDINGS.MODAL_NEW_SUBTITLE' | translate }}</p>
 
     <div class="mb-field">
-      <label class="mb-label">Nombre de la boda *</label>
+      <label class="mb-label">{{ 'WEDDINGS.NAME_LABEL' | translate }}</label>
       <input
         class="mb-input"
         [(ngModel)]="nuevaForm.name"
         [class.mb-input--error]="nuevaError"
-        placeholder="Ej: Boda de Ana y Carlos"
+        [placeholder]="'WEDDINGS.NAME_PLACEHOLDER' | translate"
         maxlength="200"
         (keydown.enter)="crearBoda()"
       />
@@ -142,7 +142,7 @@
     </div>
 
     <div class="mb-field">
-      <label class="mb-label">Fecha (opcional)</label>
+      <label class="mb-label">{{ 'WEDDINGS.DATE_LABEL' | translate }}</label>
       <input
         class="mb-input"
         [(ngModel)]="nuevaForm.wedding_date"
@@ -151,10 +151,10 @@
     </div>
 
     <button class="mb-modal__btn" (click)="crearBoda()" [disabled]="creando">
-      <span *ngIf="!creando">✦ Crear boda</span>
+      <span *ngIf="!creando">{{ 'WEDDINGS.CREATE_BTN' | translate }}</span>
       <span *ngIf="creando" class="d-flex align-items-center justify-content-center gap-2">
         <span class="spinner-border spinner-border-sm"></span>
-        Creando...
+        {{ 'WEDDINGS.CREATING' | translate }}
       </span>
     </button>
   </div>
@@ -166,7 +166,7 @@
     <button class="mb-modal__close" (click)="cerrarUpgradeModal()">×</button>
 
     <div class="mb-upgrade__icon">💎</div>
-    <h3 class="mb-modal__title">Actualiza tu plan</h3>
+    <h3 class="mb-modal__title">{{ 'WEDDINGS.UPGRADE_TITLE' | translate }}</h3>
     <p class="mb-upgrade__reason">{{ upgradeReason }}</p>
 
     <div class="mb-upgrade__features">
@@ -177,11 +177,11 @@
     </div>
 
     <button class="mb-modal__btn mb-modal__btn--upgrade" (click)="irAPricing($event)">
-      Ver planes Premium →
+      {{ 'WEDDINGS.UPGRADE_SEE_PLANS' | translate }}
     </button>
 
     <button class="mb-upgrade__dismiss" (click)="cerrarUpgradeModal()">
-      Ahora no
+      {{ 'WEDDINGS.UPGRADE_LATER' | translate }}
     </button>
   </div>
 </div>
@@ -192,23 +192,18 @@
     <button class="mb-modal__close" (click)="cerrarEliminarModal()">×</button>
 
     <div class="mb-danger__icon">⚠️</div>
-    <h3 class="mb-modal__title">Eliminar boda</h3>
-    <p class="mb-danger__desc">
-      ¿Estás seguro de que quieres eliminar
-      <strong>{{ bodaAEliminar?.name }}</strong>?
-      Esta acción eliminará todos los invitados, mesas, checklist y fotos asociados.
-      <strong>No se puede deshacer.</strong>
-    </p>
+    <h3 class="mb-modal__title">{{ 'WEDDINGS.DELETE_TITLE' | translate }}</h3>
+    <p class="mb-danger__desc" [innerHTML]="'WEDDINGS.DELETE_CONFIRM' | translate:{name: bodaAEliminar?.name}"></p>
 
     <div class="mb-modal__actions">
       <button class="mb-modal__btn--secondary" (click)="cerrarEliminarModal()">
-        Cancelar
+        {{ 'WEDDINGS.DELETE_CANCEL' | translate }}
       </button>
       <button class="mb-modal__btn mb-modal__btn--danger" (click)="ejecutarEliminar()" [disabled]="eliminando">
-        <span *ngIf="!eliminando">Eliminar definitivamente</span>
+        <span *ngIf="!eliminando">{{ 'WEDDINGS.DELETE_CONFIRM_BTN' | translate }}</span>
         <span *ngIf="eliminando" class="d-flex align-items-center gap-2">
           <span class="spinner-border spinner-border-sm"></span>
-          Eliminando...
+          {{ 'WEDDINGS.DELETING' | translate }}
         </span>
       </button>
     </div>

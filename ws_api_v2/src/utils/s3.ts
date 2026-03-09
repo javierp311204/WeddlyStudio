@@ -28,6 +28,33 @@ export interface UploadResult {
 }
 
 /**
+ * Versión para avatares: sube sin thumbnail y devuelve URL prefirmada.
+ * Los avatares no necesitan thumbnail y deben ser privados.
+ */
+export async function uploadAvatarToS3(
+  buffer: Buffer,
+  userId: string,
+  expiresIn = 604800, // 7 días
+): Promise<{ url: string; key: string }> {
+  const uuid = randomUUID();
+  const key = `avatars/${userId}/${uuid}.webp`;
+
+  const optimized = await sharp(buffer).resize(256, 256, { fit: 'cover' }).webp({ quality: 85 }).toBuffer();
+
+  await s3.send(new PutObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+    Body: optimized,
+    ContentType: 'image/webp',
+    CacheControl: 'max-age=604800',
+  }));
+
+  const url = await getPresignedUrl(key, expiresIn);
+
+  return { url, key };
+}
+
+/**
  * Sube una foto a S3 y genera un thumbnail automáticamente con sharp.
  * Estructura en el bucket: photos/{weddingId}/{uuid}.webp
  */

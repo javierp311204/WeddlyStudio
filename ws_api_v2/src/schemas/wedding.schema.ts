@@ -36,8 +36,8 @@ export const addWeddingMemberSchema = z.object({
   params: z.object({ id: z.string().uuid('ID de boda inválido') }),
   body: z.object({
     user_id: z.string().uuid('ID de usuario inválido'),
-    role: z.enum(['bride', 'groom', 'planner', 'guest'] as const, {
-      message: 'Rol inválido: bride | groom | planner | guest',
+    role: z.enum(['owner', 'co_organizer', 'planner', 'guest'] as const, {
+      message: 'Rol inválido: owner | co_organizer | planner | guest',
     }),
   }),
 });

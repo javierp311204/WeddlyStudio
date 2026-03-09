@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 
 // ─────────────────────────────────────────────────────────────
@@ -15,7 +16,7 @@ import { NotificationService } from '../../services/notification/notification.se
 @Component({
   selector: 'app-recuperar-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './recuperar-password.component.html',
   styleUrl: './recuperar-password.component.css',
 })
@@ -30,17 +31,24 @@ export class RecuperarPasswordComponent {
     private http: HttpClient,
     private router: Router,
     private notifService: NotificationService,
+    private translate: TranslateService,
   ) {}
 
   solicitarRecuperacion() {
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
 
     if (!this.email) {
-      this.notifService.showError('Campo requerido', 'Por favor, ingresa tu email.');
+      this.notifService.showError(
+        this.translate.instant('RECOVERY.ERROR_TITLE'),
+        this.translate.instant('AUTH.INCOMPLETE_FIELDS_DESC')
+      );
       return;
     }
     if (!emailPattern.test(this.email.toLowerCase())) {
-      this.notifService.showError('Email inválido', 'Por favor, ingresa un correo electrónico válido.');
+      this.notifService.showError(
+        this.translate.instant('RECOVERY.ERROR_TITLE'),
+        this.translate.instant('AUTH.INVALID_EMAIL_DESC')
+      );
       return;
     }
 
@@ -54,15 +62,16 @@ export class RecuperarPasswordComponent {
         this.enviando = false;
         this.emailEnviado = true;
         this.notifService.showSuccess(
-          'Email enviado',
-          'Si tu email está registrado, recibirás instrucciones para recuperar tu contraseña.',
+          this.translate.instant('RECOVERY.SUCCESS_TITLE'),
+          this.translate.instant('RECOVERY.SUCCESS_DESC', { email: this.email }),
         );
       },
       error: (err) => {
         this.enviando = false;
+        const errorMsg = err.error?.message || this.translate.instant('RECOVERY.ERROR_SEND');
         this.notifService.showError(
-          'Error',
-          'Hubo un problema al procesar tu solicitud. Inténtalo de nuevo.',
+          this.translate.instant('RECOVERY.ERROR_TITLE'),
+          errorMsg,
         );
         console.error('Error en recuperación:', err);
       },

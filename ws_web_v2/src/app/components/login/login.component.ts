@@ -38,22 +38,32 @@ export class LoginComponent {
       return;
     }
 
-    // FIX: usar AuthService.login() en vez de HttpClient directo.
-    // AuthService ya guarda el token correctamente leyendo res.data.access_token
-    // y no hace el switchMap problemático que causaba el logout automático.
     this.authService.login(this.email, this.pass).subscribe({
-      next: (res) => {
-        const user = res.data.user;
+      next: (rawRes) => {
+        // Cast a any para evitar conflictos con la unión de tipos
+        // El backend siempre envuelve en { success, data: { ... } }
+        const res = rawRes as any;
+
+        const requires2fa = res.data?.requires_2fa ?? res.requires_2fa ?? false;
+
+        if (requires2fa) {
+          const tempToken = res.data?.temp_token ?? res.temp_token ?? '';
+          this.router.navigate(['/auth/2fa'], {
+            queryParams: { t: tempToken, email: this.email },
+          });
+          return;
+        }
+
+        // Login normal
+        const user = res.data?.user;
 
         this.notifService.showSuccess(
           this.translate.instant('AUTH.LOGIN_SUCCESS_TITLE'),
           this.translate.instant('AUTH.LOGIN_SUCCESS_DESC', {
-            nick: user.first_name || this.translate.instant('AUTH.GUEST'),
+            nick: user?.first_name || this.translate.instant('AUTH.GUEST'),
           }),
         );
 
-        // HomeComponent se encarga de cargar el weddingId y redirigir
-        // a /onboarding si el usuario no tiene boda todavía
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
@@ -71,11 +81,9 @@ export class LoginComponent {
   }
 
   irARecuperarPassword() {
-    this.router.navigate(['/recuperar-password']);
+    this.router.navigate(['/reco-pass']);
   }
 
-  // FIX: navega a '/' (landing) en vez de '/home' para evitar el bucle
-  // login → home → home detecta sin sesión → login → ...
   irAlHome() {
     this.router.navigate(['/']);
   }

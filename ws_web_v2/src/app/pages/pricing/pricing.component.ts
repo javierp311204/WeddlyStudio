@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PaymentService } from '../../services/payment/payment.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService } from '../../services/auth/auth.service';
@@ -22,7 +23,7 @@ interface PlanUI {
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './pricing.component.html',
   styleUrl: './pricing.component.css',
 })
@@ -32,48 +33,10 @@ export class PricingComponent implements OnInit {
   cargando   = true;
   procesandoPlanId: string | null = null;
 
-  private planMeta: Record<string, Omit<PlanUI, 'id' | 'precio' | 'tipo' | 'features'>> = {
-    free: {
-      nombre:    'Gratuito',
-      emoji:     '🎁',
-      periodo:   '',
-      subtitulo: 'Para siempre gratis',
-      badge:     '',
-      destacado: false,
-    },
-    one_time: {
-      nombre:    'Esencial',
-      emoji:     '💎',
-      periodo:   'pago único',
-      subtitulo: 'Sin mensualidades',
-      badge:     'Mejor valor',
-      destacado: false,
-    },
-    subscription: {
-      nombre:    'Premium',
-      emoji:     '👑',
-      periodo:   '/mes',
-      subtitulo: 'Cancela cuando quieras',
-      badge:     'Más popular',
-      destacado: true,
-    },
-  };
+  private planMeta!: Record<string, Omit<PlanUI, 'id' | 'precio' | 'tipo' | 'features'>>;
 
-  private featuresDefault: Record<string, string[]> = {
-    free:         ['1 boda activa', 'Hasta 40 invitados', 'Hasta 20 fotos', 'Funciones básicas'],
-    one_time:     ['1 boda lifetime', 'Invitados ilimitados', 'Hasta 80 fotos', 'Exportación PDF', 'Checklist completo', 'Plano de mesas'],
-    subscription: ['Bodas ilimitadas', 'Invitados ilimitados', 'Hasta 80 fotos por boda', 'Todas las funciones premium', 'Soporte prioritario'],
-  };
-
-  // Mapeo de features_json del backend → textos legibles
-  private featureLabels: Record<string, string> = {
-    pdf_export:          'Exportación a PDF',
-    google_calendar:     'Integración Google Calendar',
-    drag_drop_tables:    'Plano de mesas interactivo',
-    photo_moderation:    'Moderación de álbum',
-    planner_dashboard:   'Panel de wedding planner',
-    premium_stationery:  'Papelería premium',
-  };
+  private featuresDefault!: Record<string, string[]>;
+  private featureLabels!: Record<string, string>;
 
   constructor(
     private paymentService: PaymentService,
@@ -81,9 +44,11 @@ export class PricingComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private http : HttpClient,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit() {
+    this.initializePlanMeta();
     this.cargarPlanes();
     this.cargarPlanActual();
 
@@ -91,6 +56,50 @@ export class PricingComponent implements OnInit {
     if (url.includes('payment/success') || url.includes('session_id')) {
     setTimeout(() => this.cargarPlanActual(), 2000);
     }
+  }
+
+  private initializePlanMeta() {
+    this.planMeta = {
+      free: {
+        nombre:    this.translate.instant('PRICING.PLANS.FREE_NAME'),
+        emoji:     '🎁',
+        periodo:   '',
+        subtitulo: this.translate.instant('PRICING.PLANS.FREE_SUBTITLE'),
+        badge:     '',
+        destacado: false,
+      },
+      one_time: {
+        nombre:    this.translate.instant('PRICING.PLANS.ESSENTIAL_NAME'),
+        emoji:     '💎',
+        periodo:   this.translate.instant('PRICING.ONE_TIME_PAYMENT'),
+        subtitulo: this.translate.instant('PRICING.PLANS.ESSENTIAL_SUBTITLE'),
+        badge:     this.translate.instant('PRICING.BEST_VALUE'),
+        destacado: false,
+      },
+      subscription: {
+        nombre:    this.translate.instant('PRICING.PLANS.PREMIUM_NAME'),
+        emoji:     '👑',
+        periodo:   this.translate.instant('PRICING.PER_MONTH'),
+        subtitulo: this.translate.instant('PRICING.PLANS.PREMIUM_SUBTITLE'),
+        badge:     this.translate.instant('PRICING.MOST_POPULAR'),
+        destacado: true,
+      },
+    };
+
+    this.featuresDefault = {
+      free:         [this.translate.instant('PRICING.FEATURES.ONE_WEDDING'), 'Hasta 40 invitados', 'Hasta 20 fotos', this.translate.instant('PRICING.FEATURES.BASIC_FEATURES')],
+      one_time:     [this.translate.instant('PRICING.FEATURES.ONE_LIFETIME'), this.translate.instant('PRICING.FEATURES.UNLIMITED_GUESTS'), 'Hasta 80 fotos', 'Exportación PDF', 'Checklist completo', 'Plano de mesas'],
+      subscription: [this.translate.instant('PRICING.FEATURES.UNLIMITED_WEDDINGS'), this.translate.instant('PRICING.FEATURES.UNLIMITED_GUESTS'), 'Hasta 80 fotos por boda', this.translate.instant('PRICING.FEATURES.ALL_PREMIUM'), this.translate.instant('PRICING.FEATURES.PRIORITY_SUPPORT')],
+    };
+
+    this.featureLabels = {
+      pdf_export:          'Exportación a PDF',
+      google_calendar:     'Integración Google Calendar',
+      drag_drop_tables:    'Plano de mesas interactivo',
+      photo_moderation:    'Moderación de álbum',
+      planner_dashboard:   'Panel de wedding planner',
+      premium_stationery:  'Papelería premium',
+    };
   }
 
   /** Convierte features_json del backend en array de strings legibles */
@@ -101,20 +110,20 @@ export class PricingComponent implements OnInit {
     const result: string[] = [];
 
     // Límites del plan
-    if (plan.max_guests > 0)  result.push(`Hasta ${plan.max_guests} invitados`);
-    if (plan.max_guests === -1) result.push('Invitados ilimitados');
-    if (plan.max_photos > 0)  result.push(`Hasta ${plan.max_photos} fotos`);
-    if (plan.max_weddings === -1) result.push('Bodas ilimitadas');
-    else if (plan.max_weddings === 1) result.push('1 boda activa');
+    if (plan.max_guests > 0)  result.push(this.translate.instant('PRICING.FEATURES.UP_TO_GUESTS', { count: plan.max_guests }));
+    if (plan.max_guests === -1) result.push(this.translate.instant('PRICING.FEATURES.UNLIMITED_GUESTS'));
+    if (plan.max_photos > 0)  result.push(this.translate.instant('PRICING.FEATURES.UP_TO_PHOTOS', { count: plan.max_photos }));
+    if (plan.max_weddings === -1) result.push(this.translate.instant('PRICING.FEATURES.UNLIMITED_WEDDINGS'));
+    else if (plan.max_weddings === 1) result.push(this.translate.instant('PRICING.FEATURES.ONE_WEDDING'));
 
     // Features booleanas
     Object.entries(fj).forEach(([key, val]) => {
       if (val === true && this.featureLabels[key]) {
         result.push(this.featureLabels[key]);
       } else if (key === 'checklist' && val === 'full') {
-        result.push('Checklist completo');
+        result.push(this.translate.instant('PRICING.FEATURES.CHECKLIST_FULL'));
       } else if (key === 'checklist' && val === 'limited') {
-        result.push('Checklist básico');
+        result.push(this.translate.instant('PRICING.FEATURES.CHECKLIST_BASIC'));
       }
     });
 
@@ -150,7 +159,7 @@ export class PricingComponent implements OnInit {
       },
       error: () => {
         this.cargando = false;
-        this.notifService.showError('Error', 'No se pudieron cargar los planes');
+        this.notifService.showError(this.translate.instant('COMMON.ERROR'), this.translate.instant('PRICING.ERRORS.LOAD_PLANS'));
       },
     });
   }
@@ -172,16 +181,16 @@ export class PricingComponent implements OnInit {
 
   async seleccionarPlan(plan: PlanUI) {
     if (!this.authService.isLoggedIn()) {
-      this.notifService.showError('Inicia sesión', 'Debes tener una cuenta para adquirir un plan.');
+      this.notifService.showError(this.translate.instant('PRICING.ERRORS.LOGIN_REQUIRED'), this.translate.instant('PRICING.ERRORS.LOGIN_DESC'));
       this.router.navigate(['/login']);
       return;
     }
     if (plan.tipo === 'free') {
-      this.notifService.showError('Plan gratuito', 'Ya tienes acceso al plan gratuito.');
+      this.notifService.showError(this.translate.instant('PRICING.ERRORS.FREE_PLAN'), this.translate.instant('PRICING.ERRORS.FREE_DESC'));
       return;
     }
     if (plan.tipo === this.planActual) {
-      this.notifService.showError('Plan actual', 'Este ya es tu plan activo.');
+      this.notifService.showError(this.translate.instant('PRICING.ERRORS.CURRENT_PLAN'), this.translate.instant('PRICING.ERRORS.CURRENT_DESC'));
       return;
     }
 
@@ -197,7 +206,7 @@ export class PricingComponent implements OnInit {
       this.procesandoPlanId = null;
     } catch {
       this.procesandoPlanId = null;
-      this.notifService.showError('Error en el pago', 'Hubo un problema al procesar tu pago. Inténtalo de nuevo.');
+      this.notifService.showError(this.translate.instant('PRICING.ERRORS.PAYMENT_ERROR'), this.translate.instant('PRICING.ERRORS.PAYMENT_DESC'));
     }
   }
 

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class LanguageService {
   private readonly STORAGE_KEY = 'selected_language';
   private readonly DEFAULT_LANG = 'es';
-  private readonly AVAILABLE_LANGS = ['es', 'en'];
+  private readonly AVAILABLE_LANGS = ['es', 'en', 'fr', 'ca'];
 
   constructor(private translate: TranslateService) {
     this.translate.addLangs(this.AVAILABLE_LANGS);

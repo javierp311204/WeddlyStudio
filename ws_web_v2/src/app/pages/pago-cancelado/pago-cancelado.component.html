@@ -1,1 +1,32 @@
-<p>pago-cancelado works!</p>
+<div class="success-wrapper min-vh-100 d-flex align-items-center justify-content-center p-4">
+  <div class="success-card bg-white rounded-4 shadow-sm text-center">
+
+    <!-- Animación de cancelación -->
+    <div class="cancel-animation mb-4">
+      <div class="x-circle-large text-danger">
+        <h1 class="display-1">✕</h1>
+      </div>
+    </div>
+
+    <h1 class="display-5 fw-bold text-danger mb-3">{{ 'PAYMENT.CANCELLED_TITLE' | translate }}</h1>
+
+    <p class="lead text-muted mb-4">
+      {{ 'PAYMENT.CANCELLED_MESSAGE' | translate }}<br>
+      {{ 'PAYMENT.CANCELLED_DESC' | translate }}
+    </p>
+
+    <div class="d-grid gap-2 mt-5">
+      <button
+        class="btn btn-danger rounded-3 py-3 fw-semibold"
+        (click)="irAPricing()">
+        {{ 'PAYMENT.TRY_AGAIN' | translate }}
+      </button>
+      <button
+        class="btn btn-outline-secondary rounded-3 py-3"
+        (click)="irAlDashboard()">
+        {{ 'NAV.HOME' | translate }}
+      </button>
+    </div>
+
+  </div>
+</div>

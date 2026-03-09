@@ -4,9 +4,9 @@
   <div class="sidebar-header">
     <div class="sidebar-logo">
       <img src="assets/logo/logo-icon.png" alt="Weddly" class="logo-img" />
-      <span class="logo-text">Weddly</span>
+      <span class="logo-text">{{ 'HOME.BRAND' | translate }}</span>
     </div>
-    <button class="collapse-btn" (click)="toggle()" [title]="collapsed() ? 'Expandir' : 'Colapsar'">
+    <button class="collapse-btn" (click)="toggle()" [title]="(collapsed() ? 'SIDEBAR.TOGGLE_EXPAND' : 'SIDEBAR.TOGGLE_COLLAPSE') | translate">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
         <path *ngIf="!collapsed()" d="M15 18l-6-6 6-6"/>
         <path *ngIf="collapsed()"  d="M9 18l6-6-6-6"/>
@@ -15,41 +15,46 @@
   </div>
 
   <!-- Perfil clickable → navega a /perfil -->
-  <a class="sidebar-profile" routerLink="/perfil" title="Mi perfil">
-    <div class="profile-avatar">{{ getInitial() }}</div>
+  <a class="sidebar-profile" routerLink="/perfil" [title]="'SIDEBAR.PROFILE_TITLE' | translate">
+    <div class="profile-avatar"
+        [style.background-image]="avatarUrl ? 'url(' + avatarUrl + ')' : ''"
+        [style.background-size]="'cover'"
+        [style.background-position]="'center'">
+      <span *ngIf="!avatarUrl">{{ getInitial() }}</span>
+    </div>
     <div class="profile-info">
       <p class="profile-name">{{ authService.getUserNick() }}</p>
-      <p class="profile-role">{{ authService.isWeddingOwner() ? 'Organizador' : 'Invitado' }}</p>
+      <!-- Muestra el rol real en la boda activa -->
+      <p class="profile-role">{{ getRoleLabel() }}</p>
     </div>
   </a>
 
-  <!-- ✅ Mis Bodas — justo debajo del perfil, antes del divider -->
+  <!-- Mis Bodas -->
   <a
     class="nav-item mis-bodas-link"
     routerLink="/mis-bodas"
     routerLinkActive="active"
-    title="Mis Bodas"
+    [title]="'SIDEBAR.MY_WEDDINGS' | translate"
   >
     <span class="nav-emoji">💒</span>
-    <span class="nav-label">Mis Bodas</span>
+    <span class="nav-label">{{ 'SIDEBAR.MY_WEDDINGS' | translate }}</span>
     <span class="active-bar"></span>
   </a>
 
   <div class="sidebar-divider"></div>
 
-  <!-- Navegación principal -->
+  <!-- Navegación principal — filtrada por rol via visibleNavItems -->
   <nav class="sidebar-nav">
-    <ng-container *ngFor="let item of navItems">
+    <ng-container *ngFor="let item of visibleNavItems">
       <a
-        *ngIf="!item.ownerOnly || authService.isWeddingOwner()"
         [routerLink]="item.route"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
         class="nav-item"
-        [title]="item.label"
+        [title]="item.title | translate"
       >
         <span class="nav-emoji">{{ item.emoji }}</span>
-        <span class="nav-label">{{ item.label }}</span>
+        <span class="nav-label">{{ item.label | translate }}</span>
         <span class="active-bar"></span>
       </a>
     </ng-container>
@@ -66,7 +71,7 @@
       <app-language-selector class="lang-selector" />
     </div>
 
-    <button class="nav-item logout-btn" (click)="authService.logout()" title="Cerrar sesión">
+    <button class="nav-item logout-btn" (click)="authService.logout()" [title]="'NAV.LOGOUT' | translate">
       <span class="nav-emoji">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -74,7 +79,7 @@
           <line x1="21" y1="12" x2="9" y2="12"/>
         </svg>
       </span>
-      <span class="nav-label">Cerrar sesión</span>
+      <span class="nav-label">{{ 'NAV.LOGOUT' | translate }}</span>
     </button>
 
   </div>

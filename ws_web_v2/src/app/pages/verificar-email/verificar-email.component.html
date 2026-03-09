@@ -5,11 +5,11 @@
     <div *ngIf="verificando" class="verificando-state">
       <div class="spinner-container mb-4">
         <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
-          <span class="visually-hidden">Verificando...</span>
+          <span class="visually-hidden">{{ 'VERIFICATION.VERIFYING' | translate }}</span>
         </div>
       </div>
-      <h2 class="display-6 fw-normal mb-2">Verificando tu email...</h2>
-      <p class="text-muted">Por favor espera un momento</p>
+      <h2 class="display-6 fw-normal mb-2">{{ 'VERIFICATION.VERIFYING' | translate }}</h2>
+      <p class="text-muted">{{ 'VERIFICATION.WAIT' | translate }}</p>
     </div>
 
     <!-- ESTADO: Verificación Exitosa ✅ -->
@@ -19,36 +19,35 @@
           <div class="checkmark"></div>
         </div>
       </div>
-      <h2 class="display-5 fw-normal mb-3 text-success">¡Email Verificado!</h2>
+      <h2 class="display-5 fw-normal mb-3 text-success">{{ 'VERIFICATION.SUCCESS_TITLE' | translate }}</h2>
       <p class="text-muted mb-4">
-        Tu cuenta ha sido activada correctamente.<br>
+        {{ 'VERIFICATION.SUCCESS_DESC' | translate }}<br>
       </p>
       <button class="btn btn-verify w-100 rounded-3 py-2 fw-semibold" (click)="irAlLogin()">
-        Ir al Login Ahora
+        {{ 'VERIFICATION.GO_TO_LOGIN' | translate }}
       </button>
     </div>
 
     <!-- ESTADO: Error ❌ -->
     <div *ngIf="!verificando && !verificacionExitosa" class="error-state">
-      <h2 class="display-6 fw-normal mb-3 text-danger">Verificación Fallida</h2>
+      <h2 class="display-6 fw-normal mb-3 text-danger">{{ 'VERIFICATION.ERROR_TITLE' | translate }}</h2>
       <div class="alert alert-danger text-start mb-4" role="alert">
         {{ mensajeError }}
       </div>
       <p class="text-muted small mb-4">
         Posibles causas:<br>
-        • El enlace ha expirado (24 horas de validez)<br>
-        • El enlace ya fue usado<br>
-        • El enlace es inválido
+        • {{ 'VERIFICATION.ERROR_LINK_INVALID' | translate }}<br>
+        • {{ 'VERIFICATION.ERROR_ALREADY_USED' | translate }}<br>
+        • La URL es inválida
       </p>
       <div class="d-grid gap-2">
         <button class="btn btn-verify rounded-3 py-2 fw-semibold" routerLink="/register">
-          Volver a Registrarse
+          {{ 'VERIFICATION.REGISTER_AGAIN' | translate }}
         </button>
         <button class="btn btn-outline-secondary rounded-3 py-2" routerLink="/login">
-          Ir al Login
+          {{ 'VERIFICATION.GO_TO_SIGNIN' | translate }}
         </button>
       </div>
     </div>
-
   </div>
 </div>

@@ -85,7 +85,6 @@
             <label class="pf-label">{{ 'PROFILE.FIRST_NAME' | translate }}</label>
             <div *ngIf="!editMode" class="pf-value">{{ user.first_name || '—' }}</div>
             <ng-container *ngIf="editMode">
-              <!-- ✅ Notación de punto — sin error de index signature -->
               <input class="pf-input" [(ngModel)]="form.first_name"
                      [class.pf-input--error]="errors.first_name"
                      placeholder="Nombre" maxlength="100" />
@@ -217,6 +216,10 @@
             <span class="pf-security-linked">{{ 'PROFILE.LINKED' | translate }}</span>
           </div>
         </div>
+
+        <!-- ── 2FA ── AÑADIDO aquí, dentro de la sección 03 -->
+        <app-perfil-2fa></app-perfil-2fa>
+
       </section>
 
       <!-- ── Botón guardar ── -->
@@ -251,7 +254,6 @@
 
     <div class="pf-field mb-3">
       <label class="pf-label">{{ 'PROFILE.CURRENT_PASSWORD' | translate }}</label>
-      <!-- ✅ Notación de punto en todos los passwordErrors -->
       <input class="pf-input" type="password" [(ngModel)]="passwordForm.current"
              [class.pf-input--error]="passwordErrors.current"
              placeholder="••••••••" />

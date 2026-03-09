@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GestionService } from '../../services/gestion/gestion.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-onboarding',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.css',
 })
@@ -17,6 +18,14 @@ export class OnboardingComponent implements OnInit {
   totalPasos = 6;
   cargando = false;
   error = '';
+  prioridades: any[] = [];
+
+  constructor(
+    private gestionService: GestionService,
+    private authService: AuthService,
+    private router: Router,
+    private translate: TranslateService,
+  ) {}
 
   // Paso 2a — datos obligatorios
   nombre    = '';   // wedding.name
@@ -49,25 +58,21 @@ export class OnboardingComponent implements OnInit {
     { value: 'Informal / Casual', label: '👗 Informal / Casual' },
   ];
 
-  prioridades = [
-    { key: 'invitados',    emoji: '👥', label: 'Gestión de invitados',   desc: 'Añade y organiza tu lista de invitados' },
-    { key: 'mesas',        emoji: '🪑', label: 'Plano de mesas',         desc: 'Diseña la distribución de tu evento' },
-    { key: 'checklist',    emoji: '✅', label: 'Checklist de tareas',    desc: 'Organiza todas las tareas pendientes' },
-    { key: 'album',        emoji: '📸', label: 'Álbum digital',          desc: 'Sube fotos y recuerdos del evento' },
-    { key: 'invitaciones', emoji: '💌', label: 'Invitaciones digitales', desc: 'Diseña y envía invitaciones' },
-  ];
-
-  constructor(
-    private gestionService: GestionService,
-    private authService: AuthService,
-    private router: Router,
-  ) {}
-
   ngOnInit() {
     if (this.authService.getWeddingId()) {
       this.router.navigate(['/dashboard']);
     }
+
+    this.prioridades = [
+    { key: 'invitados',    emoji: '👥', label: this.translate.instant('NAV.GUESTS'),   desc: 'Añade y organiza tu lista de invitados' },
+    { key: 'mesas',        emoji: '🪑', label: this.translate.instant('NAV.TABLES'),   desc: 'Diseña la distribución de tu evento' },
+    { key: 'checklist',    emoji: '✅', label: this.translate.instant('NAV.CHECKLIST'), desc: 'Organiza todas las tareas pendientes' },
+    { key: 'album',        emoji: '📸', label: this.translate.instant('NAV.ALBUM'),    desc: 'Sube fotos y recuerdos del evento' },
+    { key: 'invitaciones', emoji: '💌', label: 'Invitaciones digitales', desc: 'Diseña y envía invitaciones' },
+  ];
   }
+
+
 
   get progreso(): number {
     return Math.round(((this.paso - 1) / (this.totalPasos - 1)) * 100);
@@ -86,7 +91,7 @@ export class OnboardingComponent implements OnInit {
 
     if (this.paso === 2) {
       if (!this.nombre.trim() || !this.fecha || !this.ciudad.trim()) {
-        this.error = 'El nombre de la boda, la fecha y el lugar son obligatorios.';
+        this.error = this.translate.instant('ONBOARDING.ERROR_REQUIRED');
         return;
       }
       this.crearBoda();
@@ -125,12 +130,12 @@ export class OnboardingComponent implements OnInit {
         const boda = res?.data ?? res;
         this.weddingId = boda.id;
         this.authService.setWeddingId(boda.id);
-        localStorage.setItem('weddingRole', 'bride');
+        localStorage.setItem('weddingRole', 'owner');
         this.cargando = false;
         this.paso++;
       },
       error: (err: any) => {
-        this.error = err?.error?.message ?? 'Error al crear la boda. Inténtalo de nuevo.';
+        this.error = err?.error?.message ?? this.translate.instant('ONBOARDING.ERROR_CREATE');
         this.cargando = false;
       },
     });

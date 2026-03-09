@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import weddingController from '../controllers/wedding.controller';
-import { authenticate } from '../middleware/auth.middleware';
-import { validate } from '../middleware/validate.middleware';
+import inviteController  from '../controllers/invite.controller';
+import { authenticate }  from '../middleware/auth.middleware';
+import { roleGuard, minRoleGuard } from '../middleware/role.guard';
+import { validate }      from '../middleware/validate.middleware';
+import { sendInviteSchema, revokeInviteSchema } from '../schemas/invite.schema';
 import {
   createWeddingSchema,
   updateWeddingSchema,
@@ -10,24 +13,67 @@ import {
 } from '../schemas/wedding.schema';
 
 const router = Router();
-
-// Todas las rutas requieren autenticación
 router.use(authenticate);
 
-// ─── Rutas sin parámetro (DEBEN ir antes de /:id) ────────────────
-router.get('/',            weddingController.getAll);
+// ─── Sin parámetro ────────────────────────────────────────────────
+router.get('/',           weddingController.getAll);
+router.get('/can-create', weddingController.canCreate);
 router.post('/', validate(createWeddingSchema), weddingController.create);
 
-// ✅ can-create va ANTES de /:id para que Express no lo trate como un UUID
-router.get('/can-create',  weddingController.canCreate);
+// ─── CRUD con :id ─────────────────────────────────────────────────
+// Cualquier miembro puede ver la boda
+router.get('/:id',
+  validate(weddingIdSchema),
+  minRoleGuard('guest'),
+  weddingController.getById,
+);
+// Solo owner y co_organizer pueden editar
+router.patch('/:id',
+  validate(updateWeddingSchema),
+  roleGuard('owner', 'co_organizer'),
+  weddingController.update,
+);
+// Solo owner puede eliminar
+router.delete('/:id',
+  validate(weddingIdSchema),
+  roleGuard('owner'),
+  weddingController.remove,
+);
 
-// ─── CRUD con :id ────────────────────────────────────────────────
-router.get('/:id',    validate(weddingIdSchema),    weddingController.getById);
-router.patch('/:id',  validate(updateWeddingSchema), weddingController.update);
-router.delete('/:id', validate(weddingIdSchema),    weddingController.remove);
+// ─── Miembros ─────────────────────────────────────────────────────
+// Solo owner puede añadir/eliminar miembros directamente
+router.post('/:id/members',
+  validate(addWeddingMemberSchema),
+  roleGuard('owner'),
+  weddingController.addMember,
+);
+router.delete('/:id/members/:userId',
+  validate(weddingIdSchema),
+  roleGuard('owner'),
+  weddingController.removeMember,
+);
 
-// ─── Gestión de miembros ─────────────────────────────────────────
-router.post('/:id/members',          validate(addWeddingMemberSchema), weddingController.addMember);
-router.delete('/:id/members/:userId', validate(weddingIdSchema),       weddingController.removeMember);
+// ─── Invitaciones ─────────────────────────────────────────────────
+// Owner y co_organizer pueden ver y enviar invitaciones
+router.get('/:id/invites',
+  minRoleGuard('co_organizer'),
+  inviteController.getInvites,
+);
+router.post('/:id/invites',
+  validate(sendInviteSchema),
+  roleGuard('owner', 'co_organizer'),
+  inviteController.sendInvite,
+);
+// Solo owner puede revocar invitaciones y miembros
+router.delete('/:id/invites/:inviteId',
+  validate(revokeInviteSchema),
+  roleGuard('owner'),
+  inviteController.revokeInvite,
+);
+router.delete('/:id/members/:memberId',
+  validate(revokeInviteSchema),
+  roleGuard('owner'),
+  inviteController.revokeMember,
+);
 
 export default router;

@@ -6,6 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { Perfil2faComponent } from '../perfil2fa/perfil2fa.component';
 
 interface FormErrors {
   first_name?: string;
@@ -23,7 +24,7 @@ interface PasswordErrors {
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, HttpClientModule, Perfil2faComponent],
   templateUrl: './perfil-usuario.component.html',
   styleUrl: './perfil-usuario.component.css',
 })
@@ -75,6 +76,9 @@ export class PerfilUsuarioComponent implements OnInit {
     this.http.get<any>(`${this.authUrl}/me`, this.getHeaders()).subscribe({
       next: (res) => {
         this.user = res?.data ?? res;
+        if (this.user.avatar_url) {
+          this.authService.updateAvatar(this.user.avatar_url);
+        }
         this.resetForm();
       },
       error: () => {
@@ -159,15 +163,10 @@ export class PerfilUsuarioComponent implements OnInit {
 
     this.http.post<any>(`${this.usersUrl}/me/avatar`, formData, { headers }).subscribe({
       next: (res) => {
-        // FIX 1: actualizar avatar_url en this.user con la URL real de S3
         const newAvatarUrl = res?.data?.avatar_url ?? this.avatarPreview;
         this.user.avatar_url = newAvatarUrl;
+        this.avatarPreview = newAvatarUrl;
 
-        // FIX 2: actualizar el preview con la URL de S3 (no la local blob://)
-        // Añadir cache-buster para forzar recarga si la URL es la misma
-        this.avatarPreview = newAvatarUrl + '?t=' + Date.now();
-
-        // FIX 3: actualizar sidebar — si AuthService guarda el avatar, actualizarlo
         if (typeof (this.authService as any).updateAvatar === 'function') {
           (this.authService as any).updateAvatar(newAvatarUrl);
         }
@@ -179,7 +178,6 @@ export class PerfilUsuarioComponent implements OnInit {
       },
       error: () => {
         this.notifService.showError('Error', this.translate.instant('PROFILE.AVATAR_ERROR'));
-        // Revertir preview al avatar anterior si falla
         this.avatarPreview = this.user.avatar_url || null;
       },
     });
@@ -234,49 +232,33 @@ export class PerfilUsuarioComponent implements OnInit {
     });
   }
 
-  // ── Validaciones ───────────────────────────────────────────────
-
   private validarForm(): boolean {
     this.errors = {};
-
-    if (!this.form.first_name.trim())
-      this.errors.first_name = this.translate.instant('PROFILE.REQUIRED');
-
-    if (!this.form.last_name.trim())
-      this.errors.last_name = this.translate.instant('PROFILE.REQUIRED');
-
+    if (!this.form.first_name.trim()) this.errors.first_name = this.translate.instant('PROFILE.REQUIRED');
+    if (!this.form.last_name.trim())  this.errors.last_name  = this.translate.instant('PROFILE.REQUIRED');
     if (!this.form.email.trim()) {
       this.errors.email = this.translate.instant('PROFILE.REQUIRED');
     } else if (!this.isValidEmail(this.form.email)) {
       this.errors.email = this.translate.instant('PROFILE.EMAIL_INVALID');
     }
-
     if (this.form.phone && !this.isValidPhone(this.form.phone)) {
       this.errors.phone = this.translate.instant('PROFILE.PHONE_INVALID');
     }
-
     return !this.errors.first_name && !this.errors.last_name &&
            !this.errors.email      && !this.errors.phone;
   }
 
   private validarPassword(): boolean {
     this.passwordErrors = {};
-
-    if (!this.passwordForm.current)
-      this.passwordErrors.current = this.translate.instant('PROFILE.REQUIRED');
-
+    if (!this.passwordForm.current) this.passwordErrors.current = this.translate.instant('PROFILE.REQUIRED');
     if (!this.passwordForm.new) {
       this.passwordErrors.new = this.translate.instant('PROFILE.REQUIRED');
     } else if (this.passwordForm.new.length < 8) {
       this.passwordErrors.new = this.translate.instant('PROFILE.PASSWORD_MIN');
     }
-
     if (this.passwordForm.new !== this.passwordForm.confirm)
       this.passwordErrors.confirm = this.translate.instant('PROFILE.PASSWORD_MISMATCH');
-
-    return !this.passwordErrors.current &&
-           !this.passwordErrors.new     &&
-           !this.passwordErrors.confirm;
+    return !this.passwordErrors.current && !this.passwordErrors.new && !this.passwordErrors.confirm;
   }
 
   private isValidEmail(email: string): boolean {
@@ -287,13 +269,8 @@ export class PerfilUsuarioComponent implements OnInit {
     return /^[\+\d\s\-\(\)]{7,30}$/.test(phone);
   }
 
-  // ── UI helpers ─────────────────────────────────────────────────
-
   toggleEdit() {
-    if (this.editMode) {
-      this.resetForm();
-      this.errors = {};
-    }
+    if (this.editMode) { this.resetForm(); this.errors = {}; }
     this.editMode = !this.editMode;
   }
 
@@ -307,10 +284,7 @@ export class PerfilUsuarioComponent implements OnInit {
       gender:     this.user.gender     || '',
       language:   this.user.language   || 'es',
     };
-    // FIX: usar avatar_url directo sin cache-buster al resetear
-    this.avatarPreview = this.user.avatar_url
-      ? this.user.avatar_url + '?t=' + Date.now()
-      : null;
+    this.avatarPreview = this.user.avatar_url || null;
   }
 
   abrirCambioPassword() {
@@ -337,60 +311,38 @@ export class PerfilUsuarioComponent implements OnInit {
 
   getRoleLabel(role: string): string {
     const map: Record<string, string> = {
-      user:       'Usuario',
-      admin:      'Administrador',
-      superadmin: 'Super Admin',
+      user: 'Usuario', admin: 'Administrador', superadmin: 'Super Admin',
     };
     return map[role] || role;
   }
 
   getGenderLabel(gender: string): string {
     const map: Record<string, string> = {
-      male:       'Hombre',
-      female:     'Mujer',
-      non_binary: 'No binario',
-      prefer_not: 'Prefiero no indicar',
+      male: 'Hombre', female: 'Mujer', non_binary: 'No binario', prefer_not: 'Prefiero no indicar',
     };
     return map[gender] || '';
   }
 
   getLanguageLabel(lang: string): string {
     const map: Record<string, string> = {
-      es: '🇪🇸 Español',
-      en: '🇬🇧 English',
-      ca: '🏴 Català',
-      fr: '🇫🇷 Français',
+      es: '🇪🇸 Español', en: '🇬🇧 English', ca: '🏴 Català', fr: '🇫🇷 Français',
     };
     return map[lang] || lang;
   }
 
-  // ✅ Lee el plan de la boda activa
-  // Fuente 1: wedding_roles devueltos por GET /api/auth/me (si el backend incluye plan_type)
-  // Fuente 2: weddingId en localStorage → busca en wedding_roles
   getPlanLabel(): string {
     const planLabels: Record<string, string> = {
-      free:         'Free',
-      one_time:     'Evento PRO',
-      subscription: 'Premium',
+      free: 'Free', one_time: 'Evento PRO', subscription: 'Premium',
     };
-
-    // Intentar obtener de wedding_roles (devuelto por getProfile)
     const weddingId = localStorage.getItem('weddingId');
     const roles: any[] = this.user.wedding_roles ?? [];
-
     if (roles.length > 0) {
-      // Si hay weddingId activo, buscar esa boda concreta
       const activeRole = weddingId
         ? roles.find((r: any) => r.wedding?.id === weddingId)
         : roles[0];
-
       const planType = activeRole?.wedding?.plan_type;
-      if (planType && planLabels[planType]) {
-        return planLabels[planType];
-      }
+      if (planType && planLabels[planType]) return planLabels[planType];
     }
-
-    // Fallback: 'Free'
     return planLabels['free'];
   }
 }

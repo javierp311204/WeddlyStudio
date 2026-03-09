@@ -14,6 +14,7 @@ import paymentRoutes      from './routes/payment.routes';
 import subscriptionRoutes from './routes/subscription.routes';
 import webhookRoutes      from './routes/webhook.routes';
 import userRoutes from './routes/user.routes'; 
+import inviteRoutes from './routes/invite.routes';
 
 const app = express();
 
@@ -32,8 +33,11 @@ app.use(
 // — Middlewares globales
 // ════════════════════════════════════════════════════════════════
 app.use(helmet());
+app.options('*', cors());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: process.env.CORS_ORIGIN,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -61,6 +65,7 @@ app.use('/api/auth', authRoutes);
 // ─── Weddings ────────────────────────────────────────────────────
 app.use('/api/weddings', weddingRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/invites', inviteRoutes);
 
 // ─── Tasks ───────────────────────────────────────────────────────
 app.use('/api/weddings/:weddingId/tasks', weddingTaskRouter);

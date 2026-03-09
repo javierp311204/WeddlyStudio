@@ -23,8 +23,8 @@ enum GlobalRole {
 }
 
 enum WeddingRole {
-  bride
-  groom
+  owner
+  co_organizer
   planner
   guest
 }
@@ -34,6 +34,26 @@ enum WeddingStatus {
   readonly
   archived
   cancelled
+}
+
+model WeddingInvite {
+  id          String      @id @default(uuid()) @db.Uuid
+  wedding_id  String      @db.Uuid
+  invited_by  String      @db.Uuid
+  email       String      @db.VarChar(255)
+  role        WeddingRole
+  token       String      @unique @db.VarChar(255)
+  expires_at  DateTime
+  accepted_at DateTime?
+  created_at  DateTime    @default(now())
+
+  wedding     Wedding     @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
+  inviter     User        @relation("InvitesSent", fields: [invited_by], references: [id])
+
+  @@index([token])
+  @@index([wedding_id])
+  @@index([email])
+  @@map("wedding_invites")
 }
 
 enum PlanType {
@@ -115,6 +135,8 @@ model User {
   language           String    @default("es") @db.VarChar(10)
   two_factor_enabled Boolean   @default(false)
   two_factor_secret  String?   @db.VarChar(255)
+  tfa_reset_token    String?   @db.Text      
+  tfa_reset_expires  DateTime?
   role_global        GlobalRole @default(user)
   google_id          String?   @unique @db.VarChar(255)
   avatar_url         String?   @db.VarChar(500)
@@ -132,6 +154,7 @@ model User {
   photos_approved    Photo[]            @relation("PhotoApprovedBy")
   tasks_assigned     Task[]             @relation("TaskAssignedTo")
   invitations_sent   InvitationSend[]   @relation("InvitationSentBy")
+  invites_sent       WeddingInvite[]    @relation("InvitesSent")
   subscriptions      Subscription[]
   payments           Payment[]
   activity_logs      ActivityLog[]
@@ -174,6 +197,7 @@ model Wedding {
   invitations      Invitation[]
   payments         Payment[]
   activity_logs    ActivityLog[]
+  invites          WeddingInvite[]
 
   @@index([created_by])
   @@index([status])

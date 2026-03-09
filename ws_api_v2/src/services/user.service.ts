@@ -1,6 +1,6 @@
 import prisma from '../config/db';
 import { AppError } from '../middleware/errorHandler.middleware';
-import { uploadToS3, deleteFromS3, extractKeyFromUrl } from '../utils/s3';
+import { getPresignedUrl , deleteFromS3, extractKeyFromUrl, uploadAvatarToS3 } from '../utils/s3';
 
 export class UserService {
 
@@ -16,15 +16,7 @@ export class UserService {
 
     if (!user) throw new AppError('Usuario no encontrado', 404);
 
-    // Subir nueva imagen a S3 usando la misma utilidad que las fotos de boda
-    // Carpeta dedicada: avatars/<userId>/
-    const s3Result = await uploadToS3(
-      file.buffer,
-      file.mimetype,
-      `avatars/${userId}`,   // "weddingId" se usa como prefijo de carpeta, aquí reutilizamos
-    );
-
-    // Borrar el avatar anterior de S3 si existe
+    // Borrar avatar anterior
     if (user.avatar_url) {
       const oldKey = extractKeyFromUrl(user.avatar_url);
       deleteFromS3(oldKey).catch(err =>
@@ -32,14 +24,15 @@ export class UserService {
       );
     }
 
-    // Guardar nueva URL en la DB
+    const { url, key } = await uploadAvatarToS3(file.buffer, userId);
+
     const updated = await prisma.user.update({
       where: { id: userId },
-      data:  { avatar_url: s3Result.url },
-      select: { id: true, avatar_url: true, first_name: true, last_name: true },
+      data: { avatar_url: key }, // ✅ guardar la KEY, no la URL prefirmada
+      select: { id: true, avatar_url: true },
     });
 
-    return { avatar_url: updated.avatar_url };
+    return { avatar_url: url }; // ✅ devolver la URL prefirmada al frontend
   }
 
   /**
@@ -65,6 +58,10 @@ export class UserService {
 
     return { message: 'Cuenta eliminada correctamente' };
   }
+
+  async refreshAvatarUrl(key: string): Promise<string> {
+    return getPresignedUrl(key, 604800);
+}
 }
 
 export default new UserService();

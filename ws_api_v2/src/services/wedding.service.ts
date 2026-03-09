@@ -87,7 +87,7 @@ export class WeddingService {
 
     const fromOrphaned = orphaned.map(w => ({
       ...w,
-      my_role:  'bride' as const,
+      my_role:  'owner' as const,
       is_owner: true,
     }));
 
@@ -149,7 +149,7 @@ export class WeddingService {
 
     // Asignar rol de bride al creador automáticamente
     await prisma.userWeddingRole.create({
-      data: { user_id: userId, wedding_id: wedding.id, role: 'bride' },
+      data: { user_id: userId, wedding_id: wedding.id, role: 'owner' },
     });
 
     return wedding;

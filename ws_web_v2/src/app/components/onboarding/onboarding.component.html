@@ -15,79 +15,78 @@
       <div class="progress-track">
         <div class="progress-fill" [style.width.%]="progreso"></div>
       </div>
-      <span class="progress-label">Paso {{ paso }} de {{ totalPasos }}</span>
+      <span class="progress-label">{{ 'ONBOARDING.STEP_LABEL' | translate:{current: paso, total: totalPasos} }}</span>
     </div>
 
     <!-- PASO 1 — Bienvenida -->
     <div class="ob-step" *ngIf="paso === 1">
       <div class="step-emoji">💍</div>
-      <h1 class="step-title">¡Bienvenido/a a Weddly!</h1>
-      <p class="step-desc">Vamos a configurar tu boda en pocos minutos.<br>Solo necesitamos algunos datos básicos para empezar.</p>
+      <h1 class="step-title">{{ 'ONBOARDING.WELCOME_TITLE' | translate }}</h1>
+      <p class="step-desc" [innerHTML]="'ONBOARDING.WELCOME_DESC' | translate"></p>
       <div class="features-list">
-        <div class="feature-item"><span class="feature-icon">👥</span><span>Gestión completa de invitados</span></div>
-        <div class="feature-item"><span class="feature-icon">🪑</span><span>Plano de mesas interactivo</span></div>
-        <div class="feature-item"><span class="feature-icon">✅</span><span>Checklist inteligente</span></div>
-        <div class="feature-item"><span class="feature-icon">📸</span><span>Álbum digital colaborativo</span></div>
+        <div class="feature-item">{{ 'ONBOARDING.FEATURE_GUESTS' | translate }}</div>
+        <div class="feature-item">{{ 'ONBOARDING.FEATURE_TABLES' | translate }}</div>
+        <div class="feature-item">{{ 'ONBOARDING.FEATURE_CHECKLIST' | translate }}</div>
+        <div class="feature-item">{{ 'ONBOARDING.FEATURE_ALBUM' | translate }}</div>
       </div>
-      <button class="btn-primary" (click)="siguiente()">Comenzar 🎊</button>
+      <button class="btn-primary" (click)="siguiente()">{{ 'ONBOARDING.START_BTN' | translate }}</button>
     </div>
 
     <!-- PASO 2 — Datos de la boda (obligatorios + opcionales) -->
     <div class="ob-step" *ngIf="paso === 2">
       <div class="step-emoji">📋</div>
-      <h2 class="step-title">Datos de tu boda</h2>
-      <p class="step-desc">Cuéntanos los detalles de vuestro gran día. Los campos con <span class="required">*</span> son obligatorios.</p>
+      <h2 class="step-title">{{ 'ONBOARDING.WEDDING_DATA_TITLE' | translate }}</h2>
+      <p class="step-desc" [innerHTML]="'ONBOARDING.WEDDING_DATA_DESC' | translate"></p>
 
       <!-- Bloque obligatorio -->
       <div class="form-group">
-        <label class="form-label">Nombre de la boda <span class="required">*</span></label>
+        <label class="form-label" [innerHTML]="'ONBOARDING.NAME_LABEL' | translate"></label>
         <input type="text" class="form-input" [(ngModel)]="nombre"
-               placeholder="Ej: La boda de Ana y Carlos" maxlength="200" />
+               placeholder="{{ 'ONBOARDING.NAME_PLACEHOLDER' | translate }}" maxlength="200" />
       </div>
 
       <div class="form-group">
-        <label class="form-label">Fecha del evento <span class="required">*</span></label>
+        <label class="form-label" [innerHTML]="'ONBOARDING.DATE_LABEL' | translate"></label>
         <input type="date" class="form-input" [(ngModel)]="fecha" [min]="fechaMin" />
       </div>
 
       <div class="form-group">
-        <label class="form-label">Lugar / Nombre del salón <span class="required">*</span></label>
+        <label class="form-label" [innerHTML]="'ONBOARDING.VENUE_LABEL' | translate"></label>
         <input type="text" class="form-input" [(ngModel)]="ciudad"
-               placeholder="Ej: Hacienda Los Olivos" maxlength="200" />
+               placeholder="{{ 'ONBOARDING.VENUE_PLACEHOLDER' | translate }}" maxlength="200" />
       </div>
 
-      <!-- Separador opcional -->
       <div class="optional-divider">
-        <span>Opcional — puedes añadirlo ahora o más tarde desde Info de Boda</span>
+        <span>{{ 'ONBOARDING.OPTIONAL_DIVIDER' | translate }}</span>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Dirección</label>
+        <label class="form-label">{{ 'ONBOARDING.ADDRESS_LABEL' | translate }}</label>
         <input type="text" class="form-input" [(ngModel)]="direccion"
-               placeholder="Ej: Calle Real, 45, Madrid" maxlength="300" />
+               placeholder="{{ 'ONBOARDING.ADDRESS_PLACEHOLDER' | translate }}" maxlength="300" />
       </div>
 
       <div class="form-group">
-        <label class="form-label">Dress Code</label>
+        <label class="form-label">{{ 'ONBOARDING.DRESSCODE_LABEL' | translate }}</label>
         <select class="form-input" [(ngModel)]="dresscode">
-          <option value="">— Sin especificar —</option>
+          <option value="">{{ 'ONBOARDING.DRESSCODE_PLACEHOLDER' | translate }}</option>
           <option *ngFor="let opt of dresscodeOpciones" [value]="opt.value">{{ opt.label }}</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Descripción del menú</label>
+        <label class="form-label">{{ 'ONBOARDING.MENU_LABEL' | translate }}</label>
         <textarea class="form-input" [(ngModel)]="menu" rows="3"
-                  placeholder="Ej: Cóctel de bienvenida, Solomillo al punto..."></textarea>
+                  placeholder="{{ 'ONBOARDING.MENU_PLACEHOLDER' | translate }}"></textarea>
       </div>
 
       <div class="error-msg" *ngIf="error">{{ error }}</div>
 
       <div class="btn-row">
-        <button class="btn-secondary" (click)="anterior()">← Atrás</button>
+        <button class="btn-secondary" (click)="anterior()">{{ 'ONBOARDING.BACK_BTN' | translate }}</button>
         <button class="btn-primary" (click)="siguiente()" [disabled]="cargando">
-          <span *ngIf="!cargando">Continuar →</span>
-          <span *ngIf="cargando" class="spinner"></span>
+          <span *ngIf="!cargando">{{ 'ONBOARDING.CONTINUE_BTN' | translate }}</span>
+          <span *ngIf="cargando" class="spinner">{{ 'ONBOARDING.LOADING' | translate }}</span>
         </button>
       </div>
     </div>
@@ -95,17 +94,17 @@
     <!-- PASO 3 — Invitados -->
     <div class="ob-step" *ngIf="paso === 3">
       <div class="step-emoji">👥</div>
-      <h2 class="step-title">¿Cuántos invitados esperáis?</h2>
-      <p class="step-desc">Una estimación nos ayuda a preparar todo mejor.</p>
+      <h2 class="step-title">{{ 'ONBOARDING.GUESTS_TITLE' | translate }}</h2>
+      <p class="step-desc">{{ 'ONBOARDING.GUESTS_DESC' | translate }}</p>
       <div class="slider-wrapper">
         <div class="slider-value">{{ estimadoInvitados }}</div>
-        <div class="slider-label">invitados aproximados</div>
+        <div class="slider-label">{{ 'ONBOARDING.GUESTS_APPROX' | translate }}</div>
         <input type="range" class="slider" [(ngModel)]="estimadoInvitados" min="1" max="500" step="5" />
         <div class="slider-range"><span>1</span><span>500+</span></div>
       </div>
       <div class="plan-hint" *ngIf="estimadoInvitados > 50">
         <span>💡</span>
-        <span>Con más de 50 invitados, considera nuestro plan PRO para acceso completo.</span>
+        <span>{{ 'ONBOARDING.GUESTS_HINT' | translate }}</span>
       </div>
       <div class="btn-row">
         <button class="btn-secondary" (click)="anterior()">← Atrás</button>
@@ -116,8 +115,8 @@
     <!-- PASO 4 — Prioridad -->
     <div class="ob-step" *ngIf="paso === 4">
       <div class="step-emoji">🎯</div>
-      <h2 class="step-title">¿Por dónde quieres empezar?</h2>
-      <p class="step-desc">Elige el módulo que más te urge organizar ahora mismo.</p>
+      <h2 class="step-title">{{ 'ONBOARDING.PRIORITY_TITLE' | translate }}</h2>
+      <p class="step-desc">{{ 'ONBOARDING.PRIORITY_DESC' | translate }}</p>
       <div class="priority-grid">
         <div class="priority-card" *ngFor="let p of prioridades"
              [class.selected]="prioridad === p.key"
@@ -127,7 +126,7 @@
             <div class="priority-label">{{ p.label }}</div>
             <div class="priority-desc">{{ p.desc }}</div>
           </div>
-          <div class="priority-check" *ngIf="prioridad === p.key">✓</div>
+          <div class="priority-check" *ngIf="prioridad === p.key">{{ 'ONBOARDING.PRIORITY_CHECK' | translate }}</div>
         </div>
       </div>
       <div class="btn-row">
@@ -140,35 +139,35 @@
     <div class="ob-step" *ngIf="paso === 5">
       <ng-container *ngIf="prioridad === 'invitados'">
         <div class="step-emoji">👤</div>
-        <h2 class="step-title">Añade tu primer invitado</h2>
-        <p class="step-desc">Empieza tu lista con alguien especial. Puedes saltarte este paso.</p>
+        <h2 class="step-title">{{ 'ONBOARDING.FIRST_GUEST_TITLE' | translate }}</h2>
+        <p class="step-desc">{{ 'ONBOARDING.FIRST_GUEST_DESC' | translate }}</p>
         <div class="form-group">
-          <label class="form-label">Nombre</label>
+          <label class="form-label">{{ 'ONBOARDING.FIRST_NAME_LABEL' | translate }}</label>
           <input type="text" class="form-input" [(ngModel)]="primerInvitadoNombre" placeholder="Nombre" />
         </div>
         <div class="form-group">
-          <label class="form-label">Apellido</label>
+          <label class="form-label">{{ 'ONBOARDING.LAST_NAME_LABEL' | translate }}</label>
           <input type="text" class="form-input" [(ngModel)]="primerInvitadoApellido" placeholder="Apellido" />
         </div>
         <div class="form-group">
-          <label class="form-label">Email (opcional)</label>
-          <input type="email" class="form-input" [(ngModel)]="primerInvitadoEmail" placeholder="email@ejemplo.com" />
+          <label class="form-label">{{ 'ONBOARDING.EMAIL_LABEL' | translate }}</label>
+          <input type="email" class="form-input" [(ngModel)]="primerInvitadoEmail" placeholder="{{ 'ONBOARDING.EMAIL_PLACEHOLDER' | translate }}" />
         </div>
       </ng-container>
       <ng-container *ngIf="prioridad !== 'invitados'">
         <div class="step-emoji">🚀</div>
-        <h2 class="step-title">¡Todo listo para empezar!</h2>
-        <p class="step-desc">Tu boda está configurada. Accederás directamente al módulo que elegiste.</p>
+        <h2 class="step-title">{{ 'ONBOARDING.READY_TITLE' | translate }}</h2>
+        <p class="step-desc">{{ 'ONBOARDING.READY_DESC' | translate }}</p>
         <div class="ready-card">
           <span style="font-size:2rem;">{{ getPrioridadEmoji() }}</span>
-          <div>Irás directo a <strong>{{ getPrioridadLabel() }}</strong></div>
+          <div [innerHTML]="'ONBOARDING.READY_GO_TO' | translate:{module: getPrioridadLabel()}"></div>
         </div>
       </ng-container>
       <div class="btn-row">
         <button class="btn-secondary" (click)="anterior()">← Atrás</button>
         <button class="btn-primary" (click)="siguiente()" [disabled]="cargando">
-          <span *ngIf="!cargando">Finalizar →</span>
-          <span *ngIf="cargando" class="spinner"></span>
+          <span *ngIf="!cargando">{{ 'ONBOARDING.FINISH_BTN' | translate }}</span>
+          <span *ngIf="cargando" class="spinner">{{ 'ONBOARDING.LOADING' | translate }}</span>
         </button>
       </div>
     </div>
@@ -176,37 +175,37 @@
     <!-- PASO 6 — Confirmación -->
     <div class="ob-step" *ngIf="paso === 6">
       <div class="step-emoji confetti-anim">🎉</div>
-      <h2 class="step-title">¡Tu boda está lista!</h2>
-      <p class="step-desc">Hemos configurado todo para que puedas empezar a planificar.</p>
+      <h2 class="step-title">{{ 'ONBOARDING.CONFIRM_TITLE' | translate }}</h2>
+      <p class="step-desc">{{ 'ONBOARDING.CONFIRM_DESC' | translate }}</p>
       <div class="summary-card">
         <div class="summary-row">
           <span class="summary-icon">💍</span>
-          <div><div class="summary-key">Boda</div><div class="summary-val">{{ nombre }}</div></div>
+          <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_WEDDING' | translate }}</div><div class="summary-val">{{ nombre }}</div></div>
         </div>
         <div class="summary-row">
           <span class="summary-icon">📅</span>
-          <div><div class="summary-key">Fecha</div><div class="summary-val">{{ fecha | date:'longDate':'':'es' }}</div></div>
+          <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_DATE' | translate }}</div><div class="summary-val">{{ fecha | date:'longDate':'':'es' }}</div></div>
         </div>
         <div class="summary-row">
           <span class="summary-icon">📍</span>
-          <div><div class="summary-key">Lugar</div><div class="summary-val">{{ ciudad }}</div></div>
+          <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_VENUE' | translate }}</div><div class="summary-val">{{ ciudad }}</div></div>
         </div>
         <div class="summary-row" *ngIf="direccion">
           <span class="summary-icon">🗺️</span>
-          <div><div class="summary-key">Dirección</div><div class="summary-val">{{ direccion }}</div></div>
+          <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_ADDRESS' | translate }}</div><div class="summary-val">{{ direccion }}</div></div>
         </div>
         <div class="summary-row" *ngIf="dresscode">
           <span class="summary-icon">👗</span>
-          <div><div class="summary-key">Dress Code</div><div class="summary-val">{{ dresscode }}</div></div>
+          <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_DRESSCODE' | translate }}</div><div class="summary-val">{{ dresscode }}</div></div>
         </div>
         <div class="summary-row">
           <span class="summary-icon">👥</span>
-          <div><div class="summary-key">Invitados estimados</div><div class="summary-val">{{ estimadoInvitados }}</div></div>
+          <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_GUESTS' | translate }}</div><div class="summary-val">{{ estimadoInvitados }}</div></div>
         </div>
       </div>
       <div class="btn-column">
-        <button class="btn-primary" (click)="irAModulo()">Ir a {{ getPrioridadLabel() }} →</button>
-        <button class="btn-ghost" (click)="irAlDashboard()">Ver el dashboard principal</button>
+        <button class="btn-primary" (click)="irAModulo()">{{ 'ONBOARDING.GO_TO_MODULE' | translate:{module: getPrioridadLabel()} }}</button>
+        <button class="btn-ghost" (click)="irAlDashboard()">{{ 'ONBOARDING.GO_TO_DASHBOARD' | translate }}</button>
       </div>
     </div>
 

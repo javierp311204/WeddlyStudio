@@ -8,34 +8,34 @@
       </div>
     </div>
 
-    <h1 class="display-5 fw-bold text-success mb-3">¡Pago Exitoso!</h1>
+    <h1 class="display-5 fw-bold text-success mb-3">{{ 'PAYMENT.SUCCESS_TITLE' | translate }}</h1>
 
     <p class="lead text-muted mb-4">
-      Tu pago se ha procesado correctamente.<br>
-      Ya tienes acceso a todas las funciones premium.
+      {{ 'PAYMENT.SUCCESS_MESSAGE' | translate }}<br>
+      {{ 'PAYMENT.SUCCESS_ACCESS' | translate }}
     </p>
 
     <div class="alert alert-success text-start mb-4" role="alert">
-      <strong>✓ ¿Qué sigue?</strong>
+      <strong>✓ {{ 'PAYMENT.WHATS_NEXT' | translate }}</strong>
       <ul class="mb-0 mt-2 ps-3">
-        <li>Tu plan ya está activo</li>
-        <li>Puedes comenzar a usar todas las funciones</li>
-        <li>Recibirás un email de confirmación</li>
+        <li>{{ 'PAYMENT.PLAN_ACTIVE' | translate }}</li>
+        <li>{{ 'PAYMENT.CAN_USE_FEATURES' | translate }}</li>
+        <li>{{ 'PAYMENT.CONFIRMATION_EMAIL' | translate }}</li>
       </ul>
     </div>
 
     <p class="small text-muted mb-4">
-      Serás redirigido al panel en unos segundos...
+      {{ 'PAYMENT.REDIRECTING' | translate }}
     </p>
 
     <button
       class="btn btn-success w-100 rounded-3 py-3 fw-semibold"
       (click)="irAlDashboard()">
-      Ir al Panel Ahora
+      {{ 'PAYMENT.GO_HOME_NOW' | translate }}
     </button>
 
     <p class="small text-muted mt-3 mb-0" *ngIf="sessionId">
-      ID de transacción: <code>{{ sessionId }}</code>
+      {{ 'PAYMENT.TRANSACTION_ID' | translate }}: <code>{{ sessionId }}</code>
     </p>
   </div>
 </div>

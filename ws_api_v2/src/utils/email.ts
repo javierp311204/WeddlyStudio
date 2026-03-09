@@ -36,6 +36,26 @@ export interface SendResult {
   error?: string;
 }
 
+export interface CollaboratorInviteEmailData {
+  to:          string;
+  inviterName: string;
+  weddingName: string;
+  role:        string;
+  token:       string;
+}
+
+const ROLE_LABELS: Record<string, string> = {
+  co_organizer: 'Co-organizador',
+  planner:      'Wedding Planner',
+  guest:        'Invitado',
+};
+
+export interface TfaResetEmailData {
+  to:        string;
+  firstName: string;
+  token:     string;
+}
+
 // ─── Templates HTML ──────────────────────────────────────────────
 
 function buildInvitationHtml(data: InvitationEmailData): string {
@@ -174,6 +194,108 @@ function buildVerificationHtml(data: VerificationEmailData): string {
 </html>`.trim();
 }
 
+function buildCollaboratorInviteHtml(data: CollaboratorInviteEmailData): string {
+  const roleLabel  = ROLE_LABELS[data.role] ?? data.role;
+  const acceptUrl  = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/invites/accept/${data.token}`;
+  const brandColor = '#8B6F47';
+
+  return `
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Invitación — ${data.weddingName}</title></head>
+<body style="margin:0;padding:20px;background:#f5f5f5;font-family:'Helvetica Neue',Arial,sans-serif;">
+  <div style="max-width:560px;margin:0 auto;">
+    <div style="text-align:center;padding:40px 0 24px;">
+      <h1 style="margin:0;font-size:28px;color:${brandColor};">Weddly</h1>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:48px 40px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <h2 style="margin:0 0 16px;font-size:22px;color:#222;">Te han invitado 🎉</h2>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">
+        <strong>${data.inviterName}</strong> te ha invitado a colaborar en la boda
+        <strong>${data.weddingName}</strong> con el rol de <strong>${roleLabel}</strong>.
+      </p>
+      <div style="text-align:center;margin:36px 0;">
+        <a href="${acceptUrl}"
+           style="background:${brandColor};color:#fff;padding:15px 36px;
+                  text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;
+                  display:inline-block;">
+          Aceptar invitación
+        </a>
+      </div>
+      <p style="margin:0 0 8px;font-size:13px;color:#888;text-align:center;">
+        Este enlace expira en <strong>48 horas</strong>.
+      </p>
+      <div style="background:#f9f6f2;border-radius:6px;padding:16px;margin-top:28px;">
+        <p style="margin:0 0 6px;font-size:12px;color:#aaa;text-transform:uppercase;letter-spacing:1px;">
+          ¿El botón no funciona?
+        </p>
+        <p style="margin:0;font-size:12px;color:#888;word-break:break-all;">
+          <a href="${acceptUrl}" style="color:${brandColor};">${acceptUrl}</a>
+        </p>
+      </div>
+      <p style="margin:28px 0 0;font-size:13px;color:#bbb;text-align:center;">
+        Si no esperabas esta invitación, puedes ignorar este mensaje.
+      </p>
+    </div>
+    <p style="text-align:center;font-size:12px;color:#ccc;margin:24px 0 40px;">
+      © ${new Date().getFullYear()} Weddly Studio
+    </p>
+  </div>
+</body>
+</html>`.trim();
+}
+
+function buildTfaResetHtml(data: TfaResetEmailData): string {
+  const resetUrl   = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/auth/2fa-reset?token=${data.token}`;
+  const brandColor = '#8B6F47';
+
+  return `
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Recuperar acceso 2FA — Weddly</title></head>
+<body style="margin:0;padding:20px;background:#f5f5f5;font-family:'Helvetica Neue',Arial,sans-serif;">
+  <div style="max-width:560px;margin:0 auto;">
+    <div style="text-align:center;padding:40px 0 24px;">
+      <h1 style="margin:0;font-size:28px;color:${brandColor};">Weddly</h1>
+      <p style="margin:4px 0 0;font-size:13px;color:#aaa;letter-spacing:2px;text-transform:uppercase;">Studio</p>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:48px 40px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <h2 style="margin:0 0 16px;font-size:22px;color:#222;">Recuperar acceso 2FA 🔐</h2>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">
+        Hola <strong>${data.firstName}</strong>, recibimos una solicitud para desactivar la
+        autenticación de doble factor en tu cuenta. Si fuiste tú, haz clic en el botón.
+      </p>
+      <div style="text-align:center;margin:36px 0;">
+        <a href="${resetUrl}"
+           style="background:#c0392b;color:#fff;padding:15px 36px;
+                  text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;
+                  display:inline-block;">
+          Desactivar mi 2FA
+        </a>
+      </div>
+      <p style="margin:0 0 8px;font-size:13px;color:#888;text-align:center;">
+        Este enlace expira en <strong>30 minutos</strong>.
+      </p>
+      <div style="background:#fff8f8;border:1px solid #f5c6c6;border-radius:6px;padding:16px;margin-top:28px;">
+        <p style="margin:0;font-size:13px;color:#c0392b;">
+          ⚠️ Si no solicitaste esto, ignora este email. Tu cuenta sigue protegida.
+        </p>
+      </div>
+      <div style="background:#f9f6f2;border-radius:6px;padding:16px;margin-top:16px;">
+        <p style="margin:0 0 6px;font-size:12px;color:#aaa;text-transform:uppercase;letter-spacing:1px;">¿El botón no funciona?</p>
+        <p style="margin:0;font-size:12px;color:#888;word-break:break-all;">
+          <a href="${resetUrl}" style="color:${brandColor};">${resetUrl}</a>
+        </p>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:12px;color:#ccc;margin:24px 0 40px;">
+      © ${new Date().getFullYear()} Weddly Studio
+    </p>
+  </div>
+</body>
+</html>`.trim();
+}
+
 // ─── Funciones de envío ──────────────────────────────────────────
 
 export async function sendInvitationEmail(data: InvitationEmailData): Promise<SendResult> {
@@ -202,6 +324,38 @@ export async function sendVerificationEmail(data: VerificationEmailData): Promis
     return { success: true };
   } catch (err: any) {
     console.error(`[Email] Error enviando verificación a ${data.to}:`, err.message);
+    return { success: false, error: err.message };
+  }
+}
+
+export async function sendCollaboratorInviteEmail(
+  data: CollaboratorInviteEmailData,
+): Promise<SendResult> {
+  try {
+    await transporter.sendMail({
+      from:    `"Weddly Studio" <${process.env.SMTP_USER}>`,
+      to:      data.to,
+      subject: `Te invitaron a colaborar en "${data.weddingName}" — Weddly`,
+      html:    buildCollaboratorInviteHtml(data),
+    });
+    return { success: true };
+  } catch (err: any) {
+    console.error(`[Email] Error enviando invitación colaborador a ${data.to}:`, err.message);
+    return { success: false, error: err.message };
+  }
+}
+
+export async function sendTfaResetEmail(data: TfaResetEmailData): Promise<SendResult> {
+  try {
+    await transporter.sendMail({
+      from:    `"Weddly Studio" <${process.env.SMTP_USER}>`,
+      to:      data.to,
+      subject: 'Recuperar acceso 2FA — Weddly Studio',
+      html:    buildTfaResetHtml(data),
+    });
+    return { success: true };
+  } catch (err: any) {
+    console.error(`[Email] Error enviando reset 2FA a ${data.to}:`, err.message);
     return { success: false, error: err.message };
   }
 }
