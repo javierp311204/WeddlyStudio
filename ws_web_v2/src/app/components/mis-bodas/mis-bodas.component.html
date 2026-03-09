@@ -1,0 +1,216 @@
+<!-- mis-bodas.component.html -->
+
+<div class="mb-page">
+  <div class="mb-bg-orb mb-bg-orb--1"></div>
+  <div class="mb-bg-orb mb-bg-orb--2"></div>
+
+  <div class="mb-container">
+
+    <!-- ── Header ── -->
+    <div class="mb-header">
+      <div>
+        <p class="mb-header__eyebrow">Mi cuenta</p>
+        <h1 class="mb-header__title">Mis Bodas</h1>
+      </div>
+      <button class="mb-new-btn" (click)="abrirNuevaBoda()">
+        <span class="mb-new-btn__icon">+</span>
+        <span>Nueva boda</span>
+      </button>
+    </div>
+
+    <!-- ── Loading ── -->
+    <div class="mb-loading" *ngIf="cargando">
+      <div class="mb-spinner"></div>
+      <p>Cargando bodas...</p>
+    </div>
+
+    <!-- ── Estado vacío ── -->
+    <div class="mb-empty" *ngIf="!cargando && bodas.length === 0">
+      <span class="mb-empty__icon">💒</span>
+      <h2 class="mb-empty__title">Aún no tienes bodas</h2>
+      <p class="mb-empty__desc">Crea tu primera boda para empezar a organizarlo todo.</p>
+      <button class="mb-new-btn" (click)="abrirNuevaBoda()">
+        <span>+ Crear mi primera boda</span>
+      </button>
+    </div>
+
+    <!-- ── Grid de bodas ── -->
+    <div class="mb-grid" *ngIf="!cargando && bodas.length > 0">
+
+      <div
+        class="mb-card"
+        *ngFor="let boda of bodas"
+        [class.mb-card--active]="boda.id === activaId"
+        (click)="seleccionarBoda(boda)"
+      >
+        <!-- Badge activa -->
+        <div class="mb-card__active-badge" *ngIf="boda.id === activaId">
+          <span>✓ Boda activa</span>
+        </div>
+
+        <!-- Header de la tarjeta -->
+        <div class="mb-card__top">
+          <div class="mb-card__icon">💍</div>
+          <div class="mb-card__badges">
+            <span class="mb-badge" [ngClass]="getPlanClass(boda.plan_type)">
+              {{ getPlanLabel(boda.plan_type) }}
+            </span>
+            <span class="mb-badge mb-badge--role" *ngIf="!boda.is_owner">
+              {{ getRoleLabel(boda.my_role) }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Nombre y fecha -->
+        <h2 class="mb-card__name">{{ boda.name }}</h2>
+        <p class="mb-card__date">
+          <span class="mb-card__date-icon">📅</span>
+          {{ formatDate(boda.wedding_date) }}
+        </p>
+        <p class="mb-card__location" *ngIf="boda.location_name">
+          <span>📍</span> {{ boda.location_name }}
+        </p>
+
+        <!-- Stats -->
+        <div class="mb-card__stats">
+          <div class="mb-stat">
+            <span class="mb-stat__num">{{ boda._count.guests }}</span>
+            <span class="mb-stat__label">invitados</span>
+          </div>
+          <div class="mb-stat">
+            <span class="mb-stat__num">{{ boda._count.tables }}</span>
+            <span class="mb-stat__label">mesas</span>
+          </div>
+          <div class="mb-stat">
+            <span class="mb-stat__num">{{ boda._count.tasks }}</span>
+            <span class="mb-stat__label">tareas</span>
+          </div>
+        </div>
+
+        <!-- Footer acciones -->
+        <div class="mb-card__footer">
+          <button
+            class="mb-card__select-btn"
+            [class.mb-card__select-btn--active]="boda.id === activaId"
+          >
+            {{ boda.id === activaId ? '✓ Activa' : 'Seleccionar' }}
+          </button>
+
+          <button
+            *ngIf="boda.is_owner"
+            class="mb-card__delete-btn"
+            (click)="confirmarEliminar(boda, $event)"
+            title="Eliminar boda"
+          >
+            🗑
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Tarjeta "Nueva boda" (siempre al final) -->
+      <div class="mb-card mb-card--new" (click)="abrirNuevaBoda()">
+        <div class="mb-card--new__inner">
+          <span class="mb-card--new__icon">+</span>
+          <p class="mb-card--new__text">Nueva boda</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ MODAL NUEVA BODA ══ -->
+<div class="mb-backdrop" *ngIf="showNuevaModal" (click)="cerrarNuevaModal()">
+  <div class="mb-modal" (click)="$event.stopPropagation()">
+    <button class="mb-modal__close" (click)="cerrarNuevaModal()">×</button>
+    <h3 class="mb-modal__title">Nueva boda</h3>
+    <p class="mb-modal__subtitle">Completa los datos básicos, podrás añadir más información después.</p>
+
+    <div class="mb-field">
+      <label class="mb-label">Nombre de la boda *</label>
+      <input
+        class="mb-input"
+        [(ngModel)]="nuevaForm.name"
+        [class.mb-input--error]="nuevaError"
+        placeholder="Ej: Boda de Ana y Carlos"
+        maxlength="200"
+        (keydown.enter)="crearBoda()"
+      />
+      <span class="mb-error" *ngIf="nuevaError">{{ nuevaError }}</span>
+    </div>
+
+    <div class="mb-field">
+      <label class="mb-label">Fecha (opcional)</label>
+      <input
+        class="mb-input"
+        [(ngModel)]="nuevaForm.wedding_date"
+        type="date"
+      />
+    </div>
+
+    <button class="mb-modal__btn" (click)="crearBoda()" [disabled]="creando">
+      <span *ngIf="!creando">✦ Crear boda</span>
+      <span *ngIf="creando" class="d-flex align-items-center justify-content-center gap-2">
+        <span class="spinner-border spinner-border-sm"></span>
+        Creando...
+      </span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ MODAL UPGRADE ══ -->
+<div class="mb-backdrop" *ngIf="showUpgradeModal" (click)="cerrarUpgradeModal()">
+  <div class="mb-modal mb-modal--upgrade" (click)="$event.stopPropagation()">
+    <button class="mb-modal__close" (click)="cerrarUpgradeModal()">×</button>
+
+    <div class="mb-upgrade__icon">💎</div>
+    <h3 class="mb-modal__title">Actualiza tu plan</h3>
+    <p class="mb-upgrade__reason">{{ upgradeReason }}</p>
+
+    <div class="mb-upgrade__features">
+      <div class="mb-upgrade__feature">✓ Bodas ilimitadas</div>
+      <div class="mb-upgrade__feature">✓ Invitados ilimitados</div>
+      <div class="mb-upgrade__feature">✓ Álbum de fotos ampliado</div>
+      <div class="mb-upgrade__feature">✓ Soporte prioritario</div>
+    </div>
+
+    <button class="mb-modal__btn mb-modal__btn--upgrade" (click)="irAPricing($event)">
+      Ver planes Premium →
+    </button>
+
+    <button class="mb-upgrade__dismiss" (click)="cerrarUpgradeModal()">
+      Ahora no
+    </button>
+  </div>
+</div>
+
+<!-- ══ MODAL CONFIRMAR ELIMINAR ══ -->
+<div class="mb-backdrop" *ngIf="showEliminarModal" (click)="cerrarEliminarModal()">
+  <div class="mb-modal mb-modal--danger" (click)="$event.stopPropagation()">
+    <button class="mb-modal__close" (click)="cerrarEliminarModal()">×</button>
+
+    <div class="mb-danger__icon">⚠️</div>
+    <h3 class="mb-modal__title">Eliminar boda</h3>
+    <p class="mb-danger__desc">
+      ¿Estás seguro de que quieres eliminar
+      <strong>{{ bodaAEliminar?.name }}</strong>?
+      Esta acción eliminará todos los invitados, mesas, checklist y fotos asociados.
+      <strong>No se puede deshacer.</strong>
+    </p>
+
+    <div class="mb-modal__actions">
+      <button class="mb-modal__btn--secondary" (click)="cerrarEliminarModal()">
+        Cancelar
+      </button>
+      <button class="mb-modal__btn mb-modal__btn--danger" (click)="ejecutarEliminar()" [disabled]="eliminando">
+        <span *ngIf="!eliminando">Eliminar definitivamente</span>
+        <span *ngIf="eliminando" class="d-flex align-items-center gap-2">
+          <span class="spinner-border spinner-border-sm"></span>
+          Eliminando...
+        </span>
+      </button>
+    </div>
+  </div>
+</div>

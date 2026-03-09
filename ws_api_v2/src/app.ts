@@ -13,6 +13,7 @@ import { weddingInvitationRouter, invitationRouter } from './routes/invitation.r
 import paymentRoutes      from './routes/payment.routes';
 import subscriptionRoutes from './routes/subscription.routes';
 import webhookRoutes      from './routes/webhook.routes';
+import userRoutes from './routes/user.routes'; 
 
 const app = express();
 
@@ -59,6 +60,7 @@ app.use('/api/auth', authRoutes);
 
 // ─── Weddings ────────────────────────────────────────────────────
 app.use('/api/weddings', weddingRoutes);
+app.use('/api/users', userRoutes);
 
 // ─── Tasks ───────────────────────────────────────────────────────
 app.use('/api/weddings/:weddingId/tasks', weddingTaskRouter);

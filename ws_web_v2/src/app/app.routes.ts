@@ -15,6 +15,10 @@ import { VerificarEmailComponent } from './pages/verificar-email/verificar-email
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { RsvpComponent } from './components/rsvp/rsvp.component';
 import { PricingComponent } from './pages/pricing/pricing.component';
+import { PagoExitosoComponent } from './pages/pago-exitoso/pago-exitoso.component';
+import { PagoCanceladoComponent } from './pages/pago-cancelado/pago-cancelado.component';
+import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuario.component';
+import { MisBodasComponent } from './components/mis-bodas/mis-bodas.component';
 
 export const routes: Routes = [
 
@@ -26,19 +30,25 @@ export const routes: Routes = [
   { path: 'verify-email/:token',     component: VerificarEmailComponent },
   { path: 'rsvp/:code',              component: RsvpComponent },
 
-  // ── Rutas autenticadas (cualquier usuario logueado) ─────────
+  // ── Rutas de pago (Stripe redirige aquí) ────────────────────
+  { path: 'payment/success',         component: PagoExitosoComponent },
+  { path: 'payment/cancel',          component: PagoCanceladoComponent },
+
+  // ── Rutas autenticadas ──────────────────────────────────────
   { path: 'album',      component: AlbumDigitalComponent, canActivate: [authGuard] },
   { path: 'dashboard',  component: HomeComponent,         canActivate: [authGuard] },
   { path: 'info-boda',  component: InfoBodaComponent,     canActivate: [authGuard] },
-  { path: 'onboarding', component: OnboardingComponent, canActivate: [authGuard] },
+  { path: 'onboarding', component: OnboardingComponent,   canActivate: [authGuard] },
+  { path: 'perfil',     component: PerfilUsuarioComponent,canActivate: [authGuard] },
+  { path: 'mis-bodas',  component: MisBodasComponent,     canActivate: [authGuard] },
 
-  // ── Rutas solo admin ────────────────────────────────────────
+  // ── Rutas con boda activa ───────────────────────────────────
   { path: 'diseno',    component: DisenoPapeleriaComponent, canActivate: [weddingOwnerGuard] },
   { path: 'checklist', component: ChecklistBodaComponent,   canActivate: [weddingOwnerGuard] },
   { path: 'invitados', component: ListaInvitadosComponent,  canActivate: [weddingOwnerGuard] },
-  { path: 'pricing', component: PricingComponent,  canActivate: [weddingOwnerGuard] },
+  { path: 'pricing',    component: PricingComponent,      canActivate: [weddingOwnerGuard] },
 
-  // ── Rutas admin + plan de pago ──────────────────────────────
+  // ── Rutas con plan de pago ──────────────────────────────────
   {
     path: 'mesas',
     component: MesaManagerComponent,

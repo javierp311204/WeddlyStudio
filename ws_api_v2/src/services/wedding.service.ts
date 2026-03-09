@@ -1,279 +1,269 @@
 import prisma from '../config/db';
 import { AppError } from '../middleware/errorHandler.middleware';
-import { CreateWeddingInput, UpdateWeddingInput, AddWeddingMemberInput } from '../schemas/wedding.schema';
+import {
+  CreateWeddingInput,
+  UpdateWeddingInput,
+  AddWeddingMemberInput,
+} from '../schemas/wedding.schema';
+
+// ─── Límites por plan ─────────────────────────────────────────────
+const PLAN_LIMITS: Record<string, { max_guests: number; max_photos: number; max_weddings: number }> = {
+  free:         { max_guests: 40,  max_photos: 20, max_weddings: 1  },
+  one_time:     { max_guests: -1,  max_photos: 80, max_weddings: 1  },
+  subscription: { max_guests: -1,  max_photos: 80, max_weddings: -1 },
+};
 
 export class WeddingService {
-  // ─── Helpers privados ──────────────────────────────────────────
 
-  /**
-   * Verifica que el usuario tiene acceso a la boda.
-   * Lanza 404 si no existe y 403 si no tiene rol en ella.
-   */
-  private async assertAccess(weddingId: string, userId: string) {
+  // ─── Helper: verificar que el usuario es owner ────────────────
+  private async assertOwner(id: string, userId: string) {
+    const wedding = await prisma.wedding.findUnique({ where: { id } });
+    if (!wedding)                      throw new AppError('Boda no encontrada', 404);
+    if (wedding.created_by !== userId) throw new AppError('Solo el creador puede realizar esta acción', 403);
+    return wedding;
+  }
+
+  // ─── Helper: verificar acceso (owner o miembro) ───────────────
+  private async assertAccess(id: string, userId: string) {
     const wedding = await prisma.wedding.findUnique({
-      where: { id: weddingId },
+      where: { id },
       include: {
-        user_roles: {
-          where: { user_id: userId },
-          take: 1,
-        },
+        user_roles: { where: { user_id: userId }, take: 1 },
       },
     });
-
     if (!wedding) throw new AppError('Boda no encontrada', 404);
 
-    const isCreator = wedding.created_by === userId;
-    const hasRole = wedding.user_roles.length > 0;
-
-    if (!isCreator && !hasRole) {
-      throw new AppError('No tienes acceso a esta boda', 403);
-    }
+    const hasAccess = wedding.created_by === userId || wedding.user_roles.length > 0;
+    if (!hasAccess) throw new AppError('No tienes acceso a esta boda', 403);
 
     return wedding;
   }
 
-  // ─── CRUD principal ────────────────────────────────────────────
-
-  /**
-   * GET /api/weddings
-   * Lista todas las bodas del usuario autenticado
-   */
-  async getAll(userId: string) {
+  // ─── Helper: plan activo del usuario ─────────────────────────
+  private async getActivePlan(userId: string): Promise<string> {
     const weddings = await prisma.wedding.findMany({
-      where: {
-        OR: [
-          { created_by: userId },
-          { user_roles: { some: { user_id: userId } } },
-        ],
-      },
-      select: {
-        id: true,
-        name: true,
-        wedding_date: true,
-        location_name: true,
-        status: true,
-        plan_type: true,
-        created_at: true,
-        user_roles: {
-          where: { user_id: userId },
-          select: { role: true },
-        },
-        _count: {
-          select: {
-            guests: true,
-            tasks: true,
-            photos: true,
-          },
-        },
-      },
-      orderBy: { wedding_date: 'asc' },
+      where: { created_by: userId },
+      select: { plan_type: true },
     });
 
-    return weddings;
+    const priority = ['subscription', 'one_time', 'free'];
+    return priority.find(p => weddings.some(w => w.plan_type === p)) ?? 'free';
   }
 
-  /**
-   * GET /api/weddings/:id
-   * Detalle completo de una boda
-   */
-  async getById(weddingId: string, userId: string) {
-    await this.assertAccess(weddingId, userId);
-
-    const wedding = await prisma.wedding.findUnique({
-      where: { id: weddingId },
+  // ─── GET /api/weddings ────────────────────────────────────────
+  async getAll(userId: string) {
+    const roles = await prisma.userWeddingRole.findMany({
+      where: { user_id: userId },
       include: {
-        user_roles: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                first_name: true,
-                last_name: true,
-                email: true,
-                avatar_url: true,
-              },
-            },
-          },
-        },
-        _count: {
+        wedding: {
           select: {
-            guests: true,
-            tasks: true,
-            photos: true,
-            tables: true,
+            id: true, name: true, wedding_date: true,
+            location_name: true, address: true, dress_code: true,
+            status: true, plan_type: true, created_by: true, created_at: true,
+            _count: { select: { guests: true, tables: true, tasks: true } },
           },
         },
       },
+      orderBy: { assigned_at: 'asc' },
     });
 
-    return wedding;
-  }
-
-  /**
-   * POST /api/weddings
-   * Crear nueva boda
-   */
-  async create(userId: string, data: CreateWeddingInput) {
-    // TODO: validar límite de bodas según plan del usuario
-    // const subscription = await this.getUserPlan(userId);
-    // if (subscription.plan.max_weddings !== -1) { ... }
-
-    const wedding = await prisma.$transaction(async (tx) => {
-      // 1. Crear la boda
-      const newWedding = await tx.wedding.create({
-        data: {
-          name: data.name,
-          wedding_date: new Date(data.wedding_date),
-          location_name: data.location_name,
-          address: data.address,
-          dress_code: data.dress_code,
-          menu_description: data.menu_description,
-          rsvp_deadline: data.rsvp_deadline ? new Date(data.rsvp_deadline) : undefined,
-          created_by: userId,
-          plan_type: 'free', // por defecto; se actualiza al comprar
-        },
-      });
-
-      // 2. Asignar rol "bride" al creador automáticamente
-      await tx.userWeddingRole.create({
-        data: {
-          user_id: userId,
-          wedding_id: newWedding.id,
-          role: 'bride',
-        },
-      });
-
-      return newWedding;
-    });
-
-    return wedding;
-  }
-
-  /**
-   * PATCH /api/weddings/:id
-   * Actualizar datos de la boda
-   */
-  async update(weddingId: string, userId: string, data: UpdateWeddingInput) {
-    await this.assertAccess(weddingId, userId);
-
-    // Solo el creador o planner puede editar
-    const wedding = await prisma.wedding.findUnique({
-      where: { id: weddingId },
-      include: { user_roles: { where: { user_id: userId } } },
-    });
-
-    const isCreator = wedding!.created_by === userId;
-    const isPlanner = wedding!.user_roles.some(r => r.role === 'planner');
-
-    if (!isCreator && !isPlanner) {
-      throw new AppError('Solo el creador o planner pueden editar la boda', 403);
-    }
-
-    const updated = await prisma.wedding.update({
-      where: { id: weddingId },
-      data: {
-        ...data,
-        wedding_date: data.wedding_date ? new Date(data.wedding_date) : undefined,
-        rsvp_deadline: data.rsvp_deadline ? new Date(data.rsvp_deadline) : undefined,
+    // Bodas creadas por el usuario sin rol asignado (edge case)
+    const assignedIds = roles.map(r => r.wedding_id);
+    const orphaned = await prisma.wedding.findMany({
+      where: { created_by: userId, id: { notIn: assignedIds } },
+      select: {
+        id: true, name: true, wedding_date: true, location_name: true,
+        address: true, dress_code: true, status: true, plan_type: true,
+        created_by: true, created_at: true,
+        _count: { select: { guests: true, tables: true, tasks: true } },
       },
     });
 
-    return updated;
+    const fromRoles = roles.map(r => ({
+      ...r.wedding,
+      my_role:  r.role,
+      is_owner: r.wedding.created_by === userId,
+    }));
+
+    const fromOrphaned = orphaned.map(w => ({
+      ...w,
+      my_role:  'bride' as const,
+      is_owner: true,
+    }));
+
+    return [...fromRoles, ...fromOrphaned].sort(
+      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    );
   }
 
-  /**
-   * DELETE /api/weddings/:id
-   * Soft delete — solo el creador puede borrar
-   */
-  async remove(weddingId: string, userId: string) {
-    const wedding = await prisma.wedding.findUnique({ where: { id: weddingId } });
+  // ─── GET /api/weddings/can-create ────────────────────────────
+  async canCreate(userId: string): Promise<{
+    allowed: boolean; plan: string; limit: number; current: number;
+  }> {
+    const existing = await prisma.wedding.findMany({
+      where: { created_by: userId },
+      select: { id: true },
+    });
 
-    if (!wedding) throw new AppError('Boda no encontrada', 404);
-    if (wedding.created_by !== userId) {
-      throw new AppError('Solo el creador puede eliminar la boda', 403);
+    const plan    = await this.getActivePlan(userId);
+    const limits  = PLAN_LIMITS[plan] ?? PLAN_LIMITS['free'];
+    const limit   = limits.max_weddings;
+    const current = existing.length;
+    const allowed = limit === -1 || current < limit;
+
+    return { allowed, plan, limit, current };
+  }
+
+  // ─── GET /api/weddings/:id ────────────────────────────────────
+  async getById(id: string, userId: string) {
+    return this.assertAccess(id, userId);
+  }
+
+  // ─── POST /api/weddings ───────────────────────────────────────
+  async create(userId: string, data: CreateWeddingInput) {
+    const { allowed, plan, limit } = await this.canCreate(userId);
+
+    if (!allowed) {
+      throw new AppError(
+        `Tu plan "${plan}" solo permite ${limit} boda(s). Actualiza a Premium para gestionar múltiples bodas.`,
+        403,
+        'PLAN_LIMIT_REACHED',
+      );
     }
 
-    // softDelete middleware intercepta este delete y pone deleted_at
-    await prisma.wedding.delete({ where: { id: weddingId } });
+    const wedding = await prisma.wedding.create({
+      data: {
+        name:             data.name,
+        wedding_date:     data.wedding_date ? new Date(data.wedding_date) : new Date(),
+        location_name:    data.location_name ?? null,
+        address:          data.address ?? null,
+        dress_code:       data.dress_code ?? null,
+        menu_description: data.menu_description ?? null,
+        rsvp_deadline:    data.rsvp_deadline ? new Date(data.rsvp_deadline) : null,
+        created_by:       userId,
+        // FIX: heredar plan del usuario
+        plan_type:        (plan === 'subscription' ? 'subscription' : plan === 'one_time' ? 'one_time' : 'free') as any,
+        status:           'active',
+      },
+    });
+
+    // Asignar rol de bride al creador automáticamente
+    await prisma.userWeddingRole.create({
+      data: { user_id: userId, wedding_id: wedding.id, role: 'bride' },
+    });
+
+    return wedding;
+  }
+
+  // ─── PATCH /api/weddings/:id ──────────────────────────────────
+  async update(id: string, userId: string, data: UpdateWeddingInput) {
+    await this.assertOwner(id, userId);
+
+    // FIX: construir el objeto explícitamente para evitar el tipo false | {...}
+    // que genera el spread condicional &&
+    const updateData: Record<string, unknown> = {};
+    if (data.name             !== undefined) updateData['name']             = data.name;
+    if (data.wedding_date     !== undefined) updateData['wedding_date']     = data.wedding_date ? new Date(data.wedding_date) : null;
+    if (data.location_name    !== undefined) updateData['location_name']    = data.location_name;
+    if (data.address          !== undefined) updateData['address']          = data.address;
+    if (data.dress_code       !== undefined) updateData['dress_code']       = data.dress_code;
+    if (data.menu_description !== undefined) updateData['menu_description'] = data.menu_description;
+    if (data.rsvp_deadline    !== undefined) updateData['rsvp_deadline']    = data.rsvp_deadline ? new Date(data.rsvp_deadline) : null;
+
+    return prisma.wedding.update({ where: { id }, data: updateData });
+  }
+
+  // ─── DELETE /api/weddings/:id ─────────────────────────────────
+  async remove(id: string, userId: string) {
+    await this.assertOwner(id, userId);
+
+    // Contar bodas activas del usuario
+    const totalBodas = await prisma.wedding.count({
+      where: { created_by: userId },
+    });
+
+    // Solo bloquear si tiene suscripción activa Y es la única boda.
+    // Si tiene 2+ bodas puede borrar una libremente.
+    if (totalBodas === 1) {
+      const activeSub = await prisma.subscription.findFirst({
+        where: { user_id: userId, status: { in: ['active', 'trialing'] } },
+      });
+
+      if (activeSub) {
+        throw new AppError(
+          'No puedes eliminar tu única boda con una suscripción activa. Cancela la suscripción primero.',
+          409,
+          'ACTIVE_SUBSCRIPTION',
+        );
+      }
+    }
+
+    // Hard delete con SQL raw — evita que el middleware de soft delete
+    // intercepte el prisma.wedding.delete() y lo convierta en UPDATE deleted_at.
+    // Borramos en cascada manual porque payments y activity_logs tienen onDelete: SetNull
+    // (no se borran automáticamente con el wedding).
+
+    // 1. Nullify payments.wedding_id (onDelete: SetNull — no se pueden borrar)
+    await prisma.$executeRawUnsafe(
+      `UPDATE payments SET wedding_id = NULL WHERE wedding_id = $1::uuid`,
+      id,
+    );
+
+    // 2. Nullify activity_logs.wedding_id (onDelete: SetNull)
+    await prisma.$executeRawUnsafe(
+      `UPDATE activity_logs SET wedding_id = NULL WHERE wedding_id = $1::uuid`,
+      id,
+    );
+
+    // 3. Hard delete de la boda — las tablas con onDelete: Cascade se borran solas:
+    //    user_wedding_roles, guests, tables, photos, tasks, events, invitations,
+    //    invitation_sends (via invitation → cascade)
+    await prisma.$executeRawUnsafe(
+      `DELETE FROM weddings WHERE id = $1::uuid`,
+      id,
+    );
 
     return { message: 'Boda eliminada correctamente' };
   }
 
-  // ─── Gestión de miembros ───────────────────────────────────────
+  // ─── POST /api/weddings/:id/members ──────────────────────────
+  async addMember(id: string, requesterId: string, data: AddWeddingMemberInput) {
+    await this.assertOwner(id, requesterId);
 
-  /**
-   * POST /api/weddings/:id/members
-   * Añadir un usuario a la boda con un rol
-   */
-  async addMember(weddingId: string, requesterId: string, data: AddWeddingMemberInput) {
-    const wedding = await prisma.wedding.findUnique({ where: { id: weddingId } });
-
-    if (!wedding) throw new AppError('Boda no encontrada', 404);
-
-    // Solo el creador o planner puede añadir miembros
-    const requesterRole = await prisma.userWeddingRole.findFirst({
-      where: { wedding_id: weddingId, user_id: requesterId },
-    });
-
-    const isCreator = wedding.created_by === requesterId;
-    const isPlanner = requesterRole?.role === 'planner';
-
-    if (!isCreator && !isPlanner) {
-      throw new AppError('No tienes permisos para añadir miembros', 403);
-    }
-
-    // Verificar que el usuario destino existe
     const targetUser = await prisma.user.findUnique({ where: { id: data.user_id } });
     if (!targetUser) throw new AppError('Usuario no encontrado', 404);
 
-    // Verificar que no tiene ya ese rol en esa boda (unique constraint)
+    // FIX: el compound unique es user_id_wedding_id_role (3 campos), no user_id_wedding_id
     const existing = await prisma.userWeddingRole.findFirst({
-      where: { wedding_id: weddingId, user_id: data.user_id, role: data.role },
+      where: { user_id: data.user_id, wedding_id: id, role: data.role },
     });
+    if (existing) throw new AppError('Este usuario ya tiene ese rol en la boda', 409);
 
-    if (existing) {
-      throw new AppError(`El usuario ya tiene el rol "${data.role}" en esta boda`, 409);
-    }
-
-    const member = await prisma.userWeddingRole.create({
-      data: {
-        wedding_id: weddingId,
-        user_id: data.user_id,
-        role: data.role,
-      },
+    return prisma.userWeddingRole.create({
+      data: { user_id: data.user_id, wedding_id: id, role: data.role },
       include: {
-        user: {
-          select: { id: true, first_name: true, last_name: true, email: true },
-        },
+        user: { select: { id: true, first_name: true, last_name: true, email: true } },
       },
     });
-
-    return member;
   }
 
-  /**
-   * DELETE /api/weddings/:id/members/:userId
-   * Eliminar un miembro de la boda
-   */
-  async removeMember(weddingId: string, requesterId: string, targetUserId: string) {
-    const wedding = await prisma.wedding.findUnique({ where: { id: weddingId } });
+  // ─── DELETE /api/weddings/:id/members/:userId ─────────────────
+  async removeMember(id: string, requesterId: string, targetUserId: string) {
+    await this.assertOwner(id, requesterId);
 
-    if (!wedding) throw new AppError('Boda no encontrada', 404);
-
-    // No se puede eliminar al creador
-    if (targetUserId === wedding.created_by) {
-      throw new AppError('No se puede eliminar al creador de la boda', 400);
+    if (requesterId === targetUserId) {
+      throw new AppError('No puedes eliminarte a ti mismo como miembro', 400);
     }
 
-    const isCreator = wedding.created_by === requesterId;
-    const isSelf = requesterId === targetUserId; // un usuario puede salir él mismo
+    // FIX: usar findFirst en vez de findUnique con compound key de 3 campos
+    const existing = await prisma.userWeddingRole.findFirst({
+      where: { user_id: targetUserId, wedding_id: id },
+    });
+    if (!existing) throw new AppError('Este usuario no es miembro de la boda', 404);
 
-    if (!isCreator && !isSelf) {
-      throw new AppError('No tienes permisos para eliminar este miembro', 403);
-    }
-
+    // Eliminar todos los roles del usuario en esta boda
     await prisma.userWeddingRole.deleteMany({
-      where: { wedding_id: weddingId, user_id: targetUserId },
+      where: { user_id: targetUserId, wedding_id: id },
     });
 
     return { message: 'Miembro eliminado correctamente' };

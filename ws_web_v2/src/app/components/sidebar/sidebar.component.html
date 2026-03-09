@@ -1,6 +1,6 @@
 <aside class="sidebar" [class.collapsed]="collapsed()">
 
-  <!-- Fila superior: logo + botón toggle juntos en flex row -->
+  <!-- Fila superior: logo + botón toggle -->
   <div class="sidebar-header">
     <div class="sidebar-logo">
       <img src="assets/logo/logo-icon.png" alt="Weddly" class="logo-img" />
@@ -14,14 +14,26 @@
     </button>
   </div>
 
-  <!-- Perfil -->
-  <div class="sidebar-profile">
+  <!-- Perfil clickable → navega a /perfil -->
+  <a class="sidebar-profile" routerLink="/perfil" title="Mi perfil">
     <div class="profile-avatar">{{ getInitial() }}</div>
     <div class="profile-info">
       <p class="profile-name">{{ authService.getUserNick() }}</p>
       <p class="profile-role">{{ authService.isWeddingOwner() ? 'Organizador' : 'Invitado' }}</p>
     </div>
-  </div>
+  </a>
+
+  <!-- ✅ Mis Bodas — justo debajo del perfil, antes del divider -->
+  <a
+    class="nav-item mis-bodas-link"
+    routerLink="/mis-bodas"
+    routerLinkActive="active"
+    title="Mis Bodas"
+  >
+    <span class="nav-emoji">💒</span>
+    <span class="nav-label">Mis Bodas</span>
+    <span class="active-bar"></span>
+  </a>
 
   <div class="sidebar-divider"></div>
 
@@ -49,10 +61,8 @@
   <!-- Footer -->
   <div class="sidebar-footer">
 
-    <!-- Idioma: el componente SIEMPRE es clickable. Solo el texto se oculta. -->
     <div class="footer-lang nav-item" title="Idioma">
       <span class="nav-emoji">🌐</span>
-      <!-- app-language-selector siempre visible y clickable, incluso colapsado -->
       <app-language-selector class="lang-selector" />
     </div>
 

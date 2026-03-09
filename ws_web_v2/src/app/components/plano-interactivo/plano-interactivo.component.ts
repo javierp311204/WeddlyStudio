@@ -514,10 +514,6 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     return mesa.guests?.length ?? 0;
   }
 
-  irAlMenu() {
-    this.router.navigate(['/home']);
-  }
-
   // FIX NG9: método requerido por el template para listar invitados de una mesa
   // v2: los invitados de la mesa están en mesa.guests[] (filtrados por table_id en cargarPlano)
   getInvitadosDeMesa(mesa: MesaV2): any[] {

@@ -1,0 +1,285 @@
+<!-- perfil-usuario.component.html -->
+
+<div class="pf-page">
+  <div class="pf-bg-orb pf-bg-orb--1"></div>
+  <div class="pf-bg-orb pf-bg-orb--2"></div>
+
+  <div class="pf-layout">
+
+    <!-- ══ COLUMNA IZQUIERDA ══ -->
+    <aside class="pf-sidebar">
+
+      <div class="pf-avatar-zone">
+        <div class="pf-avatar-ring">
+          <div class="pf-avatar" [style.background-image]="avatarPreview ? 'url(' + avatarPreview + ')' : ''">
+            <span *ngIf="!avatarPreview" class="pf-avatar__initials">{{ getInitials() }}</span>
+            <label class="pf-avatar__overlay" for="avatarInput" *ngIf="editMode">
+              <span class="pf-avatar__overlay-icon">📷</span>
+              <span class="pf-avatar__overlay-text">Cambiar</span>
+            </label>
+          </div>
+        </div>
+        <input type="file" id="avatarInput" accept="image/*"
+               class="d-none" (change)="onAvatarChange($event)" />
+        <div class="pf-avatar-info">
+          <h2 class="pf-name">{{ getFullName() }}</h2>
+          <span class="pf-role-badge" [ngClass]="'role-' + user.role_global">
+            {{ getRoleLabel(user.role_global) }}
+          </span>
+          <p class="pf-member-since" *ngIf="user.created_at">
+            {{ 'PROFILE.MEMBER_SINCE' | translate }}
+            {{ user.created_at | date:'MMMM yyyy' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="pf-verify-banner" *ngIf="!user.email_verified">
+        <span class="pf-verify-banner__icon">⚠️</span>
+        <div>
+          <p class="pf-verify-banner__title">{{ 'PROFILE.EMAIL_UNVERIFIED' | translate }}</p>
+          <button class="pf-verify-banner__btn" (click)="resendVerification()">
+            {{ 'PROFILE.RESEND_EMAIL' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div class="pf-verify-ok" *ngIf="user.email_verified">
+        <span>✓</span>
+        <span>{{ 'PROFILE.EMAIL_VERIFIED' | translate }}</span>
+      </div>
+
+      <div class="pf-plan-card">
+        <span class="pf-plan-card__label">{{ 'PROFILE.CURRENT_PLAN' | translate }}</span>
+        <span class="pf-plan-card__value">{{ getPlanLabel() }}</span>
+        <a class="pf-plan-card__upgrade" routerLink="/pricing">
+          {{ 'PROFILE.UPGRADE_PLAN' | translate }} →
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- ══ COLUMNA DERECHA ══ -->
+    <main class="pf-main">
+
+      <div class="pf-main-header">
+        <div>
+          <p class="pf-main-header__eyebrow">{{ 'PROFILE.EYEBROW' | translate }}</p>
+          <h1 class="pf-main-header__title">{{ 'PROFILE.TITLE' | translate }}</h1>
+        </div>
+        <button class="pf-toggle-btn" [class.pf-toggle-btn--cancel]="editMode" (click)="toggleEdit()">
+          <span>{{ editMode ? '✕' : '✎' }}</span>
+          <span>{{ editMode ? ('PROFILE.CANCEL' | translate) : ('PROFILE.EDIT' | translate) }}</span>
+        </button>
+      </div>
+
+      <!-- ── 01 Datos personales ── -->
+      <section class="pf-section">
+        <div class="pf-section__label">
+          <span class="pf-section__number">01</span>
+          <span class="pf-section__title">{{ 'PROFILE.SECTION_PERSONAL' | translate }}</span>
+        </div>
+
+        <div class="pf-fields-grid">
+
+          <div class="pf-field">
+            <label class="pf-label">{{ 'PROFILE.FIRST_NAME' | translate }}</label>
+            <div *ngIf="!editMode" class="pf-value">{{ user.first_name || '—' }}</div>
+            <ng-container *ngIf="editMode">
+              <!-- ✅ Notación de punto — sin error de index signature -->
+              <input class="pf-input" [(ngModel)]="form.first_name"
+                     [class.pf-input--error]="errors.first_name"
+                     placeholder="Nombre" maxlength="100" />
+              <span class="pf-error" *ngIf="errors.first_name">{{ errors.first_name }}</span>
+            </ng-container>
+          </div>
+
+          <div class="pf-field">
+            <label class="pf-label">{{ 'PROFILE.LAST_NAME' | translate }}</label>
+            <div *ngIf="!editMode" class="pf-value">{{ user.last_name || '—' }}</div>
+            <ng-container *ngIf="editMode">
+              <input class="pf-input" [(ngModel)]="form.last_name"
+                     [class.pf-input--error]="errors.last_name"
+                     placeholder="Apellidos" maxlength="100" />
+              <span class="pf-error" *ngIf="errors.last_name">{{ errors.last_name }}</span>
+            </ng-container>
+          </div>
+
+          <div class="pf-field">
+            <label class="pf-label">{{ 'PROFILE.NICKNAME' | translate }}</label>
+            <div *ngIf="!editMode" class="pf-value pf-value--soft">
+              {{ user.nickname || ('PROFILE.NOT_SET' | translate) }}
+            </div>
+            <ng-container *ngIf="editMode">
+              <input class="pf-input" [(ngModel)]="form.nickname"
+                     placeholder="Apodo (opcional)" maxlength="50" />
+            </ng-container>
+          </div>
+
+          <div class="pf-field">
+            <label class="pf-label">{{ 'PROFILE.GENDER' | translate }}</label>
+            <div *ngIf="!editMode" class="pf-value pf-value--soft">
+              {{ getGenderLabel(user.gender) || ('PROFILE.NOT_SET' | translate) }}
+            </div>
+            <ng-container *ngIf="editMode">
+              <select class="pf-input pf-select" [(ngModel)]="form.gender">
+                <option value="">{{ 'PROFILE.GENDER_NOT_SET' | translate }}</option>
+                <option value="male">{{ 'PROFILE.GENDER_MALE' | translate }}</option>
+                <option value="female">{{ 'PROFILE.GENDER_FEMALE' | translate }}</option>
+                <option value="non_binary">{{ 'PROFILE.GENDER_NON_BINARY' | translate }}</option>
+                <option value="prefer_not">{{ 'PROFILE.GENDER_PREFER_NOT' | translate }}</option>
+              </select>
+            </ng-container>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── 02 Contacto ── -->
+      <section class="pf-section">
+        <div class="pf-section__label">
+          <span class="pf-section__number">02</span>
+          <span class="pf-section__title">{{ 'PROFILE.SECTION_CONTACT' | translate }}</span>
+        </div>
+
+        <div class="pf-fields-grid">
+
+          <div class="pf-field pf-field--full">
+            <label class="pf-label">
+              {{ 'PROFILE.EMAIL' | translate }}
+              <span class="pf-label__verified" *ngIf="user.email_verified">✓ verificado</span>
+            </label>
+            <div *ngIf="!editMode" class="pf-value">{{ user.email }}</div>
+            <ng-container *ngIf="editMode">
+              <input class="pf-input" [(ngModel)]="form.email"
+                     [class.pf-input--error]="errors.email"
+                     type="email" placeholder="tu@email.com" maxlength="255" />
+              <span class="pf-error" *ngIf="errors.email">{{ errors.email }}</span>
+              <p class="pf-input-hint" *ngIf="form.email !== user.email">
+                ⚠️ {{ 'PROFILE.EMAIL_CHANGE_HINT' | translate }}
+              </p>
+            </ng-container>
+          </div>
+
+          <div class="pf-field">
+            <label class="pf-label">{{ 'PROFILE.PHONE' | translate }}</label>
+            <div *ngIf="!editMode" class="pf-value pf-value--soft">
+              {{ user.phone || ('PROFILE.NOT_SET' | translate) }}
+            </div>
+            <ng-container *ngIf="editMode">
+              <input class="pf-input" [(ngModel)]="form.phone"
+                     [class.pf-input--error]="errors.phone"
+                     placeholder="+34 600 000 000" maxlength="30" />
+              <span class="pf-error" *ngIf="errors.phone">{{ errors.phone }}</span>
+            </ng-container>
+          </div>
+
+          <div class="pf-field">
+            <label class="pf-label">{{ 'PROFILE.LANGUAGE' | translate }}</label>
+            <div *ngIf="!editMode" class="pf-value">{{ getLanguageLabel(user.language) }}</div>
+            <ng-container *ngIf="editMode">
+              <select class="pf-input pf-select" [(ngModel)]="form.language">
+                <option value="es">🇪🇸 Español</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ca">🏴 Català</option>
+                <option value="fr">🇫🇷 Français</option>
+              </select>
+            </ng-container>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── 03 Seguridad ── -->
+      <section class="pf-section pf-section--security">
+        <div class="pf-section__label">
+          <span class="pf-section__number">03</span>
+          <span class="pf-section__title">{{ 'PROFILE.SECTION_SECURITY' | translate }}</span>
+        </div>
+
+        <div class="pf-security-row">
+          <div class="pf-security-item">
+            <span class="pf-security-item__icon">🔑</span>
+            <div>
+              <p class="pf-security-item__label">{{ 'PROFILE.PASSWORD' | translate }}</p>
+              <p class="pf-security-item__desc">{{ 'PROFILE.PASSWORD_DESC' | translate }}</p>
+            </div>
+            <button class="pf-security-btn" (click)="abrirCambioPassword()">
+              {{ 'PROFILE.CHANGE_PASSWORD' | translate }}
+            </button>
+          </div>
+
+          <div class="pf-security-item" *ngIf="user.google_id">
+            <span class="pf-security-item__icon">🔗</span>
+            <div>
+              <p class="pf-security-item__label">Google</p>
+              <p class="pf-security-item__desc">{{ 'PROFILE.GOOGLE_LINKED' | translate }}</p>
+            </div>
+            <span class="pf-security-linked">{{ 'PROFILE.LINKED' | translate }}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Botón guardar ── -->
+      <div class="pf-save-bar" *ngIf="editMode">
+        <button class="pf-save-btn" (click)="guardar()" [disabled]="guardando">
+          <span *ngIf="!guardando">✦ {{ 'PROFILE.SAVE' | translate }}</span>
+          <span *ngIf="guardando" class="d-flex align-items-center gap-2">
+            <span class="spinner-border spinner-border-sm"></span>
+            {{ 'PROFILE.SAVING' | translate }}
+          </span>
+        </button>
+        <p class="pf-save-hint">{{ 'PROFILE.SAVE_HINT' | translate }}</p>
+      </div>
+
+      <!-- ── Zona peligrosa ── -->
+      <section class="pf-danger-zone">
+        <p class="pf-danger-zone__label">{{ 'PROFILE.DANGER_ZONE' | translate }}</p>
+        <button class="pf-danger-btn" (click)="confirmarEliminarCuenta()">
+          {{ 'PROFILE.DELETE_ACCOUNT' | translate }}
+        </button>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ══ MODAL CONTRASEÑA ══ -->
+<div class="pf-modal-backdrop" *ngIf="showPasswordModal" (click)="cerrarPasswordModal()">
+  <div class="pf-modal" (click)="$event.stopPropagation()">
+    <button class="pf-modal__close" (click)="cerrarPasswordModal()">×</button>
+    <h3 class="pf-modal__title">{{ 'PROFILE.CHANGE_PASSWORD' | translate }}</h3>
+
+    <div class="pf-field mb-3">
+      <label class="pf-label">{{ 'PROFILE.CURRENT_PASSWORD' | translate }}</label>
+      <!-- ✅ Notación de punto en todos los passwordErrors -->
+      <input class="pf-input" type="password" [(ngModel)]="passwordForm.current"
+             [class.pf-input--error]="passwordErrors.current"
+             placeholder="••••••••" />
+      <span class="pf-error" *ngIf="passwordErrors.current">{{ passwordErrors.current }}</span>
+    </div>
+
+    <div class="pf-field mb-3">
+      <label class="pf-label">{{ 'PROFILE.NEW_PASSWORD' | translate }}</label>
+      <input class="pf-input" type="password" [(ngModel)]="passwordForm.new"
+             [class.pf-input--error]="passwordErrors.new"
+             placeholder="Mínimo 8 caracteres" />
+      <span class="pf-error" *ngIf="passwordErrors.new">{{ passwordErrors.new }}</span>
+    </div>
+
+    <div class="pf-field mb-4">
+      <label class="pf-label">{{ 'PROFILE.CONFIRM_PASSWORD' | translate }}</label>
+      <input class="pf-input" type="password" [(ngModel)]="passwordForm.confirm"
+             [class.pf-input--error]="passwordErrors.confirm"
+             placeholder="Repite la contraseña" />
+      <span class="pf-error" *ngIf="passwordErrors.confirm">{{ passwordErrors.confirm }}</span>
+    </div>
+
+    <button class="pf-modal__save-btn" (click)="cambiarPassword()" [disabled]="guardandoPassword">
+      <span *ngIf="!guardandoPassword">{{ 'PROFILE.SAVE_PASSWORD' | translate }}</span>
+      <span *ngIf="guardandoPassword" class="d-flex align-items-center justify-content-center gap-2">
+        <span class="spinner-border spinner-border-sm"></span>
+        {{ 'PROFILE.SAVING' | translate }}
+      </span>
+    </button>
+  </div>
+</div>

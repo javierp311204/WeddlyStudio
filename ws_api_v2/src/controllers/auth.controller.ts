@@ -76,6 +76,16 @@ export class AuthController {
   }
 
   /**
+   * PATCH /api/auth/me
+   */
+  async updateProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await authService.updateProfile(req.user!.userId, req.body);
+      res.json({ success: true, data: user });
+    } catch (err) { next(err); }
+  }
+
+  /**
    * PATCH /api/auth/change-password
    */
   async changePassword(req: Request, res: Response, next: NextFunction) {

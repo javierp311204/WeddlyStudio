@@ -25,7 +25,7 @@ export class SidebarComponent {
   collapsed = signal(false);
 
   navItems: NavItem[] = [
-    { label: 'Inicio',       emoji: '🏠', route: '/dashboard', exact: true },
+    { label: 'Inicio',       emoji: '🏠', route: '/dashboard',  exact: true },
     { label: 'Info de Boda', emoji: '📖', route: '/info-boda',  ownerOnly: true },
     { label: 'Invitados',    emoji: '👥', route: '/invitados',  ownerOnly: true },
     { label: 'Checklist',    emoji: '✅', route: '/checklist',  ownerOnly: true },

@@ -1,48 +1,24 @@
 /* ========================================
-   CSS MINIMALISTA CON BOOTSTRAP 5
-   Solo personalizaciones específicas
+   CSS LISTA INVITADOS + MODAL
    ======================================== */
 
-/* Hover suave en botón volver */
-.btn-link:hover {
-  transform: translateX(-5px);
-  transition: transform 0.2s ease;
-}
+.btn-link:hover { transform: translateX(-5px); transition: transform 0.2s ease; }
 
-/* Animación hover en tarjetas de invitados */
 .invitado-card {
   transition: all 0.3s ease;
+  cursor: pointer;
 }
-
 .invitado-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(0,0,0,0.12) !important;
 }
 
-/* Tags de tipo de invitado */
-.tipo-tag.familia {
-  background: #e9edc9 !important;
-  color: #606c38 !important;
-}
+.tipo-tag.familia { background: #e9edc9 !important; color: #606c38 !important; }
+.tipo-tag.amigos  { background: #faedcd !important; color: #bc6c25 !important; }
+.tipo-tag.trabajo { background: #d8e2dc !important; color: #8d99ae !important; }
 
-.tipo-tag.amigos {
-  background: #faedcd !important;
-  color: #bc6c25 !important;
-}
+.btn-sm:hover { background: #e63946 !important; color: white !important; transition: all 0.2s ease; }
 
-.tipo-tag.trabajo {
-  background: #d8e2dc !important;
-  color: #8d99ae !important;
-}
-
-/* Botón eliminar hover */
-.btn-sm:hover {
-  background: #e63946 !important;
-  color: white !important;
-  transition: all 0.2s ease;
-}
-
-/* Chips de filtro activos */
 .filter-chip.active {
   background: linear-gradient(135deg, #bc6c25 0%, #8b5e3c 100%) !important;
   color: white !important;
@@ -50,27 +26,283 @@
   box-shadow: 0 6px 20px rgba(188, 108, 37, 0.35);
   transform: translateY(-2px);
 }
-
 .filter-chip:hover {
   border-color: #bc6c25;
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(188, 108, 37, 0.2);
   transition: all 0.3s ease;
 }
+.filter-chip.active span:first-child { animation: chipBounce 0.5s ease; }
+@keyframes chipBounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-/* Animación de bounce para el icono del chip activo */
-.filter-chip.active span:first-child {
-  animation: chipBounce 0.5s ease;
-}
-
-@keyframes chipBounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-}
-
-/* Focus personalizado para inputs (color de tu paleta) */
 .form-control:focus,
 .form-select:focus {
   border-color: #d4a373;
   box-shadow: 0 0 0 0.25rem rgba(212, 163, 115, 0.25);
+}
+
+/* ========================================
+   MODAL BACKDROP
+   ======================================== */
+.guest-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 18, 8, 0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: backdropIn 0.2s ease;
+}
+@keyframes backdropIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ========================================
+   MODAL CARD
+   ======================================== */
+.guest-modal {
+  background: #fffef9;
+  border-radius: 28px;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  box-shadow: 0 28px 70px rgba(28, 18, 8, 0.25), 0 0 0 1px rgba(188,108,37,0.08);
+  overflow: hidden;
+  animation: modalIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.86) translateY(24px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Franja de color superior por grupo */
+.modal-top-stripe {
+  height: 6px;
+  width: 100%;
+}
+.stripe-familia { background: linear-gradient(90deg, #a7c957, #c9d97a); }
+.stripe-amigos  { background: linear-gradient(90deg, #d4a373, #e76f51); }
+.stripe-trabajo { background: linear-gradient(90deg, #90a9b7, #8d99ae); }
+
+/* Contenido con padding */
+.guest-modal > *:not(.modal-top-stripe) {
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+/* Botón cerrar */
+.modal-close-btn {
+  position: absolute;
+  top: 16px; right: 18px;
+  z-index: 10;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.07);
+  color: #8b7355;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  padding: 0;
+}
+.modal-close-btn:hover { background: #ffeded; color: #e63946; }
+
+/* Avatar */
+.modal-avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 28px;
+  padding-bottom: 0;
+  margin-bottom: 12px;
+}
+
+.modal-avatar {
+  width: 76px; height: 76px;
+  border-radius: 50%;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 4px solid white;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  margin-bottom: 10px;
+}
+.avatar-familia { background: linear-gradient(135deg, #d4edaa, #a7c957); color: #4a6520; }
+.avatar-amigos  { background: linear-gradient(135deg, #fde8cc, #d4a373); color: #7a3e10; }
+.avatar-trabajo { background: linear-gradient(135deg, #cdd9e0, #90a9b7); color: #344a55; }
+
+/* Si no tiene grupo definido */
+.modal-avatar:not([class*="avatar-"]),
+.modal-avatar.avatar- {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #bc6c25;
+}
+
+.modal-group-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+.badge-familia { background: #e9edc9; color: #606c38; }
+.badge-amigos  { background: #faedcd; color: #bc6c25; }
+.badge-trabajo { background: #d8e2dc; color: #8d99ae; }
+
+/* Nombre */
+.modal-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #2c1a0e;
+  text-align: center;
+  margin: 0 0 10px;
+  padding-top: 0;
+}
+
+/* RSVP chip */
+.modal-rsvp-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin: 0 auto 22px;
+  padding: 5px 16px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+.rsvp-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.rsvp-confirmed { background: #eef4eb; color: #5c7a4e; }
+.rsvp-confirmed .rsvp-dot { background: #5c7a4e; }
+.rsvp-pending   { background: #fef3c7; color: #92610a; }
+.rsvp-pending   .rsvp-dot { background: #f59e0b; }
+.rsvp-declined  { background: #ffeded; color: #c0392b; }
+.rsvp-declined  .rsvp-dot { background: #e63946; }
+
+/* Info grid */
+.modal-info-grid {
+  border: 1px solid #f0e8dc;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.modal-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f5ede3;
+  background: white;
+  transition: background 0.15s;
+}
+.modal-info-row:last-child { border-bottom: none; }
+.modal-info-row:hover { background: #fffbf5; }
+
+/* Fila destacada para alergias */
+.highlight-row {
+  background: #fffbf0 !important;
+  border-left: 3px solid #f59e0b;
+}
+
+.info-icon { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+.info-content { display: flex; flex-direction: column; gap: 2px; }
+
+.info-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #b09070;
+}
+.info-value {
+  font-size: 0.88rem;
+  color: #2c1a0e;
+  font-weight: 500;
+}
+.info-value.muted { color: #c0a890; font-style: italic; }
+
+/* Tag de alergia especial */
+.allergy-tag {
+  display: inline-block;
+  background: #fef3c7;
+  color: #92610a;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Mensaje / dietary_notes */
+.modal-message-box {
+  background: linear-gradient(135deg, #fffef5, #fef7e8);
+  border: 1px solid #ead5a8;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #bc6c25;
+  margin-bottom: 8px;
+}
+.message-text {
+  font-size: 0.92rem;
+  color: #4a3520;
+  line-height: 1.65;
+  margin: 0;
+  font-style: italic;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.modal-message-empty {
+  text-align: center;
+  color: #c8b89a;
+  font-size: 0.82rem;
+  font-style: italic;
+  margin-bottom: 16px;
+  padding: 8px;
+}
+
+/* Botón eliminar */
+.modal-delete-btn {
+  width: calc(100% - 0px);
+  margin: 0 0 28px;
+  padding: 11px;
+  border: 1.5px solid #ffcdd2;
+  border-radius: 12px;
+  background: transparent;
+  color: #c0392b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.modal-delete-btn:hover {
+  background: #ffeded;
+  border-color: #e63946;
+  color: #e63946;
+}
+
+@media (max-width: 480px) {
+  .guest-modal > *:not(.modal-top-stripe) { padding-left: 22px; padding-right: 22px; }
+  .modal-name { font-size: 1.2rem; }
 }

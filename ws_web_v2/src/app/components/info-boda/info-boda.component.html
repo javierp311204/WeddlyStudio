@@ -1,105 +1,145 @@
-<div class="info-wrapper min-vh-100 py-5 px-3">
-  <div class="container info-container">
+<!-- info-boda.component.html — rediseño editorial -->
 
-    <!-- Navegación -->
-    <nav class="d-flex justify-content-between align-items-center mb-4">
+<div class="ib-page">
+
+  <!-- Fondo con textura sutil -->
+  <div class="ib-bg-texture"></div>
+
+  <!-- Ornamento esquina superior derecha -->
+  <div class="ib-corner-ornament top-right">
+    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+      <path d="M120 0 Q80 0 80 40 Q80 80 120 80" stroke="#d4a373" stroke-width="0.8" fill="none" opacity="0.3"/>
+      <path d="M120 20 Q95 20 95 45 Q95 70 120 70" stroke="#d4a373" stroke-width="0.5" fill="none" opacity="0.2"/>
+      <circle cx="108" cy="12" r="2" fill="#d4a373" opacity="0.3"/>
+      <circle cx="116" cy="20" r="1.5" fill="#bc6c25" opacity="0.25"/>
+    </svg>
+  </div>
+  <div class="ib-corner-ornament bottom-left">
+    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+      <path d="M0 100 Q40 100 40 60 Q40 20 0 20" stroke="#606c38" stroke-width="0.8" fill="none" opacity="0.25"/>
+      <circle cx="12" cy="88" r="2" fill="#606c38" opacity="0.25"/>
+    </svg>
+  </div>
+
+  <div class="ib-layout">
+
+    <!-- ── BARRA SUPERIOR ───────────────────────── -->
+    <div class="ib-topbar">
+      <div class="ib-topbar-left">
+        <span class="ib-topbar-label">{{ 'INFO.ACCESS_CODE' | translate }}</span>
+        <span class="ib-topbar-code">{{ authService.getWeddingId() }}</span>
+      </div>
       <button *ngIf="authService.isWeddingOwner()"
               (click)="editMode = !editMode"
-              class="btn rounded-pill px-4 py-2 fw-semibold btn-admin-action"
-              [ngClass]="editMode ? 'btn-danger' : 'btn-success'">
-        {{ editMode ? ('INFO.CANCEL_EDIT' | translate) : ('INFO.EDIT_INFO' | translate) }}
+              class="ib-edit-btn"
+              [class.ib-edit-btn--cancel]="editMode">
+        <span class="ib-edit-btn__icon">{{ editMode ? '✕' : '✎' }}</span>
+        <span>{{ editMode ? ('INFO.CANCEL_EDIT' | translate) : ('INFO.EDIT_INFO' | translate) }}</span>
       </button>
-    </nav>
+    </div>
 
-    <!-- Header -->
-    <header class="text-center mb-5 info-header-premium">
-      <div class="header-decoration d-flex align-items-center justify-content-center gap-3 mb-3">
-        <span class="decoration-line"></span>
-        <span class="fs-4">✨</span>
-        <span class="decoration-line"></span>
-      </div>
-      <h1 class="display-3 fw-normal mb-3">{{ 'INFO.TITLE' | translate }}</h1>
-      <p class="boda-id mb-0">
-        {{ 'INFO.ACCESS_CODE' | translate }}:
-        <!-- v2: weddingId (UUID) — authService.getWeddingId() -->
-        <strong>{{ authService.getWeddingId() }}</strong>
+    <!-- ── HEADER EDITORIAL ─────────────────────── -->
+    <header class="ib-header">
+      <p class="ib-header__eyebrow">
+        <span class="eyebrow-line"></span>
+        {{ 'INFO.HEADER_SUBTITLE' | translate | uppercase }}
+        <span class="eyebrow-line"></span>
       </p>
+      <h1 class="ib-header__title">{{ 'INFO.TITLE' | translate }}</h1>
+      <div class="ib-header__flourish">❧</div>
     </header>
 
-    <!-- Grid de Cards -->
-    <div class="row g-4">
+    <!-- ── GRID PRINCIPAL ──────────────────────── -->
+    <div class="ib-grid">
 
-      <!-- Card: Ubicación -->
-      <div class="col-12 col-lg-6">
-        <section class="info-card-glass h-100" [class.is-editing]="editMode">
-          <div class="card-accent-gold"></div>
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center gap-3 mb-4">
-              <span class="card-emoji">📍</span>
-              <h3 class="mb-0 h4">{{ 'INFO.LOCATION_TITLE' | translate }}</h3>
-            </div>
+      <!-- ╔══ CARD FECHA & LUGAR ══╗ -->
+      <article class="ib-card ib-card--venue" [class.ib-card--editing]="editMode">
 
-            <div *ngIf="!editMode">
-              <!-- v2: bodaInfo.venue_name (antes bodaInfo.lugarNombre) -->
-              <p class="txt-main mb-2" [class.empty-txt]="!bodaInfo.venue_name">
-                {{ bodaInfo.venue_name || ('INFO.VENUE_PENDING' | translate) }}
-              </p>
-              <!-- v2: bodaInfo.venue_address (antes bodaInfo.direccion) -->
-              <p class="txt-sub mb-3" [class.empty-txt]="!bodaInfo.venue_address">
-                {{ bodaInfo.venue_address || ('INFO.ADDRESS_PENDING' | translate) }}
-              </p>
-              <!-- v2: bodaInfo.date ISO string (antes bodaInfo.fechaHora) -->
-              <div class="date-pill" *ngIf="bodaInfo.date">
-                📅 {{ bodaInfo.date | date : "EEEE, d MMMM y" }} {{ 'INFO.DATE_AT' | translate }}
-                {{ bodaInfo.date | date : "HH:mm" }}h
-              </div>
-            </div>
+        <div class="ib-card__label-side">
+          <span>{{ 'INFO.LOCATION_TITLE' | translate }}</span>
+        </div>
 
-            <div *ngIf="editMode">
-              <div class="mb-3">
-                <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.VENUE_LABEL' | translate }}</label>
-                <!-- v2: bodaInfo.venue_name -->
-                <input type="text" class="form-control rounded-3"
-                       [(ngModel)]="bodaInfo.venue_name"
-                       [placeholder]="'INFO.VENUE_PLACEHOLDER' | translate" />
-              </div>
-              <div class="mb-3">
-                <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.ADDRESS_LABEL' | translate }}</label>
-                <!-- v2: bodaInfo.venue_address -->
-                <input type="text" class="form-control rounded-3"
-                       [(ngModel)]="bodaInfo.venue_address"
-                       [placeholder]="'INFO.ADDRESS_PLACEHOLDER' | translate" />
-              </div>
-              <div class="mb-0">
-                <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.DATE_LABEL' | translate }}</label>
-                <!-- v2: bodaInfo.date (datetime-local → ISO string) -->
-                <input type="datetime-local" class="form-control rounded-3" [(ngModel)]="bodaInfo.date" />
-              </div>
-            </div>
+        <div class="ib-card__body">
+          <div class="ib-card__icon-wrap ib-card__icon-wrap--gold">
+            <span>📍</span>
           </div>
-        </section>
-      </div>
 
-      <!-- Card: Dress Code -->
-      <div class="col-12 col-lg-6">
-        <section class="info-card-glass h-100" [class.is-editing]="editMode">
-          <div class="card-accent-green"></div>
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center gap-3 mb-4">
-              <span class="card-emoji">👗</span>
-              <h3 class="mb-0 h4">{{ 'INFO.DRESSCODE_TITLE' | translate }}</h3>
-            </div>
+          <!-- Vista lectura -->
+          <ng-container *ngIf="!editMode">
+            <p class="ib-venue-name" [class.ib-empty]="!bodaInfo.venue_name">
+              {{ bodaInfo.venue_name || ('INFO.VENUE_PENDING' | translate) }}
+            </p>
+            <p class="ib-venue-address" [class.ib-empty]="!bodaInfo.venue_address">
+              {{ bodaInfo.venue_address || ('INFO.ADDRESS_PENDING' | translate) }}
+            </p>
 
-            <div *ngIf="!editMode">
-              <!-- v2: bodaInfo.dress_code (antes bodaInfo.dressCode) -->
-              <div class="tag-elegant" [class.empty-tag]="!bodaInfo.dress_code">
-                {{ bodaInfo.dress_code || ('INFO.DRESSCODE_PENDING' | translate) }}
+            <div class="ib-date-block" *ngIf="bodaInfo.date">
+              <div class="ib-date-block__day">
+                {{ bodaInfo.date | date:'d' }}
+              </div>
+              <div class="ib-date-block__rest">
+                <span class="ib-date-block__month">{{ bodaInfo.date | date:'MMMM yyyy' }}</span>
+                <span class="ib-date-block__time">{{ bodaInfo.date | date:'HH:mm' }}h</span>
+                <span class="ib-date-block__weekday">{{ bodaInfo.date | date:'EEEE' }}</span>
               </div>
             </div>
+            <div class="ib-date-empty" *ngIf="!bodaInfo.date">
+              <span class="ib-empty">{{ 'INFO.DATE_PENDING' | translate }}</span>
+            </div>
+          </ng-container>
 
-            <div *ngIf="editMode">
-              <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.DRESSCODE_SELECT_LABEL' | translate }}</label>
-              <select class="form-select rounded-3" [(ngModel)]="bodaInfo.dress_code">
+          <!-- Vista edición -->
+          <ng-container *ngIf="editMode">
+            <div class="ib-field">
+              <label class="ib-label">{{ 'INFO.VENUE_LABEL' | translate }}</label>
+              <input type="text" class="ib-input"
+                     [(ngModel)]="bodaInfo.venue_name"
+                     [placeholder]="'INFO.VENUE_PLACEHOLDER' | translate" />
+            </div>
+            <div class="ib-field">
+              <label class="ib-label">{{ 'INFO.ADDRESS_LABEL' | translate }}</label>
+              <input type="text" class="ib-input"
+                     [(ngModel)]="bodaInfo.venue_address"
+                     [placeholder]="'INFO.ADDRESS_PLACEHOLDER' | translate" />
+            </div>
+            <div class="ib-field mb-0">
+              <label class="ib-label">{{ 'INFO.DATE_LABEL' | translate }}</label>
+              <input type="datetime-local" class="ib-input" [(ngModel)]="bodaInfo.date" />
+            </div>
+          </ng-container>
+        </div>
+
+      </article>
+
+      <!-- ╔══ CARD DRESS CODE ══╗ -->
+      <article class="ib-card ib-card--dresscode" [class.ib-card--editing]="editMode">
+
+        <div class="ib-card__label-side">
+          <span>{{ 'INFO.DRESSCODE_TITLE' | translate }}</span>
+        </div>
+
+        <div class="ib-card__body">
+          <div class="ib-card__icon-wrap ib-card__icon-wrap--green">
+            <span>👗</span>
+          </div>
+
+          <!-- Vista lectura -->
+          <ng-container *ngIf="!editMode">
+            <div class="ib-dresscode-display" [class.ib-dresscode-display--empty]="!bodaInfo.dress_code">
+              <span class="ib-dresscode-display__text">
+                {{ bodaInfo.dress_code || ('INFO.DRESSCODE_PENDING' | translate) }}
+              </span>
+            </div>
+            <p class="ib-dresscode-hint" *ngIf="bodaInfo.dress_code">
+              {{ 'INFO.DRESSCODE_HINT' | translate }}
+            </p>
+          </ng-container>
+
+          <!-- Vista edición -->
+          <ng-container *ngIf="editMode">
+            <div class="ib-field mb-0">
+              <label class="ib-label">{{ 'INFO.DRESSCODE_SELECT_LABEL' | translate }}</label>
+              <select class="ib-input ib-select" [(ngModel)]="bodaInfo.dress_code">
                 <option value="">{{ 'INFO.DRESSCODE_PLACEHOLDER' | translate }}</option>
                 <option value="Gala (Etiqueta)">{{ 'INFO.DRESSCODE_GALA' | translate }}</option>
                 <option value="Formal">{{ 'INFO.DRESSCODE_FORMAL' | translate }}</option>
@@ -107,47 +147,59 @@
                 <option value="Informal / Casual">{{ 'INFO.DRESSCODE_CASUAL' | translate }}</option>
               </select>
             </div>
+          </ng-container>
+        </div>
+
+      </article>
+
+      <!-- ╔══ CARD MENÚ / NOTAS ══╗ -->
+      <article class="ib-card ib-card--menu ib-card--full" [class.ib-card--editing]="editMode">
+
+        <div class="ib-card__label-side">
+          <span>{{ 'INFO.MENU_TITLE' | translate }}</span>
+        </div>
+
+        <div class="ib-card__body">
+          <div class="ib-card__icon-wrap ib-card__icon-wrap--gold">
+            <span>🍴</span>
           </div>
-        </section>
-      </div>
 
-      <!-- Card: Notas / Menú (Full Width) -->
-      <div class="col-12">
-        <section class="info-card-glass" [class.is-editing]="editMode">
-          <div class="card-accent-gold"></div>
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center gap-3 mb-4">
-              <span class="card-emoji">🍴</span>
-              <h3 class="mb-0 h4">{{ 'INFO.MENU_TITLE' | translate }}</h3>
-            </div>
-
-            <div *ngIf="!editMode">
-              <!-- v2: bodaInfo.notes (antes bodaInfo.menuResumen) -->
-              <p class="txt-menu mb-0" [class.empty-txt]="!bodaInfo.notes">
+          <!-- Vista lectura -->
+          <ng-container *ngIf="!editMode">
+            <div class="ib-menu-quote" [class.ib-empty]="!bodaInfo.notes">
+              <span class="ib-menu-quote__mark">"</span>
+              <p class="ib-menu-quote__text">
                 {{ bodaInfo.notes || ('INFO.MENU_PENDING' | translate) }}
               </p>
             </div>
+          </ng-container>
 
-            <div *ngIf="editMode">
-              <label class="form-label text-uppercase fw-bold small mb-2">{{ 'INFO.MENU_LABEL' | translate }}</label>
-              <textarea class="form-control rounded-3"
+          <!-- Vista edición -->
+          <ng-container *ngIf="editMode">
+            <div class="ib-field mb-0">
+              <label class="ib-label">{{ 'INFO.MENU_LABEL' | translate }}</label>
+              <textarea class="ib-input ib-textarea"
                         [(ngModel)]="bodaInfo.notes"
                         rows="4"
                         [placeholder]="'INFO.MENU_PLACEHOLDER' | translate"></textarea>
             </div>
-          </div>
-        </section>
-      </div>
+          </ng-container>
+        </div>
+
+      </article>
 
     </div>
+    <!-- /grid -->
 
-    <!-- Botón Guardar Flotante -->
-    <div class="floating-save" *ngIf="editMode">
-      <button class="btn btn-save-gold w-100 rounded-pill py-3 fw-bold shadow-lg"
-              (click)="guardarCambios()" [disabled]="guardando">
-        <span *ngIf="!guardando">✨ {{ 'INFO.SAVE_BTN' | translate }}</span>
-        <span *ngIf="guardando" class="loader-text d-flex align-items-center justify-content-center gap-2">
-          <span class="spinner-border spinner-border-sm" role="status"></span>
+    <!-- ── BOTÓN GUARDAR ───────────────────────── -->
+    <div class="ib-save-bar" *ngIf="editMode">
+      <button class="ib-save-btn" (click)="guardarCambios()" [disabled]="guardando">
+        <span *ngIf="!guardando" class="ib-save-btn__inner">
+          <span class="ib-save-btn__icon">✦</span>
+          {{ 'INFO.SAVE_BTN' | translate }}
+        </span>
+        <span *ngIf="guardando" class="ib-save-btn__inner ib-saving">
+          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
           {{ 'INFO.SAVING' | translate }}
         </span>
       </button>

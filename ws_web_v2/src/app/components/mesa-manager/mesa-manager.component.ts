@@ -273,7 +273,4 @@ export class MesaManagerComponent implements OnInit {
     return `${inv.first_name || ''} ${inv.last_name || ''}`.trim();
   }
 
-  irAlMenu() {
-    this.router.navigate(['/home']);
-  }
 }
