@@ -20,7 +20,8 @@
     "UPLOAD": "Envoyer",
     "SEND": "Envoyer",
     "CHANGE": "Modifier",
-    "SELECT": "Sélectionner"
+    "SELECT": "Sélectionner",
+    "DONT_ASK_AGAIN": "Ne plus demander"
   },
 
   "HOME": {
@@ -533,14 +534,20 @@
       "UP_TO_300": "Jusqu'à 300 invités",
       "ALL_PREMIUM": "Toutes les fonctionnalités premium",
       "PREMIUM_TEMPLATES": "Modèles premium",
-      "PRIORITY_SUPPORT": "Support prioritaire",
+      "PRIORITY_SUPPORT": "Assistance prioritaire",
       "UNLIMITED_WEDDINGS": "Mariages illimités",
       "UNLIMITED_GUESTS": "Invités illimités",
-      "VIP_SUPPORT": "Support VIP 24h/24",
+      "VIP_SUPPORT": "Assistance VIP 24h/24",
       "UP_TO_GUESTS": "Jusqu'à {{count}} invités",
       "UP_TO_PHOTOS": "Jusqu'à {{count}} photos",
-      "CHECKLIST_FULL": "Checklist complète",
-      "CHECKLIST_BASIC": "Checklist basique"
+      "CHECKLIST_FULL": "Checklist complet",
+      "CHECKLIST_BASIC": "Checklist basique",
+      "PDF_EXPORT": "Export PDF",
+      "GOOGLE_CALENDAR": "Intégration Google Calendar",
+      "DRAG_DROP_TABLES": "Plan de tables interactif",
+      "PHOTO_MODERATION": "Modération de l'album",
+      "PLANNER_DASHBOARD": "Tableau de bord wedding planner",
+      "PREMIUM_STATIONERY": "Papeterie premium"
     },
     "PLANS": {
       "FREE_NAME": "Gratuit",
@@ -824,5 +831,169 @@
       "RESET_SENT_DESC": "Si l'email est enregistré avec la 2FA active, vous recevrez un lien dans les prochaines minutes.",
       "BACK_LOGIN": "Retour à la connexion"
     }
+  },
+
+  "FOOTER": {
+    "SOCIAL": "Social",
+    "ARIA_INSTAGRAM": "Instagram",
+    "ARIA_TIKTOK": "TikTok",
+    "ARIA_PINTEREST": "Pinterest",
+    "ARIA_YOUTUBE": "YouTube",
+    "NAV_HOME": "Accueil",
+    "NAV_WEDDINGS": "Mes Mariages",
+    "NAV_PLANS": "Forfaits",
+    "NAV_TERMS": "Conditions Générales",
+    "NAV_PRIVACY": "Politique de Confidentialité",
+    "COPYRIGHT": "Copyright © 2026 · Weddly Studio"
+  },
+
+  "LEGAL": {
+    "BADGE_TERMS": "Légal",
+    "BADGE_PRIVACY": "Confidentialité",
+    "TERMS_TITLE": "Conditions Générales d'Utilisation",
+    "PRIVACY_TITLE": "Politique de Confidentialité",
+    "LAST_UPDATED": "Dernière mise à jour",
+    "TOC_LABEL": "Sommaire",
+    "CONTACT_ADDRESS": "Weddly Studio SL · Madrid, Espagne",
+    "SEE_PRIVACY_POLICY": "Voir la Politique de Confidentialité",
+    "SEE_TERMS": "Voir les Conditions Générales",
+
+    "TERMS_TOC_1": "Acceptation des conditions",
+    "TERMS_TOC_2": "Description du service",
+    "TERMS_TOC_3": "Inscription et compte utilisateur",
+    "TERMS_TOC_4": "Plans et paiements",
+    "TERMS_TOC_5": "Propriété intellectuelle",
+    "TERMS_TOC_6": "Comportement de l'utilisateur",
+    "TERMS_TOC_7": "Limitation de responsabilité",
+    "TERMS_TOC_8": "Modifications",
+    "TERMS_TOC_9": "Contact",
+
+    "TERMS_S1_P1": "En accédant et en utilisant Weddly Studio (ci-après « le Service »), vous acceptez d'être lié par ces Conditions Générales. Si vous n'êtes pas d'accord avec une partie de ces conditions, vous ne pourrez pas accéder au Service.",
+    "TERMS_S1_P2": "Ces conditions s'appliquent à tous les visiteurs, utilisateurs et toute autre personne qui accède ou utilise le Service.",
+
+    "TERMS_S2_INTRO": "Weddly Studio est une plateforme d'organisation de mariages qui permet aux utilisateurs de :",
+    "TERMS_S2_LI1": "Gérer les listes d'invités et la distribution des tables",
+    "TERMS_S2_LI2": "Créer et partager des albums numériques collaboratifs",
+    "TERMS_S2_LI3": "Administrer la checklist des tâches du mariage",
+    "TERMS_S2_LI4": "Concevoir de la papeterie numérique et des invitations",
+    "TERMS_S2_LI5": "Inviter des collaborateurs avec différents niveaux d'accès",
+    "TERMS_S2_P2": "Le Service est fourni « tel quel » et « selon disponibilité ». Nous nous réservons le droit de modifier ou d'interrompre le Service à tout moment, avec ou sans préavis.",
+
+    "TERMS_S3_INTRO": "Pour utiliser certaines fonctions du Service, vous devez créer un compte. Ce faisant, vous vous engagez à :",
+    "TERMS_S3_LI1": "Fournir des informations véridiques, précises et complètes",
+    "TERMS_S3_LI2": "Maintenir la confidentialité de votre mot de passe",
+    "TERMS_S3_LI3": "Nous notifier immédiatement de toute utilisation non autorisée de votre compte",
+    "TERMS_S3_LI4": "Être responsable de toute activité effectuée depuis votre compte",
+    "TERMS_S3_P2": "Il n'est pas permis de créer des comptes de manière automatisée ni de se faire passer pour une autre personne ou entité.",
+
+    "TERMS_S4_INTRO": "Weddly Studio propose différents plans d'accès :",
+    "TERMS_S4_PLAN_FREE_LABEL": "Plan Gratuit :",
+    "TERMS_S4_PLAN_FREE_DESC": "Accès de base sans frais, avec des limitations sur les invités et les fonctions.",
+    "TERMS_S4_PLAN_PRO_LABEL": "Plan Essentiel (Événement PRO) :",
+    "TERMS_S4_PLAN_PRO_DESC": "Paiement unique de 49 € par mariage, sans mensualités.",
+    "TERMS_S4_PLAN_PREMIUM_LABEL": "Plan Premium :",
+    "TERMS_S4_PLAN_PREMIUM_DESC": "Abonnement mensuel de 14 €/mois, avec mariages illimités et accès complet.",
+    "TERMS_S4_P2": "Les paiements sont traités de manière sécurisée via Stripe. Nous ne stockons pas les données de cartes bancaires. Les tarifs sont susceptibles d'être modifiés avec un préavis.",
+    "TERMS_S4_P3": "Les paiements uniques ne sont pas remboursables sauf erreur technique imputable à Weddly Studio. Les abonnements peuvent être annulés à tout moment ; l'accès est maintenu jusqu'à la fin de la période facturée.",
+
+    "TERMS_S5_P1": "Le Service et son contenu original (à l'exclusion du contenu fourni par les utilisateurs) sont la propriété exclusive de Weddly Studio et sont protégés par les lois sur la propriété intellectuelle applicables.",
+    "TERMS_S5_P2": "Les photographies, textes et autres contenus téléchargés par les utilisateurs restent la propriété de leurs auteurs. En les téléchargeant, vous accordez à Weddly Studio une licence limitée, non exclusive et non transférable pour les stocker et les afficher dans le Service.",
+
+    "TERMS_S6_INTRO": "Il est expressément interdit de :",
+    "TERMS_S6_LI1": "Télécharger du contenu illégal, offensant, diffamatoire ou portant atteinte aux droits de tiers",
+    "TERMS_S6_LI2": "Tenter d'accéder sans autorisation à des systèmes ou comptes appartenant à d'autres",
+    "TERMS_S6_LI3": "Utiliser le Service pour envoyer des communications non sollicitées (spam)",
+    "TERMS_S6_LI4": "Effectuer une ingénierie inverse ou tenter d'extraire le code source",
+    "TERMS_S6_LI5": "Utiliser le Service d'une manière susceptible d'endommager, de surcharger ou de dégrader son fonctionnement",
+    "TERMS_S6_P2": "Le non-respect peut entraîner la suspension immédiate du compte sans droit au remboursement.",
+
+    "TERMS_S7_P1": "Dans toute la mesure permise par la loi, Weddly Studio ne sera pas responsable des dommages indirects, accidentels, spéciaux ou consécutifs découlant de l'utilisation ou de l'impossibilité d'utiliser le Service.",
+    "TERMS_S7_P2": "Weddly Studio ne garantit pas que le Service sera ininterrompu, sans erreur ou complètement sécurisé. Les données sont sauvegardées périodiquement, mais nous recommandons de conserver vos propres copies des informations critiques.",
+
+    "TERMS_S8_P1": "Nous nous réservons le droit de modifier ces Conditions à tout moment. Les changements substantiels seront notifiés par e-mail ou via un avis mis en évidence dans le Service avec au moins 15 jours de préavis.",
+    "TERMS_S8_P2": "L'utilisation continue du Service après la publication des modifications implique l'acceptation des nouveaux termes.",
+
+    "TERMS_S9_INTRO": "Pour toute question relative à ces Conditions Générales, vous pouvez nous contacter via :",
+
+    "PRIVACY_TOC_1": "Responsable du traitement",
+    "PRIVACY_TOC_2": "Données collectées",
+    "PRIVACY_TOC_3": "Finalité du traitement",
+    "PRIVACY_TOC_4": "Base légale",
+    "PRIVACY_TOC_5": "Conservation des données",
+    "PRIVACY_TOC_6": "Vos droits",
+    "PRIVACY_TOC_7": "Sécurité des données",
+    "PRIVACY_TOC_8": "Transferts à des tiers",
+    "PRIVACY_TOC_9": "Cookies",
+    "PRIVACY_TOC_10": "Mineurs",
+    "PRIVACY_TOC_11": "Contact et réclamations",
+
+    "PRIVACY_S1_P1": "Conformément au Règlement Général sur la Protection des Données (RGPD), nous vous informons que le responsable du traitement est :",
+    "PRIVACY_S1_COMPANY": "Weddly Studio SL",
+
+    "PRIVACY_S2_INTRO": "Nous collectons uniquement les données nécessaires à la prestation du Service :",
+    "PRIVACY_S2_CAT1_LABEL": "Données d'inscription",
+    "PRIVACY_S2_CAT1_DESC": "nom, prénom, adresse e-mail et mot de passe chiffré.",
+    "PRIVACY_S2_CAT2_LABEL": "Données de l'événement",
+    "PRIVACY_S2_CAT2_DESC": "nom du mariage, date, lieu, adresse et code vestimentaire.",
+    "PRIVACY_S2_CAT3_LABEL": "Données des invités",
+    "PRIVACY_S2_CAT3_DESC": "nom, email, restrictions alimentaires et statut de confirmation, saisis par l'utilisateur organisateur.",
+    "PRIVACY_S2_CAT4_LABEL": "Photographies",
+    "PRIVACY_S2_CAT4_DESC": "images téléchargées volontairement par l'utilisateur ou ses invités dans l'album numérique.",
+    "PRIVACY_S2_CAT5_LABEL": "Données de facturation",
+    "PRIVACY_S2_CAT5_DESC": "gérées de manière sécurisée via Stripe ou PayPal. Weddly Studio ne stocke pas les données complètes de cartes bancaires.",
+
+    "PRIVACY_S3_INTRO": "Vos données sont traitées aux fins suivantes :",
+    "PRIVACY_S3_LI1": "Gérer l'inscription et l'accès à la plateforme.",
+    "PRIVACY_S3_LI2": "Fournir les services souscrits selon le plan actif.",
+    "PRIVACY_S3_LI3": "Traiter les paiements et émettre les factures.",
+    "PRIVACY_S3_LI4": "Envoyer des communications transactionnelles liées au Service (vérification d'email, rappels, notifications).",
+    "PRIVACY_S3_LI5": "Respecter les obligations légales applicables.",
+
+    "PRIVACY_S4_P1": "Le traitement de vos données est fondé sur :",
+    "PRIVACY_S4_LI1": "L'exécution du contrat de prestation du Service (art. 6.1.b RGPD).",
+    "PRIVACY_S4_LI2": "Le respect des obligations légales (art. 6.1.c RGPD).",
+    "PRIVACY_S4_LI3": "Votre consentement exprès pour les communications optionnelles (art. 6.1.a RGPD).",
+
+    "PRIVACY_S5_P1": "Nous conserverons vos données tant que vous maintiendrez un compte actif sur la plateforme. Après la suppression du compte, les données seront effacées dans un délai maximum de 30 jours, sauf obligation légale de conservation.",
+    "PRIVACY_S5_P2": "Les données de facturation sont conservées pendant la période minimale requise par la législation fiscale applicable (généralement 5 ans).",
+
+    "PRIVACY_S6_INTRO": "Conformément au RGPD, vous disposez des droits suivants concernant vos données personnelles :",
+    "PRIVACY_S6_RIGHT1_LABEL": "Accès",
+    "PRIVACY_S6_RIGHT1_DESC": "savoir quelles données nous traitons à votre sujet.",
+    "PRIVACY_S6_RIGHT2_LABEL": "Rectification",
+    "PRIVACY_S6_RIGHT2_DESC": "demander la correction des données inexactes.",
+    "PRIVACY_S6_RIGHT3_LABEL": "Suppression",
+    "PRIVACY_S6_RIGHT3_DESC": "demander l'effacement de vos données (« droit à l'oubli »).",
+    "PRIVACY_S6_RIGHT4_LABEL": "Limitation",
+    "PRIVACY_S6_RIGHT4_DESC": "demander que nous limitions le traitement de vos données.",
+    "PRIVACY_S6_RIGHT5_LABEL": "Portabilité",
+    "PRIVACY_S6_RIGHT5_DESC": "recevoir vos données dans un format structuré et lisible.",
+    "PRIVACY_S6_RIGHT6_LABEL": "Opposition",
+    "PRIVACY_S6_RIGHT6_DESC": "vous opposer au traitement dans certaines circonstances.",
+    "PRIVACY_S6_CONTACT": "Pour exercer ces droits, adressez-vous à :",
+
+    "PRIVACY_S7_P1": "Nous mettons en œuvre des mesures techniques et organisationnelles pour protéger vos données personnelles :",
+    "PRIVACY_S7_LI1": "Authentification via JWT avec tokens à durée limitée.",
+    "PRIVACY_S7_LI2": "Mots de passe stockés avec chiffrement bcrypt.",
+    "PRIVACY_S7_LI3": "Isolation multi-tenant : chaque mariage est un environnement strictement séparé.",
+    "PRIVACY_S7_LI4": "Sauvegardes périodiques dans une infrastructure sécurisée.",
+    "PRIVACY_S7_P2": "Malgré nos mesures de sécurité, aucun système n'est entièrement infaillible. En cas de violation de données vous affectant, nous vous en informerons dans le délai légalement établi.",
+
+    "PRIVACY_S8_P1": "Pour la prestation du Service, nous partageons des données avec les prestataires de confiance suivants, qui agissent en tant que sous-traitants :",
+    "PRIVACY_S8_STRIPE": "Traitement sécurisé des paiements.",
+    "PRIVACY_S8_SENDGRID": "Envoi des e-mails transactionnels.",
+    "PRIVACY_S8_GCAL": "Exportation optionnelle des événements vers le calendrier de l'utilisateur.",
+    "PRIVACY_S8_P2": "Tous nos prestataires respectent le RGPD et disposent des garanties adéquates pour la protection de vos données.",
+
+    "PRIVACY_S9_P1": "Nous utilisons des cookies strictement nécessaires au fonctionnement du Service :",
+    "PRIVACY_S9_COOKIE1_LABEL": "Cookies de session",
+    "PRIVACY_S9_COOKIE1_DESC": "Maintiennent votre session active pendant l'utilisation de la plateforme.",
+    "PRIVACY_S9_COOKIE2_LABEL": "Cookies de préférences",
+    "PRIVACY_S9_COOKIE2_DESC": "Mémorisent vos préférences de langue et de configuration.",
+    "PRIVACY_S9_P2": "Nous n'utilisons pas de cookies publicitaires ni de traçage tiers. Vous pouvez gérer les cookies depuis les paramètres de votre navigateur.",
+
+    "PRIVACY_S10_P1": "Weddly Studio n'est pas destiné aux personnes de moins de 16 ans. Si nous détectons que nous avons collecté des données d'un mineur sans le consentement de ses tuteurs légaux, nous procéderons à leur suppression immédiate. Si vous êtes parent ou tuteur et pensez que votre enfant a fourni des données personnelles via notre plateforme, veuillez nous contacter.",
+
+    "PRIVACY_S11_INTRO": "Pour toute question relative à cette Politique de Confidentialité ou pour exercer vos droits, vous pouvez nous contacter à :"
   }
 }

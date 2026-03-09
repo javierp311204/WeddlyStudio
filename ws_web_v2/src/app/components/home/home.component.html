@@ -29,10 +29,21 @@
       </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="hero-section position-relative d-flex align-items-center justify-content-center text-center vh-100"
-             style="background:url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070') center/cover no-repeat;">
+    <!-- Hero con carrusel -->
+    <section class="hero-section position-relative d-flex align-items-center justify-content-center text-center vh-100">
+
+      <!-- Slides de fondo -->
+      <div class="hero-slides">
+        <div class="hero-slide"
+             *ngFor="let slide of heroSlides; let i = index"
+             [class.active]="i === currentSlide">
+          <div class="hero-slide-img" [style.background-image]="'url(' + slide + ')'"></div>
+        </div>
+      </div>
+
       <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
+
+      <!-- Contenido -->
       <div class="hero-content position-relative text-white" style="z-index:1; max-width:800px; padding:20px;">
         <span class="d-block text-uppercase fw-semibold mb-3"
               style="letter-spacing:4px; font-size:0.8rem; opacity:0.9;">
@@ -55,12 +66,24 @@
           </button>
         </div>
       </div>
+
+      <!-- Dots indicadores -->
+      <div class="hero-dots">
+        <span class="hero-dot"
+              *ngFor="let slide of heroSlides; let i = index"
+              [class.active]="i === currentSlide"
+              (click)="goToSlide(i)">
+        </span>
+      </div>
+
+      <!-- Scroll indicator -->
       <div class="scroll-indicator position-absolute text-white text-center"
            style="bottom:30px; left:50%; transform:translateX(-50%); z-index:2; cursor:pointer;"
            (click)="scrollToContent()">
         <span class="d-block mb-2">{{ 'HOME.DISCOVER_MORE' | translate }}</span>
         <div class="arrow-down mx-auto"></div>
       </div>
+
     </section>
 
     <!-- Pasos -->

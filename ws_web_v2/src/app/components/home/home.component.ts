@@ -22,6 +22,8 @@ import { ChecklistPreviewComponent } from '../checklist-preview/checklist-previe
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  // ─── Estado general ───────────────────────────────────────────
   showStickyNav    = false;
   mostrarPanel     = false;
   cargandoBoda     = false;
@@ -32,6 +34,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private checklistSub?: Subscription;
 
+  // ─── Hero carousel ────────────────────────────────────────────
+  heroSlides: string[] = [
+    'https://weddly-photos-dev.s3.eu-west-1.amazonaws.com/landing/hero-1.jpg',
+    'https://weddly-photos-dev.s3.eu-west-1.amazonaws.com/landing/hero-2.jpg',
+    'https://weddly-photos-dev.s3.eu-west-1.amazonaws.com/landing/hero-3.jpg',
+    'https://weddly-photos-dev.s3.eu-west-1.amazonaws.com/landing/hero-4.jpg',
+    'https://weddly-photos-dev.s3.eu-west-1.amazonaws.com/landing/hero-5.jpg',
+  ];
+  currentSlide = 0;
+  private slideInterval: any;
+
   constructor(
     public  authService:   AuthService,
     private router:        Router,
@@ -39,7 +52,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private tareasService: TareasService,
   ) {}
 
-  ngOnInit() {
+  // ─── Lifecycle ────────────────────────────────────────────────
+  ngOnInit(): void {
+    this.startCarousel();
+
     if (!this.authService.isLoggedIn()) return;
 
     const weddingId = this.authService.getWeddingId();
@@ -65,7 +81,28 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private inicializarHome() {
+  ngAfterViewInit(): void {}
+
+  ngOnDestroy(): void {
+    this.checklistSub?.unsubscribe();
+    clearInterval(this.slideInterval);
+  }
+
+  // ─── Carousel ────────────────────────────────────────────────
+  startCarousel(): void {
+    this.slideInterval = setInterval(() => {
+      this.currentSlide = (this.currentSlide + 1) % this.heroSlides.length;
+    }, 5000);
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlide = index;
+    clearInterval(this.slideInterval);
+    this.startCarousel();
+  }
+
+  // ─── Home init ────────────────────────────────────────────────
+  private inicializarHome(): void {
     if (this.authService.isWeddingOwner()) {
       this.cargarEstadisticasChecklist();
     }
@@ -77,24 +114,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnDestroy() { this.checklistSub?.unsubscribe(); }
-  ngAfterViewInit() {}
-
-  iniciarTour() {
+  iniciarTour(): void {
     driver({
       showProgress: true, animate: true,
       popoverClass: 'driverjs-theme',
       overlayColor: 'rgba(51, 47, 44, 0.7)',
       stagePadding: 10,
       steps: [
-        { element: '.sidebar',      popover: { title: this.translate.instant('HOME.TOUR_STEP_1_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_1_DESC'), side: 'right' } },
-        { element: '.action-grid',  popover: { title: this.translate.instant('HOME.TOUR_STEP_3_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_3_DESC'), side: 'top'   } },
-        { element: '.logout-btn',   popover: { title: this.translate.instant('HOME.TOUR_STEP_4_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_4_DESC'), side: 'right' } },
+        { element: '.sidebar',     popover: { title: this.translate.instant('HOME.TOUR_STEP_1_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_1_DESC'), side: 'right' } },
+        { element: '.action-grid', popover: { title: this.translate.instant('HOME.TOUR_STEP_3_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_3_DESC'), side: 'top'   } },
+        { element: '.logout-btn',  popover: { title: this.translate.instant('HOME.TOUR_STEP_4_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_4_DESC'), side: 'right' } },
       ],
     }).drive();
   }
 
-  cargarEstadisticasChecklist() {
+  cargarEstadisticasChecklist(): void {
     const weddingId = this.authService.getWeddingId();
     if (!weddingId) return;
     this.tareasService.getChecklist(weddingId).subscribe({
@@ -103,26 +137,29 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  toggleNotificaciones() { this.mostrarPanel = !this.mostrarPanel; }
-  leerNotificacion(n: any) { this.redirigirSegunTipo(n); }
-  redirigirSegunTipo(n: any) {
+  // ─── Notificaciones ───────────────────────────────────────────
+  toggleNotificaciones(): void { this.mostrarPanel = !this.mostrarPanel; }
+  leerNotificacion(n: any): void { this.redirigirSegunTipo(n); }
+
+  redirigirSegunTipo(n: any): void {
     this.mostrarPanel = false;
     if (n.ruta) { this.router.navigate([n.ruta]); return; }
     const mapa: Record<string, string> = { foto: '/album', album: '/album', 'info-boda': '/info-boda', mesa: '/plano' };
     if (mapa[n.tipo]) this.router.navigate([mapa[n.tipo]]);
   }
 
-  irAInfoBoda()  { this.router.navigate(['/info-boda']); }
+  irAInfoBoda(): void { this.router.navigate(['/info-boda']); }
 
+  // ─── Scroll ───────────────────────────────────────────────────
   @HostListener('window:scroll', [])
-  onWindowScroll() {
+  onWindowScroll(): void {
     this.showStickyNav = (window.pageYOffset || document.documentElement.scrollTop) > 400;
     document.querySelectorAll('.reveal').forEach(el => {
       if (el.getBoundingClientRect().top < window.innerHeight - 150) el.classList.add('active');
     });
   }
 
-  scrollToContent() {
+  scrollToContent(): void {
     document.getElementById('marketing-content')?.scrollIntoView({ behavior: 'smooth' });
   }
 }

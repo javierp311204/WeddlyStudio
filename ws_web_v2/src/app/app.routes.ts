@@ -21,10 +21,14 @@ import { PerfilUsuarioComponent }      from './components/perfil-usuario/perfil-
 import { MisBodasComponent }           from './components/mis-bodas/mis-bodas.component';
 import { ResetearPasswordComponent }   from './pages/resetear-password/resetear-password.component';
 import { RecuperarPasswordComponent }  from './pages/recuperar-password/recuperar-password.component';
+import { TerminosComponent }           from './components/terminos/terminos.component';
+import { PrivacidadComponent } from './components/privacidad/privacidad.component';
 // ── 2FA ──────────────────────────────────────────────────────────────────────
 import { TwoFactorComponent }          from './components/two-factor/two-factor.component';
 import { TfaResetConfirmComponent }    from './components/tfa-reset-confirm/tfa-reset-confirm.component';
 import { Perfil2faComponent }          from './components/perfil2fa/perfil2fa.component';
+
+
 
 
 
@@ -39,6 +43,8 @@ export const routes: Routes = [
   { path: 'reset-pass',              component: ResetearPasswordComponent },
   { path: 'reco-pass',               component: RecuperarPasswordComponent },
   { path: 'rsvp/:code',              component: RsvpComponent },
+  { path: 'terminos',                component: TerminosComponent },
+  { path: 'privacidad',              component: PrivacidadComponent },
 
   // ── Rutas 2FA — públicas (temp_token, sin sesión completa) ──
   { path: 'auth/2fa',                component: TwoFactorComponent },

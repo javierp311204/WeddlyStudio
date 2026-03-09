@@ -20,7 +20,8 @@
     "UPLOAD": "Upload",
     "SEND": "Send",
     "CHANGE": "Change",
-    "SELECT": "Select"
+    "SELECT": "Select",
+    "DONT_ASK_AGAIN": "Don't ask again"
   },
 
   "HOME": {
@@ -543,11 +544,17 @@
       "PRIORITY_SUPPORT": "Priority support",
       "UNLIMITED_WEDDINGS": "Unlimited weddings",
       "UNLIMITED_GUESTS": "Unlimited guests",
-      "VIP_SUPPORT": "24/7 VIP support",
+      "VIP_SUPPORT": "VIP support 24/7",
       "UP_TO_GUESTS": "Up to {{count}} guests",
       "UP_TO_PHOTOS": "Up to {{count}} photos",
-      "CHECKLIST_FULL": "Complete checklist",
-      "CHECKLIST_BASIC": "Basic checklist"
+      "CHECKLIST_FULL": "Full checklist",
+      "CHECKLIST_BASIC": "Basic checklist",
+      "PDF_EXPORT": "PDF export",
+      "GOOGLE_CALENDAR": "Google Calendar integration",
+      "DRAG_DROP_TABLES": "Interactive seating chart",
+      "PHOTO_MODERATION": "Album moderation",
+      "PLANNER_DASHBOARD": "Wedding planner dashboard",
+      "PREMIUM_STATIONERY": "Premium stationery"
     },
 
     "PLANS": {
@@ -843,5 +850,169 @@
       "RESET_SENT_DESC": "If the email is registered with 2FA active, you will receive a link within the next few minutes.",
       "BACK_LOGIN": "Back to login"
     }
+  },
+
+  "FOOTER": {
+    "SOCIAL": "Social",
+    "ARIA_INSTAGRAM": "Instagram",
+    "ARIA_TIKTOK": "TikTok",
+    "ARIA_PINTEREST": "Pinterest",
+    "ARIA_YOUTUBE": "YouTube",
+    "NAV_HOME": "Home",
+    "NAV_WEDDINGS": "My Weddings",
+    "NAV_PLANS": "Plans",
+    "NAV_TERMS": "Terms & Conditions",
+    "NAV_PRIVACY": "Privacy Policy",
+    "COPYRIGHT": "Copyright © 2026 · Weddly Studio"
+  },
+
+  "LEGAL": {
+    "BADGE_TERMS": "Legal",
+    "BADGE_PRIVACY": "Privacy",
+    "TERMS_TITLE": "Terms and Conditions",
+    "PRIVACY_TITLE": "Privacy Policy",
+    "LAST_UPDATED": "Last updated",
+    "TOC_LABEL": "Contents",
+    "CONTACT_ADDRESS": "Weddly Studio SL · Madrid, Spain",
+    "SEE_PRIVACY_POLICY": "View Privacy Policy",
+    "SEE_TERMS": "View Terms and Conditions",
+
+    "TERMS_TOC_1": "Acceptance of terms",
+    "TERMS_TOC_2": "Description of service",
+    "TERMS_TOC_3": "Registration and user account",
+    "TERMS_TOC_4": "Plans and payments",
+    "TERMS_TOC_5": "Intellectual property",
+    "TERMS_TOC_6": "User conduct",
+    "TERMS_TOC_7": "Limitation of liability",
+    "TERMS_TOC_8": "Modifications",
+    "TERMS_TOC_9": "Contact",
+
+    "TERMS_S1_P1": "By accessing and using Weddly Studio (hereinafter, 'the Service'), you agree to be bound by these Terms and Conditions. If you disagree with any part of these terms, you may not access the Service.",
+    "TERMS_S1_P2": "These terms apply to all visitors, users and any other person who accesses or uses the Service.",
+
+    "TERMS_S2_INTRO": "Weddly Studio is a wedding planning platform that allows users to:",
+    "TERMS_S2_LI1": "Manage guest lists and table layouts",
+    "TERMS_S2_LI2": "Create and share collaborative digital albums",
+    "TERMS_S2_LI3": "Manage the wedding task checklist",
+    "TERMS_S2_LI4": "Design digital stationery and invitations",
+    "TERMS_S2_LI5": "Invite collaborators with different access levels",
+    "TERMS_S2_P2": "The Service is provided 'as is' and 'as available'. We reserve the right to modify or discontinue the Service at any time, with or without notice.",
+
+    "TERMS_S3_INTRO": "To use certain features of the Service, you must create an account. By doing so, you agree to:",
+    "TERMS_S3_LI1": "Provide truthful, accurate and complete information",
+    "TERMS_S3_LI2": "Maintain the confidentiality of your password",
+    "TERMS_S3_LI3": "Immediately notify us of any unauthorized use of your account",
+    "TERMS_S3_LI4": "Be responsible for all activity conducted from your account",
+    "TERMS_S3_P2": "It is not permitted to create accounts in an automated manner or to impersonate another person or entity.",
+
+    "TERMS_S4_INTRO": "Weddly Studio offers different access plans:",
+    "TERMS_S4_PLAN_FREE_LABEL": "Free Plan:",
+    "TERMS_S4_PLAN_FREE_DESC": "Basic access at no cost, with limitations on guests and features.",
+    "TERMS_S4_PLAN_PRO_LABEL": "Essential Plan (Event PRO):",
+    "TERMS_S4_PLAN_PRO_DESC": "One-time payment of €49 per wedding, no monthly fees.",
+    "TERMS_S4_PLAN_PREMIUM_LABEL": "Premium Plan:",
+    "TERMS_S4_PLAN_PREMIUM_DESC": "Monthly subscription of €14/month, with unlimited weddings and full access.",
+    "TERMS_S4_P2": "Payments are processed securely via Stripe. We do not store credit card data. Prices are subject to change with prior notice.",
+    "TERMS_S4_P3": "One-time payments are non-refundable except for technical errors attributable to Weddly Studio. Subscriptions can be cancelled at any time; access is maintained until the end of the billing period.",
+
+    "TERMS_S5_P1": "The Service and its original content (excluding user-provided content) are the exclusive property of Weddly Studio and are protected by applicable intellectual property laws.",
+    "TERMS_S5_P2": "Photographs, texts and other content uploaded by users remain the property of their authors. By uploading them, you grant Weddly Studio a limited, non-exclusive and non-transferable licence to store and display them within the Service.",
+
+    "TERMS_S6_INTRO": "The following is expressly prohibited:",
+    "TERMS_S6_LI1": "Uploading illegal, offensive, defamatory content or content that infringes third-party rights",
+    "TERMS_S6_LI2": "Attempting to gain unauthorised access to other systems or accounts",
+    "TERMS_S6_LI3": "Using the Service to send unsolicited communications (spam)",
+    "TERMS_S6_LI4": "Reverse engineering or attempting to extract the source code",
+    "TERMS_S6_LI5": "Using the Service in a way that may damage, overload or deteriorate its functioning",
+    "TERMS_S6_P2": "Non-compliance may result in immediate account suspension without right to a refund.",
+
+    "TERMS_S7_P1": "To the maximum extent permitted by law, Weddly Studio shall not be liable for indirect, incidental, special or consequential damages arising from the use or inability to use the Service.",
+    "TERMS_S7_P2": "Weddly Studio does not guarantee that the Service will be uninterrupted, error-free or completely secure. Data is backed up periodically, but we recommend keeping your own copies of critical information.",
+
+    "TERMS_S8_P1": "We reserve the right to modify these Terms at any time. Substantial changes will be notified by email or via a prominent notice in the Service at least 15 days in advance.",
+    "TERMS_S8_P2": "Continued use of the Service after the publication of changes implies acceptance of the new terms.",
+
+    "TERMS_S9_INTRO": "For any queries related to these Terms and Conditions, you can contact us via:",
+
+    "PRIVACY_TOC_1": "Data controller",
+    "PRIVACY_TOC_2": "Data we collect",
+    "PRIVACY_TOC_3": "Purpose of processing",
+    "PRIVACY_TOC_4": "Legal basis",
+    "PRIVACY_TOC_5": "Data retention",
+    "PRIVACY_TOC_6": "Your rights",
+    "PRIVACY_TOC_7": "Data security",
+    "PRIVACY_TOC_8": "Third-party transfers",
+    "PRIVACY_TOC_9": "Cookies",
+    "PRIVACY_TOC_10": "Minors",
+    "PRIVACY_TOC_11": "Contact and complaints",
+
+    "PRIVACY_S1_P1": "In accordance with the General Data Protection Regulation (GDPR), we inform you that the data controller is:",
+    "PRIVACY_S1_COMPANY": "Weddly Studio SL",
+
+    "PRIVACY_S2_INTRO": "We collect only the data necessary to provide the Service:",
+    "PRIVACY_S2_CAT1_LABEL": "Registration data",
+    "PRIVACY_S2_CAT1_DESC": "name, surname, email address and encrypted password.",
+    "PRIVACY_S2_CAT2_LABEL": "Event data",
+    "PRIVACY_S2_CAT2_DESC": "wedding name, date, venue, address and dress code.",
+    "PRIVACY_S2_CAT3_LABEL": "Guest data",
+    "PRIVACY_S2_CAT3_DESC": "name, email, dietary restrictions and confirmation status, entered by the organising user.",
+    "PRIVACY_S2_CAT4_LABEL": "Photographs",
+    "PRIVACY_S2_CAT4_DESC": "images voluntarily uploaded by the user or their guests to the digital album.",
+    "PRIVACY_S2_CAT5_LABEL": "Billing data",
+    "PRIVACY_S2_CAT5_DESC": "handled securely via Stripe or PayPal. Weddly Studio does not store complete card data.",
+
+    "PRIVACY_S3_INTRO": "Your data is processed for the following purposes:",
+    "PRIVACY_S3_LI1": "Managing registration and access to the platform.",
+    "PRIVACY_S3_LI2": "Providing contracted services according to the active plan.",
+    "PRIVACY_S3_LI3": "Processing payments and issuing invoices.",
+    "PRIVACY_S3_LI4": "Sending transactional communications related to the Service (email verification, reminders, notifications).",
+    "PRIVACY_S3_LI5": "Complying with applicable legal obligations.",
+
+    "PRIVACY_S4_P1": "The processing of your data is based on:",
+    "PRIVACY_S4_LI1": "Performance of the Service contract (art. 6.1.b GDPR).",
+    "PRIVACY_S4_LI2": "Compliance with legal obligations (art. 6.1.c GDPR).",
+    "PRIVACY_S4_LI3": "Your explicit consent for optional communications (art. 6.1.a GDPR).",
+
+    "PRIVACY_S5_P1": "We will retain your data for as long as you maintain an active account on the platform. After account deletion, data will be erased within a maximum of 30 days, unless there is a legal obligation to retain it.",
+    "PRIVACY_S5_P2": "Billing data is retained for the minimum period required by applicable tax legislation (generally 5 years).",
+
+    "PRIVACY_S6_INTRO": "Under the GDPR, you have the following rights regarding your personal data:",
+    "PRIVACY_S6_RIGHT1_LABEL": "Access",
+    "PRIVACY_S6_RIGHT1_DESC": "know what data we process about you.",
+    "PRIVACY_S6_RIGHT2_LABEL": "Rectification",
+    "PRIVACY_S6_RIGHT2_DESC": "request correction of inaccurate data.",
+    "PRIVACY_S6_RIGHT3_LABEL": "Erasure",
+    "PRIVACY_S6_RIGHT3_DESC": "request deletion of your data ('right to be forgotten').",
+    "PRIVACY_S6_RIGHT4_LABEL": "Restriction",
+    "PRIVACY_S6_RIGHT4_DESC": "request that we restrict the processing of your data.",
+    "PRIVACY_S6_RIGHT5_LABEL": "Portability",
+    "PRIVACY_S6_RIGHT5_DESC": "receive your data in a structured, readable format.",
+    "PRIVACY_S6_RIGHT6_LABEL": "Objection",
+    "PRIVACY_S6_RIGHT6_DESC": "object to processing in certain circumstances.",
+    "PRIVACY_S6_CONTACT": "To exercise these rights, contact us at:",
+
+    "PRIVACY_S7_P1": "We implement technical and organisational measures to protect your personal data:",
+    "PRIVACY_S7_LI1": "JWT authentication with limited-duration tokens.",
+    "PRIVACY_S7_LI2": "Passwords stored with bcrypt encryption.",
+    "PRIVACY_S7_LI3": "Multi-tenant isolation: each wedding is a strictly separate environment.",
+    "PRIVACY_S7_LI4": "Periodic backups in secure infrastructure.",
+    "PRIVACY_S7_P2": "Despite our security measures, no system is entirely infallible. In the event of a data breach affecting your data, we will notify you within the legally established timeframe.",
+
+    "PRIVACY_S8_P1": "For the provision of the Service, we share data with the following trusted providers, who act as data processors:",
+    "PRIVACY_S8_STRIPE": "Secure payment processing.",
+    "PRIVACY_S8_SENDGRID": "Transactional email delivery.",
+    "PRIVACY_S8_GCAL": "Optional export of events to the user's calendar.",
+    "PRIVACY_S8_P2": "All our providers comply with the GDPR and have adequate safeguards in place for the protection of your data.",
+
+    "PRIVACY_S9_P1": "We use strictly necessary cookies for the operation of the Service:",
+    "PRIVACY_S9_COOKIE1_LABEL": "Session cookies",
+    "PRIVACY_S9_COOKIE1_DESC": "Keep your session active while using the platform.",
+    "PRIVACY_S9_COOKIE2_LABEL": "Preference cookies",
+    "PRIVACY_S9_COOKIE2_DESC": "Store your language and configuration preferences.",
+    "PRIVACY_S9_P2": "We do not use advertising or third-party tracking cookies. You can manage cookies from your browser settings.",
+
+    "PRIVACY_S10_P1": "Weddly Studio is not directed at persons under 16 years of age. If we detect that we have collected data from a minor without the consent of their legal guardians, we will proceed to delete it immediately. If you are a parent or guardian and believe that your child has provided personal data through our platform, please contact us.",
+
+    "PRIVACY_S11_INTRO": "For any questions about this Privacy Policy or to exercise your rights, you can contact us at:"
   }
 }
