@@ -46,6 +46,7 @@ model WeddingInvite {
   expires_at  DateTime
   accepted_at DateTime?
   created_at  DateTime    @default(now())
+  declined_at DateTime?
 
   wedding     Wedding     @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
   inviter     User        @relation("InvitesSent", fields: [invited_by], references: [id])
@@ -234,11 +235,12 @@ model UserWeddingRole {
 model Guest {
   id               String     @id @default(uuid()) @db.Uuid
   wedding_id       String     @db.Uuid
-  parent_guest_id  String?    @db.Uuid   // null = invitado principal, UUID = acompañante (+1)
+  parent_guest_id  String?    @db.Uuid
   first_name       String     @db.VarChar(100)
   last_name        String?    @db.VarChar(100)
   email            String?    @db.VarChar(255)
   phone            String?    @db.VarChar(30)
+  group            String?    @db.VarChar(50)   
   rsvp_status      RsvpStatus @default(pending)
   allergies        String?    @db.Text
   dietary_notes    String?    @db.Text
@@ -247,9 +249,8 @@ model Guest {
   seat_number      Int?
   created_at       DateTime   @default(now())
   updated_at       DateTime   @updatedAt
-  deleted_at       DateTime?  // soft delete
+  deleted_at       DateTime?
 
-  // Relaciones
   wedding          Wedding    @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
   table            Table?     @relation(fields: [table_id], references: [id], onDelete: SetNull)
   parent           Guest?     @relation("GuestPlusOne", fields: [parent_guest_id], references: [id], onDelete: Cascade)
@@ -261,6 +262,7 @@ model Guest {
   @@index([parent_guest_id])
   @@index([rsvp_status])
   @@index([deleted_at])
+  @@index([group])
   @@map("guests")
 }
 

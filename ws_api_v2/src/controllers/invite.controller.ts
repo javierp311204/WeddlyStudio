@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import inviteService from '../services/invite.service';
+import prisma from '../config/db';
 
 export class InviteController {
 
@@ -54,6 +55,39 @@ export class InviteController {
     try {
       const data = await inviteService.acceptInvite(
         req.params.token, req.user!.userId,
+      );
+      res.json({ success: true, data });
+    } catch (err) { next(err); }
+  }
+
+  /** POST /api/invites/decline/:token — requiere auth */
+  async declineInvite(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: req.user!.userId },
+        select: { email: true },
+      });
+      const data = await inviteService.declineInvite(req.params.token, user!.email);
+      res.json({ success: true, data });
+    } catch (err) { next(err); }
+  }
+
+  /** GET /api/weddings/:id/members */
+  async getMembers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await inviteService.getMembers(req.params.id, req.user!.userId);
+      res.json({ success: true, data });
+    } catch (err) { next(err); }
+  }
+
+  // PATCH /api/weddings/:id/members/:memberId/role
+  async updateMemberRole(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await inviteService.updateMemberRole(
+        req.params.id,
+        req.user!.userId,
+        req.params.memberId,
+        req.body.role,
       );
       res.json({ success: true, data });
     } catch (err) { next(err); }

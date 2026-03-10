@@ -99,6 +99,7 @@
     "ALBUM": "Álbum",
     "INFO": "Info Boda",
     "PRICING": "Planes",
+    "COLLABORATORS": "Colaboradores",
     "CHECKLIST": "Checklist",
     "LOGOUT": "Cerrar Sesión"
   },
@@ -300,18 +301,15 @@
     "BACK_TO_PANEL": "Volver al Panel",
     "PREVIEW": "Vista Previa",
     "PREVIEW_SUBTITLE": "Así verán tu invitación los invitados",
-
     "STYLE_SECTION": "Elige tu Estilo",
     "CLASSIC": "Clásica",
     "CLASSIC_DESC": "Elegante y tradicional",
     "MODERN": "Moderna",
     "MODERN_DESC": "Minimalista y sofisticada",
-
     "COUPLE_SECTION": "Datos de los Novios",
     "BRIDE_NAME": "Nombre de la Novia",
     "GROOM_NAME": "Nombre del Novio",
     "EVENT_DATE": "Fecha del Evento",
-
     "CUSTOMIZATION_SECTION": "Personalización",
     "COUPLE_PHOTO": "Foto de los Novios",
     "UPLOAD_IMAGE": "Subir imagen",
@@ -321,18 +319,15 @@
     "BACKGROUND_COLOR": "Fondo",
     "SPECIAL_MESSAGE": "Mensaje Especial",
     "MESSAGE_PLACEHOLDER": "Escribe un mensaje personalizado para tus invitados...",
-
     "SAVE_CONFIG": "Guardar Configuración",
     "DOWNLOAD_PDF": "Descargar PDF",
     "SEND_EMAIL": "Enviar por Email",
     "MASS_SEND": "Envío Masivo",
     "GENERATING": "Generando...",
     "SENDING": "Enviando...",
-
     "MODAL_SELECT_GUEST": "Selecciona un Invitado",
     "MODAL_SELECT_DESC": "Selecciona a qué invitado deseas enviarle la invitación",
     "NO_GUESTS_EMAIL": "No hay invitados con email registrado",
-
     "INVITATION_TEXT": "¡Nos casamos!",
     "ONLINE_CONFIRMATION": "Confirmación Online"
   },
@@ -434,10 +429,10 @@
     "GUEST_ADDED": "Invitado añadido correctamente",
     "GUEST_DELETED": "Invitado eliminado correctamente",
     "GUEST_DELETE_ERROR": "No se pudo eliminar el invitado",
-    "DIETARY":          "Restricciones dietéticas",
-    "PHONE":            "Teléfono",
-    "HAS_MESSAGE":      "Tiene mensaje",
-    "MODAL_MESSAGE":    "Mensaje del invitado",
+    "DIETARY": "Restricciones dietéticas",
+    "PHONE": "Teléfono",
+    "HAS_MESSAGE": "Tiene mensaje",
+    "MODAL_MESSAGE": "Mensaje del invitado",
     "MODAL_NO_MESSAGE": "Sin mensaje"
   },
 
@@ -532,32 +527,30 @@
     "CURRENT_PLAN_BADGE": "✓ Plan actual",
     "SELECT_PLAN_WITH_NAME": "Elegir",
     "REDIRECTING": "Redirigiendo...",
-
-  "FEATURES": {
-    "ONE_WEDDING": "1 boda activa",
-    "UP_TO_50": "Hasta 50 invitados",
-    "BASIC_FEATURES": "Funciones básicas",
-    "STANDARD_TEMPLATES": "Plantillas estándar",
-    "ONE_LIFETIME": "1 boda lifetime",
-    "UP_TO_300": "Hasta 300 invitados",
-    "ALL_PREMIUM": "Todas las funciones premium",
-    "PREMIUM_TEMPLATES": "Plantillas premium",
-    "PRIORITY_SUPPORT": "Soporte prioritario",
-    "UNLIMITED_WEDDINGS": "Bodas ilimitadas",
-    "UNLIMITED_GUESTS": "Invitados ilimitados",
-    "VIP_SUPPORT": "Soporte VIP 24/7",
-    "UP_TO_GUESTS": "Hasta {{count}} invitados",
-    "UP_TO_PHOTOS": "Hasta {{count}} fotos",
-    "CHECKLIST_FULL": "Checklist completo",
-    "CHECKLIST_BASIC": "Checklist básico",
-    "PDF_EXPORT": "Exportación a PDF",
-    "GOOGLE_CALENDAR": "Integración Google Calendar",
-    "DRAG_DROP_TABLES": "Plano de mesas interactivo",
-    "PHOTO_MODERATION": "Moderación de álbum",
-    "PLANNER_DASHBOARD": "Panel de wedding planner",
-    "PREMIUM_STATIONERY": "Papelería premium"
-  },
-
+    "FEATURES": {
+      "ONE_WEDDING": "1 boda activa",
+      "UP_TO_50": "Hasta 50 invitados",
+      "BASIC_FEATURES": "Funciones básicas",
+      "STANDARD_TEMPLATES": "Plantillas estándar",
+      "ONE_LIFETIME": "1 boda lifetime",
+      "UP_TO_300": "Hasta 300 invitados",
+      "ALL_PREMIUM": "Todas las funciones premium",
+      "PREMIUM_TEMPLATES": "Plantillas premium",
+      "PRIORITY_SUPPORT": "Soporte prioritario",
+      "UNLIMITED_WEDDINGS": "Bodas ilimitadas",
+      "UNLIMITED_GUESTS": "Invitados ilimitados",
+      "VIP_SUPPORT": "Soporte VIP 24/7",
+      "UP_TO_GUESTS": "Hasta {{count}} invitados",
+      "UP_TO_PHOTOS": "Hasta {{count}} fotos",
+      "CHECKLIST_FULL": "Checklist completo",
+      "CHECKLIST_BASIC": "Checklist básico",
+      "PDF_EXPORT": "Exportación a PDF",
+      "GOOGLE_CALENDAR": "Integración Google Calendar",
+      "DRAG_DROP_TABLES": "Plano de mesas interactivo",
+      "PHOTO_MODERATION": "Moderación de álbum",
+      "PLANNER_DASHBOARD": "Panel de wedding planner",
+      "PREMIUM_STATIONERY": "Papelería premium"
+    },
     "PLANS": {
       "FREE_NAME": "Gratuito",
       "FREE_SUBTITLE": "Para siempre gratis",
@@ -566,7 +559,6 @@
       "PREMIUM_NAME": "Premium",
       "PREMIUM_SUBTITLE": "Cancela cuando quieras"
     },
-
     "ERRORS": {
       "LOAD_PLANS": "No se pudieron cargar los planes",
       "LOGIN_REQUIRED": "Inicia sesión",
@@ -650,7 +642,6 @@
     "BACK_TO_PANEL": "Volver al Panel",
     "NEW_TASK": "Nueva Tarea",
     "LOADING": "Cargando tu checklist...",
-
     "STATS": {
       "TOTAL": "Total de Tareas",
       "COMPLETED": "Completadas",
@@ -658,7 +649,6 @@
       "PENDING": "Pendientes",
       "GENERAL_PROGRESS": "Progreso General"
     },
-
     "PHASES": {
       "SIX_MONTHS": "6 Meses Antes",
       "THREE_MONTHS": "3 Meses Antes",
@@ -666,7 +656,6 @@
       "ONE_WEEK": "1 Semana Antes",
       "ONE_DAY": "1 Día Antes"
     },
-
     "FILTERS": {
       "TITLE": "Filtros",
       "STATUS": "Estado",
@@ -679,7 +668,6 @@
       "SEARCH_PLACEHOLDER": "Buscar tarea...",
       "NEW_TASK_PHASE": "Nueva Tarea en esta Fase"
     },
-
     "CATEGORIES": {
       "VENUE": "Lugar",
       "CATERING": "Catering",
@@ -690,7 +678,6 @@
       "LEGAL": "Legal/Documentos",
       "OTHER": "Otro"
     },
-
     "TASK": {
       "COMPLETED": "Completada",
       "IN_PROGRESS": "En Progreso",
@@ -704,14 +691,12 @@
       "DELETE": "Eliminar",
       "NO_CATEGORY": "Sin categoría"
     },
-
     "MODALS": {
       "INIT_TITLE": "¡Bienvenido al Checklist!",
       "INIT_DESC": "¿Quieres que creemos un checklist con tareas predefinidas para tu boda? Incluye todas las tareas esenciales organizadas por fases.",
       "INIT_EMPTY": "Crear vacío",
       "INIT_WITH_TASKS": "Sí, crear con tareas",
       "CREATING": "Creando...",
-
       "NEW_TASK_TITLE": "Nueva Tarea",
       "EDIT_TASK_TITLE": "Editar Tarea",
       "TASK_TITLE": "Título",
@@ -730,7 +715,6 @@
       "SAVE": "Guardar Tarea",
       "SAVING": "Guardando..."
     },
-
     "NOTIFICATIONS": {
       "CHECKLIST_CREATED": "¡Checklist creado!",
       "CHECKLIST_CREATED_DESC": "Se han agregado las tareas predefinidas",
@@ -756,7 +740,6 @@
       "ERROR_REMINDER": "No se pudo configurar el recordatorio",
       "NO_WEDDING_CODE": "No se encontró el código de boda"
     },
-
     "EMPTY_STATE": {
       "NO_TASKS": "No hay tareas que coincidan con los filtros",
       "NO_TASKS_PHASE": "No hay tareas en esta fase todavía"
@@ -830,7 +813,6 @@
     "SUCCESS_DISABLED_DESC": "La autenticación en dos pasos ha sido desactivada.",
     "SUCCESS_COPIED": "Copiado",
     "SUCCESS_COPIED_DESC": "Clave copiada al portapapeles",
-
     "RESET_CONFIRM": {
       "LOADING_TITLE": "Desactivando 2FA...",
       "LOADING_DESC": "Por favor espera un momento.",
@@ -877,7 +859,6 @@
     "CONTACT_ADDRESS": "Weddly Studio SL · Madrid, España",
     "SEE_PRIVACY_POLICY": "Ver Política de Privacidad",
     "SEE_TERMS": "Ver Términos y Condiciones",
-
     "TERMS_TOC_1": "Aceptación de los términos",
     "TERMS_TOC_2": "Descripción del servicio",
     "TERMS_TOC_3": "Registro y cuenta de usuario",
@@ -887,10 +868,8 @@
     "TERMS_TOC_7": "Limitación de responsabilidad",
     "TERMS_TOC_8": "Modificaciones",
     "TERMS_TOC_9": "Contacto",
-
     "TERMS_S1_P1": "Al acceder y utilizar Weddly Studio (en adelante, «el Servicio»), usted acepta quedar vinculado por estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, no podrá acceder al Servicio.",
     "TERMS_S1_P2": "Estos términos se aplican a todos los visitantes, usuarios y cualquier otra persona que acceda o utilice el Servicio.",
-
     "TERMS_S2_INTRO": "Weddly Studio es una plataforma de organización de bodas que permite a los usuarios:",
     "TERMS_S2_LI1": "Gestionar listas de invitados y distribución de mesas",
     "TERMS_S2_LI2": "Crear y compartir álbumes digitales colaborativos",
@@ -898,14 +877,12 @@
     "TERMS_S2_LI4": "Diseñar papelería digital e invitaciones",
     "TERMS_S2_LI5": "Invitar a colaboradores con diferentes niveles de acceso",
     "TERMS_S2_P2": "El Servicio se proporciona «tal cual» y «según disponibilidad». Nos reservamos el derecho de modificar o discontinuar el Servicio en cualquier momento, con o sin previo aviso.",
-
     "TERMS_S3_INTRO": "Para utilizar ciertas funciones del Servicio, debe crear una cuenta. Al hacerlo, usted se compromete a:",
     "TERMS_S3_LI1": "Proporcionar información veraz, precisa y completa",
     "TERMS_S3_LI2": "Mantener la confidencialidad de su contraseña",
     "TERMS_S3_LI3": "Notificarnos inmediatamente cualquier uso no autorizado de su cuenta",
     "TERMS_S3_LI4": "Ser responsable de toda actividad realizada desde su cuenta",
     "TERMS_S3_P2": "No está permitido crear cuentas de forma automatizada ni hacerse pasar por otra persona o entidad.",
-
     "TERMS_S4_INTRO": "Weddly Studio ofrece diferentes planes de acceso:",
     "TERMS_S4_PLAN_FREE_LABEL": "Plan Gratuito:",
     "TERMS_S4_PLAN_FREE_DESC": "Acceso básico sin coste, con limitaciones en invitados y funciones.",
@@ -915,10 +892,8 @@
     "TERMS_S4_PLAN_PREMIUM_DESC": "Suscripción mensual de 14 €/mes, con bodas ilimitadas y acceso completo.",
     "TERMS_S4_P2": "Los pagos son procesados de forma segura a través de Stripe. No almacenamos datos de tarjetas de crédito. Las tarifas están sujetas a cambios con previo aviso.",
     "TERMS_S4_P3": "Los pagos únicos no son reembolsables salvo error técnico imputable a Weddly Studio. Las suscripciones pueden cancelarse en cualquier momento; el acceso se mantiene hasta el fin del período facturado.",
-
     "TERMS_S5_P1": "El Servicio y su contenido original (excluido el contenido aportado por los usuarios) son propiedad exclusiva de Weddly Studio y están protegidos por las leyes de propiedad intelectual aplicables.",
     "TERMS_S5_P2": "Las fotografías, textos y demás contenidos subidos por los usuarios siguen siendo propiedad de sus autores. Al subirlos, usted concede a Weddly Studio una licencia limitada, no exclusiva y no transferible para almacenarlos y mostrarlos dentro del Servicio.",
-
     "TERMS_S6_INTRO": "Queda expresamente prohibido:",
     "TERMS_S6_LI1": "Subir contenido ilegal, ofensivo, difamatorio o que infrinja derechos de terceros",
     "TERMS_S6_LI2": "Intentar acceder sin autorización a sistemas o cuentas ajenas",
@@ -926,15 +901,11 @@
     "TERMS_S6_LI4": "Realizar ingeniería inversa o intentar extraer el código fuente",
     "TERMS_S6_LI5": "Usar el Servicio de forma que pueda dañar, sobrecargar o deteriorar su funcionamiento",
     "TERMS_S6_P2": "El incumplimiento puede resultar en la suspensión inmediata de la cuenta sin derecho a reembolso.",
-
     "TERMS_S7_P1": "En la medida máxima permitida por la ley, Weddly Studio no será responsable de daños indirectos, incidentales, especiales o consecuentes derivados del uso o la imposibilidad de uso del Servicio.",
     "TERMS_S7_P2": "Weddly Studio no garantiza que el Servicio sea ininterrumpido, libre de errores o completamente seguro. Los datos son respaldados periódicamente, pero recomendamos conservar copias propias de información crítica.",
-
     "TERMS_S8_P1": "Nos reservamos el derecho de modificar estos Términos en cualquier momento. Los cambios sustanciales serán notificados por correo electrónico o mediante aviso destacado en el Servicio con al menos 15 días de antelación.",
     "TERMS_S8_P2": "El uso continuado del Servicio tras la publicación de cambios implica la aceptación de los nuevos términos.",
-
     "TERMS_S9_INTRO": "Para cualquier consulta relacionada con estos Términos y Condiciones, puede contactarnos a través de:",
-
     "PRIVACY_TOC_1": "Responsable del tratamiento",
     "PRIVACY_TOC_2": "Datos que recogemos",
     "PRIVACY_TOC_3": "Finalidad del tratamiento",
@@ -946,10 +917,8 @@
     "PRIVACY_TOC_9": "Cookies",
     "PRIVACY_TOC_10": "Menores de edad",
     "PRIVACY_TOC_11": "Contacto y reclamaciones",
-
     "PRIVACY_S1_P1": "De conformidad con el Reglamento General de Protección de Datos (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales (LOPDGDD), le informamos de que el responsable del tratamiento es:",
     "PRIVACY_S1_COMPANY": "Weddly Studio SL",
-
     "PRIVACY_S2_INTRO": "Recogemos únicamente los datos necesarios para la prestación del Servicio:",
     "PRIVACY_S2_CAT1_LABEL": "Datos de registro",
     "PRIVACY_S2_CAT1_DESC": "nombre, apellidos, dirección de correo electrónico y contraseña cifrada.",
@@ -961,22 +930,18 @@
     "PRIVACY_S2_CAT4_DESC": "imágenes subidas voluntariamente por el usuario o sus invitados al álbum digital.",
     "PRIVACY_S2_CAT5_LABEL": "Datos de facturación",
     "PRIVACY_S2_CAT5_DESC": "gestionados de forma segura a través de Stripe o PayPal. Weddly Studio no almacena datos completos de tarjetas.",
-
     "PRIVACY_S3_INTRO": "Sus datos se tratan con las siguientes finalidades:",
     "PRIVACY_S3_LI1": "Gestionar el registro y acceso a la plataforma.",
     "PRIVACY_S3_LI2": "Prestar los servicios contratados según el plan activo.",
     "PRIVACY_S3_LI3": "Procesar pagos y emitir facturas.",
     "PRIVACY_S3_LI4": "Enviar comunicaciones transaccionales relacionadas con el Servicio (verificación de email, recordatorios, notificaciones).",
     "PRIVACY_S3_LI5": "Cumplir con las obligaciones legales aplicables.",
-
     "PRIVACY_S4_P1": "El tratamiento de sus datos se basa en:",
     "PRIVACY_S4_LI1": "La ejecución del contrato de prestación del Servicio (art. 6.1.b RGPD).",
     "PRIVACY_S4_LI2": "El cumplimiento de obligaciones legales (art. 6.1.c RGPD).",
     "PRIVACY_S4_LI3": "Su consentimiento expreso para comunicaciones opcionales (art. 6.1.a RGPD).",
-
     "PRIVACY_S5_P1": "Conservaremos sus datos mientras mantenga una cuenta activa en la plataforma. Tras la eliminación de la cuenta, los datos serán suprimidos en un plazo máximo de 30 días, salvo obligación legal de conservación.",
     "PRIVACY_S5_P2": "Los datos de facturación se conservan durante el período mínimo exigido por la legislación fiscal aplicable (generalmente 5 años).",
-
     "PRIVACY_S6_INTRO": "De acuerdo con el RGPD, usted tiene los siguientes derechos respecto a sus datos personales:",
     "PRIVACY_S6_RIGHT1_LABEL": "Acceso",
     "PRIVACY_S6_RIGHT1_DESC": "conocer qué datos tratamos sobre usted.",
@@ -991,29 +956,91 @@
     "PRIVACY_S6_RIGHT6_LABEL": "Oposición",
     "PRIVACY_S6_RIGHT6_DESC": "oponerse al tratamiento en determinadas circunstancias.",
     "PRIVACY_S6_CONTACT": "Para ejercer estos derechos, diríjase a:",
-
     "PRIVACY_S7_P1": "Implementamos medidas técnicas y organizativas para proteger sus datos personales:",
     "PRIVACY_S7_LI1": "Autenticación mediante JWT con tokens de duración limitada.",
     "PRIVACY_S7_LI2": "Contraseñas almacenadas con cifrado bcrypt.",
     "PRIVACY_S7_LI3": "Aislamiento multi-tenant: cada boda es un entorno estrictamente separado.",
     "PRIVACY_S7_LI4": "Backups periódicos en infraestructura segura.",
     "PRIVACY_S7_P2": "Pese a nuestras medidas de seguridad, ningún sistema es completamente infalible. En caso de brecha de seguridad que afecte a sus datos, le notificaremos en el plazo legalmente establecido.",
-
     "PRIVACY_S8_P1": "Para la prestación del Servicio, compartimos datos con los siguientes proveedores de confianza, que actúan como encargados del tratamiento:",
     "PRIVACY_S8_STRIPE": "Procesamiento seguro de pagos.",
     "PRIVACY_S8_SENDGRID": "Envío de correos transaccionales.",
     "PRIVACY_S8_GCAL": "Exportación opcional de eventos al calendario del usuario.",
     "PRIVACY_S8_P2": "Todos nuestros proveedores cumplen con el RGPD y disponen de las garantías adecuadas para la protección de sus datos.",
-
     "PRIVACY_S9_P1": "Utilizamos cookies estrictamente necesarias para el funcionamiento del Servicio:",
     "PRIVACY_S9_COOKIE1_LABEL": "Cookies de sesión",
     "PRIVACY_S9_COOKIE1_DESC": "Mantienen su sesión iniciada durante el uso de la plataforma.",
     "PRIVACY_S9_COOKIE2_LABEL": "Cookies de preferencia",
     "PRIVACY_S9_COOKIE2_DESC": "Almacenan sus preferencias de idioma y configuración.",
     "PRIVACY_S9_P2": "No utilizamos cookies de publicidad ni de rastreo de terceros. Puede gestionar las cookies desde la configuración de su navegador.",
-
     "PRIVACY_S10_P1": "Weddly Studio no está dirigido a menores de 16 años. Si detectamos que hemos recogido datos de un menor sin el consentimiento de sus tutores legales, procederemos a eliminarlos de inmediato. Si usted es padre, madre o tutor y cree que su hijo ha facilitado datos personales a través de nuestra plataforma, póngase en contacto con nosotros.",
-
     "PRIVACY_S11_INTRO": "Para cualquier consulta sobre esta Política de Privacidad o para ejercer sus derechos, puede contactarnos en:"
+  },
+
+  "COLLABORATORS": {
+    "SUBTITLE": "Gestiona quién tiene acceso a tu boda y con qué rol.",
+    "INVITE_BTN": "+ Invitar persona",
+    "RETRY": "Reintentar",
+    "ACTIVE_MEMBERS": "Miembros activos",
+    "INVITATIONS": "Invitaciones",
+    "NO_MEMBERS": "No hay miembros todavía.",
+    "NO_INVITES": "No hay invitaciones pendientes.",
+    "SENT": "Enviada",
+    "CHANGE_ROLE": "Cambiar rol",
+    "REVOKE_ACCESS": "Revocar acceso",
+    "CANCEL_INVITE": "Cancelar invitación",
+    "INVITE_TITLE": "Invitar persona",
+    "INVITE_SUCCESS": "¡Invitación enviada correctamente!",
+    "SEND_INVITE": "Enviar invitación",
+    "HINT_CO_ORGANIZER": "🔑 Puede editar la boda, gestionar invitados, mesas y enviar invitaciones.",
+    "HINT_PLANNER": "📋 Puede editar información, gestionar invitados y mesas. No puede invitar.",
+    "HINT_GUEST": "👁️ Solo puede ver el checklist y el álbum de fotos.",
+    "REVOKE_CONFIRM": "¿Revocar el acceso de <strong>{{label}}</strong>? Esta acción no se puede deshacer.",
+    "REVOKE_CONFIRM_BTN": "Sí, revocar",
+    "STATUS_PENDING": "Pendiente",
+    "STATUS_ACCEPTED": "Aceptada",
+    "STATUS_DECLINED": "Rechazada",
+    "STATUS_EXPIRED": "Expirada",
+    "ERROR_LOAD_MEMBERS": "Error al cargar miembros",
+    "ERROR_LOAD_INVITES": "Error al cargar invitaciones",
+    "ERROR_SEND_INVITE": "Error al enviar la invitación",
+    "ERROR_CHANGE_ROLE": "Error al cambiar el rol",
+    "ERROR_REVOKE": "Error al revocar el acceso"
+  },
+
+  "INVITE": {
+    "LOADING": "Cargando invitación...",
+    "INVALID_TITLE": "Invitación no válida",
+    "INVALID_TOKEN": "Token de invitación inválido.",
+    "INVALID_OR_EXPIRED": "La invitación no es válida o ha expirado.",
+    "HERO_TITLE": "¡Te han invitado a una boda!",
+    "INVITED_BY": "<strong>{{name}}</strong> te invita a colaborar en:",
+    "YOUR_ROLE": "Tu rol será:",
+    "PERMISSIONS_TITLE": "¿Qué podrás hacer?",
+    "PERM_CO_1": "Editar la información de la boda",
+    "PERM_CO_2": "Gestionar invitados y mesas",
+    "PERM_CO_3": "Enviar invitaciones a otros",
+    "PERM_CO_4": "Ver y moderar el álbum",
+    "PERM_CO_5": "Gestionar el checklist",
+    "PERM_PLANNER_1": "Editar la información de la boda",
+    "PERM_PLANNER_2": "Gestionar invitados y mesas",
+    "PERM_PLANNER_3": "Ver y gestionar el checklist",
+    "PERM_PLANNER_4": "Ver el álbum de fotos",
+    "PERM_PLANNER_5": "No puede invitar a otras personas",
+    "PERM_GUEST_1": "Ver el checklist",
+    "PERM_GUEST_2": "Ver y subir fotos al álbum",
+    "PERM_GUEST_3": "No puede editar información",
+    "EXPIRES": "⏳ Esta invitación expira el {{date}}",
+    "EXPIRED": "⛔ Esta invitación ha expirado.",
+    "ACCEPT_BTN": "✓ Aceptar invitación",
+    "LOGGED_AS": "Conectado como <strong>{{nick}}</strong>",
+    "AUTH_REQUIRED": "Para aceptar la invitación necesitas una cuenta en Weddly Studio.",
+    "CREATE_ACCOUNT": "Crear cuenta gratis",
+    "AUTH_REDIRECT_NOTE": "Después de iniciar sesión serás redirigido automáticamente a esta página.",
+    "ACCEPTING": "Aceptando invitación...",
+    "SUCCESS_TITLE": "¡Bienvenido/a!",
+    "SUCCESS_DESC": "Ya formas parte de la organización de <strong>{{name}}</strong>.",
+    "GO_DASHBOARD": "Ir al panel",
+    "ERROR_ACCEPT": "Error al aceptar la invitación."
   }
 }

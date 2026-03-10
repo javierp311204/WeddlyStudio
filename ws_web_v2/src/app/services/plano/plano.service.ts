@@ -1,38 +1,53 @@
-// src/app/services/plano/plano.service.ts
-// Actualizado para Weddly API v2
-//
-// CAMBIOS PRINCIPALES vs backend viejo:
-// - /api/plano/:codigoBoda              → /api/weddings/:weddingId/tables
-// - /api/plano/mesa/:id/posicion        → /api/tables/:tableId/position
-// - /api/plano/asignar-invitado         → /api/tables/:tableId/assign
-// - /api/plano/quitar-invitado          → /api/tables/:tableId/unassign/:guestId
-// - /api/plano/nueva-mesa               → /api/weddings/:weddingId/tables
-// - /api/plano/mesa/:id?codigoBoda=     → /api/tables/:tableId
-// - Mesa._id                            → Table.id (UUID)
-// - Posicion { x, y }                  → pos_x, pos_y (campos directos)
-// - tipo (string)                       → shape: 'round' | 'rectangular'
-
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../enviroments/enviroment';
 
 export interface TablePosition {
   pos_x: number;
   pos_y: number;
 }
 
+export interface GuestSummary {
+  id:              string;
+  first_name:      string;
+  last_name:       string | null;
+  group:           string | null;   
+  rsvp_status:     'pending' | 'confirmed' | 'declined';
+  seat_number:     number | null;
+  parent_guest_id: string | null;
+  allergies?:      string | null;
+  email?:          string | null;
+  table_id?:       string | null;
+}
+
 export interface Table {
-  id:           string;       // UUID — antes: _id
+  id:           string;
   wedding_id:   string;
-  name:         string;       // antes: nombre
-  shape:        'round' | 'rectangular'; // antes: tipo
-  max_capacity: number;       // antes: capacidad
-  pos_x:        number;       // antes: posicion.x
-  pos_y:        number;       // antes: posicion.y
-  occupied:     number;       // campo calculado
-  available:    number;       // campo calculado
-  is_full:      boolean;      // campo calculado
-  guests?:      any[];
+  name:         string;
+  shape:        'round' | 'rectangular';
+  max_capacity: number;
+  pos_x:        number;
+  pos_y:        number;
+  occupied:     number;
+  available:    number;
+  is_full:      boolean;
+  guests?:      GuestSummary[];
+}
+
+export interface TableSummary {
+  total_tables:    number;
+  total_capacity:  number;
+  total_occupied:  number;
+  total_available: number;
+}
+
+export interface TablesResponse {
+  success:  boolean;
+  data: {
+    tables:  Table[];
+    summary: TableSummary;
+  };
 }
 
 export interface TablePayload {
@@ -45,69 +60,64 @@ export interface TablePayload {
 
 @Injectable({ providedIn: 'root' })
 export class PlanoService {
-  private apiUrl = 'http://localhost:3000/api';
+  // FIX: usar environment en lugar de URL hardcodeada
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
+
+  // FIX: headers centralizados en el servicio — antes solo el componente los enviaba
+  private getHeaders(): { headers: HttpHeaders } {
+    const token = localStorage.getItem('token') ?? '';
+    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
+  }
 
   // ════════════════════════════════════════
   // LECTURA
   // ════════════════════════════════════════
 
-  /**
-   * Obtiene todas las mesas de la boda con campos calculados.
-   * Antes: GET /api/plano/:codigoBoda
-   */
-  getPlano(weddingId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/weddings/${weddingId}/tables`);
+  getPlano(weddingId: string): Observable<TablesResponse> {
+    return this.http.get<TablesResponse>(
+      `${this.apiUrl}/weddings/${weddingId}/tables`,
+      this.getHeaders(),
+    );
   }
 
-  /**
-   * Detalle de una mesa con invitados asignados.
-   */
   getMesa(tableId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/tables/${tableId}`);
+    return this.http.get<any>(
+      `${this.apiUrl}/tables/${tableId}`,
+      this.getHeaders(),
+    );
   }
 
   // ════════════════════════════════════════
   // POSICIÓN (drag & drop)
   // ════════════════════════════════════════
 
-  /**
-   * Actualiza solo la posición de una mesa.
-   * Antes: PATCH /api/plano/mesa/:mesaId/posicion  con { codigoBoda, x, y }
-   * Ahora: PATCH /api/tables/:tableId/position     con { pos_x, pos_y }
-   */
   actualizarPosicionMesa(tableId: string, x: number, y: number): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/tables/${tableId}/position`, {
-      pos_x: x,
-      pos_y: y,
-    });
+    return this.http.patch(
+      `${this.apiUrl}/tables/${tableId}/position`,
+      { pos_x: x, pos_y: y },
+      this.getHeaders(),
+    );
   }
 
   // ════════════════════════════════════════
   // ASIGNACIÓN DE INVITADOS
   // ════════════════════════════════════════
 
-  /**
-   * Asigna un invitado a una mesa. Valida capacidad en transacción.
-   * Antes: POST /api/plano/asignar-invitado  con { codigoBoda, mesaId, invitadoId }
-   * Ahora: PATCH /api/tables/:tableId/assign con { guest_id }
-   */
   asignarInvitadoAMesa(tableId: string, guestId: string): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/tables/${tableId}/assign`, {
-      guest_id: guestId,
-    });
+    return this.http.patch(
+      `${this.apiUrl}/tables/${tableId}/assign`,
+      { guest_id: guestId },
+      this.getHeaders(),
+    );
   }
 
-  /**
-   * Quita un invitado de su mesa.
-   * Antes: POST /api/plano/quitar-invitado    con { codigoBoda, mesaId, invitadoId }
-   * Ahora: PATCH /api/tables/:tableId/unassign/:guestId
-   */
   quitarInvitadoDeMesa(tableId: string, guestId: string): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/tables/${tableId}/unassign/${guestId}`,
       {},
+      this.getHeaders(),
     );
   }
 
@@ -115,33 +125,26 @@ export class PlanoService {
   // CRUD DE MESAS
   // ════════════════════════════════════════
 
-  /**
-   * Crea una nueva mesa.
-   * Antes: POST /api/plano/nueva-mesa  con posicion: { x, y }
-   * Ahora: POST /api/weddings/:weddingId/tables  con pos_x, pos_y
-   */
   agregarMesa(weddingId: string, datos: TablePayload): Observable<any> {
-    return this.http.post(`${this.apiUrl}/weddings/${weddingId}/tables`, {
-      ...datos,
-      pos_x: datos.pos_x ?? 50,
-      pos_y: datos.pos_y ?? 50,
-    });
+    return this.http.post(
+      `${this.apiUrl}/weddings/${weddingId}/tables`,
+      { pos_x: 600, pos_y: 400, ...datos },
+      this.getHeaders(),
+    );
   }
 
-  /**
-   * Actualiza nombre, shape o capacidad de una mesa.
-   */
   actualizarMesa(tableId: string, datos: Partial<TablePayload>): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/tables/${tableId}`, datos);
+    return this.http.patch(
+      `${this.apiUrl}/tables/${tableId}`,
+      datos,
+      this.getHeaders(),
+    );
   }
 
-  /**
-   * Elimina una mesa físicamente y desasigna sus invitados.
-   * Devuelve { guests_released: N }
-   * Antes: DELETE /api/plano/mesa/:mesaId?codigoBoda=
-   * Ahora: DELETE /api/tables/:tableId
-   */
   eliminarMesa(tableId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/tables/${tableId}`);
+    return this.http.delete(
+      `${this.apiUrl}/tables/${tableId}`,
+      this.getHeaders(),
+    );
   }
 }

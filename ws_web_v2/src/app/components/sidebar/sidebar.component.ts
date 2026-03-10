@@ -38,6 +38,7 @@ export class SidebarComponent implements OnInit {
     { label: 'NAV.TABLES',     title: 'NAV.TABLES',     emoji: '🪑', route: '/mesas',      minRole: 'planner' },
     { label: 'NAV.MAP',        title: 'NAV.MAP',        emoji: '🗺️', route: '/plano',      minRole: 'planner' },
     { label: 'NAV.ALBUM',      title: 'NAV.ALBUM',      emoji: '📸', route: '/album'      },              
+    { label: 'NAV.COLLABORATORS', title: 'NAV.COLLABORATORS', emoji: '👥', route: '/colaboradores', minRole: 'co_organizer' },
     { label: 'NAV.PRICING',    title: 'NAV.PRICING',    emoji: '💎', route: '/pricing'    },              
   ];
 

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import inviteController from '../controllers/invite.controller';
 import { authenticate } from '../middleware/auth.middleware';
 import { validate } from '../middleware/validate.middleware';
-import { acceptInviteSchema } from '../schemas/invite.schema';
+import { acceptInviteSchema, declineInviteSchema } from '../schemas/invite.schema';
 
 const router = Router();
 
@@ -16,6 +16,13 @@ router.post(
   authenticate,
   validate(acceptInviteSchema),
   inviteController.acceptInvite,
+);
+
+router.post(
+  '/decline/:token',
+  authenticate,
+  validate(declineInviteSchema),
+  inviteController.declineInvite,
 );
 
 export default router;

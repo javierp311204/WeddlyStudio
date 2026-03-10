@@ -1,0 +1,206 @@
+<div class="colab-wrapper">
+
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <div class="colab-header">
+    <div>
+      <h1 class="colab-title">{{ 'NAV.COLLABORATORS' | translate }}</h1>
+      <p class="colab-subtitle">{{ 'COLLABORATORS.SUBTITLE' | translate }}</p>
+    </div>
+    <button class="btn-invite" (click)="openModal()"
+            *ngIf="authService.hasMinRole('co_organizer')">
+      {{ 'COLLABORATORS.INVITE_BTN' | translate }}
+    </button>
+  </div>
+
+  <!-- ── Loading ─────────────────────────────────────────────── -->
+  <div class="colab-loading" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>{{ 'COMMON.LOADING' | translate }}</p>
+  </div>
+
+  <!-- ── Error ───────────────────────────────────────────────── -->
+  <div class="colab-error" *ngIf="error && !loading">
+    <p>⚠️ {{ error }}</p>
+    <button (click)="load()">{{ 'COLLABORATORS.RETRY' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <!-- ── Miembros activos ─────────────────────────────────── -->
+    <section class="colab-section">
+      <h2 class="section-title">{{ 'COLLABORATORS.ACTIVE_MEMBERS' | translate }}</h2>
+
+      <div class="members-list" *ngIf="members.length; else noMembers">
+        <div class="member-card" *ngFor="let m of members">
+
+          <!-- Avatar -->
+          <div class="member-avatar"
+               [style.background-image]="m.user.avatar_url && m.user.avatar_url.startsWith('http') ? 'url(' + m.user.avatar_url + ')' : ''"
+               [class.has-img]="m.user.avatar_url && m.user.avatar_url.startsWith('http')">
+            <span *ngIf="!m.user.avatar_url || !m.user.avatar_url.startsWith('http')">
+              {{ getInitial(m.user.first_name) }}
+            </span>
+          </div>
+
+          <!-- Info -->
+          <div class="member-info">
+            <p class="member-name">{{ m.user.first_name }} {{ m.user.last_name }}</p>
+            <p class="member-email">{{ m.user.email }}</p>
+          </div>
+
+          <!-- Rol -->
+          <ng-container *ngIf="editingRoleFor === m.user.id; else roleBadge">
+            <div class="role-edit">
+              <select class="role-select" [(ngModel)]="editingRole">
+                <option *ngFor="let r of roles" [value]="r.value">{{ r.label | translate }}</option>
+              </select>
+              <button class="btn-save-role" (click)="saveRole(m)" [disabled]="savingRole">
+                <span *ngIf="!savingRole">✓</span>
+                <span *ngIf="savingRole" class="btn-spinner-sm"></span>
+              </button>
+              <button class="btn-cancel-role" (click)="cancelEditRole()">✕</button>
+            </div>
+          </ng-container>
+
+          <ng-template #roleBadge>
+            <span class="role-badge" [ngClass]="roleClass(m.role)">
+              {{ roleLabel(m.role) | translate }}
+            </span>
+            <button class="btn-edit-role"
+                    *ngIf="isOwner() && m.role !== 'owner'"
+                    (click)="startEditRole(m)"
+                    [title]="'COLLABORATORS.CHANGE_ROLE' | translate">
+              ✏️
+            </button>
+          </ng-template>
+
+          <!-- Revocar -->
+          <button class="btn-revoke"
+                  *ngIf="isOwner() && m.role !== 'owner'"
+                  (click)="askRevoke('member', m.user.id, m.user.first_name + ' ' + m.user.last_name)"
+                  [title]="'COLLABORATORS.REVOKE_ACCESS' | translate">
+            ✕
+          </button>
+
+        </div>
+      </div>
+
+      <ng-template #noMembers>
+        <p class="empty-msg">{{ 'COLLABORATORS.NO_MEMBERS' | translate }}</p>
+      </ng-template>
+    </section>
+
+    <!-- ── Invitaciones ─────────────────────────────────────── -->
+    <section class="colab-section" *ngIf="authService.hasMinRole('co_organizer')">
+      <h2 class="section-title">{{ 'COLLABORATORS.INVITATIONS' | translate }}</h2>
+
+      <div class="invites-list" *ngIf="pendingInvites.length; else noInvites">
+        <div class="invite-row" *ngFor="let inv of pendingInvites">
+
+          <div class="invite-icon">📧</div>
+
+          <div class="invite-info">
+            <p class="invite-email">{{ inv.email }}</p>
+            <p class="invite-meta">
+              {{ roleLabel(inv.role) | translate }} ·
+              {{ 'COLLABORATORS.SENT' | translate }} {{ inv.created_at | date:'dd MMM yyyy' }}
+            </p>
+          </div>
+
+          <span class="status-badge" [ngClass]="statusClass(inviteStatus(inv))">
+            {{ statusLabel(inviteStatus(inv)) | translate }}
+          </span>
+
+          <button class="btn-revoke"
+                  *ngIf="isOwner()"
+                  (click)="askRevoke('invite', inv.id, inv.email)"
+                  [title]="'COLLABORATORS.CANCEL_INVITE' | translate">
+            ✕
+          </button>
+
+        </div>
+      </div>
+
+      <ng-template #noInvites>
+        <p class="empty-msg">{{ 'COLLABORATORS.NO_INVITES' | translate }}</p>
+      </ng-template>
+    </section>
+
+  </ng-container>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- MODAL — Invitar persona                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2>{{ 'COLLABORATORS.INVITE_TITLE' | translate }}</h2>
+      <button class="modal-close" (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-success" *ngIf="sendSuccess">
+      <span>✅</span>
+      <p>{{ 'COLLABORATORS.INVITE_SUCCESS' | translate }}</p>
+    </div>
+
+    <ng-container *ngIf="!sendSuccess">
+      <div class="form-group">
+        <label>{{ 'AUTH.EMAIL' | translate }}</label>
+        <input type="email" [(ngModel)]="inviteEmail"
+               placeholder="email@ejemplo.com" class="form-input" />
+      </div>
+
+      <div class="form-group">
+        <label>{{ 'AUTH.ROLE' | translate }}</label>
+        <div class="role-options">
+          <label class="role-option" *ngFor="let r of roles"
+                 [class.selected]="inviteRole === r.value">
+            <input type="radio" [(ngModel)]="inviteRole" [value]="r.value" />
+            <span class="role-opt-label">{{ r.label | translate }}</span>
+          </label>
+        </div>
+      </div>
+
+      <p class="role-hint" *ngIf="inviteRole === 'co_organizer'">
+        {{ 'COLLABORATORS.HINT_CO_ORGANIZER' | translate }}
+      </p>
+      <p class="role-hint" *ngIf="inviteRole === 'planner'">
+        {{ 'COLLABORATORS.HINT_PLANNER' | translate }}
+      </p>
+      <p class="role-hint" *ngIf="inviteRole === 'guest'">
+        {{ 'COLLABORATORS.HINT_GUEST' | translate }}
+      </p>
+
+      <div class="modal-error" *ngIf="sendError">⚠️ {{ sendError }}</div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeModal()" [disabled]="sending">
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button class="btn-send" (click)="submitInvite()" [disabled]="sending || !inviteEmail">
+          <span *ngIf="!sending">{{ 'COLLABORATORS.SEND_INVITE' | translate }}</span>
+          <span *ngIf="sending" class="btn-spinner"></span>
+        </button>
+      </div>
+    </ng-container>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- CONFIRM — Revocar                                         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" *ngIf="confirmTarget" (click)="cancelRevoke()">
+  <div class="modal-box confirm-box" (click)="$event.stopPropagation()">
+    <p class="confirm-msg"
+       [innerHTML]="'COLLABORATORS.REVOKE_CONFIRM' | translate: { label: confirmTarget?.label }">
+    </p>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cancelRevoke()">{{ 'COMMON.CANCEL' | translate }}</button>
+      <button class="btn-danger" (click)="confirmRevoke()">{{ 'COLLABORATORS.REVOKE_CONFIRM_BTN' | translate }}</button>
+    </div>
+  </div>
+</div>

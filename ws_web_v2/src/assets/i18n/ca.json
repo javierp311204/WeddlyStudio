@@ -99,6 +99,7 @@
     "ALBUM": "Àlbum",
     "INFO": "Info Casament",
     "PRICING": "Plans",
+    "COLLABORATORS": "Col·laboradors",
     "CHECKLIST": "Checklist",
     "LOGOUT": "Tancar Sessió"
   },
@@ -857,7 +858,6 @@
     "CONTACT_ADDRESS": "Weddly Studio SL · Madrid, Espanya",
     "SEE_PRIVACY_POLICY": "Veure la Política de Privacitat",
     "SEE_TERMS": "Veure els Termes i Condicions",
-
     "TERMS_TOC_1": "Acceptació dels termes",
     "TERMS_TOC_2": "Descripció del servei",
     "TERMS_TOC_3": "Registre i compte d'usuari",
@@ -867,10 +867,8 @@
     "TERMS_TOC_7": "Limitació de responsabilitat",
     "TERMS_TOC_8": "Modificacions",
     "TERMS_TOC_9": "Contacte",
-
     "TERMS_S1_P1": "En accedir i utilitzar Weddly Studio (d'ara en endavant, «el Servei»), accepteu quedar vinculat per aquests Termes i Condicions. Si no esteu d'acord amb alguna part d'aquests termes, no podreu accedir al Servei.",
     "TERMS_S1_P2": "Aquests termes s'apliquen a tots els visitants, usuaris i qualsevol altra persona que accedeixi o utilitzi el Servei.",
-
     "TERMS_S2_INTRO": "Weddly Studio és una plataforma d'organització de casaments que permet als usuaris:",
     "TERMS_S2_LI1": "Gestionar llistes de convidats i distribució de taules",
     "TERMS_S2_LI2": "Crear i compartir àlbums digitals col·laboratius",
@@ -878,14 +876,12 @@
     "TERMS_S2_LI4": "Dissenyar papereria digital i invitacions",
     "TERMS_S2_LI5": "Convidar col·laboradors amb diferents nivells d'accés",
     "TERMS_S2_P2": "El Servei es proporciona «tal com és» i «segons disponibilitat». Ens reservem el dret de modificar o interrompre el Servei en qualsevol moment, amb o sense preavís.",
-
     "TERMS_S3_INTRO": "Per utilitzar certes funcions del Servei, heu de crear un compte. En fer-ho, us comprometeu a:",
     "TERMS_S3_LI1": "Proporcionar informació verídica, precisa i completa",
     "TERMS_S3_LI2": "Mantenir la confidencialitat de la vostra contrasenya",
     "TERMS_S3_LI3": "Notificar-nos immediatament qualsevol ús no autoritzat del vostre compte",
     "TERMS_S3_LI4": "Ser responsable de tota l'activitat realitzada des del vostre compte",
     "TERMS_S3_P2": "No està permès crear comptes de forma automatitzada ni fer-se passar per una altra persona o entitat.",
-
     "TERMS_S4_INTRO": "Weddly Studio ofereix diferents plans d'accés:",
     "TERMS_S4_PLAN_FREE_LABEL": "Pla Gratuït:",
     "TERMS_S4_PLAN_FREE_DESC": "Accés bàsic sense cost, amb limitacions en convidats i funcions.",
@@ -895,10 +891,8 @@
     "TERMS_S4_PLAN_PREMIUM_DESC": "Subscripció mensual de 14 €/mes, amb casaments il·limitats i accés complet.",
     "TERMS_S4_P2": "Els pagaments es processen de forma segura a través de Stripe. No emmagatzemem dades de targetes bancàries. Les tarifes estan subjectes a canvis amb preavís.",
     "TERMS_S4_P3": "Els pagaments únics no són reemborsables tret d'error tècnic imputable a Weddly Studio. Les subscripcions es poden cancel·lar en qualsevol moment; l'accés es manté fins al final del període facturat.",
-
     "TERMS_S5_P1": "El Servei i el seu contingut original (excloent el contingut aportat pels usuaris) són propietat exclusiva de Weddly Studio i estan protegits per les lleis de propietat intel·lectual aplicables.",
     "TERMS_S5_P2": "Les fotografies, textos i altres continguts pujats pels usuaris continuen sent propietat dels seus autors. En pujar-los, concediu a Weddly Studio una llicència limitada, no exclusiva i no transferible per emmagatzemar-los i mostrar-los dins del Servei.",
-
     "TERMS_S6_INTRO": "Queda expressament prohibit:",
     "TERMS_S6_LI1": "Pujar contingut il·legal, ofensiu, difamatori o que infringeixi drets de tercers",
     "TERMS_S6_LI2": "Intentar accedir sense autorització a sistemes o comptes aliens",
@@ -906,15 +900,11 @@
     "TERMS_S6_LI4": "Realitzar enginyeria inversa o intentar extreure el codi font",
     "TERMS_S6_LI5": "Usar el Servei de forma que pugui danyar, sobrecarregar o deteriorar el seu funcionament",
     "TERMS_S6_P2": "L'incompliment pot resultar en la suspensió immediata del compte sense dret a reemborsament.",
-
     "TERMS_S7_P1": "En la mesura màxima permesa per la llei, Weddly Studio no serà responsable de danys indirectes, incidentals, especials o conseqüents derivats de l'ús o la impossibilitat d'ús del Servei.",
     "TERMS_S7_P2": "Weddly Studio no garanteix que el Servei sigui ininterromput, lliure d'errors o completament segur. Les dades es fan còpies de seguretat periòdicament, però recomanem conservar les vostres pròpies còpies d'informació crítica.",
-
     "TERMS_S8_P1": "Ens reservem el dret de modificar aquests Termes en qualsevol moment. Els canvis substancials es notificaran per correu electrònic o mitjançant un avís destacat al Servei amb almenys 15 dies d'antelació.",
     "TERMS_S8_P2": "L'ús continuat del Servei després de la publicació dels canvis implica l'acceptació dels nous termes.",
-
     "TERMS_S9_INTRO": "Per a qualsevol consulta relacionada amb aquests Termes i Condicions, podeu contactar-nos a través de:",
-
     "PRIVACY_TOC_1": "Responsable del tractament",
     "PRIVACY_TOC_2": "Dades que recollim",
     "PRIVACY_TOC_3": "Finalitat del tractament",
@@ -926,10 +916,8 @@
     "PRIVACY_TOC_9": "Cookies",
     "PRIVACY_TOC_10": "Menors d'edat",
     "PRIVACY_TOC_11": "Contacte i reclamacions",
-
     "PRIVACY_S1_P1": "De conformitat amb el Reglament General de Protecció de Dades (RGPD), us informem que el responsable del tractament és:",
     "PRIVACY_S1_COMPANY": "Weddly Studio SL",
-
     "PRIVACY_S2_INTRO": "Recollim únicament les dades necessàries per a la prestació del Servei:",
     "PRIVACY_S2_CAT1_LABEL": "Dades de registre",
     "PRIVACY_S2_CAT1_DESC": "nom, cognoms, adreça de correu electrònic i contrasenya xifrada.",
@@ -941,22 +929,18 @@
     "PRIVACY_S2_CAT4_DESC": "imatges pujades voluntàriament per l'usuari o els seus convidats a l'àlbum digital.",
     "PRIVACY_S2_CAT5_LABEL": "Dades de facturació",
     "PRIVACY_S2_CAT5_DESC": "gestionades de forma segura a través de Stripe o PayPal. Weddly Studio no emmagatzema dades completes de targetes.",
-
     "PRIVACY_S3_INTRO": "Les vostres dades es tracten amb les finalitats següents:",
     "PRIVACY_S3_LI1": "Gestionar el registre i l'accés a la plataforma.",
     "PRIVACY_S3_LI2": "Prestar els serveis contractats segons el pla actiu.",
     "PRIVACY_S3_LI3": "Processar els pagaments i emetre factures.",
     "PRIVACY_S3_LI4": "Enviar comunicacions transaccionals relacionades amb el Servei (verificació d'email, recordatoris, notificacions).",
     "PRIVACY_S3_LI5": "Complir les obligacions legals aplicables.",
-
     "PRIVACY_S4_P1": "El tractament de les vostres dades es basa en:",
     "PRIVACY_S4_LI1": "L'execució del contracte de prestació del Servei (art. 6.1.b RGPD).",
     "PRIVACY_S4_LI2": "El compliment d'obligacions legals (art. 6.1.c RGPD).",
     "PRIVACY_S4_LI3": "El vostre consentiment exprés per a comunicacions opcionals (art. 6.1.a RGPD).",
-
     "PRIVACY_S5_P1": "Conservarem les vostres dades mentre mantingueu un compte actiu a la plataforma. Després de l'eliminació del compte, les dades s'esborraran en un termini màxim de 30 dies, tret d'obligació legal de conservació.",
     "PRIVACY_S5_P2": "Les dades de facturació es conserven durant el període mínim exigit per la legislació fiscal aplicable (generalment 5 anys).",
-
     "PRIVACY_S6_INTRO": "D'acord amb el RGPD, teniu els drets següents respecte a les vostres dades personals:",
     "PRIVACY_S6_RIGHT1_LABEL": "Accés",
     "PRIVACY_S6_RIGHT1_DESC": "saber quines dades tractem sobre vosaltres.",
@@ -971,29 +955,91 @@
     "PRIVACY_S6_RIGHT6_LABEL": "Oposició",
     "PRIVACY_S6_RIGHT6_DESC": "oposar-vos al tractament en determinades circumstàncies.",
     "PRIVACY_S6_CONTACT": "Per exercir aquests drets, adreceu-vos a:",
-
     "PRIVACY_S7_P1": "Implementem mesures tècniques i organitzatives per protegir les vostres dades personals:",
     "PRIVACY_S7_LI1": "Autenticació mitjançant JWT amb tokens de durada limitada.",
     "PRIVACY_S7_LI2": "Contrasenyes emmagatzemades amb xifratge bcrypt.",
     "PRIVACY_S7_LI3": "Aïllament multi-tenant: cada casament és un entorn estrictament separat.",
     "PRIVACY_S7_LI4": "Còpies de seguretat periòdiques en infraestructura segura.",
     "PRIVACY_S7_P2": "Malgrat les nostres mesures de seguretat, cap sistema és completament infal·lible. En cas de bretxa de seguretat que afecti les vostres dades, us ho notificarem en el termini legalment establert.",
-
     "PRIVACY_S8_P1": "Per a la prestació del Servei, compartim dades amb els proveïdors de confiança següents, que actuen com a encarregats del tractament:",
     "PRIVACY_S8_STRIPE": "Processament segur de pagaments.",
     "PRIVACY_S8_SENDGRID": "Enviament de correus transaccionals.",
     "PRIVACY_S8_GCAL": "Exportació opcional d'esdeveniments al calendari de l'usuari.",
     "PRIVACY_S8_P2": "Tots els nostres proveïdors compleixen el RGPD i disposen de les garanties adequades per a la protecció de les vostres dades.",
-
     "PRIVACY_S9_P1": "Utilitzem cookies estrictament necessàries per al funcionament del Servei:",
     "PRIVACY_S9_COOKIE1_LABEL": "Cookies de sessió",
     "PRIVACY_S9_COOKIE1_DESC": "Mantenen la vostra sessió activa durant l'ús de la plataforma.",
     "PRIVACY_S9_COOKIE2_LABEL": "Cookies de preferències",
     "PRIVACY_S9_COOKIE2_DESC": "Emmagatzemen les vostres preferències d'idioma i configuració.",
     "PRIVACY_S9_P2": "No utilitzem cookies de publicitat ni de rastreig de tercers. Podeu gestionar les cookies des de la configuració del vostre navegador.",
-
     "PRIVACY_S10_P1": "Weddly Studio no està dirigit a menors de 16 anys. Si detectem que hem recollit dades d'un menor sense el consentiment dels seus tutors legals, procedirem a eliminar-les immediatament. Si sou pare, mare o tutor i creieu que el vostre fill ha facilitat dades personals a través de la nostra plataforma, poseu-vos en contacte amb nosaltres.",
-
     "PRIVACY_S11_INTRO": "Per a qualsevol consulta sobre aquesta Política de Privacitat o per exercir els vostres drets, podeu contactar-nos a:"
+  },
+
+  "COLLABORATORS": {
+    "SUBTITLE": "Gestiona qui té accés al teu casament i amb quin rol.",
+    "INVITE_BTN": "+ Convidar persona",
+    "RETRY": "Tornar-ho a intentar",
+    "ACTIVE_MEMBERS": "Membres actius",
+    "INVITATIONS": "Invitacions",
+    "NO_MEMBERS": "Encara no hi ha membres.",
+    "NO_INVITES": "No hi ha invitacions pendents.",
+    "SENT": "Enviada",
+    "CHANGE_ROLE": "Canviar rol",
+    "REVOKE_ACCESS": "Revocar accés",
+    "CANCEL_INVITE": "Cancel·lar invitació",
+    "INVITE_TITLE": "Convidar persona",
+    "INVITE_SUCCESS": "Invitació enviada correctament!",
+    "SEND_INVITE": "Enviar invitació",
+    "HINT_CO_ORGANIZER": "🔑 Pot editar el casament, gestionar convidats, taules i enviar invitacions.",
+    "HINT_PLANNER": "📋 Pot editar informació, gestionar convidats i taules. No pot convidar.",
+    "HINT_GUEST": "👁️ Només pot veure el checklist i l'àlbum de fotos.",
+    "REVOKE_CONFIRM": "Revocar l'accés de <strong>{{label}}</strong>? Aquesta acció no es pot desfer.",
+    "REVOKE_CONFIRM_BTN": "Sí, revocar",
+    "STATUS_PENDING": "Pendent",
+    "STATUS_ACCEPTED": "Acceptada",
+    "STATUS_DECLINED": "Rebutjada",
+    "STATUS_EXPIRED": "Expirada",
+    "ERROR_LOAD_MEMBERS": "Error en carregar membres",
+    "ERROR_LOAD_INVITES": "Error en carregar invitacions",
+    "ERROR_SEND_INVITE": "Error en enviar la invitació",
+    "ERROR_CHANGE_ROLE": "Error en canviar el rol",
+    "ERROR_REVOKE": "Error en revocar l'accés"
+  },
+
+  "INVITE": {
+    "LOADING": "Carregant invitació...",
+    "INVALID_TITLE": "Invitació no vàlida",
+    "INVALID_TOKEN": "Token d'invitació no vàlid.",
+    "INVALID_OR_EXPIRED": "La invitació no és vàlida o ha expirat.",
+    "HERO_TITLE": "T'han convidat a un casament!",
+    "INVITED_BY": "<strong>{{name}}</strong> et convida a col·laborar a:",
+    "YOUR_ROLE": "El teu rol serà:",
+    "PERMISSIONS_TITLE": "Què podràs fer?",
+    "PERM_CO_1": "Editar la informació del casament",
+    "PERM_CO_2": "Gestionar convidats i taules",
+    "PERM_CO_3": "Enviar invitacions a altres persones",
+    "PERM_CO_4": "Veure i moderar l'àlbum",
+    "PERM_CO_5": "Gestionar el checklist",
+    "PERM_PLANNER_1": "Editar la informació del casament",
+    "PERM_PLANNER_2": "Gestionar convidats i taules",
+    "PERM_PLANNER_3": "Veure i gestionar el checklist",
+    "PERM_PLANNER_4": "Veure l'àlbum de fotos",
+    "PERM_PLANNER_5": "No pot convidar altres persones",
+    "PERM_GUEST_1": "Veure el checklist",
+    "PERM_GUEST_2": "Veure i pujar fotos a l'àlbum",
+    "PERM_GUEST_3": "No pot editar informació",
+    "EXPIRES": "⏳ Aquesta invitació expira el {{date}}",
+    "EXPIRED": "⛔ Aquesta invitació ha expirat.",
+    "ACCEPT_BTN": "✓ Acceptar invitació",
+    "LOGGED_AS": "Connectat com a <strong>{{nick}}</strong>",
+    "AUTH_REQUIRED": "Per acceptar la invitació necessites un compte a Weddly Studio.",
+    "CREATE_ACCOUNT": "Crear compte gratuït",
+    "AUTH_REDIRECT_NOTE": "Després d'iniciar sessió seràs redirigit automàticament a aquesta pàgina.",
+    "ACCEPTING": "Acceptant invitació...",
+    "SUCCESS_TITLE": "Benvingut/da!",
+    "SUCCESS_DESC": "Ja formes part de l'organització de <strong>{{name}}</strong>.",
+    "GO_DASHBOARD": "Anar al tauler",
+    "ERROR_ACCEPT": "Error en acceptar la invitació."
   }
 }

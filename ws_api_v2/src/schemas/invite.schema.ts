@@ -14,11 +14,24 @@ export const acceptInviteSchema = z.object({
   params: z.object({ token: z.string().min(1) }),
 });
 
+// ─── Revocar invitación (:inviteId) ──────────────────────────
 export const revokeInviteSchema = z.object({
+  params: z.object({
+    id:       z.string().uuid('ID de boda inválido'),
+    inviteId: z.string().uuid('ID de invitación inválido'),
+  }),
+});
+
+// ─── Revocar / editar miembro (:memberId) ────────────────────
+export const memberSchema = z.object({
   params: z.object({
     id:       z.string().uuid('ID de boda inválido'),
     memberId: z.string().uuid('ID de miembro inválido'),
   }),
+});
+
+export const declineInviteSchema = z.object({
+  params: z.object({ token: z.string().min(1) }),
 });
 
 export type SendInviteInput = z.infer<typeof sendInviteSchema>['body'];

@@ -1,59 +1,83 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router }  from '@angular/router';
 
 // ─────────────────────────────────────────────────────────────
-// MIGRACIÓN v2:
-//  • Sin cambios en authGuard — sigue leyendo 'token' de localStorage ✅
-//  • adminGuard: v2 tiene role_global 'admin' | 'superadmin'
-//    → se acepta tanto 'admin' como 'superadmin' (antes solo 'admin')
-//  • 'invitado' ya no existe como rol — v2 usa 'user' para usuarios normales
+// Jerarquía de roles — igual que en el backend
 // ─────────────────────────────────────────────────────────────
+const ROLE_HIERARCHY: Record<string, number> = {
+  guest:        1,
+  planner:      2,
+  co_organizer: 3,
+  owner:        4,
+};
 
-/** Guard para cualquier usuario autenticado */
+function hasMinRole(minRole: string): boolean {
+  const current  = ROLE_HIERARCHY[localStorage.getItem('weddingRole') ?? 'guest'] ?? 0;
+  const required = ROLE_HIERARCHY[minRole] ?? 99;
+  return current >= required;
+}
+
+// ─────────────────────────────────────────────────────────────
+// authGuard — cualquier usuario autenticado
+// ─────────────────────────────────────────────────────────────
 export const authGuard = () => {
   const router = inject(Router);
-  const token = localStorage.getItem('token');
+  const token  = localStorage.getItem('token');
 
-  if (token && token.length > 0) {
-    return true;
-  }
+  if (token && token.length > 0) return true;
 
   router.navigate(['/login']);
   return false;
 };
 
-/**
- * Guard para rutas de administrador.
- * v2: acepta role_global 'admin' o 'superadmin'
- * (antes solo comprobaba rol === 'admin')
- */
+// ─────────────────────────────────────────────────────────────
+// adminGuard — solo admin / superadmin
+// ─────────────────────────────────────────────────────────────
 export const adminGuard = () => {
   const router = inject(Router);
-  const token = localStorage.getItem('token');
-  // v2: localStorage.getItem('rol') guarda role_global del JWT
-  const rol = localStorage.getItem('rol');
+  const token  = localStorage.getItem('token');
+  const rol    = localStorage.getItem('rol');
 
-  if (token && (rol === 'admin' || rol === 'superadmin')) {
-    return true;
-  }
+  if (token && (rol === 'admin' || rol === 'superadmin')) return true;
 
   router.navigate(['/home']);
   return false;
 };
 
-/** Guard para el dueño/organizador de una boda (cualquier role_global) */
+// ─────────────────────────────────────────────────────────────
+// weddingOwnerGuard — cualquier miembro con boda activa
+// (antes solo comprobaba que existía weddingId — ahora igual,
+//  pero las rutas sensibles usan minRoleGuard)
+// ─────────────────────────────────────────────────────────────
 export const weddingOwnerGuard = () => {
-  const router = inject(Router);
+  const router    = inject(Router);
   const token     = localStorage.getItem('token');
   const weddingId = localStorage.getItem('weddingId');
   const rol       = localStorage.getItem('rol');
 
-  // Superadmin siempre pasa
   if (token && (rol === 'admin' || rol === 'superadmin')) return true;
-
-  // Usuario normal con boda activa también pasa
   if (token && weddingId) return true;
 
   router.navigate(['/home']);
+  return false;
+};
+
+// ─────────────────────────────────────────────────────────────
+// minRoleGuard — rol mínimo requerido en la boda activa
+// Uso: canActivate: [authGuard, minRoleGuard('planner')]
+// ─────────────────────────────────────────────────────────────
+export const minRoleGuard = (minRole: string) => () => {
+  const router    = inject(Router);
+  const token     = localStorage.getItem('token');
+  const weddingId = localStorage.getItem('weddingId');
+  const rol       = localStorage.getItem('rol');
+
+  if (!token || !weddingId) { router.navigate(['/login']);  return false; }
+  if (rol === 'admin' || rol === 'superadmin') return true;
+
+  if (hasMinRole(minRole)) return true;
+
+  // No tiene rol suficiente → redirigir al dashboard sin romper la sesión
+  router.navigate(['/dashboard']);
   return false;
 };

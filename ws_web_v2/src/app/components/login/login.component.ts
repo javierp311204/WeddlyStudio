@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService } from '../../services/auth/auth.service';
@@ -21,6 +21,7 @@ export class LoginComponent {
   constructor(
     private authService:  AuthService,
     private router:       Router,
+    private route:        ActivatedRoute,   
     private notifService: NotificationService,
     private translate:    TranslateService,
   ) {}
@@ -40,10 +41,7 @@ export class LoginComponent {
 
     this.authService.login(this.email, this.pass).subscribe({
       next: (rawRes) => {
-        // Cast a any para evitar conflictos con la unión de tipos
-        // El backend siempre envuelve en { success, data: { ... } }
         const res = rawRes as any;
-
         const requires2fa = res.data?.requires_2fa ?? res.requires_2fa ?? false;
 
         if (requires2fa) {
@@ -54,9 +52,7 @@ export class LoginComponent {
           return;
         }
 
-        // Login normal
         const user = res.data?.user;
-
         this.notifService.showSuccess(
           this.translate.instant('AUTH.LOGIN_SUCCESS_TITLE'),
           this.translate.instant('AUTH.LOGIN_SUCCESS_DESC', {
@@ -64,7 +60,9 @@ export class LoginComponent {
           }),
         );
 
-        this.router.navigate(['/dashboard']);
+        // ─── Redirect tras login ──────────────────────────────
+        const redirect = this.route.snapshot.queryParamMap.get('redirect');
+        this.router.navigateByUrl(redirect ?? '/dashboard');
       },
       error: (err) => {
         const mensaje =
@@ -80,11 +78,6 @@ export class LoginComponent {
     });
   }
 
-  irARecuperarPassword() {
-    this.router.navigate(['/reco-pass']);
-  }
-
-  irAlHome() {
-    this.router.navigate(['/']);
-  }
+  irARecuperarPassword() { this.router.navigate(['/reco-pass']); }
+  irAlHome()             { this.router.navigate(['/']);          }
 }

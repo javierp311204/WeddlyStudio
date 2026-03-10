@@ -56,7 +56,7 @@
       <!-- Precio -->
       <div class="plan-price">
         <span class="price-currency" *ngIf="plan.precio > 0">€</span>
-        <span class="price-amount">{{ plan.precio > 0 ? plan.precio : 'Gratis' }}</span>
+        <span class="price-amount">{{ plan.precio > 0 ? plan.precio : 'PRICING.PLANS.FREE_NAME' | translate }}</span>
         <span class="price-period" *ngIf="plan.periodo">{{ plan.periodo }}</span>
       </div>
       <p class="plan-subtitle">{{ plan.subtitulo }}</p>

@@ -4,7 +4,7 @@ import inviteController  from '../controllers/invite.controller';
 import { authenticate }  from '../middleware/auth.middleware';
 import { roleGuard, minRoleGuard } from '../middleware/role.guard';
 import { validate }      from '../middleware/validate.middleware';
-import { sendInviteSchema, revokeInviteSchema } from '../schemas/invite.schema';
+import { sendInviteSchema, revokeInviteSchema, memberSchema } from '../schemas/invite.schema';
 import {
   createWeddingSchema,
   updateWeddingSchema,
@@ -42,15 +42,15 @@ router.delete('/:id',
 
 // ─── Miembros ─────────────────────────────────────────────────────
 // Solo owner puede añadir/eliminar miembros directamente
+router.get('/:id/members',
+  minRoleGuard('co_organizer'),
+  inviteController.getMembers,
+);
+
 router.post('/:id/members',
   validate(addWeddingMemberSchema),
   roleGuard('owner'),
   weddingController.addMember,
-);
-router.delete('/:id/members/:userId',
-  validate(weddingIdSchema),
-  roleGuard('owner'),
-  weddingController.removeMember,
 );
 
 // ─── Invitaciones ─────────────────────────────────────────────────
@@ -71,9 +71,15 @@ router.delete('/:id/invites/:inviteId',
   inviteController.revokeInvite,
 );
 router.delete('/:id/members/:memberId',
-  validate(revokeInviteSchema),
+  validate(memberSchema),
   roleGuard('owner'),
   inviteController.revokeMember,
+);
+
+router.patch('/:id/members/:memberId/role',
+  validate(memberSchema),
+  roleGuard('owner'),
+  inviteController.updateMemberRole,
 );
 
 export default router;

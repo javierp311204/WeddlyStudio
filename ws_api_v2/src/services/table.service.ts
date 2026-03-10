@@ -12,8 +12,9 @@ export class TableService {
   // ─── Helpers privados ──────────────────────────────────────────
 
   private async assertWeddingAccess(weddingId: string, userId: string) {
+    // FIX: añadir deleted_at: null para no operar sobre bodas soft-deleted
     const wedding = await prisma.wedding.findUnique({
-      where: { id: weddingId },
+      where: { id: weddingId, deleted_at: null },
       include: { user_roles: { where: { user_id: userId }, take: 1 } },
     });
 
@@ -36,6 +37,11 @@ export class TableService {
     });
 
     if (!table) throw new AppError('Mesa no encontrada', 404);
+
+    // FIX: verificar también que la boda no está soft-deleted
+    if (table.wedding.deleted_at !== null) {
+      throw new AppError('Boda no encontrada', 404);
+    }
 
     const hasAccess =
       table.wedding.created_by === userId || table.wedding.user_roles.length > 0;
@@ -60,39 +66,44 @@ export class TableService {
           guests: {
             where: { deleted_at: null },
             select: {
-              id: true,
-              first_name: true,
-              last_name: true,
-              rsvp_status: true,
-              seat_number: true,
+              id:              true,
+              first_name:      true,
+              last_name:       true,
+              group:           true,   // campo nuevo
+              rsvp_status:     true,
+              seat_number:     true,
               parent_guest_id: true,
             },
             orderBy: { seat_number: 'asc' },
           },
         }),
-        _count: { select: { guests: true } },
+        // FIX: _count solo cuenta invitados activos (no soft-deleted)
+        // Antes _count no filtraba deleted_at → occupied/available eran incorrectos
+        _count: {
+          select: {
+            guests: { where: { deleted_at: null } },
+          },
+        },
       },
       orderBy: { name: 'asc' },
     });
 
-    // Añadir campo calculado: plazas libres
-    const tablesWithOccupancy = tables.map(t => ({
+    const tablesWithOccupancy = tables.map((t) => ({
       ...t,
-      occupied: t._count.guests,
+      occupied:  t._count.guests,
       available: t.max_capacity - t._count.guests,
-      is_full: t._count.guests >= t.max_capacity,
+      is_full:   t._count.guests >= t.max_capacity,
     }));
 
-    // Resumen global del salón
     const totalCapacity = tables.reduce((sum, t) => sum + t.max_capacity, 0);
     const totalOccupied = tables.reduce((sum, t) => sum + t._count.guests, 0);
 
     return {
       tables: tablesWithOccupancy,
       summary: {
-        total_tables: tables.length,
-        total_capacity: totalCapacity,
-        total_occupied: totalOccupied,
+        total_tables:    tables.length,
+        total_capacity:  totalCapacity,
+        total_occupied:  totalOccupied,
         total_available: totalCapacity - totalOccupied,
       },
     };
@@ -111,54 +122,57 @@ export class TableService {
         guests: {
           where: { deleted_at: null },
           select: {
-            id: true,
-            first_name: true,
-            last_name: true,
-            email: true,
-            rsvp_status: true,
-            seat_number: true,
-            allergies: true,
-            dietary_notes: true,
+            id:              true,
+            first_name:      true,
+            last_name:       true,
+            email:           true,
+            group:           true,   
+            rsvp_status:     true,
+            seat_number:     true,
+            allergies:       true,
+            dietary_notes:   true,
             parent_guest_id: true,
           },
           orderBy: { seat_number: 'asc' },
         },
-        _count: { select: { guests: true } },
+        // FIX: _count con filtro deleted_at
+        _count: {
+          select: {
+            guests: { where: { deleted_at: null } },
+          },
+        },
       },
     });
 
     return {
       ...table,
-      occupied: table!._count.guests,
+      occupied:  table!._count.guests,
       available: table!.max_capacity - table!._count.guests,
-      is_full: table!._count.guests >= table!.max_capacity,
+      is_full:   table!._count.guests >= table!.max_capacity,
     };
   }
 
   /**
    * POST /api/weddings/:weddingId/tables
-   * Crea una nueva mesa.
    */
   async create(weddingId: string, userId: string, data: CreateTableInput) {
     await this.assertWeddingAccess(weddingId, userId);
 
-    // Verificar que no existe otra mesa con el mismo nombre en la misma boda
     const existing = await prisma.table.findFirst({
       where: { wedding_id: weddingId, name: data.name },
     });
-
     if (existing) {
       throw new AppError(`Ya existe una mesa llamada "${data.name}"`, 409);
     }
 
     const table = await prisma.table.create({
       data: {
-        wedding_id: weddingId,
-        name: data.name,
-        shape: data.shape,
+        wedding_id:   weddingId,
+        name:         data.name,
+        shape:        data.shape,
         max_capacity: data.max_capacity,
-        pos_x: data.pos_x,
-        pos_y: data.pos_y,
+        pos_x:        data.pos_x,
+        pos_y:        data.pos_y,
       },
     });
 
@@ -167,17 +181,15 @@ export class TableService {
 
   /**
    * PATCH /api/tables/:tableId
-   * Actualiza nombre, shape, capacidad o posición.
    */
   async update(tableId: string, userId: string, data: UpdateTableInput) {
     const table = await this.assertTableAccess(tableId, userId);
 
-    // Si se reduce la capacidad, verificar que no deje invitados sin sitio
     if (data.max_capacity !== undefined) {
+      // FIX: usar el mismo filtro deleted_at para coherencia
       const currentOccupied = await prisma.guest.count({
         where: { table_id: tableId, deleted_at: null },
       });
-
       if (data.max_capacity < currentOccupied) {
         throw new AppError(
           `No puedes reducir la capacidad a ${data.max_capacity}: hay ${currentOccupied} invitados asignados`,
@@ -186,7 +198,6 @@ export class TableService {
       }
     }
 
-    // Si se cambia el nombre, verificar que no colisione con otra mesa
     if (data.name && data.name !== table.name) {
       const existing = await prisma.table.findFirst({
         where: { wedding_id: table.wedding_id, name: data.name },
@@ -197,27 +208,27 @@ export class TableService {
     const updated = await prisma.table.update({
       where: { id: tableId },
       data,
-      include: { _count: { select: { guests: true } } },
+      include: {
+        _count: { select: { guests: { where: { deleted_at: null } } } },
+      },
     });
 
     return {
       ...updated,
-      occupied: updated._count.guests,
+      occupied:  updated._count.guests,
       available: updated.max_capacity - updated._count.guests,
     };
   }
 
   /**
    * PATCH /api/tables/:tableId/position
-   * Actualiza solo pos_x y pos_y (llamada frecuente desde drag & drop).
-   * Endpoint separado para que sea ligero y rápido.
    */
   async updatePosition(tableId: string, userId: string, data: UpdatePositionInput) {
     await this.assertTableAccess(tableId, userId);
 
     const updated = await prisma.table.update({
       where: { id: tableId },
-      data: { pos_x: data.pos_x, pos_y: data.pos_y },
+      data:  { pos_x: data.pos_x, pos_y: data.pos_y },
       select: { id: true, pos_x: true, pos_y: true },
     });
 
@@ -226,26 +237,23 @@ export class TableService {
 
   /**
    * PATCH /api/tables/:tableId/assign
-   * Asigna un invitado a la mesa.
-   * Usa transacción para validar capacidad de forma segura.
    */
   async assignGuest(tableId: string, userId: string, data: AssignGuestInput) {
     const table = await this.assertTableAccess(tableId, userId);
 
-    // Verificar que el invitado existe y pertenece a la misma boda
-    const guest = await prisma.guest.findUnique({ where: { id: data.guest_id } });
+    // FIX: filtrar invitados soft-deleted — antes se podía asignar un guest eliminado
+    const guest = await prisma.guest.findUnique({
+      where: { id: data.guest_id, deleted_at: null },
+    });
 
     if (!guest) throw new AppError('Invitado no encontrado', 404);
     if (guest.wedding_id !== table.wedding_id) {
       throw new AppError('El invitado no pertenece a esta boda', 400);
     }
-
-    // Si ya está en esta misma mesa, no hacer nada
     if (guest.table_id === tableId) {
       throw new AppError('El invitado ya está asignado a esta mesa', 400);
     }
 
-    // Transacción: verificar capacidad + asignar
     const updatedGuest = await prisma.$transaction(async (tx) => {
       const occupied = await tx.guest.count({
         where: { table_id: tableId, deleted_at: null },
@@ -261,14 +269,14 @@ export class TableService {
       return tx.guest.update({
         where: { id: data.guest_id },
         data: {
-          table_id: tableId,
+          table_id:    tableId,
           seat_number: data.seat_number ?? null,
         },
         select: {
-          id: true,
-          first_name: true,
-          last_name: true,
-          table_id: true,
+          id:          true,
+          first_name:  true,
+          last_name:   true,
+          table_id:    true,
           seat_number: true,
         },
       });
@@ -279,7 +287,6 @@ export class TableService {
 
   /**
    * PATCH /api/tables/:tableId/unassign/:guestId
-   * Desasigna un invitado de la mesa (lo deja sin mesa).
    */
   async unassignGuest(tableId: string, guestId: string, userId: string) {
     await this.assertTableAccess(tableId, userId);
@@ -293,7 +300,7 @@ export class TableService {
 
     const updated = await prisma.guest.update({
       where: { id: guestId },
-      data: { table_id: null, seat_number: null },
+      data:  { table_id: null, seat_number: null },
       select: { id: true, first_name: true, last_name: true, table_id: true },
     });
 
@@ -302,21 +309,20 @@ export class TableService {
 
   /**
    * DELETE /api/tables/:tableId
-   * Elimina la mesa. Los invitados asignados quedan sin mesa (SetNull).
-   * Table no tiene deleted_at, se elimina físicamente.
+   * FK onDelete: SetNull libera a los invitados automáticamente.
    */
   async remove(tableId: string, userId: string) {
-    const table = await this.assertTableAccess(tableId, userId);
+    await this.assertTableAccess(tableId, userId);
 
+    // FIX: usar deleted_at: null para el conteo real de liberados
     const occupiedCount = await prisma.guest.count({
       where: { table_id: tableId, deleted_at: null },
     });
 
-    // Eliminar la mesa — FK onDelete: SetNull libera a los invitados automáticamente
     await prisma.table.delete({ where: { id: tableId } });
 
     return {
-      message: 'Mesa eliminada correctamente',
+      message:         'Mesa eliminada correctamente',
       guests_released: occupiedCount,
     };
   }

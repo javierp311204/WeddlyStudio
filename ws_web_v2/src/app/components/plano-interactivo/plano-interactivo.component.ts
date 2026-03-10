@@ -1,5 +1,6 @@
 import {
-  Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy, NgZone
+  Component, OnInit, ViewChild, ElementRef,
+  AfterViewInit, OnDestroy, NgZone,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,100 +10,88 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { PlanoService, Table, GuestSummary } from '../../services/plano/plano.service';
+import { environment } from '../../../enviroments/enviroment';
 
-// ─────────────────────────────────────────────────────────────
-// MIGRACIÓN v2:
-//  • PlanoService → sustituido por llamadas directas a v2 (adaptar al servicio)
-//  • codigoBoda  → weddingId (UUID)
-//  • mesa._id    → mesa.id
-//  • inv._id     → inv.id
-//  • inv.nombre  → inv.first_name + inv.last_name
-//  • mesa.posicion.x/y → mesa.pos_x / mesa.pos_y (números directos, NO porcentaje)
-//  • mesa.radio / mesa.asientos → en v2 la estructura de asientos no existe;
-//    los invitados se listan por GET /api/weddings/:weddingId/guests?table_id=
-//
-//  Endpoints v2:
-//  • GET  /api/weddings/:weddingId/tables       → lista de mesas
-//  • GET  /api/weddings/:weddingId/guests       → invitados (filtrar por table_id)
-//  • POST /api/weddings/:weddingId/tables       → crear mesa
-//  • DELETE /api/tables/:tableId                → eliminar mesa (físico)
-//  • PATCH  /api/tables/:tableId/position       → { pos_x, pos_y }
-//  • PATCH  /api/tables/:tableId/assign         → { guest_id }
-//  • PATCH  /api/tables/:tableId/unassign/:guestId
-//
-//  IMPORTANTE: v2 usa pos_x/pos_y en píxeles directos (no porcentaje).
-//  Se conserva la lógica de posicionamiento adaptada.
-// ─────────────────────────────────────────────────────────────
-
-interface MesaV2 {
-  id: string;
-  name: string;
-  shape: 'round' | 'rectangular';
-  max_capacity: number;
-  pos_x: number;
-  pos_y: number;
-  occupied?: number;
-  available?: number;
-  is_full?: boolean;
-  guests?: any[];
-}
+// ─── Colores por grupo ────────────────────────────────────────────
+const GROUP_COLORS: Record<string, string> = {
+  familia:  '#d4a373',
+  amigos:   '#606c38',
+  trabajo:  '#3a86ff',
+  pareja:   '#e63946',
+  otro:     '#6c757d',
+};
 
 interface FabricMesaGroup extends Group {
   data: {
     mesaId: string;
-    tipo: string;
-    mesa: MesaV2;
+    tipo:   string;
+    mesa:   Table;
   };
 }
 
 @Component({
-  selector: 'app-plano-interactivo',
-  standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  selector:    'app-plano-interactivo',
+  standalone:  true,
+  imports:     [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './plano-interactivo.component.html',
-  styleUrl: './plano-interactivo.component.css',
+  styleUrl:    './plano-interactivo.component.css',
 })
 export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvasElement', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
 
   canvas!: Canvas;
-  mesas: MesaV2[] = [];
-  weddingId: string = '';
+  mesas:     Table[]        = [];
+  weddingId: string         = '';
 
-  canvasWidth = 1200;
+  // FIX: rol leído de localStorage para controlar visibilidad de acciones
+  weddingRole: string = 'guest';
+  get puedeEditar(): boolean {
+    return ['owner', 'co_organizer', 'planner'].includes(this.weddingRole);
+  }
+
+  canvasWidth  = 1200;
   canvasHeight = 800;
 
-  modoEdicion = true;
-  mesaSeleccionada: MesaV2 | null = null;
+  modoEdicion         = false;  // empieza en modo vista por defecto
+  mesaSeleccionada:   Table | null = null;
 
-  invitadosDisponibles: any[] = [];
-  invitadosFiltrados: any[] = [];
-  busquedaInvitado: string = '';
-  invitadoSeleccionado: any = null;
-  listaInvitadosAbierta: boolean = false;
-  invitadoModalInfo: any = null;
+  invitadosDisponibles: GuestSummary[] = [];
+  invitadosFiltrados:   GuestSummary[] = [];
+  busquedaInvitado:     string         = '';
+  invitadoSeleccionado: GuestSummary | null = null;
+  listaInvitadosAbierta = false;
+  invitadoModalInfo:    GuestSummary | null = null;
 
-  private modalJustOpened = false;
+  private modalJustOpened       = false;
   private guardarPosicionSubject = new Subject<FabricMesaGroup>();
-  private apiUrl = 'http://localhost:3000/api';
+
+  // FIX: HTTP solo para invitados (guests API) — el resto va por PlanoService
+  private apiUrl = environment.apiUrl;
 
   constructor(
-    private http: HttpClient,
+    private http:         HttpClient,
+    private planoService: PlanoService,
     private notifService: NotificationService,
-    private router: Router,
-    private ngZone: NgZone,
+    private router:       Router,
+    private ngZone:       NgZone,
   ) {}
 
+  // FIX: headers solo se usan para la llamada de guests (aún directa)
+  // PlanoService ya gestiona sus propios headers
   private getHeaders() {
     const token = localStorage.getItem('token');
     return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
   }
 
   ngOnInit() {
-    this.weddingId = localStorage.getItem('weddingId') || '';
+    this.weddingId   = localStorage.getItem('weddingId')   ?? '';
+    this.weddingRole = localStorage.getItem('weddingRole') ?? 'guest';
+
     if (!this.weddingId) {
       this.notifService.showError('Error', 'No se encontró weddingId');
       this.router.navigate(['/home']);
+      return;
     }
 
     this.guardarPosicionSubject.pipe(debounceTime(500)).subscribe((objeto) => {
@@ -116,7 +105,7 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
 
     if (this.canvasElement?.nativeElement) {
       this.canvasElement.nativeElement.addEventListener('mousedown', (e) => e.stopPropagation(), true);
-      this.canvasElement.nativeElement.addEventListener('mouseup', (e) => e.stopPropagation(), true);
+      this.canvasElement.nativeElement.addEventListener('mouseup',   (e) => e.stopPropagation(), true);
     }
   }
 
@@ -127,10 +116,10 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
 
   inicializarCanvas() {
     this.canvas = new Canvas(this.canvasElement.nativeElement, {
-      width: this.canvasWidth,
-      height: this.canvasHeight,
+      width:           this.canvasWidth,
+      height:          this.canvasHeight,
       backgroundColor: '#fdfaf7',
-      selection: this.modoEdicion,
+      selection:       this.modoEdicion,
     });
 
     this.dibujarGrid();
@@ -148,62 +137,62 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     });
 
     this.canvas.on('object:moving', (e) => {
-      const obj = e.target!;
-      const halfW = obj.getScaledWidth() / 2;
+      const obj  = e.target!;
+      const halfW = obj.getScaledWidth()  / 2;
       const halfH = obj.getScaledHeight() / 2;
-      if (obj.left! < halfW) obj.left = halfW;
-      if (obj.top! < halfH) obj.top = halfH;
-      if (obj.left! > this.canvasWidth - halfW) obj.left = this.canvasWidth - halfW;
-      if (obj.top! > this.canvasHeight - halfH) obj.top = this.canvasHeight - halfH;
+      if (obj.left! < halfW)                    obj.left = halfW;
+      if (obj.top!  < halfH)                    obj.top  = halfH;
+      if (obj.left! > this.canvasWidth  - halfW) obj.left = this.canvasWidth  - halfW;
+      if (obj.top!  > this.canvasHeight - halfH) obj.top  = this.canvasHeight - halfH;
     });
   }
 
   dibujarGrid() {
-    const gridSize = 50;
+    const gridSize    = 50;
     const patternCanvas = document.createElement('canvas');
-    patternCanvas.width = gridSize;
+    patternCanvas.width  = gridSize;
     patternCanvas.height = gridSize;
     const ctx = patternCanvas.getContext('2d')!;
     ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 1;
+    ctx.lineWidth   = 1;
     ctx.strokeRect(0, 0, gridSize, gridSize);
     const pattern = new Pattern({ source: patternCanvas as any, repeat: 'repeat' });
     this.canvas.set({ backgroundColor: pattern });
     this.canvas.renderAll();
   }
 
+  // ─── Carga de datos ───────────────────────────────────────────
+
   cargarPlano() {
-    // v2: GET /api/weddings/:weddingId/tables → { tables, summary }
-    this.http
-      .get<any>(`${this.apiUrl}/weddings/${this.weddingId}/tables`, this.getHeaders())
-      .subscribe({
-        next: (resTables) => {
-          this.mesas = resTables?.data?.tables ?? resTables?.tables ?? [];
+    // FIX: usar PlanoService en lugar de llamada HTTP directa
+    this.planoService.getPlano(this.weddingId).subscribe({
+      next: (resTables) => {
+        this.mesas = resTables?.data?.tables ?? [];
 
-          // v2: GET /api/weddings/:weddingId/guests para invitados sin mesa
-          this.http
-            .get<any>(`${this.apiUrl}/weddings/${this.weddingId}/guests`, this.getHeaders())
-            .subscribe({
-              next: (resGuests) => {
-                const todos = resGuests?.data?.guests ?? resGuests?.guests ?? [];
-                this.invitadosDisponibles = todos;
+        // Cargar todos los invitados para el buscador
+        this.http
+          .get<any>(`${this.apiUrl}/weddings/${this.weddingId}/guests`, this.getHeaders())
+          .subscribe({
+            next: (resGuests) => {
+              const todos: GuestSummary[] = resGuests?.data?.guests ?? resGuests?.guests ?? [];
+              this.invitadosDisponibles   = todos;
 
-                // Asociar invitados a mesas
-                this.mesas.forEach((mesa) => {
-                  mesa.guests = todos.filter((g: any) => g.table_id === mesa.id);
-                });
+              // Asociar invitados a mesas usando la lista completa
+              this.mesas.forEach((mesa) => {
+                mesa.guests = todos.filter((g) => (g as any).table_id === mesa.id);
+              });
 
-                this.renderizarMesas();
-              },
-              error: () => this.renderizarMesas(),
-            });
-        },
-        error: (err) => {
-          console.error('Error al cargar plano:', err);
-          this.notifService.showError('Error', 'No se pudo cargar el plano');
-          this.renderizarMesas();
-        },
-      });
+              this.renderizarMesas();
+            },
+            error: () => this.renderizarMesas(),
+          });
+      },
+      error: (err) => {
+        console.error('Error al cargar plano:', err);
+        this.notifService.showError('Error', 'No se pudo cargar el plano');
+        this.renderizarMesas();
+      },
+    });
   }
 
   renderizarMesas() {
@@ -214,61 +203,57 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     this.canvas.renderAll();
   }
 
-  dibujarMesa(mesa: MesaV2) {
-    // v2: pos_x/pos_y en píxeles directos
-    const xPx = mesa.pos_x ?? this.canvasWidth / 2;
+  dibujarMesa(mesa: Table) {
+    const xPx = mesa.pos_x ?? this.canvasWidth  / 2;
     const yPx = mesa.pos_y ?? this.canvasHeight / 2;
 
     const grupoMesa = new Group([], {
-      selectable: true,
-      originX: 'center',
-      originY: 'center',
+      selectable:     true,
+      originX:        'center',
+      originY:        'center',
       subTargetCheck: true,
-      interactive: true,
+      interactive:    true,
     } as any);
 
-    const radio = 60;
+    const radio          = 60;
     const esPresidencial = mesa.shape === 'rectangular';
 
     const circuloMesa = new Circle({
-      radius: radio,
-      fill: esPresidencial ? '#d4af37' : '#ffffff',
-      stroke: '#333',
+      radius:      radio,
+      fill:        esPresidencial ? '#d4af37' : '#ffffff',
+      stroke:      '#333',
       strokeWidth: 3,
-      originX: 'center',
-      originY: 'center',
-      evented: false,
+      originX:     'center',
+      originY:     'center',
+      evented:     false,
     });
     grupoMesa.add(circuloMesa);
 
-    // v2: mesa.name en lugar de mesa.nombre
     const textoNombre = new Text(mesa.name, {
-      fontSize: 14,
+      fontSize:   14,
       fontFamily: 'Playfair Display',
-      fill: esPresidencial ? '#ffffff' : '#333',
-      originX: 'center',
-      originY: 'center',
-      top: -8,
-      evented: false,
+      fill:       esPresidencial ? '#ffffff' : '#333',
+      originX:    'center',
+      originY:    'center',
+      top:        -8,
+      evented:    false,
     });
     grupoMesa.add(textoNombre);
 
-    // v2: occupied/max_capacity
-    const ocupados = mesa.guests?.length ?? mesa.occupied ?? 0;
+    const ocupados     = mesa.guests?.length ?? mesa.occupied ?? 0;
     const textoContador = new Text(`${ocupados}/${mesa.max_capacity}`, {
-      fontSize: 12,
+      fontSize:   12,
       fontFamily: 'Arial',
-      fill: '#666',
-      originX: 'center',
-      originY: 'center',
-      top: 12,
-      evented: false,
+      fill:       '#666',
+      originX:    'center',
+      originY:    'center',
+      top:        12,
+      evented:    false,
     });
     grupoMesa.add(textoContador);
 
-    // Dibujar invitados alrededor
     if (mesa.guests && mesa.guests.length > 0) {
-      mesa.guests.forEach((guest: any, index: number) => {
+      mesa.guests.forEach((guest, index) => {
         this.dibujarInvitadoEnMesa(grupoMesa, guest, index, mesa.guests!.length, radio);
       });
     }
@@ -281,27 +266,31 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     this.canvas.renderAll();
   }
 
-  dibujarInvitadoEnMesa(grupo: Group, guest: any, index: number, total: number, radioMesa: number) {
-    const angulo = (360 / total) * index;
+  dibujarInvitadoEnMesa(
+    grupo:     Group,
+    guest:     GuestSummary,
+    index:     number,
+    total:     number,
+    radioMesa: number,
+  ) {
+    const angulo   = (360 / total) * index;
     const radianes = (angulo * Math.PI) / 180;
     const distancia = radioMesa + 35;
     const x = Math.cos(radianes) * distancia;
     const y = Math.sin(radianes) * distancia;
 
     const circulo = new Circle({
-      radius: 20,
-      fill: '#3498db',
-      stroke: guest.rsvp_status === 'confirmed' ? '#27ae60' : '#e74c3c',
+      radius:      20,
+      fill:        this.getColorPorGrupo(guest.group),
+      stroke:      guest.rsvp_status === 'confirmed' ? '#27ae60' : '#e74c3c',
       strokeWidth: 3,
-      left: x, top: y,
-      originX: 'center', originY: 'center',
-      selectable: false,
-      evented: false,
+      left:        x, top: y,
+      originX:     'center', originY: 'center',
+      selectable:  false, evented: false,
     });
 
-    // v2: iniciales de first_name + last_name
-    const iniciales = this.obtenerIniciales(`${guest.first_name} ${guest.last_name}`);
-    const texto = new Text(iniciales, {
+    const iniciales = this.obtenerIniciales(this.getNombreCompleto(guest));
+    const texto     = new Text(iniciales, {
       fontSize: 11, fontWeight: 'bold', fill: '#fff',
       left: x, top: y,
       originX: 'center', originY: 'center',
@@ -312,10 +301,12 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     grupo.add(texto);
   }
 
+  // ─── Posición ─────────────────────────────────────────────────
+
   guardarPosicionMesa(objeto: FabricMesaGroup) {
     const gridSize = 25;
     const ajL = Math.round(objeto.left! / gridSize) * gridSize;
-    const ajT = Math.round(objeto.top! / gridSize) * gridSize;
+    const ajT = Math.round(objeto.top!  / gridSize) * gridSize;
     objeto.set({ left: ajL, top: ajT });
     objeto.setCoords();
     this.canvas.renderAll();
@@ -327,23 +318,23 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     if (!mesaId) return;
 
     const gridSize = 25;
-    const pos_x = Math.round(objeto.left! / gridSize) * gridSize;
-    const pos_y = Math.round(objeto.top! / gridSize) * gridSize;
+    const pos_x    = Math.round(objeto.left! / gridSize) * gridSize;
+    const pos_y    = Math.round(objeto.top!  / gridSize) * gridSize;
 
-    // v2: PATCH /api/tables/:tableId/position  { pos_x, pos_y }
-    this.http
-      .patch(`${this.apiUrl}/tables/${mesaId}/position`, { pos_x, pos_y }, this.getHeaders())
-      .subscribe({
-        next: () => console.log('✅ Posición guardada'),
-        error: (err) => {
-          console.error('Error al guardar posición:', err);
-          this.cargarPlano();
-        },
-      });
+    // FIX: usar PlanoService
+    this.planoService.actualizarPosicionMesa(mesaId, pos_x, pos_y).subscribe({
+      next:  () => console.log('✅ Posición guardada'),
+      error: (err) => {
+        console.error('Error al guardar posición:', err);
+        this.cargarPlano();
+      },
+    });
   }
 
+  // ─── Selección ────────────────────────────────────────────────
+
   seleccionarMesa(mesaId: string) {
-    this.mesaSeleccionada = this.mesas.find((m) => m.id === mesaId) || null;
+    this.mesaSeleccionada    = this.mesas.find((m) => m.id === mesaId) || null;
     this.listaInvitadosAbierta = false;
     this.limpiarBusqueda();
   }
@@ -352,27 +343,29 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     this.listaInvitadosAbierta = !this.listaInvitadosAbierta;
   }
 
+  // ─── Invitados ────────────────────────────────────────────────
+
   filtrarInvitados() {
     if (!this.busquedaInvitado?.trim()) { this.invitadosFiltrados = []; return; }
     const term = this.busquedaInvitado.toLowerCase().trim();
     this.invitadosFiltrados = this.invitadosDisponibles
       .filter((inv) => {
-        const nombre = `${inv.first_name} ${inv.last_name}`.toLowerCase();
-        return nombre.includes(term) && !inv.table_id;
+        const nombre = this.getNombreCompleto(inv).toLowerCase();
+        return nombre.includes(term) && !(inv as any).table_id;
       })
       .slice(0, 5);
   }
 
-  seleccionarInvitado(inv: any) {
+  seleccionarInvitado(inv: GuestSummary) {
     this.invitadoSeleccionado = inv;
-    this.busquedaInvitado = `${inv.first_name} ${inv.last_name}`.trim();
-    this.invitadosFiltrados = [];
+    this.busquedaInvitado     = this.getNombreCompleto(inv);
+    this.invitadosFiltrados   = [];
   }
 
   limpiarBusqueda() {
     this.invitadoSeleccionado = null;
-    this.busquedaInvitado = '';
-    this.invitadosFiltrados = [];
+    this.busquedaInvitado     = '';
+    this.invitadosFiltrados   = [];
   }
 
   agregarInvitadoAMesa() {
@@ -381,13 +374,9 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
       return;
     }
 
-    // v2: PATCH /api/tables/:tableId/assign  { guest_id }
-    this.http
-      .patch(
-        `${this.apiUrl}/tables/${this.mesaSeleccionada.id}/assign`,
-        { guest_id: this.invitadoSeleccionado.id },
-        this.getHeaders()
-      )
+    // FIX: usar PlanoService
+    this.planoService
+      .asignarInvitadoAMesa(this.mesaSeleccionada.id, this.invitadoSeleccionado.id)
       .subscribe({
         next: () => {
           this.notifService.showSuccess('¡Éxito!', 'Invitado asignado a la mesa');
@@ -403,78 +392,77 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
   quitarInvitadoDeMesa(guestId: string) {
     if (!this.mesaSeleccionada) return;
 
-    this.notifService.askConfirmation('Quitar invitado', '¿Deseas quitar este invitado de la mesa?', 'warning')
+    this.notifService
+      .askConfirmation('Quitar invitado', '¿Deseas quitar este invitado de la mesa?', 'warning')
       .then((confirm) => {
-        if (confirm) {
-          // v2: PATCH /api/tables/:tableId/unassign/:guestId
-          this.http
-            .patch(
-              `${this.apiUrl}/tables/${this.mesaSeleccionada!.id}/unassign/${guestId}`,
-              {},
-              this.getHeaders()
-            )
-            .subscribe({
-              next: () => {
-                this.notifService.showSuccess('¡Listo!', 'Invitado quitado de la mesa');
-                this.cargarPlano();
-              },
-              error: () => this.notifService.showError('Error', 'No se pudo quitar el invitado'),
-            });
-        }
+        if (!confirm) return;
+
+        // FIX: usar PlanoService
+        this.planoService
+          .quitarInvitadoDeMesa(this.mesaSeleccionada!.id, guestId)
+          .subscribe({
+            next:  () => {
+              this.notifService.showSuccess('¡Listo!', 'Invitado quitado de la mesa');
+              this.cargarPlano();
+            },
+            error: () => this.notifService.showError('Error', 'No se pudo quitar el invitado'),
+          });
       });
   }
 
+  // FIX: antes bloqueaba si había invitados — el backend hace SetNull automáticamente
+  // Ahora informa al usuario de los invitados que quedarán sin mesa y deja proceder
   eliminarMesa() {
     if (!this.mesaSeleccionada) return;
 
     const ocupados = this.mesaSeleccionada.guests?.length ?? 0;
-    if (ocupados > 0) {
-      this.notifService.showError('Mesa ocupada', `Hay ${ocupados} invitado(s). Quítalos primero.`);
-      return;
-    }
+    const mensaje  = ocupados > 0
+      ? `La mesa "${this.mesaSeleccionada.name}" tiene ${ocupados} invitado(s). Quedarán sin mesa asignada. ¿Continuar?`
+      : `¿Eliminar la mesa "${this.mesaSeleccionada.name}"?`;
 
-    this.notifService.askConfirmation('Eliminar mesa', `¿Eliminar "${this.mesaSeleccionada.name}"?`, 'delete')
-      .then((confirm) => {
-        if (confirm) {
-          // v2: DELETE /api/tables/:tableId
-          this.http
-            .delete(`${this.apiUrl}/tables/${this.mesaSeleccionada!.id}`, this.getHeaders())
-            .subscribe({
-              next: () => {
-                this.notifService.showSuccess('¡Eliminada!', 'Mesa eliminada correctamente');
-                this.mesaSeleccionada = null;
-                this.cargarPlano();
-              },
-              error: () => this.notifService.showError('Error', 'No se pudo eliminar la mesa'),
-            });
-        }
+    this.notifService.askConfirmation('Eliminar mesa', mensaje, 'delete').then((confirm) => {
+      if (!confirm) return;
+
+      // FIX: usar PlanoService
+      this.planoService.eliminarMesa(this.mesaSeleccionada!.id).subscribe({
+        next: (res: any) => {
+          const liberados = res?.data?.guests_released ?? 0;
+          const msg       = liberados > 0
+            ? `Mesa eliminada. ${liberados} invitado(s) han quedado sin mesa.`
+            : 'Mesa eliminada correctamente.';
+          this.notifService.showSuccess('¡Eliminada!', msg);
+          this.mesaSeleccionada = null;
+          this.cargarPlano();
+        },
+        error: () => this.notifService.showError('Error', 'No se pudo eliminar la mesa'),
       });
+    });
   }
 
   agregarMesa() {
-    // v2: POST /api/weddings/:weddingId/tables
     const payload = {
-      name: `Mesa ${this.mesas.length + 1}`,
-      shape: 'round',
+      name:         `Mesa ${this.mesas.length + 1}`,
+      shape:        'round' as const,
       max_capacity: 8,
-      pos_x: this.canvasWidth / 2,
-      pos_y: this.canvasHeight / 2,
+      pos_x:        this.canvasWidth  / 2,
+      pos_y:        this.canvasHeight / 2,
     };
 
-    this.http
-      .post(`${this.apiUrl}/weddings/${this.weddingId}/tables`, payload, this.getHeaders())
-      .subscribe({
-        next: () => {
-          this.notifService.showSuccess('¡Éxito!', 'Mesa añadida en el centro');
-          this.cargarPlano();
-        },
-        error: () => this.notifService.showError('Error', 'No se pudo crear la mesa'),
-      });
+    // FIX: usar PlanoService
+    this.planoService.agregarMesa(this.weddingId, payload).subscribe({
+      next:  () => {
+        this.notifService.showSuccess('¡Éxito!', 'Mesa añadida en el centro');
+        this.cargarPlano();
+      },
+      error: () => this.notifService.showError('Error', 'No se pudo crear la mesa'),
+    });
   }
 
-  mostrarModalInvitado(invitado: any) {
-    this.invitadoModalInfo = invitado;
-    this.modalJustOpened = true;
+  // ─── Modal invitado ───────────────────────────────────────────
+
+  mostrarModalInvitado(invitado: GuestSummary) {
+    this.invitadoModalInfo  = invitado;
+    this.modalJustOpened    = true;
     setTimeout(() => { this.modalJustOpened = false; }, 300);
   }
 
@@ -484,52 +472,49 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   cerrarModalForzado() {
-    this.modalJustOpened = false;
+    this.modalJustOpened   = false;
     this.invitadoModalInfo = null;
   }
 
+  // ─── Modo edición ─────────────────────────────────────────────
+
   toggleModoEdicion() {
-    this.modoEdicion = !this.modoEdicion;
-    this.canvas.selection = this.modoEdicion;
+    this.modoEdicion         = !this.modoEdicion;
+    this.canvas.selection    = this.modoEdicion;
     this.canvas.forEachObject((obj: any) => {
       if (obj.data?.tipo === 'mesa') {
-        obj.selectable = this.modoEdicion;
-        obj.hasControls = this.modoEdicion;
-        obj.hasBorders = this.modoEdicion;
+        obj.selectable   = this.modoEdicion;
+        obj.hasControls  = this.modoEdicion;
+        obj.hasBorders   = this.modoEdicion;
       }
     });
     this.canvas.renderAll();
   }
 
-  // ─── Helpers ──────────────────────────────────────────────
+  // ─── Helpers de template ──────────────────────────────────────
+
   obtenerIniciales(nombre: string): string {
-    return nombre.split(' ').map((n) => n.charAt(0).toUpperCase()).slice(0, 2).join('');
+    return nombre
+      .split(' ')
+      .map((n) => n.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('');
   }
 
-  getNombreCompleto(guest: any): string {
-    return `${guest.first_name || ''} ${guest.last_name || ''}`.trim();
+  getNombreCompleto(guest: GuestSummary): string {
+    return `${guest.first_name ?? ''} ${guest.last_name ?? ''}`.trim();
   }
 
-  contarAsientosOcupados(mesa: MesaV2): number {
+  contarAsientosOcupados(mesa: Table): number {
     return mesa.guests?.length ?? 0;
   }
 
-  // FIX NG9: método requerido por el template para listar invitados de una mesa
-  // v2: los invitados de la mesa están en mesa.guests[] (filtrados por table_id en cargarPlano)
-  getInvitadosDeMesa(mesa: MesaV2): any[] {
+  getInvitadosDeMesa(mesa: Table): GuestSummary[] {
     return mesa?.guests ?? [];
   }
 
-  // FIX NG9: método requerido por el template para colorear por grupo
-  // v2: inv.group reemplaza a inv.tipo
-  getColorPorGrupo(grupo: string): string {
-    const colores: Record<string, string> = {
-      familia:   '#d4a373',
-      amigos:    '#606c38',
-      trabajo:   '#3a86ff',
-      pareja:    '#e63946',
-      otro:      '#6c757d',
-    };
-    return colores[grupo?.toLowerCase()] ?? '#6c757d';
+  // FIX: ahora usa inv.group que existe en BD
+  getColorPorGrupo(grupo: string | null | undefined): string {
+    return GROUP_COLORS[grupo?.toLowerCase() ?? ''] ?? GROUP_COLORS['otro'];
   }
 }

@@ -1,0 +1,119 @@
+<div class="ia-page">
+
+  <!-- ── Loading ─────────────────────────────────────────────── -->
+  <div class="ia-card" *ngIf="state === 'loading'">
+    <div class="spinner"></div>
+    <p class="ia-loading-txt">{{ 'INVITE.LOADING' | translate }}</p>
+  </div>
+
+  <!-- ── Error ───────────────────────────────────────────────── -->
+  <div class="ia-card" *ngIf="state === 'error'">
+    <div class="ia-icon ia-icon--error">⚠️</div>
+    <h1 class="ia-title">{{ 'INVITE.INVALID_TITLE' | translate }}</h1>
+    <p class="ia-desc">{{ errorMsg }}</p>
+    <button class="btn-primary" routerLink="/home">{{ 'COMMON.BACK' | translate }}</button>
+  </div>
+
+  <!-- ── Preview ─────────────────────────────────────────────── -->
+  <div class="ia-card" *ngIf="state === 'preview' && preview">
+
+    <div class="ia-brand">
+      <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="ia-logo" />
+      <span>{{ 'HOME.BRAND' | translate }}</span>
+    </div>
+
+    <div class="ia-icon">💌</div>
+    <h1 class="ia-title">{{ 'INVITE.HERO_TITLE' | translate }}</h1>
+
+    <p class="ia-inviter"
+       [innerHTML]="'INVITE.INVITED_BY' | translate: {
+         name: preview.inviter.first_name + ' ' + preview.inviter.last_name
+       }">
+    </p>
+
+    <div class="ia-wedding-card">
+      <h2 class="ia-wedding-name">{{ preview.wedding.name }}</h2>
+      <div class="ia-wedding-meta">
+        <span>📅 {{ preview.wedding.wedding_date | date:'dd MMMM yyyy' }}</span>
+        <span *ngIf="preview.wedding.location_name">📍 {{ preview.wedding.location_name }}</span>
+      </div>
+    </div>
+
+    <div class="ia-role-row">
+      <span class="ia-role-label">{{ 'INVITE.YOUR_ROLE' | translate }}</span>
+      <span class="ia-role-badge">{{ roleLabel(preview.role) | translate }}</span>
+    </div>
+
+    <div class="ia-perms">
+      <p class="ia-perms-title">{{ 'INVITE.PERMISSIONS_TITLE' | translate }}</p>
+      <ul>
+        <ng-container *ngIf="preview.role === 'co_organizer'">
+          <li>✅ {{ 'INVITE.PERM_CO_1' | translate }}</li>
+          <li>✅ {{ 'INVITE.PERM_CO_2' | translate }}</li>
+          <li>✅ {{ 'INVITE.PERM_CO_3' | translate }}</li>
+          <li>✅ {{ 'INVITE.PERM_CO_4' | translate }}</li>
+          <li>✅ {{ 'INVITE.PERM_CO_5' | translate }}</li>
+        </ng-container>
+        <ng-container *ngIf="preview.role === 'planner'">
+          <li>✅ {{ 'INVITE.PERM_PLANNER_1' | translate }}</li>
+          <li>✅ {{ 'INVITE.PERM_PLANNER_2' | translate }}</li>
+          <li>✅ {{ 'INVITE.PERM_PLANNER_3' | translate }}</li>
+          <li>✅ {{ 'INVITE.PERM_PLANNER_4' | translate }}</li>
+          <li>❌ {{ 'INVITE.PERM_PLANNER_5' | translate }}</li>
+        </ng-container>
+        <ng-container *ngIf="preview.role === 'guest'">
+          <li>✅ {{ 'INVITE.PERM_GUEST_1' | translate }}</li>
+          <li>✅ {{ 'INVITE.PERM_GUEST_2' | translate }}</li>
+          <li>❌ {{ 'INVITE.PERM_GUEST_3' | translate }}</li>
+        </ng-container>
+      </ul>
+    </div>
+
+    <p class="ia-expires" *ngIf="!isExpired()">
+      {{ 'INVITE.EXPIRES' | translate: { date: preview.expires_at | date:'dd MMM yyyy, HH:mm' } }}
+    </p>
+    <p class="ia-expired" *ngIf="isExpired()">{{ 'INVITE.EXPIRED' | translate }}</p>
+
+    <ng-container *ngIf="!isExpired()">
+
+      <!-- Logueado → aceptar -->
+      <ng-container *ngIf="isLoggedIn()">
+        <button class="btn-primary" (click)="accept()" [disabled]="isAccepting">
+          <span *ngIf="!isAccepting">{{ 'INVITE.ACCEPT_BTN' | translate }}</span>
+          <span *ngIf="isAccepting" class="btn-spinner"></span>
+        </button>
+        <p class="ia-account-note"
+           [innerHTML]="'INVITE.LOGGED_AS' | translate: { nick: authService.getUserNick() }">
+        </p>
+      </ng-container>
+
+      <!-- No logueado → login / registro -->
+      <ng-container *ngIf="!isLoggedIn()">
+        <p class="ia-auth-msg">{{ 'INVITE.AUTH_REQUIRED' | translate }}</p>
+        <div class="ia-auth-btns">
+          <button class="btn-primary"   (click)="goToLogin()">{{ 'AUTH.LOGIN' | translate }}</button>
+          <button class="btn-secondary" (click)="goToRegister()">{{ 'INVITE.CREATE_ACCOUNT' | translate }}</button>
+        </div>
+        <p class="ia-auth-note">{{ 'INVITE.AUTH_REDIRECT_NOTE' | translate }}</p>
+      </ng-container>
+
+    </ng-container>
+  </div>
+
+  <!-- ── Accepting ────────────────────────────────────────────── -->
+  <div class="ia-card" *ngIf="state === 'accepting'">
+    <div class="spinner"></div>
+    <p class="ia-loading-txt">{{ 'INVITE.ACCEPTING' | translate }}</p>
+  </div>
+
+  <!-- ── Success ──────────────────────────────────────────────── -->
+  <div class="ia-card" *ngIf="state === 'success'">
+    <div class="ia-icon ia-icon--success">🎉</div>
+    <h1 class="ia-title">{{ 'INVITE.SUCCESS_TITLE' | translate }}</h1>
+    <p class="ia-desc"
+       [innerHTML]="'INVITE.SUCCESS_DESC' | translate: { name: preview?.wedding?.name }">
+    </p>
+    <button class="btn-primary" (click)="goToDashboard()">{{ 'INVITE.GO_DASHBOARD' | translate }}</button>
+  </div>
+
+</div>
