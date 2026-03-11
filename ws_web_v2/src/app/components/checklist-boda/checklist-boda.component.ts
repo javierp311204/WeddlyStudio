@@ -191,17 +191,33 @@ export class ChecklistBodaComponent implements OnInit {
     this.guardando = true;
     try {
       if (this.tareaActual.id) {
-        // v2: PATCH /api/tasks/:taskId — firma: actualizarTarea(taskId, datos)
+        // Solo enviamos los campos que acepta UpdateTaskInput
+        const payload: Partial<Tarea> = {
+          title:            this.tareaActual.title,
+          description:      this.tareaActual.description,
+          phase:            this.tareaActual.phase,
+          category:         this.tareaActual.category,
+          assigned_user_id: this.tareaActual.assigned_user_id,
+          due_date:         this.tareaActual.due_date
+                              ? new Date(this.tareaActual.due_date).toISOString()
+                              : undefined,
+        };
+
+        // Eliminar claves con valor undefined para no contaminar el body
+        Object.keys(payload).forEach(k => {
+          if ((payload as any)[k] === undefined) delete (payload as any)[k];
+        });
+
         await this.tareasService
-          .actualizarTarea(this.tareaActual.id, this.tareaActual)
+          .actualizarTarea(this.tareaActual.id, payload)
           .toPromise();
+
         this.notifService.showSuccess(
           this.translate.instant('CHECKLIST.NOTIFICATIONS.TASK_UPDATED'),
           this.translate.instant('CHECKLIST.NOTIFICATIONS.TASK_UPDATED_DESC')
         );
         this.mostrarModalEditarTarea = false;
       } else {
-        // v2: POST /api/weddings/:weddingId/tasks
         await this.tareasService
           .crearTarea(this.weddingId, this.tareaActual)
           .toPromise();

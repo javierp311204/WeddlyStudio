@@ -15,6 +15,7 @@ import subscriptionRoutes from './routes/subscription.routes';
 import webhookRoutes      from './routes/webhook.routes';
 import userRoutes from './routes/user.routes'; 
 import inviteRoutes from './routes/invite.routes';
+import { exportRouter } from './routes/export.routes';
 
 const app = express();
 
@@ -69,6 +70,7 @@ app.use('/api/invites', inviteRoutes);
 
 // ─── Tasks ───────────────────────────────────────────────────────
 app.use('/api/weddings/:weddingId/tasks', weddingTaskRouter);
+app.use('/api/weddings/:weddingId/export', exportRouter);
 app.use('/api/tasks',                     taskRouter);
 
 // ─── Guests ──────────────────────────────────────────────────────

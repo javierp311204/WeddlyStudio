@@ -33,13 +33,15 @@ export class SidebarComponent implements OnInit {
     { label: 'NAV.HOME',       title: 'NAV.HOME',       emoji: '🏠', route: '/dashboard',  exact: true },
     { label: 'NAV.INFO',       title: 'NAV.INFO',       emoji: '📖', route: '/info-boda',  minRole: 'planner' },
     { label: 'NAV.GUESTS',     title: 'NAV.GUESTS',     emoji: '👥', route: '/invitados',  minRole: 'planner' },
-    { label: 'NAV.CHECKLIST',  title: 'NAV.CHECKLIST',  emoji: '✅', route: '/checklist'  },              
+    { label: 'NAV.CHECKLIST',  title: 'NAV.CHECKLIST',  emoji: '✅', route: '/checklist'  },
+    { label: 'NAV.CALENDAR',   title: 'NAV.CALENDAR',    emoji: '📅', route: '/calendario'},              
     { label: 'NAV.DESIGN',     title: 'NAV.DESIGN',     emoji: '🎨', route: '/diseno',     minRole: 'co_organizer' },
     { label: 'NAV.TABLES',     title: 'NAV.TABLES',     emoji: '🪑', route: '/mesas',      minRole: 'planner' },
     { label: 'NAV.MAP',        title: 'NAV.MAP',        emoji: '🗺️', route: '/plano',      minRole: 'planner' },
     { label: 'NAV.ALBUM',      title: 'NAV.ALBUM',      emoji: '📸', route: '/album'      },              
     { label: 'NAV.COLLABORATORS', title: 'NAV.COLLABORATORS', emoji: '👥', route: '/colaboradores', minRole: 'co_organizer' },
-    { label: 'NAV.PRICING',    title: 'NAV.PRICING',    emoji: '💎', route: '/pricing'    },              
+    { label: 'NAV.PRICING',    title: 'NAV.PRICING',    emoji: '💎', route: '/pricing'    },
+                  
   ];
 
   constructor(public authService: AuthService, private http: HttpClient, private translate: TranslateService) {}

@@ -29,6 +29,7 @@ import { InviteAcceptComponent }       from './components/invite-accept/invite-a
 import { TwoFactorComponent }          from './components/two-factor/two-factor.component';
 import { TfaResetConfirmComponent }    from './components/tfa-reset-confirm/tfa-reset-confirm.component';
 import { Perfil2faComponent }          from './components/perfil2fa/perfil2fa.component';
+import { CalendarioPageComponent } from './pages/calendario-page/calendario-page.component';
 
 export const routes: Routes = [
 
@@ -72,13 +73,18 @@ export const routes: Routes = [
     path: 'mesas',
     component: MesaManagerComponent,
     canActivate: [authGuard, minRoleGuard('planner'), PlanGuard],
-    data: { planRequerido: 'one_time' },
+    // data: { planRequerido: 'one_time' },
   },
   {
     path: 'plano',
     component: PlanoInteractivoComponent,
     canActivate: [authGuard, minRoleGuard('planner'), PlanGuard],
-    data: { planRequerido: 'one_time' },
+    // data: { planRequerido: 'one_time' },
+  },
+  {
+    path: 'calendario',
+    component: CalendarioPageComponent,
+    canActivate: [authGuard, minRoleGuard('guest')],
   },
 
   // ── Co-organizador o superior ──────────────────────────────

@@ -118,6 +118,7 @@ enum PaymentStatus {
 enum GuestShape {
   round
   rectangular
+  presidential
 }
 
 // ─────────────────────────────────────────────

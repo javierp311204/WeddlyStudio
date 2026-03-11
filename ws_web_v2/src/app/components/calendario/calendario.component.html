@@ -1,0 +1,258 @@
+<!-- src/app/components/calendario/calendario.component.html -->
+<div class="cal-wrapper">
+
+  <!-- LOADER -->
+  <div *ngIf="loading" class="cal-loader">
+    <div class="loader-ring"></div>
+    <p>Cargando calendario…</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- ── HEADER ─────────────────────────────────────────── -->
+    <header class="cal-header">
+      <div class="cal-header-left">
+        <h2 class="cal-title">Calendario</h2>
+        <p class="cal-subtitle">
+          {{ tasksThisMonth.length }} tarea{{ tasksThisMonth.length !== 1 ? 's' : '' }} este mes
+        </p>
+      </div>
+
+      <!-- Export buttons -->
+      <div class="cal-actions">
+        <button
+          class="export-btn export-ics"
+          (click)="exportToGoogleCalendar()"
+          [disabled]="exportingICS"
+          title="Exportar a Google Calendar (.ics)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <span>{{ exportingICS ? 'Exportando…' : 'Google Calendar' }}</span>
+        </button>
+
+        <button
+          class="export-btn export-pdf"
+          [class.locked]="isPlanFree"
+          (click)="exportToPDF()"
+          [disabled]="exportingPDF"
+          title="{{ isPlanFree ? 'Requiere plan de pago' : 'Exportar PDF del checklist' }}">
+          <svg *ngIf="!isPlanFree" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10,9 9,9 8,9"/>
+          </svg>
+          <svg *ngIf="isPlanFree" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+          <span>{{ exportingPDF ? 'Generando…' : 'Exportar PDF' }}</span>
+          <span *ngIf="isPlanFree" class="lock-badge">Pro</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── NAVEGACIÓN MES ─────────────────────────────────── -->
+    <div class="cal-nav">
+      <div class="cal-nav-controls">
+        <button class="nav-btn" (click)="prevMonth()" title="Mes anterior">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15,18 9,12 15,6"/>
+          </svg>
+        </button>
+        <span class="cal-month-label">{{ currentMonthLabel }}</span>
+        <button class="nav-btn" (click)="nextMonth()" title="Mes siguiente">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9,18 15,12 9,6"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="cal-nav-shortcuts">
+        <button class="shortcut-btn" (click)="goToToday()">Hoy</button>
+        <button class="shortcut-btn accent" *ngIf="weddingDate" (click)="goToWeddingMonth()">
+          💍 Día de la boda
+        </button>
+      </div>
+    </div>
+
+    <!-- ── GRID CALENDARIO ────────────────────────────────── -->
+    <div class="cal-grid-wrap">
+
+      <!-- Cabeceras días de la semana -->
+      <div class="cal-dow-row">
+        <div *ngFor="let day of DAY_NAMES" class="cal-dow">{{ day }}</div>
+      </div>
+
+      <!-- Semanas -->
+      <div class="cal-body">
+        <div *ngFor="let week of weeks" class="cal-week">
+          <div
+            *ngFor="let day of week.days"
+            class="cal-day"
+            [class.other-month]="!day.isCurrentMonth"
+            [class.today]="day.isToday"
+            [class.wedding-day]="day.isWeddingDay"
+            [class.has-tasks]="day.tasks.length > 0"
+            [class.selected]="selectedDay ? selectedDay.date.getTime() === day.date.getTime() : false"
+            (click)="selectDay(day)">
+
+            <span class="day-number">{{ day.dayNumber }}</span>
+
+            <!-- Indicador boda -->
+            <span *ngIf="day.isWeddingDay" class="wedding-badge" title="¡Día de la boda!">💍</span>
+
+            <!-- Dots de tareas (máx 4 visibles) -->
+            <div class="task-dots" *ngIf="day.tasks.length > 0">
+              <span
+                *ngFor="let task of day.tasks.slice(0, 3)"
+                class="task-dot"
+                [style.background]="getTaskDotColor(task)"
+                [title]="task.title">
+              </span>
+              <span *ngIf="day.tasks.length > 3" class="task-dot-more">+{{ day.tasks.length - 3 }}</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PANEL DE DETALLE DEL DÍA ──────────────────────── -->
+    <div class="day-detail" *ngIf="selectedDay" [@slideIn]>
+      <div class="day-detail-header">
+        <div>
+          <h3 class="day-detail-title">
+            {{ selectedDay.date | date:'EEEE d' : '' : 'es-ES' | titlecase }}
+            <span *ngIf="selectedDay.isWeddingDay" style="margin-left:6px">💍</span>
+          </h3>
+          <p class="day-detail-sub">{{ selectedDay.date | date:'MMMM yyyy' : '' : 'es-ES' }}</p>
+        </div>
+        <button class="detail-close" (click)="closeDetail()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Sin tareas -->
+      <div *ngIf="selectedDay.tasks.length === 0" class="day-no-tasks">
+        <p>Sin tareas para este día</p>
+      </div>
+
+      <!-- Lista de tareas del día -->
+      <div class="day-tasks-list" *ngIf="selectedDay.tasks.length > 0">
+        <div *ngFor="let task of selectedDay.tasks" class="day-task-item">
+          <span
+            class="day-task-dot"
+            [style.background]="getTaskDotColor(task)">
+          </span>
+          <div class="day-task-info">
+            <span class="day-task-title" [class.completed]="task.status === 'completed'">
+              {{ task.title }}
+            </span>
+            <div class="day-task-meta">
+              <span class="day-task-phase" *ngIf="task.phase">{{ getPhaseLabel(task.phase) }}</span>
+              <span
+                class="day-task-status"
+                [style.color]="STATUS_COLORS[task.status]">
+                {{ getStatusLabel(task.status) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <button class="assign-task-btn" (click)="openAssignModal()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Asignar tarea a este día
+    </button>
+    </div>
+
+    <!-- ── TAREAS SIN FECHA ───────────────────────────────── -->
+    <div class="undated-section" *ngIf="tasksWithoutDate.length > 0">
+      <div class="undated-header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>
+        </svg>
+        <span>{{ tasksWithoutDate.length }} tarea{{ tasksWithoutDate.length !== 1 ? 's' : '' }} sin fecha asignada</span>
+      </div>
+      <div class="undated-chips">
+        <span *ngFor="let task of tasksWithoutDate.slice(0, 6)" class="undated-chip">
+          {{ task.title }}
+        </span>
+        <span *ngIf="tasksWithoutDate.length > 6" class="undated-more">
+          +{{ tasksWithoutDate.length - 6 }} más
+        </span>
+      </div>
+    </div>
+
+    <!-- ── MODAL ASIGNAR TAREA ──────────────────────────────── -->
+    <div class="assign-overlay" *ngIf="showAssignModal" (click)="closeAssignModal()">
+    <div class="assign-modal" (click)="$event.stopPropagation()">
+
+        <div class="assign-modal-header">
+        <div>
+            <h3 class="assign-modal-title">Asignar tarea</h3>
+            <p class="assign-modal-sub">
+            {{ selectedDay?.date | date:'d MMMM yyyy' : '' : 'es-ES' }}
+            </p>
+        </div>
+        <button class="detail-close" (click)="closeAssignModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        </div>
+
+        <!-- Buscador -->
+        <div class="assign-search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+            class="assign-search"
+            type="text"
+            placeholder="Buscar tarea..."
+            [(ngModel)]="taskSearchQuery"
+        />
+        </div>
+
+        <!-- Lista de tareas -->
+        <div class="assign-task-list">
+
+        <div *ngIf="assignableTasks.length === 0" class="assign-empty">
+            <p>No hay tareas pendientes sin fecha</p>
+        </div>
+
+        <button
+            *ngFor="let task of assignableTasks"
+            class="assign-task-row"
+            [disabled]="assigningTask"
+            (click)="assignTaskToDay(task)">
+
+            <span
+            class="assign-task-dot"
+            [style.background]="PHASE_COLORS[task.phase ?? ''] ?? '#94a3b8'">
+            </span>
+            <div class="assign-task-info">
+            <span class="assign-task-title">{{ task.title }}</span>
+            <span class="assign-task-phase">{{ getPhaseLabel(task.phase) }}</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9,18 15,12 9,6"/>
+            </svg>
+        </button>
+
+        </div>
+    </div>
+    </div>
+
+  </ng-container>
+</div>

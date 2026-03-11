@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+// Shape válidos — sincronizado con el enum GuestShape de Prisma
+const SHAPE_VALUES = ['round', 'rectangular', 'presidential'] as const;
+type Shape = typeof SHAPE_VALUES[number];
+
 // ─── Params comunes ──────────────────────────────────────────────
 export const weddingIdParamSchema = z.object({
   params: z.object({
@@ -19,8 +23,6 @@ export const listTablesSchema = z.object({
     weddingId: z.string().uuid('ID de boda inválido'),
   }),
   query: z.object({
-    // FIX: enum explícito en lugar de transform(v => v !== 'false')
-    // Antes cualquier string que no fuera 'false' devolvía true (ej: 'banana' → true)
     include_guests: z
       .enum(['true', 'false'])
       .optional()
@@ -37,8 +39,8 @@ export const createTableSchema = z.object({
   body: z.object({
     name: z.string().min(1, 'El nombre es requerido').max(100),
     shape: z
-      .enum(['round', 'rectangular'] as const, {
-        message: 'Shape inválido: round | rectangular',
+      .enum(SHAPE_VALUES, {
+        message: 'Shape inválido: round | rectangular | presidential',
       })
       .optional()
       .default('round'),
@@ -49,11 +51,8 @@ export const createTableSchema = z.object({
       .max(50)
       .optional()
       .default(10),
-    // FIX: el canvas usa píxeles directos (canvasWidth=1200, canvasHeight=800).
-    // El límite anterior de max(100) rechazaba cualquier posición real del canvas
-    // con error 400. Ahora se acepta hasta 5000px por si el canvas escala.
-    pos_x: z.number().min(0).max(5000).optional().default(600),
-    pos_y: z.number().min(0).max(5000).optional().default(400),
+    pos_x: z.number().min(-5000).max(10000).optional().default(600),
+    pos_y: z.number().min(-5000).max(10000).optional().default(400),
   }),
 });
 
@@ -65,11 +64,10 @@ export const updateTableSchema = z.object({
   body: z
     .object({
       name:         z.string().min(1).max(100).optional(),
-      shape:        z.enum(['round', 'rectangular'] as const).optional(),
+      shape:        z.enum(SHAPE_VALUES).optional(),
       max_capacity: z.number().int().min(1).max(50).optional(),
-      // FIX: mismo ajuste de rango que en createTableSchema
-      pos_x:        z.number().min(0).max(5000).optional(),
-      pos_y:        z.number().min(0).max(5000).optional(),
+      pos_x:        z.number().min(-5000).max(10000).optional(),
+      pos_y:        z.number().min(-5000).max(10000).optional(),
     })
     .refine((data) => Object.keys(data).length > 0, {
       message: 'Debes enviar al menos un campo para actualizar',
@@ -101,9 +99,8 @@ export const updatePositionSchema = z.object({
     tableId: z.string().uuid('ID de mesa inválido'),
   }),
   body: z.object({
-    // FIX: mismo ajuste de rango
-    pos_x: z.number().min(0).max(5000),
-    pos_y: z.number().min(0).max(5000),
+    pos_x: z.number().min(-5000).max(10000).optional(),
+    pos_y: z.number().min(-5000).max(10000).optional(),
   }),
 });
 

@@ -12,7 +12,7 @@ export interface GuestSummary {
   id:              string;
   first_name:      string;
   last_name:       string | null;
-  group:           string | null;   
+  group:           string | null;
   rsvp_status:     'pending' | 'confirmed' | 'declined';
   seat_number:     number | null;
   parent_guest_id: string | null;
@@ -25,7 +25,7 @@ export interface Table {
   id:           string;
   wedding_id:   string;
   name:         string;
-  shape:        'round' | 'rectangular';
+  shape:        'round' | 'rectangular' | 'presidential'; // ← añadido presidential
   max_capacity: number;
   pos_x:        number;
   pos_y:        number;
@@ -52,7 +52,7 @@ export interface TablesResponse {
 
 export interface TablePayload {
   name:          string;
-  shape?:        'round' | 'rectangular';
+  shape?:        'round' | 'rectangular' | 'presidential'; // ← añadido presidential
   max_capacity?: number;
   pos_x?:        number;
   pos_y?:        number;
@@ -60,20 +60,14 @@ export interface TablePayload {
 
 @Injectable({ providedIn: 'root' })
 export class PlanoService {
-  // FIX: usar environment en lugar de URL hardcodeada
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
-  // FIX: headers centralizados en el servicio — antes solo el componente los enviaba
   private getHeaders(): { headers: HttpHeaders } {
     const token = localStorage.getItem('token') ?? '';
     return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
   }
-
-  // ════════════════════════════════════════
-  // LECTURA
-  // ════════════════════════════════════════
 
   getPlano(weddingId: string): Observable<TablesResponse> {
     return this.http.get<TablesResponse>(
@@ -89,10 +83,6 @@ export class PlanoService {
     );
   }
 
-  // ════════════════════════════════════════
-  // POSICIÓN (drag & drop)
-  // ════════════════════════════════════════
-
   actualizarPosicionMesa(tableId: string, x: number, y: number): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/tables/${tableId}/position`,
@@ -100,10 +90,6 @@ export class PlanoService {
       this.getHeaders(),
     );
   }
-
-  // ════════════════════════════════════════
-  // ASIGNACIÓN DE INVITADOS
-  // ════════════════════════════════════════
 
   asignarInvitadoAMesa(tableId: string, guestId: string): Observable<any> {
     return this.http.patch(
@@ -120,10 +106,6 @@ export class PlanoService {
       this.getHeaders(),
     );
   }
-
-  // ════════════════════════════════════════
-  // CRUD DE MESAS
-  // ════════════════════════════════════════
 
   agregarMesa(weddingId: string, datos: TablePayload): Observable<any> {
     return this.http.post(

@@ -231,6 +231,33 @@
           <span class="card-arrow">→</span>
         </div>
 
+        <div class="action-card" routerLink="/colaboradores" *ngIf="authService.isWeddingOwner()">
+          <div class="card-icon">👥</div>
+          <div class="card-body-text">
+            <h3>{{ 'HOME.CARD_COLABORADORES_TITLE' | translate }}</h3>
+            <p>{{ 'HOME.CARD_COLABORADORES_DESC' | translate }}</p>
+          </div>
+          <span class="card-arrow">→</span>
+        </div>
+
+        <div class="action-card" routerLink="/pricing">
+          <div class="card-icon">💎</div>
+          <div class="card-body-text">
+            <h3>{{ 'HOME.CARD_PRICING_TITLE' | translate }}</h3>
+            <p>{{ 'HOME.CARD_PRICING_DESC' | translate }}</p>
+          </div>
+          <span class="card-arrow">→</span>
+        </div>
+
+        <div class="action-card" routerLink="/plano" *ngIf="authService.isWeddingOwner()">
+          <div class="card-icon">🗺️</div>
+          <div class="card-body-text">
+            <h3>{{ 'HOME.CARD_PLANO_TITLE' | translate }}</h3>
+            <p>{{ 'HOME.CARD_PLANO_DESC' | translate }}</p>
+          </div>
+          <span class="card-arrow">→</span>
+        </div>
+
       </div>
 
       <!-- Checklist preview -->
