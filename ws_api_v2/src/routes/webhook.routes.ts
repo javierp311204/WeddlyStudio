@@ -142,13 +142,26 @@ router.post('/stripe', async (req: Request, res: Response) => {
       // ── Suscripción cancelada ─────────────────────────────
       case 'customer.subscription.deleted': {
         const sub = event.data.object as Stripe.Subscription;
-        await subscriptionService.markCancelled(sub.id);
+        const cancelledSub = await subscriptionService.markCancelled(sub.id);
 
-        // Revocar plan — volver a free
-        const userId    = sub.metadata?.user_id;
+        const userId    = sub.metadata?.user_id ?? cancelledSub?.user_id;
         const weddingId = sub.metadata?.wedding_id;
-        if (userId && weddingId) {
+
+        if (userId) {
+          await prisma.wedding.updateMany({
+            where: {
+              created_by: userId,
+              status: 'active',
+              ...(weddingId ? { id: weddingId } : {}),
+            },
+            data: {
+              status: 'readonly',
+              readonly_reason: 'payment_failed',  // ← añadir
+            },
+          });
+
           await subscriptionService.upgradePlan(userId, 'free', weddingId);
+          console.log(`[Stripe] Suscripción cancelada — user ${userId} → plan free, bodas → readonly`);
         }
         break;
       }
@@ -156,11 +169,25 @@ router.post('/stripe', async (req: Request, res: Response) => {
       // ── Pago de suscripción fallido ───────────────────────
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice;
-        // En Stripe v20, subscription_id vive en invoice.parent.subscription_details.subscription
         const subId = (invoice as any).subscription
           ?? (invoice as any).parent?.subscription_details?.subscription;
+
         if (subId) {
-          await subscriptionService.markPastDue(subId as string);
+          const sub = await subscriptionService.markPastDue(subId as string);
+
+          if (sub?.user_id) {
+            await prisma.wedding.updateMany({
+              where: {
+                created_by: sub.user_id,
+                status: 'active',
+              },
+              data: {
+                status: 'readonly',
+                readonly_reason: 'payment_failed',  // ← añadir
+              },
+            });
+            console.log(`[Stripe] Bodas de user ${sub.user_id} → readonly (past_due)`);
+          }
         }
         break;
       }

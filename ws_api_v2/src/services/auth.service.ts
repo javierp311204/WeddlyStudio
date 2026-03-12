@@ -38,10 +38,10 @@ export class AuthService {
       },
     });
 
-    sendVerificationEmail({ to: data.email, firstName: data.first_name, verificationToken })
+    sendVerificationEmail({ to: data.email, firstName: data.first_name, verificationToken, lang: data.language ?? 'es', })
       .catch(err => console.error('[Auth] Error enviando email de verificación:', err));
 
-    const tokenPayload = { userId: user.id, email: user.email, globalRole: user.role_global };
+    const tokenPayload = { userId: user.id, email: user.email, globalRole: user.role_global,  };
 
     return {
       user,
@@ -77,7 +77,7 @@ export class AuthService {
       where: { id: user.id },
       data: { email_verification_token: verificationToken, email_verification_expires: verificationExpires },
     });
-    sendVerificationEmail({ to: user.email, firstName: user.first_name, verificationToken })
+    sendVerificationEmail({ to: user.email, firstName: user.first_name, verificationToken, lang: user.language ?? 'es',})
       .catch(err => console.error('[Auth] Error reenviando verificación:', err));
     return { message: 'Si el email existe y no está verificado, recibirás un nuevo enlace.' };
   }
@@ -91,6 +91,7 @@ export class AuthService {
         first_name:         true,
         last_name:          true,
         email:              true,
+        language:           true,
         phone:              true,
         role_global:        true,
         avatar_url:         true,
@@ -196,7 +197,7 @@ export class AuthService {
         email_verification_token: verificationToken,
         email_verification_expires: verificationExpires,
       };
-      sendVerificationEmail({ to: data.email, firstName: data.first_name, verificationToken })
+      sendVerificationEmail({ to: data.email, firstName: data.first_name, verificationToken, lang: data.language ?? 'es', })
         .catch(err => console.error('[Auth] Error enviando verificación al cambiar email:', err));
     }
 

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import prisma from '../config/db';
 import { AppError } from './errorHandler.middleware';
 
 export interface JwtPayload {
@@ -17,7 +18,7 @@ declare global {
   }
 }
 
-export const authenticate = (req: Request, res: Response, next: NextFunction) => {
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -27,12 +28,22 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
 
     const token = authHeader.split(' ')[1];
     const secret = process.env.JWT_SECRET;
-
-    if (!secret) {
-      throw new AppError('Configuración de servidor inválida', 500);
-    }
+    if (!secret) throw new AppError('Configuración de servidor inválida', 500);
 
     const decoded = jwt.verify(token, secret) as JwtPayload;
+
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: { status: true },
+    });
+
+    if (!user) throw new AppError('Usuario no encontrado', 401);
+
+    if (user.status === 'suspended') {
+      return next(new AppError('ACCOUNT_SUSPENDED', 403));
+    }
+
     req.user = decoded;
     next();
   } catch (err) {

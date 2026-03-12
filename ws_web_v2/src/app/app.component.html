@@ -4,6 +4,7 @@
     <app-sidebar (collapsedChange)="isSidebarCollapsed = $event" />
     <main class="app-main">
       <div class="app-content">
+        <app-wedding-status-banner />
         <router-outlet />
       </div>
 
@@ -88,6 +89,7 @@
 
 <!-- ── Layout público: sin sidebar ───────────────────────────── -->
 <ng-container *ngIf="!authService.isLoggedIn()">
+  
   <router-outlet />
 </ng-container>
 

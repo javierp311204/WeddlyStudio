@@ -53,8 +53,8 @@ export const moderatePhotoSchema = z.object({
     photoId: z.string().uuid('ID de foto inválido'),
   }),
   body: z.object({
-    status: z.enum(['approved', 'rejected'] as const, {
-      message: 'Estado inválido: approved | rejected',
+    status: z.enum(['approved', 'rejected', 'deleted'], {
+      message: 'Estado inválido: approved | rejected | deleted',
     }),
   }),
 });

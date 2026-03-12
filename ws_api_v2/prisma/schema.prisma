@@ -22,6 +22,11 @@ enum GlobalRole {
   superadmin
 }
 
+enum UserStatus {
+  active
+  suspended
+}
+
 enum WeddingRole {
   owner
   co_organizer
@@ -34,6 +39,11 @@ enum WeddingStatus {
   readonly
   archived
   cancelled
+}
+
+enum ReadonlyReason {
+  wedding_completed
+  payment_failed
 }
 
 model WeddingInvite {
@@ -140,6 +150,7 @@ model User {
   tfa_reset_token    String?   @db.Text      
   tfa_reset_expires  DateTime?
   role_global        GlobalRole @default(user)
+  status             UserStatus @default(active)
   google_id          String?   @unique @db.VarChar(255)
   avatar_url         String?   @db.VarChar(500)
   created_at         DateTime  @default(now())
@@ -182,6 +193,7 @@ model Wedding {
   rsvp_deadline    DateTime?
   plan_type        PlanType      @default(free)
   status           WeddingStatus @default(active)
+  readonly_reason  ReadonlyReason?
   created_by       String        @db.Uuid
   archived_at      DateTime?
   created_at       DateTime      @default(now())

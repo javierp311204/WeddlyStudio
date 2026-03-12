@@ -7,10 +7,11 @@ import { LanguageService } from './services/language/language.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { WeddingStatusBannerComponent } from './components/wedding-status-banner/wedding-status-banner.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent, TranslateModule, SidebarComponent],
+  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent, TranslateModule, SidebarComponent, WeddingStatusBannerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

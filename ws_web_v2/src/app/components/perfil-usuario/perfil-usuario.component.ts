@@ -184,7 +184,7 @@ export class PerfilUsuarioComponent implements OnInit {
   }
 
   resendVerification() {
-    this.http.post<any>(`${this.authUrl}/resend-verification`, {}, this.getHeaders()).subscribe({
+    this.http.post<any>(`${this.authUrl}/resend-verification`, { email: this.user.email }, this.getHeaders()).subscribe({
       next: () => this.notifService.showSuccess(
         this.translate.instant('COMMON.SUCCESS'),
         this.translate.instant('PROFILE.VERIFICATION_SENT'),

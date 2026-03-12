@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LanguageService } from '../../services/language/language.service';
 
@@ -13,7 +13,9 @@ interface LanguageOption {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="lang-wrapper" [class.open]="isOpen">
+    <div class="lang-wrapper"
+         [class.open]="isOpen"
+         [class.navbar-mode]="mode === 'navbar'">
 
       <button class="lang-trigger" (click)="toggle($event)" type="button">
         <span class="lang-flag">{{ currentLanguageOption.flag }}</span>
@@ -79,11 +81,11 @@ interface LanguageOption {
     }
     .open .lang-chevron { transform: rotate(180deg); }
 
-    /* Dropdown menu — abre hacia ARRIBA para no salir del sidebar */
+    /* ── MODO SIDEBAR (default): abre hacia arriba con position fixed ── */
     .lang-menu {
-      position: fixed;          /* fixed para salir del overflow:hidden del sidebar */
-      bottom: 80px;             /* encima del footer del sidebar */
-      left: 72px;               /* justo al lado del sidebar */
+      position: fixed;
+      bottom: 80px;
+      left: 72px;
       min-width: 140px;
       background: #2a2420;
       border: 1px solid rgba(212, 163, 115, 0.2);
@@ -94,6 +96,30 @@ interface LanguageOption {
       padding: 4px;
       z-index: 2000;
       animation: fadeIn 0.15s ease;
+    }
+
+    /* ── MODO NAVBAR: abre hacia abajo con position absolute ── */
+    .navbar-mode .lang-menu {
+      position: absolute;
+      bottom: auto;
+      left: 0;
+      top: calc(100% + 6px);
+      background: white;
+      border: 1px solid rgba(212, 163, 115, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-mode .lang-option {
+      color: #4a443f;
+    }
+
+    .navbar-mode .lang-option:hover {
+      background: rgba(212, 163, 115, 0.1);
+      color: #d4a373;
+    }
+
+    .navbar-mode .lang-option.selected {
+      color: #d4a373;
     }
 
     @keyframes fadeIn {
@@ -137,6 +163,9 @@ interface LanguageOption {
   `]
 })
 export class LanguageSelectorComponent implements OnInit {
+
+  @Input() mode: 'sidebar' | 'navbar' = 'sidebar';
+
   currentLang = 'es';
   isOpen      = false;
 
@@ -170,7 +199,6 @@ export class LanguageSelectorComponent implements OnInit {
     this.isOpen = false;
   }
 
-  /* Cierra al hacer click fuera */
   @HostListener('document:click', ['$event'])
   onDocumentClick(e: MouseEvent): void {
     if (!this.elRef.nativeElement.contains(e.target)) {

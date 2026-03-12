@@ -8,6 +8,7 @@ import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import { TareasService } from '../../services/tareas/tareas.service';
 import { ChecklistPreviewComponent } from '../checklist-preview/checklist-preview.component';
+import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +17,7 @@ import { ChecklistPreviewComponent } from '../checklist-preview/checklist-previe
     CommonModule,
     RouterModule,
     TranslateModule,
+    LanguageSelectorComponent,
     ChecklistPreviewComponent,
   ],
   templateUrl: './home.component.html',
@@ -70,6 +72,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           const lista: any[] = res?.data ?? res?.weddings ?? [];
           if (lista.length > 0) {
             this.authService.setWeddingId(lista[0].id);
+            this.authService.setWeddingStatus(lista[0].status ?? 'active');
+            this.authService.setReadonlyReason(lista[0].readonly_reason ?? null);
             localStorage.setItem('weddingRole', lista[0].myRole ?? 'owner');
             this.inicializarHome();
           } else {

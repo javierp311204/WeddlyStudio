@@ -1,6 +1,6 @@
 import prisma from '../config/db';
 import { AppError } from '../middleware/errorHandler.middleware';
-import { uploadToS3, deleteFromS3, extractKeyFromUrl } from '../utils/s3';
+import { uploadToS3, deleteFromS3, extractKeyFromUrl, getPresignedUrl } from '../utils/s3';
 import {
   ListPhotosQuery,
   UploadPhotoInput,
@@ -8,198 +8,177 @@ import {
   ModeratePhotoInput,
 } from '../schemas/photo.schema';
 
-// Límites de fotos por tipo de plan
+// ─── FIX: claves alineadas con plan_type real del schema ─────────
 const PHOTO_LIMITS: Record<string, number> = {
-  free: 20,
-  one_time: 80,
-  subscription: 80,
+  free:    20,
+  pro:     200,
+  premium: Infinity,
 };
 
 export class PhotoService {
-  // ─── Helpers privados ──────────────────────────────────────────
+
+  // ─── Helper: genera presigned URLs para una foto ──────────────
+  private async withPresignedUrls(photo: any) {
+    if (!photo) return photo;
+    return {
+      ...photo,
+      url:           photo.url           ? await getPresignedUrl(extractKeyFromUrl(photo.url), 3600)           : photo.url,
+      thumbnail_url: photo.thumbnail_url ? await getPresignedUrl(extractKeyFromUrl(photo.thumbnail_url), 3600) : photo.thumbnail_url,
+    };
+  }
 
   private async assertWeddingAccess(weddingId: string, userId: string) {
     const wedding = await prisma.wedding.findUnique({
-      where: { id: weddingId },
+      where:   { id: weddingId },
       include: { user_roles: { where: { user_id: userId }, take: 1 } },
     });
-
     if (!wedding) throw new AppError('Boda no encontrada', 404);
-
     const hasAccess = wedding.created_by === userId || wedding.user_roles.length > 0;
     if (!hasAccess) throw new AppError('No tienes acceso a esta boda', 403);
-
     return wedding;
   }
 
   private async assertPhotoAccess(photoId: string, userId: string) {
     const photo = await prisma.photo.findUnique({
-      where: { id: photoId },
+      where:   { id: photoId },
       include: {
-        wedding: {
-          include: { user_roles: { where: { user_id: userId }, take: 1 } },
-        },
+        wedding: { include: { user_roles: { where: { user_id: userId }, take: 1 } } },
       },
     });
-
     if (!photo) throw new AppError('Foto no encontrada', 404);
-
-    const hasAccess =
-      photo.wedding.created_by === userId || photo.wedding.user_roles.length > 0;
+    const hasAccess = photo.wedding.created_by === userId || photo.wedding.user_roles.length > 0;
     if (!hasAccess) throw new AppError('No tienes acceso a esta foto', 403);
-
     return photo;
   }
 
-  // ─── Endpoints ────────────────────────────────────────────────
-
-  /**
-   * GET /api/weddings/:weddingId/photos
-   * Lista fotos con paginación y filtros.
-   */
+  // ─── GET /api/weddings/:weddingId/photos ──────────────────────
   async getAll(weddingId: string, userId: string, filters: ListPhotosQuery) {
-    await this.assertWeddingAccess(weddingId, userId);
-
-    const where = {
+    const wedding = await this.assertWeddingAccess(weddingId, userId);
+    const isOwner = wedding.created_by === userId;
+    const isOwnerRole = wedding.user_roles.some((r: any) => r.role === 'owner');
+    const where: any = {
       wedding_id: weddingId,
-      ...(filters.status && { status: filters.status }),
-      ...(filters.uploaded_by_me && { uploaded_by: userId }),
+      deleted_at: null,  // FIX: excluir soft-deleted
     };
+
+    if (isOwner || isOwnerRole) {
+      // Owner ve todas, con filtro opcional por status
+      if (filters.status) where.status = filters.status;
+    } else {
+      // Resto solo ven approved
+      where.status = 'approved';
+    }
+
+    if (filters.uploaded_by_me) where.uploaded_by = userId;
 
     const [photos, total] = await Promise.all([
       prisma.photo.findMany({
         where,
         select: {
-          id: true,
-          url: true,
-          thumbnail_url: true,
-          caption: true,
-          status: true,
-          file_size: true,
-          created_at: true,
-          uploader: {
-            select: { id: true, first_name: true, last_name: true, avatar_url: true },
-          },
-          approver: {
-            select: { id: true, first_name: true, last_name: true },
-          },
+          id: true, url: true, thumbnail_url: true,
+          caption: true, status: true, file_size: true, created_at: true,
+          uploader: { select: { id: true, first_name: true, last_name: true, avatar_url: true } },
+          approver: { select: { id: true, first_name: true, last_name: true } },
         },
         orderBy: { created_at: 'desc' },
-        skip: (filters.page - 1) * filters.limit,
-        take: filters.limit,
+        skip:  (filters.page - 1) * filters.limit,
+        take:  filters.limit,
       }),
       prisma.photo.count({ where }),
     ]);
 
+    // FIX: generar presigned URLs para cada foto
+    const photosWithUrls = await Promise.all(photos.map(p => this.withPresignedUrls(p)));
+
     return {
-      photos,
+      photos: photosWithUrls,
+      is_owner: isOwner || isOwnerRole,
       pagination: {
         total,
-        page: filters.page,
-        limit: filters.limit,
+        page:        filters.page,
+        limit:       filters.limit,
         total_pages: Math.ceil(total / filters.limit),
-        has_next: filters.page * filters.limit < total,
+        has_next:    filters.page * filters.limit < total,
       },
     };
   }
 
-  /**
-   * GET /api/photos/:photoId
-   * Detalle de una foto.
-   */
+  // ─── GET /api/photos/:photoId ─────────────────────────────────
   async getById(photoId: string, userId: string) {
     await this.assertPhotoAccess(photoId, userId);
-
-    return prisma.photo.findUnique({
-      where: { id: photoId },
+    const photo = await prisma.photo.findUnique({
+      where:   { id: photoId },
       include: {
-        uploader: {
-          select: { id: true, first_name: true, last_name: true, avatar_url: true },
-        },
-        approver: {
-          select: { id: true, first_name: true, last_name: true },
-        },
+        uploader: { select: { id: true, first_name: true, last_name: true, avatar_url: true } },
+        approver: { select: { id: true, first_name: true, last_name: true } },
       },
     });
+    return this.withPresignedUrls(photo);
   }
 
-  /**
-   * POST /api/weddings/:weddingId/photos
-   * Sube una foto individual a S3.
-   */
-  async upload(
-    weddingId: string,
-    userId: string,
-    file: Express.Multer.File,
-    data: UploadPhotoInput,
-  ) {
+  // ─── POST /api/weddings/:weddingId/photos ─────────────────────
+  async upload(weddingId: string, userId: string, file: Express.Multer.File, data: UploadPhotoInput) {
     const wedding = await this.assertWeddingAccess(weddingId, userId);
 
-    // Verificar límite de fotos según plan
     const photoLimit = PHOTO_LIMITS[wedding.plan_type] ?? 20;
-    const currentCount = await prisma.photo.count({ where: { wedding_id: weddingId } });
 
-    if (currentCount >= photoLimit) {
-      throw new AppError(
-        `Has alcanzado el límite de ${photoLimit} fotos para el plan ${wedding.plan_type}`,
-        403,
-      );
+    if (photoLimit !== Infinity) {
+      // FIX: contar solo fotos no eliminadas
+      const currentCount = await prisma.photo.count({
+        where: { wedding_id: weddingId, deleted_at: null },
+      });
+      if (currentCount >= photoLimit) {
+        throw new AppError(
+          `Has alcanzado el límite de ${photoLimit} fotos para el plan ${wedding.plan_type}. Actualiza tu plan para subir más.`,
+          403,
+        );
+      }
     }
 
-    // Subir a S3 (optimiza y genera thumbnail automáticamente)
     const s3Result = await uploadToS3(file.buffer, file.mimetype, weddingId);
 
-    // Guardar en BD
     const photo = await prisma.photo.create({
       data: {
-        wedding_id: weddingId,
-        uploaded_by: userId,
-        url: s3Result.url,
+        wedding_id:    weddingId,
+        uploaded_by:   userId,
+        url:           s3Result.url,
         thumbnail_url: s3Result.thumbnail_url,
-        file_size: s3Result.file_size,
-        mime_type: s3Result.mime_type,
-        caption: data.caption,
-        status: 'pending', // requiere moderación
+        file_size:     s3Result.file_size,
+        mime_type:     s3Result.mime_type,
+        caption:       data.caption,
+        status:        'pending',
       },
       include: {
-        uploader: {
-          select: { id: true, first_name: true, last_name: true },
-        },
+        uploader: { select: { id: true, first_name: true, last_name: true } },
       },
     });
 
-    return photo;
+    return this.withPresignedUrls(photo);
   }
 
-  /**
-   * POST /api/weddings/:weddingId/photos/batch
-   * Sube múltiples fotos a la vez (máx 10).
-   */
-  async uploadBatch(
-    weddingId: string,
-    userId: string,
-    files: Express.Multer.File[],
-  ) {
+  // ─── POST /api/weddings/:weddingId/photos/batch ───────────────
+  async uploadBatch(weddingId: string, userId: string, files: Express.Multer.File[]) {
     const wedding = await this.assertWeddingAccess(weddingId, userId);
 
-    // Verificar límite considerando las fotos nuevas
-    const photoLimit = PHOTO_LIMITS[wedding.plan_type] ?? 20;
-    const currentCount = await prisma.photo.count({ where: { wedding_id: weddingId } });
+    const photoLimit   = PHOTO_LIMITS[wedding.plan_type] ?? 20;
 
-    if (currentCount + files.length > photoLimit) {
-      const remaining = photoLimit - currentCount;
-      throw new AppError(
-        `Solo puedes subir ${remaining} foto(s) más (límite: ${photoLimit}, actuales: ${currentCount})`,
-        403,
-      );
+    if (photoLimit !== Infinity) {
+      const currentCount = await prisma.photo.count({
+        where: { wedding_id: weddingId, deleted_at: null },
+      });
+      if (currentCount + files.length > photoLimit) {
+        const remaining = photoLimit - currentCount;
+        throw new AppError(
+          `Solo puedes subir ${remaining} foto(s) más (límite: ${photoLimit}, actuales: ${currentCount}). Actualiza tu plan para subir más.`,
+          403,
+        );
+      }
     }
 
-    // Subir todas a S3 en paralelo
     const uploadResults = await Promise.allSettled(
       files.map(f => uploadToS3(f.buffer, f.mimetype, weddingId)),
     );
 
-    // Separar éxitos y fallos
     const successful = uploadResults
       .map((r, i) => ({ result: r, file: files[i] }))
       .filter(({ result }) => result.status === 'fulfilled') as Array<{
@@ -209,166 +188,132 @@ export class PhotoService {
 
     const failed = uploadResults.filter(r => r.status === 'rejected').length;
 
-    if (successful.length === 0) {
-      throw new AppError('No se pudo subir ninguna foto a S3', 500);
-    }
+    if (successful.length === 0) throw new AppError('No se pudo subir ninguna foto a S3', 500);
 
-    // Insertar registros en BD
     await prisma.photo.createMany({
       data: successful.map(({ result }) => ({
-        wedding_id: weddingId,
-        uploaded_by: userId,
-        url: result.value.url,
+        wedding_id:    weddingId,
+        uploaded_by:   userId,
+        url:           result.value.url,
         thumbnail_url: result.value.thumbnail_url,
-        file_size: result.value.file_size,
-        mime_type: result.value.mime_type,
-        status: 'pending' as const,
+        file_size:     result.value.file_size,
+        mime_type:     result.value.mime_type,
+        status:        'pending' as const,
       })),
     });
 
     return {
       uploaded: successful.length,
       failed,
-      message: `${successful.length} foto(s) subidas correctamente${failed > 0 ? `, ${failed} fallaron` : ''}`,
+      message: `${successful.length} foto(s) subidas correctamente${failed > 0 ? `, ${failed} fallaron` : ''}. Pendientes de moderación.`,
     };
   }
 
-  /**
-   * PATCH /api/photos/:photoId
-   * Actualiza el caption de una foto.
-   * Solo puede hacerlo quien la subió.
-   */
+  // ─── PATCH /api/photos/:photoId ───────────────────────────────
   async update(photoId: string, userId: string, data: UpdatePhotoInput) {
     const photo = await this.assertPhotoAccess(photoId, userId);
-
-    if (photo.uploaded_by !== userId) {
-      throw new AppError('Solo quien subió la foto puede editarla', 403);
-    }
+    if (photo.uploaded_by !== userId) throw new AppError('Solo quien subió la foto puede editarla', 403);
 
     return prisma.photo.update({
-      where: { id: photoId },
-      data: { caption: data.caption },
+      where:  { id: photoId },
+      data:   { caption: data.caption },
       select: { id: true, caption: true, url: true, thumbnail_url: true, status: true },
     });
   }
 
-  /**
-   * PATCH /api/photos/:photoId/moderate
-   * Aprueba o rechaza una foto.
-   * Solo puede hacerlo el creador de la boda o un planner.
-   */
+  // ─── PATCH /api/photos/:photoId/moderate ─────────────────────
   async moderate(photoId: string, userId: string, data: ModeratePhotoInput) {
     const photo = await this.assertPhotoAccess(photoId, userId);
 
-    // Verificar que es creador o planner
     const wedding = await prisma.wedding.findUnique({
-      where: { id: photo.wedding_id },
+      where:   { id: photo.wedding_id },
       include: { user_roles: { where: { user_id: userId } } },
     });
 
-    const isCreator = wedding!.created_by === userId;
-    const isPlanner = wedding!.user_roles.some(r => r.role === 'planner');
+    // FIX: solo owner puede moderar (no planner)
+    const isOwner     = wedding!.created_by === userId;
+    const isOwnerRole = wedding!.user_roles.some((r: any) => r.role === 'owner');
 
-    if (!isCreator && !isPlanner) {
-      throw new AppError('Solo el creador o planner pueden moderar fotos', 403);
+    if (!isOwner && !isOwnerRole) {
+      throw new AppError('Solo el organizador (owner) puede moderar fotos', 403);
     }
 
     return prisma.photo.update({
-      where: { id: photoId },
-      data: {
-        status: data.status,
+      where:  { id: photoId },
+      data:   {
+        status:      data.status,
         approved_by: data.status === 'approved' ? userId : null,
       },
-      select: {
-        id: true,
-        status: true,
-        approved_by: true,
-        url: true,
-        thumbnail_url: true,
-      },
+      select: { id: true, status: true, approved_by: true, url: true, thumbnail_url: true },
     });
   }
 
-  /**
-   * DELETE /api/photos/:photoId
-   * Soft delete en BD + eliminación real de S3.
-   * El uploader o el creador/planner de la boda pueden borrar.
-   */
+  // ─── DELETE /api/photos/:photoId — FIX: soft delete real ─────
   async remove(photoId: string, userId: string) {
     const photo = await this.assertPhotoAccess(photoId, userId);
 
     const wedding = await prisma.wedding.findUnique({
-      where: { id: photo.wedding_id },
+      where:   { id: photo.wedding_id },
       include: { user_roles: { where: { user_id: userId } } },
     });
 
-    const isCreator = wedding!.created_by === userId;
-    const isPlanner = wedding!.user_roles.some(r => r.role === 'planner');
-    const isUploader = photo.uploaded_by === userId;
+    const isOwner     = wedding!.created_by === userId;
+    const isOwnerRole = wedding!.user_roles.some((r: any) => r.role === 'owner');
+    const isUploader  = photo.uploaded_by === userId;
 
-    if (!isCreator && !isPlanner && !isUploader) {
+    if (!isOwner && !isOwnerRole && !isUploader) {
       throw new AppError('No tienes permisos para eliminar esta foto', 403);
     }
 
-    // 1. Soft delete en BD (el middleware pone deleted_at)
-    await prisma.photo.delete({ where: { id: photoId } });
-
-    // 2. Eliminar archivos de S3 en background (no bloquear la respuesta)
-    const key = extractKeyFromUrl(photo.url);
-    const thumbKey = photo.thumbnail_url ? extractKeyFromUrl(photo.thumbnail_url) : undefined;
-
-    deleteFromS3(key, thumbKey).catch(err => {
-      console.error(`[S3] Error al eliminar foto ${key}:`, err);
+    // FIX: soft delete — marcar status=deleted y deleted_at, NO borrar de S3 ni de BD
+    await prisma.photo.update({
+      where: { id: photoId },
+      data:  { status: 'deleted' as any, deleted_at: new Date() },
     });
 
     return { message: 'Foto eliminada correctamente' };
   }
 
-  /**
-   * GET /api/weddings/:weddingId/photos/stats
-   * Estadísticas de fotos de la boda.
-   */
+  // ─── GET /api/weddings/:weddingId/photos/stats ────────────────
   async getStats(weddingId: string, userId: string) {
     await this.assertWeddingAccess(weddingId, userId);
 
     const wedding = await prisma.wedding.findUnique({
-      where: { id: weddingId },
+      where:  { id: weddingId },
       select: { plan_type: true },
     });
 
     const stats = await prisma.photo.groupBy({
-      by: ['status'],
-      where: { wedding_id: weddingId },
+      by:    ['status'],
+      where: { wedding_id: weddingId, deleted_at: null },
       _count: { id: true },
-      _sum: { file_size: true },
+      _sum:   { file_size: true },
     });
 
     const statusMap = stats.reduce<Record<string, { count: number; size: number }>>(
       (acc, s) => {
-        acc[s.status] = {
-          count: s._count.id,
-          size: s._sum.file_size ?? 0,
-        };
+        acc[s.status] = { count: s._count.id, size: Number(s._sum.file_size ?? 0) };
         return acc;
-      },
-      {},
+      }, {},
     );
 
-    const total = Object.values(statusMap).reduce((sum, s) => sum + s.count, 0);
-    const totalSize = Object.values(statusMap).reduce((sum, s) => sum + s.size, 0);
-    const limit = PHOTO_LIMITS[wedding!.plan_type] ?? 20;
+    const limit        = PHOTO_LIMITS[wedding!.plan_type] ?? 20;
+    const total        = (statusMap['pending']?.count ?? 0) + (statusMap['approved']?.count ?? 0) + (statusMap['rejected']?.count ?? 0);
+    const totalSize    = Object.values(statusMap).reduce((sum, s) => sum + s.size, 0);
 
     return {
       total,
-      limit,
-      remaining: Math.max(0, limit - total),
-      usage_percent: Math.round((total / limit) * 100),
+      limit:            limit === Infinity ? null : limit,
+      remaining:        limit === Infinity ? null : Math.max(0, limit - total),
+      usage_percent:    limit === Infinity ? 0    : Math.round((total / limit) * 100),
       total_size_bytes: totalSize,
-      total_size_mb: Math.round(totalSize / 1024 / 1024 * 10) / 10,
+      total_size_mb:    Math.round(totalSize / 1024 / 1024 * 10) / 10,
+      plan:             wedding!.plan_type,
       by_status: {
-        pending: statusMap['pending']?.count ?? 0,
+        pending:  statusMap['pending']?.count  ?? 0,
         approved: statusMap['approved']?.count ?? 0,
         rejected: statusMap['rejected']?.count ?? 0,
+        deleted:  statusMap['deleted']?.count  ?? 0,
       },
     };
   }

@@ -41,7 +41,7 @@ export class InviteService {
 
     const inviter = await prisma.user.findUnique({
       where: { id: requesterId },
-      select: { first_name: true, last_name: true },
+      select: { first_name: true, last_name: true, language: true },
     });
 
     const token     = crypto.randomBytes(32).toString('hex');
@@ -54,7 +54,7 @@ export class InviteService {
 
     const inviterName = `${inviter?.first_name ?? ''} ${inviter?.last_name ?? ''}`.trim();
     await sendCollaboratorInviteEmail({
-      to: data.email, inviterName, weddingName: wedding.name, role: data.role, token,
+      to: data.email, inviterName, weddingName: wedding.name, role: data.role, token, lang: inviter?.language ?? 'es',
     });
 
     await prisma.activityLog.create({

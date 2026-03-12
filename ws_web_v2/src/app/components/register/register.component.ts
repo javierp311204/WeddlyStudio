@@ -18,6 +18,10 @@ export class RegisterComponent implements OnInit {
   last_name:  string = '';
   email:      string = '';
   pass:       string = '';
+  gender: string = '';
+  language: string = 'es';
+  nickname: string = '';
+  phone: string = '';
   mostrarPassword: boolean = false;
 
   codigoBodaReferencia: string = '';
@@ -69,6 +73,10 @@ export class RegisterComponent implements OnInit {
       last_name:  this.last_name.trim() || undefined,
       email:      this.email.toLowerCase(),
       password:   this.pass,
+      nickname:   this.nickname.trim() || undefined,
+      phone:      this.phone.trim() || undefined,
+      gender:     this.gender || undefined,
+      language:   this.language || 'es',
     };
 
     this.http.post<any>(`${this.API_URL}/register`, datos).subscribe({

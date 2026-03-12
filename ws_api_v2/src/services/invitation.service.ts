@@ -202,6 +202,12 @@ export class InvitationService {
     let failed = 0;
     const failedGuests: { guest_id: string; error: string }[] = [];
 
+    const senderUser = await prisma.user.findUnique({
+      where:  { id: userId },
+      select: { language: true },
+    });
+    const senderLang = senderUser?.language ?? 'es';
+
     for (let i = 0; i < pendingGuests.length; i += BATCH_SIZE) {
       const batch = pendingGuests.slice(i, i + BATCH_SIZE);
 
@@ -218,6 +224,7 @@ export class InvitationService {
             primaryColor: invitation.primary_color ?? '#8B6F47',
             secondaryColor: invitation.secondary_color ?? '#D4AF87',
             template: invitation.template_type as any,
+            lang: senderLang,
           });
 
           return { guest, emailResult };
@@ -379,6 +386,12 @@ export class InvitationService {
 
     const { wedding } = invitation;
 
+    const senderUser = await prisma.user.findUnique({
+      where:  { id: userId },
+      select: { language: true },
+    });
+    const senderLang = senderUser?.language ?? 'es';
+
     const emailResult = await sendInvitationEmail({
       to: guest.email,
       guestName: `${guest.first_name} ${guest.last_name ?? ''}`.trim(),
@@ -390,6 +403,7 @@ export class InvitationService {
       primaryColor: invitation.primary_color ?? '#8B6F47',
       secondaryColor: invitation.secondary_color ?? '#D4AF87',
       template: invitation.template_type as any,
+      lang: senderLang,
     });
 
     // Registrar el reenvío

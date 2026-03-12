@@ -1,84 +1,128 @@
-<!-- register.component.html — migrado a API v2 -->
-<!-- Cambios: nick→first_name+last_name | rol/codigoBoda eliminados del form -->
-
-<div class="auth-wrapper min-vh-100 d-flex align-items-center justify-content-center p-4">
-  <div class="auth-card bg-white rounded-4 shadow-sm position-relative">
-    <button class="btn btn-link btn-back position-absolute text-decoration-none d-flex align-items-center gap-2" routerLink="/home">
-      <span class="icon">←</span> {{ 'COMMON.BACK' | translate }}
-    </button>
-    
-    <div class="text-center mb-4 pt-3">
-      <h2 class="display-5 fw-normal mb-2">{{ 'AUTH.REGISTER_TITLE' | translate }}</h2>
-      <p class="text-muted small mb-0">{{ 'AUTH.REGISTER_SUBTITLE' | translate }}</p>
+<div class="register-layout">
+  
+  <!-- COLUMNA IZQUIERDA: FOTO + TEXTO -->
+  <div class="register-left">
+    <div class="overlay"></div>
+    <div class="left-content">
+      <h1 class="brand-title">Weddly Studio</h1>
+      <p class="brand-subtitle">
+        {{ 'AUTH.REGISTER_LEFT_TEXT' | translate }}
+      </p>
     </div>
+  </div>
 
-    <form>
-      <!-- v2: first_name + last_name en lugar de nick -->
-      <div class="row g-3 mb-3">
-        <div class="col-md-6">
-          <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">
-            {{ 'AUTH.FIRST_NAME' | translate }}
-          </label>
-          <input type="text" class="form-control rounded-3"
-                 [(ngModel)]="first_name" name="first_name"
-                 placeholder="Ej: María" (keyup.enter)="registrar()" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">
-            {{ 'AUTH.LAST_NAME' | translate }}
-          </label>
-          <input type="text" class="form-control rounded-3"
-                 [(ngModel)]="last_name" name="last_name"
-                 placeholder="Ej: García" (keyup.enter)="registrar()" />
-        </div>
-      </div>
+  <!-- COLUMNA DERECHA: FORMULARIO -->
+  <div class="register-right">
 
-      <div class="row g-3 mb-3">
-        <div class="col-md-6">
-          <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">
-            {{ 'AUTH.EMAIL' | translate }}
-          </label>
-          <input type="email" class="form-control rounded-3"
-                 [(ngModel)]="email" name="email"
-                 placeholder="tu@email.com" (keyup.enter)="registrar()" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label text-uppercase fw-semibold small ls-1 mb-1">
-            {{ 'AUTH.PASSWORD' | translate }}
-          </label>
-          <div class="position-relative">
-            <input [type]="mostrarPassword ? 'text' : 'password'"
-                   class="form-control rounded-3 pe-5"
-                   [(ngModel)]="pass" name="pass"
-                   [placeholder]="'AUTH.PASSWORD_PLACEHOLDER' | translate"
-                   (keyup.enter)="registrar()" />
-            <button type="button"
-                    class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-decoration-none p-0 me-2"
-                    (click)="togglePassword()" style="z-index: 10;">
-              <span class="eye-icon">{{ mostrarPassword ? '👁️' : '👁️‍🗨️' }}</span>
-            </button>
+    <button class="btn-back" routerLink="/home">
+      ← {{ 'COMMON.BACK' | translate }}
+    </button>
+
+    <div class="form-container">
+
+      <h2 class="form-title">{{ 'AUTH.REGISTER_TITLE' | translate }}</h2>
+      <p class="form-subtitle">{{ 'AUTH.REGISTER_SUBTITLE' | translate }}</p>
+
+      <form>
+
+        <!-- NOMBRE + APELLIDO -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label">{{ 'AUTH.FIRST_NAME' | translate }}</label>
+            <input type="text" class="form-control"
+                   [(ngModel)]="first_name" name="first_name"
+                   placeholder="Ej: María" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">{{ 'AUTH.LAST_NAME' | translate }}</label>
+            <input type="text" class="form-control"
+                   [(ngModel)]="last_name" name="last_name"
+                   placeholder="Ej: García" />
           </div>
         </div>
-      </div>
 
-      <!-- v2: rol y codigoBoda ya NO se envían al register.
-           Si venía de una invitación, se muestra informativo. -->
-      <div class="mb-3" *ngIf="codigoBodaReferencia">
-        <div class="alert alert-info small py-2 px-3 mb-0">
-          📎 Llegarás a la boda con código <strong>{{ codigoBodaReferencia }}</strong>.
-          Tras registrarte, el organizador te añadirá a la boda.
+        <!-- NICKNAME -->
+        <div class="mb-3">
+          <label class="form-label">{{ 'AUTH.NICKNAME' | translate }}</label>
+          <input type="text" class="form-control"
+                 [(ngModel)]="nickname" name="nickname"
+                 placeholder="Ej: Javi" />
         </div>
+
+        <!-- EMAIL + PASSWORD -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
+            <input type="email" class="form-control"
+                   [(ngModel)]="email" name="email"
+                   placeholder="tu@email.com" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">{{ 'AUTH.PASSWORD' | translate }}</label>
+            <div class="password-wrapper">
+              <input [type]="mostrarPassword ? 'text' : 'password'"
+                     class="form-control"
+                     [(ngModel)]="pass" name="pass"
+                     [placeholder]="'AUTH.PASSWORD_PLACEHOLDER' | translate" />
+              <span class="eye-icon" (click)="togglePassword()">
+                {{ mostrarPassword ? '👁️' : '👁️‍🗨️' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TELÉFONO -->
+        <div class="mb-3">
+          <label class="form-label">{{ 'AUTH.PHONE' | translate }}</label>
+          <input type="tel" class="form-control"
+                 [(ngModel)]="phone" name="phone"
+                 placeholder="+34 600 000 000" />
+        </div>
+
+        <!-- GÉNERO -->
+        <div class="mb-3">
+          <label class="form-label">{{ 'AUTH.GENDER' | translate }}</label>
+          <select class="form-select" [(ngModel)]="gender" name="gender">
+            <option value="male">{{ 'AUTH.GENDER_MALE' | translate }}</option>
+            <option value="female">{{ 'AUTH.GENDER_FEMALE' | translate }}</option>
+            <option value="other">{{ 'AUTH.GENDER_OTHER' | translate }}</option>
+            <option value="prefer_not">{{ 'AUTH.GENDER_PREFER_NOT' | translate }}</option>
+          </select>
+        </div>
+
+        <!-- IDIOMA -->
+        <div class="mb-3">
+          <label class="form-label">{{ 'AUTH.LANGUAGE' | translate }}</label>
+          <select class="form-select" [(ngModel)]="language" name="language">
+            <option value="es">Español</option>
+            <option value="ca">Català</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+          </select>
+        </div>
+
+        <!-- INFO INVITACIÓN -->
+        <div class="mb-3" *ngIf="codigoBodaReferencia">
+          <div class="alert alert-info small">
+            📎 Llegarás a la boda con código <strong>{{ codigoBodaReferencia }}</strong>.
+          </div>
+        </div>
+
+        <!-- BOTÓN -->
+        <button type="button" class="btn-auth w-100"
+                (click)="registrar()">
+          {{ 'AUTH.REGISTER_TITLE' | translate }}
+        </button>
+
+      </form>
+
+      <div class="auth-footer">
+        {{ 'AUTH.ALREADY_HAVE_ACCOUNT' | translate }}
+        <a routerLink="/login">{{ 'AUTH.LOGIN' | translate }}</a>
       </div>
 
-      <button type="button" class="btn btn-auth w-100 rounded-3 py-2 fw-semibold mt-2"
-              (click)="registrar()">
-        {{ 'AUTH.REGISTER_TITLE' | translate }}
-      </button>
-    </form>
-
-    <div class="auth-footer text-center mt-3 small text-muted">
-      {{ 'AUTH.ALREADY_HAVE_ACCOUNT' | translate }}
-      <a routerLink="/login" class="text-decoration-none fw-semibold">{{ 'AUTH.LOGIN' | translate }}</a>
     </div>
   </div>
 </div>

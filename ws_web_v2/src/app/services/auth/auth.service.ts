@@ -147,6 +147,34 @@ export class AuthService {
   getWeddingId(): string { return localStorage.getItem('weddingId') || ''; }
   setWeddingId(id: string): void { localStorage.setItem('weddingId', id); }
 
+  getWeddingStatus(): string {
+    return localStorage.getItem('weddingStatus') || 'active';
+  }
+
+  setWeddingStatus(status: string): void {
+    localStorage.setItem('weddingStatus', status);
+  }
+
+  isWeddingReadonly(): boolean {
+    return this.getWeddingStatus() === 'readonly';
+  }
+
+  isWeddingArchived(): boolean {
+    return this.getWeddingStatus() === 'archived';
+  }
+
+  getReadonlyReason(): string {
+    return localStorage.getItem('weddingReadonlyReason') || '';
+  }
+
+  setReadonlyReason(reason: string | null): void {
+    if (reason) {
+      localStorage.setItem('weddingReadonlyReason', reason);
+    } else {
+      localStorage.removeItem('weddingReadonlyReason');
+    }
+  }
+
   getWeddingRole(): WeddingRole {
     return (localStorage.getItem('weddingRole') as WeddingRole) || 'guest';
   }

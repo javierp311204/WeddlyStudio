@@ -159,7 +159,7 @@ export async function verifyLogin(
 export async function requestReset(email: string): Promise<void> {
   const user = await prisma.user.findUnique({
     where:  { email },
-    select: { id: true, first_name: true, two_factor_enabled: true },
+    select: { id: true, first_name: true, two_factor_enabled: true, language: true },
   });
   if (!user || !user.two_factor_enabled) return;
 
@@ -172,7 +172,7 @@ export async function requestReset(email: string): Promise<void> {
     data:  { tfa_reset_token: resetToken, tfa_reset_expires: resetExpires },
   });
 
-  await sendTfaResetEmail({ to: email, firstName: user.first_name, token: resetToken });
+  await sendTfaResetEmail({ to: email, firstName: user.first_name, token: resetToken, lang: user.language ?? 'es' });
 }
 
 // ─── Reset por email: confirmar ───────────────────────────────────

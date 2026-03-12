@@ -60,6 +60,7 @@ export class WeddingService {
             id: true, name: true, wedding_date: true,
             location_name: true, address: true, dress_code: true,
             status: true, plan_type: true, created_by: true, created_at: true,
+            readonly_reason: true,
             _count: { select: { guests: true, tables: true, tasks: true } },
           },
         },
