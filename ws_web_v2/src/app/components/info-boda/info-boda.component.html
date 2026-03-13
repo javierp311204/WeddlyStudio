@@ -32,8 +32,11 @@
       <button *ngIf="authService.isWeddingOwner()"
               (click)="editMode = !editMode"
               class="ib-edit-btn"
-              [class.ib-edit-btn--cancel]="editMode">
-        <span class="ib-edit-btn__icon">{{ editMode ? '✕' : '✎' }}</span>
+              [class.ib-edit-btn--cancel]="editMode" >
+
+        <span class="ib-edit-btn__icon">
+          <app-icon [name]="editMode ? 'rechazar' : 'editar'" [size]="22"></app-icon>
+        </span>
         <span>{{ editMode ? ('INFO.CANCEL_EDIT' | translate) : ('INFO.EDIT_INFO' | translate) }}</span>
       </button>
     </div>
@@ -61,7 +64,7 @@
 
         <div class="ib-card__body">
           <div class="ib-card__icon-wrap ib-card__icon-wrap--gold">
-            <span>📍</span>
+            <span><app-icon name="ubicacion" [size]="26" ></app-icon></span>
           </div>
 
           <!-- Vista lectura -->
@@ -120,7 +123,7 @@
 
         <div class="ib-card__body">
           <div class="ib-card__icon-wrap ib-card__icon-wrap--green">
-            <span>👗</span>
+            <span><app-icon name="dressCode" [size]="26" ></app-icon></span>
           </div>
 
           <!-- Vista lectura -->
@@ -161,7 +164,7 @@
 
         <div class="ib-card__body">
           <div class="ib-card__icon-wrap ib-card__icon-wrap--gold">
-            <span>🍴</span>
+            <span><app-icon name="menu" [size]="26" ></app-icon></span>
           </div>
 
           <!-- Vista lectura -->

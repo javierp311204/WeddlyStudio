@@ -33,7 +33,6 @@
     <!-- Hero con carrusel -->
     <section class="hero-section position-relative d-flex align-items-center justify-content-center text-center vh-100">
 
-      <!-- Slides de fondo -->
       <div class="hero-slides">
         <div class="hero-slide"
              *ngFor="let slide of heroSlides; let i = index"
@@ -44,7 +43,6 @@
 
       <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
 
-      <!-- Contenido -->
       <div class="hero-content position-relative text-white" style="z-index:1; max-width:800px; padding:20px;">
         <span class="d-block text-uppercase fw-semibold mb-3"
               style="letter-spacing:4px; font-size:0.8rem; opacity:0.9;">
@@ -68,7 +66,6 @@
         </div>
       </div>
 
-      <!-- Dots indicadores -->
       <div class="hero-dots">
         <span class="hero-dot"
               *ngFor="let slide of heroSlides; let i = index"
@@ -77,7 +74,6 @@
         </span>
       </div>
 
-      <!-- Scroll indicator -->
       <div class="scroll-indicator position-absolute text-white text-center"
            style="bottom:30px; left:50%; transform:translateX(-50%); z-index:2; cursor:pointer;"
            (click)="scrollToContent()">
@@ -121,300 +117,280 @@
       </div>
     </section>
 
-  <!-- ══════════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN: MÓDULOS / FEATURES                              -->
-  <!-- Insertar DESPUÉS de la sección #marketing-content (pasos) -->
-  <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- Features -->
+    <section class="features-section reveal py-5" style="background:var(--bg-soft);">
+      <div class="container py-5" style="max-width:1200px;">
 
-  <section class="features-section reveal py-5" style="background:var(--bg-soft);">
-    <div class="container py-5" style="max-width:1200px;">
+        <div class="text-center mb-5">
+          <span class="d-block text-uppercase fw-semibold mb-2"
+                style="color:var(--gold); letter-spacing:2px; font-size:0.8rem;">
+            {{ 'HOME.FEATURES_LABEL' | translate }}
+          </span>
+          <h2 class="display-4 fw-bold mb-3"
+              style="font-family:'Playfair Display',serif; color:var(--dark-charcoal);">
+            {{ 'HOME.FEATURES_TITLE' | translate }}
+          </h2>
+          <p class="lead mx-auto" style="max-width:600px; color:#8b7e74;">
+            {{ 'HOME.FEATURES_SUBTITLE' | translate }}
+          </p>
+        </div>
 
-      <div class="text-center mb-5">
-        <span class="d-block text-uppercase fw-semibold mb-2"
-              style="color:var(--gold); letter-spacing:2px; font-size:0.8rem;">
-          {{ 'HOME.FEATURES_LABEL' | translate }}
-        </span>
-        <h2 class="display-4 fw-bold mb-3"
-            style="font-family:'Playfair Display',serif; color:var(--dark-charcoal);">
-          {{ 'HOME.FEATURES_TITLE' | translate }}
-        </h2>
-        <p class="lead mx-auto" style="max-width:600px; color:#8b7e74;">
-          {{ 'HOME.FEATURES_SUBTITLE' | translate }}
+        <div class="row g-4">
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature-card h-100">
+              <div class="feature-icon-wrap">
+                <app-icon name="invitados" [size]="32" style="color:var(--gold-dark)"></app-icon>
+              </div>
+              <h3 class="feature-title">{{ 'HOME.FEAT_GUESTS_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'HOME.FEAT_GUESTS_DESC' | translate }}</p>
+              <ul class="feature-list">
+                <li>{{ 'HOME.FEAT_GUESTS_LI1' | translate }}</li>
+                <li>{{ 'HOME.FEAT_GUESTS_LI2' | translate }}</li>
+                <li>{{ 'HOME.FEAT_GUESTS_LI3' | translate }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature-card h-100">
+              <div class="feature-icon-wrap">
+                <app-icon name="plano" [size]="32" style="color:var(--gold-dark)"></app-icon>
+              </div>
+              <h3 class="feature-title">{{ 'HOME.FEAT_TABLES_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'HOME.FEAT_TABLES_DESC' | translate }}</p>
+              <ul class="feature-list">
+                <li>{{ 'HOME.FEAT_TABLES_LI1' | translate }}</li>
+                <li>{{ 'HOME.FEAT_TABLES_LI2' | translate }}</li>
+                <li>{{ 'HOME.FEAT_TABLES_LI3' | translate }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature-card h-100">
+              <div class="feature-icon-wrap">
+                <app-icon name="checklist" [size]="32" style="color:var(--gold-dark)"></app-icon>
+              </div>
+              <h3 class="feature-title">{{ 'HOME.FEAT_CHECKLIST_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'HOME.FEAT_CHECKLIST_DESC' | translate }}</p>
+              <ul class="feature-list">
+                <li>{{ 'HOME.FEAT_CHECKLIST_LI1' | translate }}</li>
+                <li>{{ 'HOME.FEAT_CHECKLIST_LI2' | translate }}</li>
+                <li>{{ 'HOME.FEAT_CHECKLIST_LI3' | translate }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature-card h-100">
+              <div class="feature-icon-wrap">
+                <app-icon name="album" [size]="32" style="color:var(--gold-dark)"></app-icon>
+              </div>
+              <h3 class="feature-title">{{ 'HOME.FEAT_ALBUM_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'HOME.FEAT_ALBUM_DESC' | translate }}</p>
+              <ul class="feature-list">
+                <li>{{ 'HOME.FEAT_ALBUM_LI1' | translate }}</li>
+                <li>{{ 'HOME.FEAT_ALBUM_LI2' | translate }}</li>
+                <li>{{ 'HOME.FEAT_ALBUM_LI3' | translate }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature-card h-100">
+              <div class="feature-icon-wrap">
+                <app-icon name="diseno" [size]="32" style="color:var(--gold-dark)"></app-icon>
+              </div>
+              <h3 class="feature-title">{{ 'HOME.FEAT_DESIGN_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'HOME.FEAT_DESIGN_DESC' | translate }}</p>
+              <ul class="feature-list">
+                <li>{{ 'HOME.FEAT_DESIGN_LI1' | translate }}</li>
+                <li>{{ 'HOME.FEAT_DESIGN_LI2' | translate }}</li>
+                <li>{{ 'HOME.FEAT_DESIGN_LI3' | translate }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature-card h-100">
+              <div class="feature-icon-wrap">
+                <app-icon name="colaboradores" [size]="32" style="color:var(--gold-dark)"></app-icon>
+              </div>
+              <h3 class="feature-title">{{ 'HOME.FEAT_COLLAB_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'HOME.FEAT_COLLAB_DESC' | translate }}</p>
+              <ul class="feature-list">
+                <li>{{ 'HOME.FEAT_COLLAB_LI1' | translate }}</li>
+                <li>{{ 'HOME.FEAT_COLLAB_LI2' | translate }}</li>
+                <li>{{ 'HOME.FEAT_COLLAB_LI3' | translate }}</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Planes -->
+    <section class="pricing-section reveal py-5" style="background:white;">
+      <div class="container py-5" style="max-width:1200px;">
+
+        <div class="text-center mb-5">
+          <span class="d-block text-uppercase fw-semibold mb-2"
+                style="color:var(--gold); letter-spacing:2px; font-size:0.8rem;">
+            {{ 'HOME.PRICING_LABEL' | translate }}
+          </span>
+          <h2 class="display-4 fw-bold mb-3"
+              style="font-family:'Playfair Display',serif; color:var(--dark-charcoal);">
+            {{ 'HOME.PRICING_TITLE' | translate }}
+          </h2>
+          <p class="lead mx-auto" style="max-width:500px; color:#8b7e74;">
+            {{ 'HOME.PRICING_SUBTITLE' | translate }}
+          </p>
+        </div>
+
+        <div class="row g-4 justify-content-center align-items-stretch">
+
+          <div class="col-12 col-md-4">
+            <div class="pricing-card h-100">
+              <div class="pricing-header">
+                <app-icon name="planGratuito" [size]="40" style="color:var(--gold-dark)"></app-icon>
+                <span class="pricing-badge">{{ 'HOME.PLAN_FREE_BADGE' | translate }}</span>
+                <div class="pricing-price">
+                  <span class="pricing-amount">0€</span>
+                  <span class="pricing-period">{{ 'HOME.PLAN_FREE_PERIOD' | translate }}</span>
+                </div>
+              </div>
+              <div class="pricing-body">
+                <p class="pricing-tagline">{{ 'HOME.PLAN_FREE_TAGLINE' | translate }}</p>
+                <ul class="pricing-features">
+                  <li class="ok">{{ 'HOME.PLAN_FREE_F1' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_FREE_F2' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_FREE_F3' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_FREE_F4' | translate }}</li>
+                  <li class="no">{{ 'HOME.PLAN_FREE_F5' | translate }}</li>
+                  <li class="no">{{ 'HOME.PLAN_FREE_F6' | translate }}</li>
+                </ul>
+              </div>
+              <div class="pricing-footer">
+                <button class="btn pricing-btn pricing-btn--outline w-100 rounded-pill py-3 fw-semibold"
+                        routerLink="/register">
+                  {{ 'HOME.PLAN_FREE_CTA' | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="pricing-card pricing-card--featured h-100">
+              <div class="pricing-popular-ribbon">{{ 'HOME.PLAN_PRO_POPULAR' | translate }}</div>
+              <div class="pricing-header">
+                <app-icon name="planEsencial" [size]="40" style="color:var(--gold-dark)"></app-icon>
+                <span class="pricing-badge">{{ 'HOME.PLAN_PRO_BADGE' | translate }}</span>
+                <div class="pricing-price">
+                  <span class="pricing-amount">49€</span>
+                  <span class="pricing-period">{{ 'HOME.PLAN_PRO_PERIOD' | translate }}</span>
+                </div>
+              </div>
+              <div class="pricing-body">
+                <p class="pricing-tagline">{{ 'HOME.PLAN_PRO_TAGLINE' | translate }}</p>
+                <ul class="pricing-features">
+                  <li class="ok">{{ 'HOME.PLAN_PRO_F1' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PRO_F2' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PRO_F3' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PRO_F4' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PRO_F5' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PRO_F6' | translate }}</li>
+                </ul>
+              </div>
+              <div class="pricing-footer">
+                <button class="btn pricing-btn pricing-btn--gold w-100 rounded-pill py-3 fw-semibold text-white"
+                        routerLink="/register">
+                  {{ 'HOME.PLAN_PRO_CTA' | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="pricing-card h-100">
+              <div class="pricing-header">
+                <app-icon name="planPremium" [size]="40" style="color:var(--gold-dark)"></app-icon>
+                <span class="pricing-badge">{{ 'HOME.PLAN_PREMIUM_BADGE' | translate }}</span>
+                <div class="pricing-price">
+                  <span class="pricing-amount">14€</span>
+                  <span class="pricing-period">{{ 'HOME.PLAN_PREMIUM_PERIOD' | translate }}</span>
+                  <span class="pricing-annual">{{ 'HOME.PLAN_PREMIUM_ANNUAL' | translate }}</span>
+                </div>
+              </div>
+              <div class="pricing-body">
+                <p class="pricing-tagline">{{ 'HOME.PLAN_PREMIUM_TAGLINE' | translate }}</p>
+                <ul class="pricing-features">
+                  <li class="ok">{{ 'HOME.PLAN_PREMIUM_F1' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PREMIUM_F2' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PREMIUM_F3' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PREMIUM_F4' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PREMIUM_F5' | translate }}</li>
+                  <li class="ok">{{ 'HOME.PLAN_PREMIUM_F6' | translate }}</li>
+                </ul>
+              </div>
+              <div class="pricing-footer">
+                <button class="btn pricing-btn pricing-btn--outline w-100 rounded-pill py-3 fw-semibold"
+                        routerLink="/register">
+                  {{ 'HOME.PLAN_PREMIUM_CTA' | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="text-center mt-4" style="color:#8b7e74; font-size:0.85rem;">
+          {{ 'HOME.PRICING_NOTE' | translate }}
         </p>
-      </div>
-
-      <div class="row g-4">
-
-        <!-- Invitados -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
-            <div class="feature-icon-wrap">
-              <span class="feature-icon">👥</span>
-            </div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_GUESTS_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_GUESTS_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_GUESTS_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_GUESTS_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_GUESTS_LI3' | translate }}</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Plano de mesas -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
-            <div class="feature-icon-wrap">
-              <span class="feature-icon">🗺️</span>
-            </div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_TABLES_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_TABLES_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_TABLES_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_TABLES_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_TABLES_LI3' | translate }}</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Checklist — destacado -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card feature-card--highlight h-100">
-            <div class="feature-icon-wrap">
-              <span class="feature-icon">✅</span>
-            </div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_CHECKLIST_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_CHECKLIST_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_CHECKLIST_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_CHECKLIST_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_CHECKLIST_LI3' | translate }}</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Álbum digital -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
-            <div class="feature-icon-wrap">
-              <span class="feature-icon">📸</span>
-            </div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_ALBUM_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_ALBUM_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_ALBUM_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_ALBUM_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_ALBUM_LI3' | translate }}</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Diseño e invitaciones -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
-            <div class="feature-icon-wrap">
-              <span class="feature-icon">🎨</span>
-            </div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_DESIGN_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_DESIGN_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_DESIGN_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_DESIGN_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_DESIGN_LI3' | translate }}</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Colaboradores -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
-            <div class="feature-icon-wrap">
-              <span class="feature-icon">🤝</span>
-            </div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_COLLAB_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_COLLAB_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_COLLAB_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_COLLAB_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_COLLAB_LI3' | translate }}</li>
-            </ul>
-          </div>
-        </div>
 
       </div>
-    </div>
-  </section>
+    </section>
 
-
-  <!-- ══════════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN: PLANES / PRECIOS                                 -->
-  <!-- Insertar DESPUÉS de la sección de features               -->
-  <!-- ══════════════════════════════════════════════════════════ -->
-
-  <section class="pricing-section reveal py-5" style="background:white;">
-    <div class="container py-5" style="max-width:1200px;">
-
-      <div class="text-center mb-5">
-        <span class="d-block text-uppercase fw-semibold mb-2"
-              style="color:var(--gold); letter-spacing:2px; font-size:0.8rem;">
-          {{ 'HOME.PRICING_LABEL' | translate }}
+    <!-- CTA Final -->
+    <section class="cta-final-section reveal py-5">
+      <div class="container py-5 text-center" style="max-width:800px;">
+        <span class="d-block text-uppercase fw-semibold mb-3 cta-label"
+              style="letter-spacing:3px; font-size:0.8rem;">
+          {{ 'HOME.CTA_LABEL' | translate }}
         </span>
-        <h2 class="display-4 fw-bold mb-3"
-            style="font-family:'Playfair Display',serif; color:var(--dark-charcoal);">
-          {{ 'HOME.PRICING_TITLE' | translate }}
+        <h2 class="cta-title mb-4">
+          {{ 'HOME.CTA_TITLE' | translate }}
         </h2>
-        <p class="lead mx-auto" style="max-width:500px; color:#8b7e74;">
-          {{ 'HOME.PRICING_SUBTITLE' | translate }}
+        <p class="cta-subtitle mb-5">
+          {{ 'HOME.CTA_SUBTITLE' | translate }}
         </p>
-      </div>
-
-      <div class="row g-4 justify-content-center align-items-stretch">
-
-        <!-- Plan Free -->
-        <div class="col-12 col-md-4">
-          <div class="pricing-card h-100">
-            <div class="pricing-header">
-              <span class="pricing-badge">{{ 'HOME.PLAN_FREE_BADGE' | translate }}</span>
-              <div class="pricing-price">
-                <span class="pricing-amount">0€</span>
-                <span class="pricing-period">{{ 'HOME.PLAN_FREE_PERIOD' | translate }}</span>
-              </div>
-            </div>
-            <div class="pricing-body">
-              <p class="pricing-tagline">{{ 'HOME.PLAN_FREE_TAGLINE' | translate }}</p>
-              <ul class="pricing-features">
-                <li class="ok">{{ 'HOME.PLAN_FREE_F1' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_FREE_F2' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_FREE_F3' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_FREE_F4' | translate }}</li>
-                <li class="no">{{ 'HOME.PLAN_FREE_F5' | translate }}</li>
-                <li class="no">{{ 'HOME.PLAN_FREE_F6' | translate }}</li>
-              </ul>
-            </div>
-            <div class="pricing-footer">
-              <button class="btn pricing-btn pricing-btn--outline w-100 rounded-pill py-3 fw-semibold"
-                      routerLink="/register">
-                {{ 'HOME.PLAN_FREE_CTA' | translate }}
-              </button>
-            </div>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <button class="btn btn-lg rounded-pill px-5 py-3 fw-semibold text-white cta-btn-primary"
+                  routerLink="/register">
+            {{ 'HOME.CTA_PRIMARY_BTN' | translate }}
+          </button>
+          <button class="btn btn-lg rounded-pill px-5 py-3 fw-semibold cta-btn-secondary"
+                  routerLink="/login">
+            {{ 'HOME.CTA_SECONDARY_BTN' | translate }}
+          </button>
+        </div>
+        <div class="cta-trust-row mt-5">
+          <div class="cta-trust-item">
+            <app-icon name="perfil" [size]="20" style="color:var(--gold-dark)"></app-icon>
+            <span>{{ 'HOME.CTA_TRUST_1' | translate }}</span>
+          </div>
+          <div class="cta-trust-item">
+            <app-icon name="planGratuito" [size]="20" style="color:var(--gold-dark)"></app-icon>
+            <span>{{ 'HOME.CTA_TRUST_2' | translate }}</span>
+          </div>
+          <div class="cta-trust-item">
+            <app-icon name="planes" [size]="20" style="color:var(--gold-dark)"></app-icon>
+            <span>{{ 'HOME.CTA_TRUST_3' | translate }}</span>
           </div>
         </div>
-
-        <!-- Plan Evento PRO — destacado -->
-        <div class="col-12 col-md-4">
-          <div class="pricing-card pricing-card--featured h-100">
-            <div class="pricing-popular-ribbon">{{ 'HOME.PLAN_PRO_POPULAR' | translate }}</div>
-            <div class="pricing-header">
-              <span class="pricing-badge">{{ 'HOME.PLAN_PRO_BADGE' | translate }}</span>
-              <div class="pricing-price">
-                <span class="pricing-amount">49€</span>
-                <span class="pricing-period">{{ 'HOME.PLAN_PRO_PERIOD' | translate }}</span>
-              </div>
-            </div>
-            <div class="pricing-body">
-              <p class="pricing-tagline">{{ 'HOME.PLAN_PRO_TAGLINE' | translate }}</p>
-              <ul class="pricing-features">
-                <li class="ok">{{ 'HOME.PLAN_PRO_F1' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F2' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F3' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F4' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F5' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F6' | translate }}</li>
-              </ul>
-            </div>
-            <div class="pricing-footer">
-              <button class="btn pricing-btn pricing-btn--gold w-100 rounded-pill py-3 fw-semibold text-white"
-                      routerLink="/register">
-                {{ 'HOME.PLAN_PRO_CTA' | translate }}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Plan Premium -->
-        <div class="col-12 col-md-4">
-          <div class="pricing-card h-100">
-            <div class="pricing-header">
-              <span class="pricing-badge">{{ 'HOME.PLAN_PREMIUM_BADGE' | translate }}</span>
-              <div class="pricing-price">
-                <span class="pricing-amount">14€</span>
-                <span class="pricing-period">{{ 'HOME.PLAN_PREMIUM_PERIOD' | translate }}</span>
-                <span class="pricing-annual">{{ 'HOME.PLAN_PREMIUM_ANNUAL' | translate }}</span>
-              </div>
-            </div>
-            <div class="pricing-body">
-              <p class="pricing-tagline">{{ 'HOME.PLAN_PREMIUM_TAGLINE' | translate }}</p>
-              <ul class="pricing-features">
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F1' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F2' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F3' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F4' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F5' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F6' | translate }}</li>
-              </ul>
-            </div>
-            <div class="pricing-footer">
-              <button class="btn pricing-btn pricing-btn--outline w-100 rounded-pill py-3 fw-semibold"
-                      routerLink="/register">
-                {{ 'HOME.PLAN_PREMIUM_CTA' | translate }}
-              </button>
-            </div>
-          </div>
-        </div>
-
       </div>
-
-      <p class="text-center mt-4" style="color:#8b7e74; font-size:0.85rem;">
-        {{ 'HOME.PRICING_NOTE' | translate }}
-      </p>
-
-    </div>
-  </section>
-
-
-  <!-- ══════════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN: CTA FINAL                                        -->
-  <!-- Insertar JUSTO ANTES del footer                          -->
-  <!-- ══════════════════════════════════════════════════════════ -->
-
-  <section class="cta-final-section reveal py-5">
-    <div class="container py-5 text-center" style="max-width:800px;">
-      <span class="d-block text-uppercase fw-semibold mb-3 cta-label"
-            style="letter-spacing:3px; font-size:0.8rem;">
-        {{ 'HOME.CTA_LABEL' | translate }}
-      </span>
-      <h2 class="cta-title mb-4">
-        {{ 'HOME.CTA_TITLE' | translate }}
-      </h2>
-      <p class="cta-subtitle mb-5">
-        {{ 'HOME.CTA_SUBTITLE' | translate }}
-      </p>
-      <div class="d-flex gap-3 justify-content-center flex-wrap">
-        <button class="btn btn-lg rounded-pill px-5 py-3 fw-semibold text-white cta-btn-primary"
-                routerLink="/register">
-          {{ 'HOME.CTA_PRIMARY_BTN' | translate }}
-        </button>
-        <button class="btn btn-lg rounded-pill px-5 py-3 fw-semibold cta-btn-secondary"
-                routerLink="/login">
-          {{ 'HOME.CTA_SECONDARY_BTN' | translate }}
-        </button>
-      </div>
-      <div class="cta-trust-row mt-5">
-        <div class="cta-trust-item">
-          <span class="cta-trust-icon">🔒</span>
-          <span>{{ 'HOME.CTA_TRUST_1' | translate }}</span>
-        </div>
-        <div class="cta-trust-item">
-          <span class="cta-trust-icon">💳</span>
-          <span>{{ 'HOME.CTA_TRUST_2' | translate }}</span>
-        </div>
-        <div class="cta-trust-item">
-          <span class="cta-trust-icon">⚡</span>
-          <span>{{ 'HOME.CTA_TRUST_3' | translate }}</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
     <!-- Testimonios -->
     <section class="testimonial-section reveal py-5 text-center"
@@ -456,12 +432,11 @@
   </ng-container>
 
   <!-- ══════════════════════════════════════════════════════════ -->
-  <!-- DASHBOARD (logueado — sidebar ya viene del app.component) -->
+  <!-- DASHBOARD (logueado)                                     -->
   <!-- ══════════════════════════════════════════════════════════ -->
   <ng-container *ngIf="authService.isLoggedIn()">
     <div class="dashboard-wrapper">
 
-      <!-- Bienvenida -->
       <div class="db-welcome">
         <h1 class="db-title">
           {{ 'HOME.WELCOME' | translate }},
@@ -470,11 +445,12 @@
         <p class="db-subtitle">{{ 'HOME.WELCOME_SUBTITLE' | translate }}</p>
       </div>
 
-      <!-- Cards -->
       <div class="action-grid">
 
         <div class="action-card" routerLink="/info-boda">
-          <div class="card-icon">📖</div>
+          <div class="card-icon">
+            <app-icon name="infoBoda" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_GUIDE_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_GUIDE_DESC' | translate }}</p>
@@ -483,7 +459,9 @@
         </div>
 
         <div class="action-card" routerLink="/invitados" *ngIf="authService.isWeddingOwner()">
-          <div class="card-icon">👥</div>
+          <div class="card-icon">
+            <app-icon name="invitados" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_GUESTS_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_GUESTS_DESC' | translate }}</p>
@@ -492,7 +470,9 @@
         </div>
 
         <div class="action-card" routerLink="/checklist" *ngIf="authService.isWeddingOwner()">
-          <div class="card-icon">✅</div>
+          <div class="card-icon">
+            <app-icon name="checklist" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_CHECKLIST_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_CHECKLIST_DESC' | translate }}</p>
@@ -501,7 +481,9 @@
         </div>
 
         <div class="action-card" routerLink="/diseno" *ngIf="authService.isWeddingOwner()">
-          <div class="card-icon">🎨</div>
+          <div class="card-icon">
+            <app-icon name="diseno" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_DESIGN_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_DESIGN_DESC' | translate }}</p>
@@ -510,7 +492,9 @@
         </div>
 
         <div class="action-card" routerLink="/mesas" *ngIf="authService.isWeddingOwner()">
-          <div class="card-icon">🪑</div>
+          <div class="card-icon">
+            <app-icon name="mesas" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_TABLES_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_TABLES_DESC' | translate }}</p>
@@ -519,7 +503,9 @@
         </div>
 
         <div class="action-card" routerLink="/album">
-          <div class="card-icon">📸</div>
+          <div class="card-icon">
+            <app-icon name="album" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_ALBUM_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_ALBUM_DESC' | translate }}</p>
@@ -528,7 +514,9 @@
         </div>
 
         <div class="action-card" routerLink="/colaboradores" *ngIf="authService.isWeddingOwner()">
-          <div class="card-icon">👥</div>
+          <div class="card-icon">
+            <app-icon name="colaboradores" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_COLABORADORES_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_COLABORADORES_DESC' | translate }}</p>
@@ -537,7 +525,9 @@
         </div>
 
         <div class="action-card" routerLink="/pricing">
-          <div class="card-icon">💎</div>
+          <div class="card-icon">
+            <app-icon name="planes" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_PRICING_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_PRICING_DESC' | translate }}</p>
@@ -546,7 +536,9 @@
         </div>
 
         <div class="action-card" routerLink="/plano" *ngIf="authService.isWeddingOwner()">
-          <div class="card-icon">🗺️</div>
+          <div class="card-icon">
+            <app-icon name="plano" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_PLANO_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_PLANO_DESC' | translate }}</p>
@@ -555,7 +547,9 @@
         </div>
 
         <div class="action-card" routerLink="/calendario" *ngIf="authService.isWeddingOwner()">
-          <div class="card-icon">📅</div>
+          <div class="card-icon">
+            <app-icon name="calendario" [size]="24"></app-icon>
+          </div>
           <div class="card-body-text">
             <h3>{{ 'HOME.CARD_CALENDARIO_TITLE' | translate }}</h3>
             <p>{{ 'HOME.CARD_CALENDARIO_DESC' | translate }}</p>
@@ -565,7 +559,6 @@
 
       </div>
 
-      <!-- Checklist preview -->
       <div class="mt-4" *ngIf="authService.isWeddingOwner()">
         <app-checklist-preview />
       </div>

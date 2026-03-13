@@ -34,7 +34,7 @@
       </div>
 
       <div class="pf-verify-banner" *ngIf="!user.email_verified">
-        <span class="pf-verify-banner__icon">⚠️</span>
+        <span class="pf-verify-banner__icon"><app-icon name="advertencia" [size]="20" ></app-icon></span>
         <div>
           <p class="pf-verify-banner__title">{{ 'PROFILE.EMAIL_UNVERIFIED' | translate }}</p>
           <button class="pf-verify-banner__btn" (click)="resendVerification()">
@@ -67,7 +67,7 @@
           <h1 class="pf-main-header__title">{{ 'PROFILE.TITLE' | translate }}</h1>
         </div>
         <button class="pf-toggle-btn" [class.pf-toggle-btn--cancel]="editMode" (click)="toggleEdit()">
-          <span>{{ editMode ? '✕' : '✎' }}</span>
+          <span><app-icon [name]="editMode ? 'rechazar' : 'editar'" [size]="22"></app-icon></span>
           <span>{{ editMode ? ('PROFILE.CANCEL' | translate) : ('PROFILE.EDIT' | translate) }}</span>
         </button>
       </div>
@@ -154,7 +154,7 @@
                      type="email" placeholder="tu@email.com" maxlength="255" />
               <span class="pf-error" *ngIf="errors.email">{{ errors.email }}</span>
               <p class="pf-input-hint" *ngIf="form.email !== user.email">
-                ⚠️ {{ 'PROFILE.EMAIL_CHANGE_HINT' | translate }}
+                <app-icon name="advertencia" [size]="20" ></app-icon> {{ 'PROFILE.EMAIL_CHANGE_HINT' | translate }}
               </p>
             </ng-container>
           </div>
@@ -197,7 +197,7 @@
 
         <div class="pf-security-row">
           <div class="pf-security-item">
-            <span class="pf-security-item__icon">🔑</span>
+            <span class="pf-security-item__icon"><app-icon name="perfil" [size]="35"></app-icon></span>
             <div>
               <p class="pf-security-item__label">{{ 'PROFILE.PASSWORD' | translate }}</p>
               <p class="pf-security-item__desc">{{ 'PROFILE.PASSWORD_DESC' | translate }}</p>
@@ -208,7 +208,7 @@
           </div>
 
           <div class="pf-security-item" *ngIf="user.google_id">
-            <span class="pf-security-item__icon">🔗</span>
+            <span class="pf-security-item__icon"><app-icon name="invitar" [size]="35"></app-icon></span>
             <div>
               <p class="pf-security-item__label">Google</p>
               <p class="pf-security-item__desc">{{ 'PROFILE.GOOGLE_LINKED' | translate }}</p>
@@ -225,7 +225,7 @@
       <!-- ── Botón guardar ── -->
       <div class="pf-save-bar" *ngIf="editMode">
         <button class="pf-save-btn" (click)="guardar()" [disabled]="guardando">
-          <span *ngIf="!guardando">✦ {{ 'PROFILE.SAVE' | translate }}</span>
+          <span *ngIf="!guardando"><app-icon name="aprobar" [size]="20"></app-icon> {{ 'PROFILE.SAVE' | translate }}</span>
           <span *ngIf="guardando" class="d-flex align-items-center gap-2">
             <span class="spinner-border spinner-border-sm"></span>
             {{ 'PROFILE.SAVING' | translate }}

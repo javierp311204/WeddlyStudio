@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { GestionService } from '../../services/gestion/gestion.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 @Component({
   selector: 'app-onboarding',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, IconComponent],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.css',
 })
@@ -19,6 +20,7 @@ export class OnboardingComponent implements OnInit {
   cargando = false;
   error = '';
   prioridades: any[] = [];
+  dresscodeOpciones: any[] = [];
 
   constructor(
     private gestionService: GestionService,
@@ -50,25 +52,27 @@ export class OnboardingComponent implements OnInit {
 
   weddingId = '';
   fechaMin  = new Date().toISOString().split('T')[0];
-
-  dresscodeOpciones = [
-    { value: 'Gala (Etiqueta)',   label: '👔 Gala (Etiqueta)' },
-    { value: 'Formal',            label: '🎩 Formal' },
-    { value: 'Cóctel',            label: '🥂 Cóctel' },
-    { value: 'Informal / Casual', label: '👗 Informal / Casual' },
-  ];
-
+  
   ngOnInit() {
     if (this.authService.getWeddingId()) {
       this.router.navigate(['/dashboard']);
-    }
+  }
+
+  this.dresscodeOpciones = [
+    { value: 'Gala (Etiqueta)',   label: this.translate.instant('INFO.DRESSCODE_GALA') },
+    { value: 'Formal',            label: this.translate.instant('INFO.DRESSCODE_FORMAL') },
+    { value: 'Cóctel',            label: this.translate.instant('INFO.DRESSCODE_COCKTAIL') },
+    { value: 'Informal / Casual', label: this.translate.instant('INFO.DRESSCODE_CASUAL') },
+  ];
+
+
 
     this.prioridades = [
-    { key: 'invitados',    emoji: '👥', label: this.translate.instant('NAV.GUESTS'),   desc: 'Añade y organiza tu lista de invitados' },
-    { key: 'mesas',        emoji: '🪑', label: this.translate.instant('NAV.TABLES'),   desc: 'Diseña la distribución de tu evento' },
-    { key: 'checklist',    emoji: '✅', label: this.translate.instant('NAV.CHECKLIST'), desc: 'Organiza todas las tareas pendientes' },
-    { key: 'album',        emoji: '📸', label: this.translate.instant('NAV.ALBUM'),    desc: 'Sube fotos y recuerdos del evento' },
-    { key: 'invitaciones', emoji: '💌', label: 'Invitaciones digitales', desc: 'Diseña y envía invitaciones' },
+    { key: 'invitados',    emoji: 'invitados', label: this.translate.instant('NAV.GUESTS'),   desc: this.translate.instant('ONBOARDING.GUEST_DESC') },
+    { key: 'mesas',        emoji: 'mesas', label: this.translate.instant('NAV.TABLES'),   desc: this.translate.instant('ONBOARDING.TABLES_DESC') },
+    { key: 'checklist',    emoji: 'checklist', label: this.translate.instant('NAV.CHECKLIST'), desc: this.translate.instant('ONBOARDING.CHECKLIST_DESC') },
+    { key: 'album',        emoji: 'album', label: this.translate.instant('NAV.ALBUM'),    desc: this.translate.instant('ONBOARDING.ALBUM_DESC') },
+    { key: 'invitaciones', emoji: 'invitacion', label: this.translate.instant('HOME.FEAT_DESIGN_LI2'), desc: this.translate.instant('ONBOARDING.DESIGN_DESC') },
   ];
   }
 

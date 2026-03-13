@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule }      from '@angular/common';
 import { FormsModule }       from '@angular/forms';
+import { IconComponent } from '../../shared/icons/icon.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NotificationService } from '../../services/notification/notification.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -10,12 +11,12 @@ type Step = 'loading' | 'disabled' | 'setup_qr' | 'setup_verify' | 'enabled';
 @Component({
   selector: 'app-perfil-2fa',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, IconComponent],
   template: `
 <div class="tfa-card">
 
   <div class="tfa-header">
-    <span class="tfa-header__icon">🔐</span>
+    <span class="tfa-header__icon"><app-icon name="aprobar" [size]="35"></app-icon></span>
     <div>
       <p class="tfa-header__title">{{ 'TFA.TITLE' | translate }}</p>
       <p class="tfa-header__desc">{{ 'TFA.DESCRIPTION' | translate }}</p>

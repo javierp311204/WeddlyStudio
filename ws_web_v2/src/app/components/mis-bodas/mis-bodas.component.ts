@@ -6,6 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService, WeddingRole } from '../../services/auth/auth.service';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 interface Boda {
   id:            string;
@@ -26,7 +27,7 @@ interface Boda {
 @Component({
   selector: 'app-mis-bodas',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, HttpClientModule, IconComponent],
   templateUrl: './mis-bodas.component.html',
   styleUrl:    './mis-bodas.component.css',
 })

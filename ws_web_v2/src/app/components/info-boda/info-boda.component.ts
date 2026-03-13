@@ -5,11 +5,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 @Component({
   selector: 'app-info-boda',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, TranslateModule, HttpClientModule, IconComponent],
   templateUrl: './info-boda.component.html',
   styleUrl: './info-boda.component.css'
 })

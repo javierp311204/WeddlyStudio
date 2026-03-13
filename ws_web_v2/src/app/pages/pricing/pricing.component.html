@@ -9,7 +9,6 @@
 
   <!-- Header -->
   <header class="pricing-header">
-
     <div class="header-content">
       <span class="header-eyebrow">✦ Weddly Studio</span>
       <h1 class="header-title">{{ 'PRICING.TITLE' | translate }}</h1>
@@ -47,8 +46,10 @@
       <!-- Top accent -->
       <div class="plan-accent" *ngIf="plan.destacado"></div>
 
-      <!-- Emoji -->
-      <div class="plan-emoji">{{ plan.emoji }}</div>
+      <!-- Icono SVG -->
+      <div class="plan-emoji">
+        <app-icon [name]="plan.icon" [size]="44" style="color:var(--gold-dark)"></app-icon>
+      </div>
 
       <!-- Nombre -->
       <h2 class="plan-name">{{ plan.nombre }}</h2>
@@ -69,7 +70,8 @@
         <li *ngFor="let f of plan.features" class="feature-item">
           <span class="feature-check">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
           <span>{{ f }}</span>
@@ -96,7 +98,8 @@
         </span>
         <span *ngIf="!isProcesando(plan.id) && !esPlanActual(plan.tipo) && plan.tipo !== 'free'" class="btn-inner">
           {{ 'PRICING.SELECT_PLAN_WITH_NAME' | translate }} {{ plan.nombre }}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
         </span>

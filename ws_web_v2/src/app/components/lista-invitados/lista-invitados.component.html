@@ -55,7 +55,7 @@
   <!-- Búsqueda y Filtros -->
   <section class="mb-4">
     <div class="position-relative mb-3">
-      <span class="position-absolute top-50 start-0 translate-middle-y ms-3">🔍</span>
+      <span class="position-absolute top-50 start-0 translate-middle-y ms-3"><app-icon name="buscar" [size]="20" ></app-icon></span>
       <input type="text" class="form-control ps-5"
              [(ngModel)]="terminoBusqueda" (input)="filtrar()"
              [placeholder]="'GUESTS.SEARCH_PLACEHOLDER_EXTENDED' | translate" />
@@ -63,19 +63,19 @@
     <div class="d-flex flex-wrap gap-2 justify-content-center">
       <button class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
               [class.active]="filtroTipo === 'Todos'" (click)="cambiarFiltro('Todos')">
-        <span>📋</span><span>{{ "GUESTS.FILTER_ALL" | translate }}</span>
+        <span><app-icon name="grupoTodos" [size]="20" ></app-icon></span><span>{{ "GUESTS.FILTER_ALL" | translate }}</span>
       </button>
       <button class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
               [class.active]="filtroTipo === 'Familia'" (click)="cambiarFiltro('Familia')">
-        <span>👨‍👩‍👧</span><span>{{ "GUESTS.FILTER_FAMILY" | translate }}</span>
+        <span><app-icon name="grupoFamilia" [size]="20" ></app-icon></span><span>{{ "GUESTS.FILTER_FAMILY" | translate }}</span>
       </button>
       <button class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
               [class.active]="filtroTipo === 'Amigos'" (click)="cambiarFiltro('Amigos')">
-        <span>🎉</span><span>{{ "GUESTS.FILTER_FRIENDS" | translate }}</span>
+        <span><app-icon name="grupoAmigos" [size]="20" ></app-icon></span><span>{{ "GUESTS.FILTER_FRIENDS" | translate }}</span>
       </button>
       <button class="btn btn-outline-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 filter-chip"
               [class.active]="filtroTipo === 'Trabajo'" (click)="cambiarFiltro('Trabajo')">
-        <span>💼</span><span>{{ "GUESTS.FILTER_WORK" | translate }}</span>
+        <span><app-icon name="grupoTrabajo" [size]="20" ></app-icon></span><span>{{ "GUESTS.FILTER_WORK" | translate }}</span>
       </button>
     </div>
   </section>
@@ -109,13 +109,13 @@
 
             <div class="d-flex flex-column gap-2 p-3 rounded-3" style="background: #fcfcfc">
               <span class="small text-secondary">
-                🍽️ {{ inv.allergies || inv.dietary_restrictions || ('GUESTS.PENDING' | translate) }}
+                <app-icon name="cartaMenu" [size]="15" ></app-icon> {{ inv.allergies || inv.dietary_restrictions || ('GUESTS.PENDING' | translate) }}
               </span>
               <span class="small text-secondary">
-                🪑 {{ "GUESTS.TABLE_LABEL" | translate }}:
+                <app-icon name="silla" [size]="15" ></app-icon> {{ "GUESTS.TABLE_LABEL" | translate }}:
                 {{ inv.table_id ? inv.table_id : ("GUESTS.PENDING" | translate) }}
               </span>
-              <span class="small text-secondary">📨 RSVP: {{ getRsvpLabel(inv.rsvp_status) }}</span>
+              <span class="small text-secondary"><app-icon name="invitacion" [size]="15" ></app-icon> RSVP: {{ getRsvpLabel(inv.rsvp_status) }}</span>
             </div>
           </div>
 
@@ -129,7 +129,7 @@
     </div>
 
     <div class="col-12 text-center py-5" *ngIf="invitadosFiltrados.length === 0">
-      <div class="display-1 mb-3">👥</div>
+      <div class="display-1 mb-3"><app-icon name="invitados" [size]="80" ></app-icon></div>
       <p class="text-muted">{{ "GUESTS.EMPTY_STATE" | translate }}</p>
     </div>
   </div>
@@ -169,7 +169,7 @@
     <div class="modal-info-grid">
 
       <div class="modal-info-row">
-        <span class="info-icon">✉️</span>
+        <span class="info-icon"><app-icon name="invitacion" [size]="20" ></app-icon></span>
         <div class="info-content">
           <span class="info-label">{{ "GUESTS.EMAIL" | translate }}</span>
           <span class="info-value" [class.muted]="!invitadoModal.email">
@@ -179,7 +179,7 @@
       </div>
 
       <div class="modal-info-row">
-        <span class="info-icon">🪑</span>
+        <span class="info-icon"><app-icon name="silla" [size]="20" ></app-icon></span>
         <div class="info-content">
           <span class="info-label">{{ "GUESTS.TABLE_LABEL" | translate }}</span>
           <span class="info-value" [class.muted]="!invitadoModal.table_id">
@@ -190,7 +190,7 @@
 
       <!-- ✅ CAMPO CORRECTO: allergies (viene del RSVP) -->
       <div class="modal-info-row highlight-row" *ngIf="invitadoModal.allergies">
-        <span class="info-icon">⚠️</span>
+        <span class="info-icon"><app-icon name="advertencia" [size]="20"></app-icon></span>
         <div class="info-content">
           <span class="info-label">{{ "GUESTS.ALLERGIES" | translate }}</span>
           <span class="info-value allergy-tag">{{ invitadoModal.allergies }}</span>
@@ -199,7 +199,7 @@
 
       <!-- dietary_restrictions (campo manual) -->
       <div class="modal-info-row" *ngIf="invitadoModal.dietary_restrictions">
-        <span class="info-icon">🥗</span>
+        <span class="info-icon"><app-icon name="ensalada" [size]="20"></app-icon></span>
         <div class="info-content">
           <span class="info-label">{{ "GUESTS.DIETARY" | translate }}</span>
           <span class="info-value">{{ invitadoModal.dietary_restrictions }}</span>
@@ -207,7 +207,7 @@
       </div>
 
       <div class="modal-info-row" *ngIf="invitadoModal.phone">
-        <span class="info-icon">📞</span>
+        <span class="info-icon"><app-icon name="telefono" [size]="20"></app-icon></span>
         <div class="info-content">
           <span class="info-label">{{ "GUESTS.PHONE" | translate }}</span>
           <span class="info-value">{{ invitadoModal.phone }}</span>
@@ -219,19 +219,19 @@
     <!-- ✅ CAMPO CORRECTO: dietary_notes (mensaje libre del RSVP) -->
     <div class="modal-message-box" *ngIf="invitadoModal.dietary_notes">
       <div class="message-header">
-        <span>💬</span>
+        <span><app-icon name="diseno" [size]="20"></app-icon></span>
         <span>{{ "GUESTS.MODAL_MESSAGE" | translate }}</span>
       </div>
       <p class="message-text">"{{ invitadoModal.dietary_notes }}"</p>
     </div>
 
     <div class="modal-message-empty" *ngIf="!invitadoModal.dietary_notes">
-      💬 {{ "GUESTS.MODAL_NO_MESSAGE" | translate }}
+      <app-icon name="diseno" [size]="20" ></app-icon> {{ "GUESTS.MODAL_NO_MESSAGE" | translate }}
     </div>
 
     <button class="modal-delete-btn"
             (click)="cerrarModal(); eliminarInvitado(invitadoModal!.id)">
-      🗑 {{ "GUESTS.DELETE_CONFIRM" | translate }}
+      <app-icon name="eliminar" [size]="20" ></app-icon> {{ "GUESTS.DELETE_CONFIRM" | translate }}
     </button>
 
   </div>

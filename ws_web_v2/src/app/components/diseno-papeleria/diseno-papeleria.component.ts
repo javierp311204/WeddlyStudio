@@ -9,28 +9,9 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 registerLocaleData(localeEs);
-
-// ─────────────────────────────────────────────────────────────
-// MIGRACIÓN v2:
-//  • codigoBoda → weddingId (UUID)
-//  • guardarConfiguracion / cargarConfiguracion:
-//    ⚠️ El endpoint /api/gestion/configuracion-boda NO existe en v2.
-//    En v2, la info de la boda se guarda en PATCH /api/weddings/:weddingId.
-//    El diseño de papelería (plantilla, colores, etc.) no tiene endpoint
-//    equivalente en v2. Se sugiere guardarlo en localStorage como workaround
-//    hasta que se implemente.
-//  • abrirSelectorInvitados:
-//    GET /api/gestion/invitados → GET /api/weddings/:weddingId/guests
-//    inv.nombre → inv.first_name + inv.last_name
-//    inv._id    → inv.id
-//  • enviarEmail / enviarInvitacionesMasivas:
-//    ⚠️ /api/gestion/enviar-invitacion-individual NO existe en v2.
-//    En v2, el envío se gestiona por Invitations: POST /api/invitations/:id/send
-//    Esta funcionalidad requiere primero crear una invitación (diseño) y luego
-//    enviarla. Se deja el método con un aviso claro.
-// ─────────────────────────────────────────────────────────────
 
 interface InvitadoV2 {
   id: string;
@@ -42,7 +23,7 @@ interface InvitadoV2 {
 @Component({
   selector: 'app-diseno-papeleria',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule, IconComponent],
   templateUrl: './diseno-papeleria.component.html',
   styleUrl: './diseno-papeleria.component.css',
 })

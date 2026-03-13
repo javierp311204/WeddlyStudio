@@ -7,12 +7,13 @@ import { PaymentService } from '../../services/payment/payment.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 interface PlanUI {
   id:        string;
   tipo:      string;
   nombre:    string;
-  emoji:     string;
+  icon:      string;
   precio:    number;
   periodo:   string;
   subtitulo: string;
@@ -24,7 +25,7 @@ interface PlanUI {
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, IconComponent],
   templateUrl: './pricing.component.html',
   styleUrl: './pricing.component.css',
 })
@@ -104,7 +105,7 @@ export class PricingComponent implements OnInit, OnDestroy {
     const planMeta: Record<string, Omit<PlanUI, 'id' | 'precio' | 'tipo' | 'features'>> = {
       free: {
         nombre:    this.translate.instant('PRICING.PLANS.FREE_NAME')       || 'Gratuito',
-        emoji:     '🎁',
+        icon:     'planGratuito',
         periodo:   '',
         subtitulo: this.translate.instant('PRICING.PLANS.FREE_SUBTITLE')   || 'Para empezar',
         badge:     '',
@@ -112,7 +113,7 @@ export class PricingComponent implements OnInit, OnDestroy {
       },
       one_time: {
         nombre:    this.translate.instant('PRICING.PLANS.ESSENTIAL_NAME')      || 'Evento PRO',
-        emoji:     '💎',
+        icon:     'planEsencial',
         periodo:   this.translate.instant('PRICING.ONE_TIME_PAYMENT')          || 'pago único',
         subtitulo: this.translate.instant('PRICING.PLANS.ESSENTIAL_SUBTITLE')  || 'Todo lo que necesitas',
         badge:     this.translate.instant('PRICING.BEST_VALUE')                || 'Mejor valor',
@@ -120,7 +121,7 @@ export class PricingComponent implements OnInit, OnDestroy {
       },
       subscription: {
         nombre:    this.translate.instant('PRICING.PLANS.PREMIUM_NAME')      || 'Premium',
-        emoji:     '👑',
+        icon:     'planPremium',
         periodo:   this.translate.instant('PRICING.PER_MONTH')               || '/mes',
         subtitulo: this.translate.instant('PRICING.PLANS.PREMIUM_SUBTITLE')  || 'Para profesionales',
         badge:     this.translate.instant('PRICING.MOST_POPULAR')            || 'Más popular',

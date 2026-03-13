@@ -5,19 +5,20 @@ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient }        from '@angular/common/http';
 import { AuthService }       from '../../services/auth/auth.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 type Step = 'code' | 'reset_sent';
 
 @Component({
   selector: 'app-two-factor',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, IconComponent],
   template: `
 <div class="tfa-shell">
   <div class="tfa-card">
 
     <div class="tfa-header">
-      <span class="tfa-emoji">🔐</span>
+      <span class="tfa-emoji"> <app-icon name="aprobar" [size]="50"></app-icon> </span>
         <h1>{{ 'TFA.VERIFY.TITLE' | translate }}</h1>
         <p>{{ 'TFA.VERIFY.SUBTITLE' | translate }}</p>
     </div>
@@ -56,7 +57,7 @@ type Step = 'code' | 'reset_sent';
     <!-- Email enviado -->
     <ng-container *ngIf="step === 'reset_sent'">
       <div class="info-box">
-        <span class="big-emoji">📧</span>
+        <span class="big-emoji"><app-icon name="invitacion" [size]="50"></app-icon></span>
         <p>{{ 'TFA.VERIFY.RESET_SENT_DESC' | translate }}</p>
       </div>
       <a routerLink="/login" class="btn-secondary">{{ 'TFA.VERIFY.BACK_LOGIN' | translate }}</a>

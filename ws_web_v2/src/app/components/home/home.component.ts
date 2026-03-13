@@ -6,9 +6,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
+import { IconComponent } from '../../shared/icons/icon.component';
 import { TareasService } from '../../services/tareas/tareas.service';
 import { ChecklistPreviewComponent } from '../checklist-preview/checklist-preview.component';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
+
 
 @Component({
   selector: 'app-home',
@@ -18,6 +20,7 @@ import { LanguageSelectorComponent } from '../language-selector/language-selecto
     RouterModule,
     TranslateModule,
     LanguageSelectorComponent,
+    IconComponent,
     ChecklistPreviewComponent,
   ],
   templateUrl: './home.component.html',

@@ -6,54 +6,55 @@
       <img src="assets/logo/logo-icon.png" alt="Weddly" class="logo-img" />
       <span class="logo-text">{{ 'HOME.BRAND' | translate }}</span>
     </div>
-    <button class="collapse-btn" (click)="toggle()" [title]="(collapsed() ? 'SIDEBAR.TOGGLE_EXPAND' : 'SIDEBAR.TOGGLE_COLLAPSE') | translate">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+    <button class="collapse-btn" (click)="toggle()"
+            [title]="(collapsed() ? 'SIDEBAR.TOGGLE_EXPAND' : 'SIDEBAR.TOGGLE_COLLAPSE') | translate">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round">
         <path *ngIf="!collapsed()" d="M15 18l-6-6 6-6"/>
         <path *ngIf="collapsed()"  d="M9 18l6-6-6-6"/>
       </svg>
     </button>
   </div>
 
-  <!-- Perfil clickable → navega a /perfil -->
+  <!-- Perfil -->
   <a class="sidebar-profile" routerLink="/perfil" [title]="'SIDEBAR.PROFILE_TITLE' | translate">
     <div class="profile-avatar"
-        [style.background-image]="avatarUrl ? 'url(' + avatarUrl + ')' : ''"
-        [style.background-size]="'cover'"
-        [style.background-position]="'center'">
+         [style.background-image]="avatarUrl ? 'url(' + avatarUrl + ')' : ''"
+         [style.background-size]="'cover'"
+         [style.background-position]="'center'">
       <span *ngIf="!avatarUrl">{{ getInitial() }}</span>
     </div>
     <div class="profile-info">
       <p class="profile-name">{{ authService.getUserNick() }}</p>
-      <!-- Muestra el rol real en la boda activa -->
       <p class="profile-role">{{ getRoleLabel() }}</p>
     </div>
   </a>
 
   <!-- Mis Bodas -->
-  <a
-    class="nav-item mis-bodas-link"
-    routerLink="/mis-bodas"
-    routerLinkActive="active"
-    [title]="'SIDEBAR.MY_WEDDINGS' | translate"
-  >
-    <span class="nav-emoji">💒</span>
+  <a class="nav-item mis-bodas-link"
+     routerLink="/mis-bodas"
+     routerLinkActive="active"
+     [title]="'SIDEBAR.MY_WEDDINGS' | translate">
+    <span class="nav-icon">
+      <app-icon name="anillo" [size]="18"></app-icon>
+    </span>
     <span class="nav-label">{{ 'SIDEBAR.MY_WEDDINGS' | translate }}</span>
     <span class="active-bar"></span>
   </a>
 
   <div class="sidebar-divider"></div>
 
-  <!-- Navegación principal — filtrada por rol via visibleNavItems -->
+  <!-- Navegación principal -->
   <nav class="sidebar-nav">
     <ng-container *ngFor="let item of visibleNavItems">
-      <a
-        [routerLink]="item.route"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
-        class="nav-item"
-        [title]="item.title | translate"
-      >
-        <span class="nav-emoji">{{ item.emoji }}</span>
+      <a [routerLink]="item.route"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+         class="nav-item"
+         [title]="item.title | translate">
+        <span class="nav-icon">
+          <app-icon [name]="item.icon" [size]="18"></app-icon>
+        </span>
         <span class="nav-label">{{ item.label | translate }}</span>
         <span class="active-bar"></span>
       </a>
@@ -67,17 +68,17 @@
   <div class="sidebar-footer">
 
     <div class="footer-lang nav-item" title="Idioma">
-      <span class="nav-emoji">🌐</span>
+      <span class="nav-icon">
+        <app-icon name="idiomas" [size]="18"></app-icon>
+      </span>
       <app-language-selector class="lang-selector" />
     </div>
 
-    <button class="nav-item logout-btn" (click)="authService.logout()" [title]="'NAV.LOGOUT' | translate">
-      <span class="nav-emoji">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-          <polyline points="16 17 21 12 16 7"/>
-          <line x1="21" y1="12" x2="9" y2="12"/>
-        </svg>
+    <button class="nav-item logout-btn"
+            (click)="authService.logout()"
+            [title]="'NAV.LOGOUT' | translate">
+      <span class="nav-icon">
+        <app-icon name="cerrarSesion" [size]="18"></app-icon>
       </span>
       <span class="nav-label">{{ 'NAV.LOGOUT' | translate }}</span>
     </button>

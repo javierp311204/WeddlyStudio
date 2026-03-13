@@ -13,7 +13,7 @@
         <h1 class="mb-header__title">{{ 'WEDDINGS.TITLE' | translate }}</h1>
       </div>
       <button class="mb-new-btn" (click)="abrirNuevaBoda()">
-        <span class="mb-new-btn__icon">+</span>
+        <span class="mb-new-btn__icon"><app-icon name="anadir" [size]="26" ></app-icon></span>
         <span>{{ 'WEDDINGS.NEW_WEDDING' | translate }}</span>
       </button>
     </div>
@@ -26,7 +26,7 @@
 
     <!-- ── Estado vacío ── -->
     <div class="mb-empty" *ngIf="!cargando && bodas.length === 0">
-      <span class="mb-empty__icon">💒</span>
+      <span class="mb-empty__icon"><app-icon name="venue" [size]="65"></app-icon></span>
       <h2 class="mb-empty__title">{{ 'WEDDINGS.EMPTY_TITLE' | translate }}</h2>
       <p class="mb-empty__desc">{{ 'WEDDINGS.EMPTY_DESC' | translate }}</p>
       <button class="mb-new-btn" (click)="abrirNuevaBoda()">
@@ -50,7 +50,7 @@
 
         <!-- Header de la tarjeta -->
         <div class="mb-card__top">
-          <div class="mb-card__icon">💍</div>
+          <div class="mb-card__icon"><app-icon name="anillo" [size]="42"></app-icon></div>
           <div class="mb-card__badges">
             <span class="mb-badge" [ngClass]="getPlanClass(boda.plan_type)">
               {{ getPlanLabel(boda.plan_type) }}
@@ -64,11 +64,11 @@
         <!-- Nombre y fecha -->
         <h2 class="mb-card__name">{{ boda.name }}</h2>
         <p class="mb-card__date">
-          <span class="mb-card__date-icon">📅</span>
+          <span class="mb-card__date-icon"><app-icon name="fecha" [size]="20"></app-icon></span>
           {{ formatDate(boda.wedding_date) }}
         </p>
         <p class="mb-card__location" *ngIf="boda.location_name">
-          <span>📍</span> {{ boda.location_name }}
+          <span><app-icon name="ubicacion" [size]="20"></app-icon></span> {{ boda.location_name }}
         </p>
 
         <!-- Stats -->
@@ -102,7 +102,7 @@
             (click)="confirmarEliminar(boda, $event)"
             title="Eliminar boda"
           >
-            🗑
+            <app-icon name="eliminar" [size]="18"></app-icon>
           </button>
         </div>
 
@@ -165,7 +165,7 @@
   <div class="mb-modal mb-modal--upgrade" (click)="$event.stopPropagation()">
     <button class="mb-modal__close" (click)="cerrarUpgradeModal()">×</button>
 
-    <div class="mb-upgrade__icon">💎</div>
+    <div class="mb-upgrade__icon"><app-icon name="planPremium" [size]="40"></app-icon></div>
     <h3 class="mb-modal__title">{{ 'WEDDINGS.UPGRADE_TITLE' | translate }}</h3>
     <p class="mb-upgrade__reason">{{ upgradeReason }}</p>
 
@@ -191,7 +191,7 @@
   <div class="mb-modal mb-modal--danger" (click)="$event.stopPropagation()">
     <button class="mb-modal__close" (click)="cerrarEliminarModal()">×</button>
 
-    <div class="mb-danger__icon">⚠️</div>
+    <div class="mb-danger__icon"><app-icon name="advertencia" [size]="50"></app-icon></div>
     <h3 class="mb-modal__title">{{ 'WEDDINGS.DELETE_TITLE' | translate }}</h3>
     <p class="mb-danger__desc" [innerHTML]="'WEDDINGS.DELETE_CONFIRM' | translate:{name: bodaAEliminar?.name}"></p>
 

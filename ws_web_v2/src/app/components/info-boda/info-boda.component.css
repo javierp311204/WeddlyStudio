@@ -259,6 +259,19 @@
 .ib-card__icon-wrap--gold  { background: var(--gold-pale); }
 .ib-card__icon-wrap--green { background: var(--green-pale); }
 
+.ib-card__icon-wrap span,
+.ib-card__icon-wrap app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.ib-card__icon-wrap .wly-icon {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ── Card Venue: contenido ─────────────────── */
 .ib-venue-name {
   font-family: 'Playfair Display', serif;

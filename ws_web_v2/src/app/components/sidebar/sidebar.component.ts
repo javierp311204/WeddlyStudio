@@ -5,20 +5,21 @@ import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http'
 import { AuthService, WeddingRole } from '../../services/auth/auth.service';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 interface NavItem {
   label:    string;
   title:    string;
-  emoji:    string;
+  icon:     string;   
   route:    string;
-  minRole?: WeddingRole;  
+  minRole?: WeddingRole;
   exact?:   boolean;
 }
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSelectorComponent, TranslateModule, HttpClientModule],
+  imports: [CommonModule, RouterModule, LanguageSelectorComponent, TranslateModule, HttpClientModule, IconComponent],
   templateUrl: './sidebar.component.html',
   styleUrl:    './sidebar.component.css',
 })
@@ -28,26 +29,23 @@ export class SidebarComponent implements OnInit {
   collapsed = signal(false);
   avatarUrl: string | null = null;
 
-  // minRole = rol mínimo para ver el ítem. Sin minRole = visible para todos.
   navItems: NavItem[] = [
-    { label: 'NAV.HOME',       title: 'NAV.HOME',       emoji: '🏠', route: '/dashboard',  exact: true },
-    { label: 'NAV.INFO',       title: 'NAV.INFO',       emoji: '📖', route: '/info-boda',  minRole: 'planner' },
-    { label: 'NAV.GUESTS',     title: 'NAV.GUESTS',     emoji: '👥', route: '/invitados',  minRole: 'planner' },
-    { label: 'NAV.CHECKLIST',  title: 'NAV.CHECKLIST',  emoji: '✅', route: '/checklist'  },
-    { label: 'NAV.CALENDAR',   title: 'NAV.CALENDAR',    emoji: '📅', route: '/calendario'},              
-    { label: 'NAV.DESIGN',     title: 'NAV.DESIGN',     emoji: '🎨', route: '/diseno',     minRole: 'co_organizer' },
-    { label: 'NAV.TABLES',     title: 'NAV.TABLES',     emoji: '🪑', route: '/mesas',      minRole: 'planner' },
-    { label: 'NAV.MAP',        title: 'NAV.MAP',        emoji: '🗺️', route: '/plano',      minRole: 'planner' },
-    { label: 'NAV.ALBUM',      title: 'NAV.ALBUM',      emoji: '📸', route: '/album'      },              
-    { label: 'NAV.COLLABORATORS', title: 'NAV.COLLABORATORS', emoji: '👥', route: '/colaboradores', minRole: 'co_organizer' },
-    { label: 'NAV.PRICING',    title: 'NAV.PRICING',    emoji: '💎', route: '/pricing'    },
-                  
+    { label: 'NAV.HOME',          title: 'NAV.HOME',          icon: 'home',          route: '/dashboard',      exact: true },
+    { label: 'NAV.INFO',          title: 'NAV.INFO',          icon: 'infoBoda',      route: '/info-boda',      minRole: 'planner' },
+    { label: 'NAV.GUESTS',        title: 'NAV.GUESTS',        icon: 'invitados',     route: '/invitados',      minRole: 'planner' },
+    { label: 'NAV.CHECKLIST',     title: 'NAV.CHECKLIST',     icon: 'checklist',     route: '/checklist' },
+    { label: 'NAV.CALENDAR',      title: 'NAV.CALENDAR',      icon: 'calendario',    route: '/calendario' },
+    { label: 'NAV.DESIGN',        title: 'NAV.DESIGN',        icon: 'diseno',        route: '/diseno',         minRole: 'co_organizer' },
+    { label: 'NAV.TABLES',        title: 'NAV.TABLES',        icon: 'mesas',         route: '/mesas',          minRole: 'planner' },
+    { label: 'NAV.MAP',           title: 'NAV.MAP',           icon: 'plano',         route: '/plano',          minRole: 'planner' },
+    { label: 'NAV.ALBUM',         title: 'NAV.ALBUM',         icon: 'album',         route: '/album' },
+    { label: 'NAV.COLLABORATORS', title: 'NAV.COLLABORATORS', icon: 'colaboradores', route: '/colaboradores',  minRole: 'co_organizer' },
+    { label: 'NAV.PRICING',       title: 'NAV.PRICING',       icon: 'planes',        route: '/pricing' },
   ];
 
   constructor(public authService: AuthService, private http: HttpClient, private translate: TranslateService) {}
 
   ngOnInit(): void {
-    // Avatar — caché instantánea + refresco desde backend
     const cached = this.authService.getAvatarUrl();
     if (cached) this.avatarUrl = cached;
 
@@ -67,7 +65,6 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  // Filtra los ítems según el rol actual del usuario en la boda activa
   get visibleNavItems(): NavItem[] {
     return this.navItems.filter(item =>
       !item.minRole || this.authService.hasMinRole(item.minRole)

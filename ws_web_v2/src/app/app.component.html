@@ -28,11 +28,11 @@
 
             <div class="gf-contact">
               <div class="gf-contact-item">
-                <span class="gf-contact-icon">📍</span>
+                <span class="gf-contact-icon"><app-icon name="ubicacion" [size]="20" ></app-icon></span>
                 <span>Madrid, España · vuestrabodaof&#64;gmail.com</span>
               </div>
               <div class="gf-contact-item">
-                <span class="gf-contact-icon">✉️</span>
+                <span class="gf-contact-icon"><app-icon name="perfil" [size]="20" ></app-icon></span>
                 <span>soporte&#64;weddlystudio.com</span>
               </div>
             </div>
@@ -104,7 +104,7 @@
   >
     <div class="toast-content d-flex align-items-start gap-3 position-relative">
       <span class="toast-icon fs-4">
-        {{ toast.type === 'success' ? '✅' : '❌' }}
+        <app-icon [name]="toast.type === 'success' ? 'aprobar' : 'rechazar'" [size]="22"></app-icon>
       </span>
       <div class="text-wrapper flex-grow-1">
         <p class="toast-title fw-bold mb-1">{{ toast.title }}</p>
@@ -126,7 +126,7 @@
   [class.active]="conf.show"
 >
   <div class="modal-card bg-white rounded-4 shadow text-center">
-    <div class="modal-icon mb-3">⚠️</div>
+    <div class="modal-icon mb-3"><app-icon name="advertencia" [size]="25" ></app-icon></div>
     <h3 class="mb-3">{{ conf.title }}</h3>
     <p class="text-muted mb-4">{{ conf.message }}</p>
 

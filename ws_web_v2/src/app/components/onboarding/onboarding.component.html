@@ -6,7 +6,7 @@
     <div class="bg-circle bg-circle-3"></div>
   </div>
 
-  <div class="ob-logo">✨ Weddly Studio</div>
+  <div class="ob-logo">Weddly Studio</div>
 
   <div class="ob-card">
 
@@ -20,21 +20,21 @@
 
     <!-- PASO 1 — Bienvenida -->
     <div class="ob-step" *ngIf="paso === 1">
-      <div class="step-emoji">💍</div>
+      <div class="step-emoji"><app-icon name="anillo" [size]="70"></app-icon></div>
       <h1 class="step-title">{{ 'ONBOARDING.WELCOME_TITLE' | translate }}</h1>
       <p class="step-desc" [innerHTML]="'ONBOARDING.WELCOME_DESC' | translate"></p>
       <div class="features-list">
-        <div class="feature-item">{{ 'ONBOARDING.FEATURE_GUESTS' | translate }}</div>
-        <div class="feature-item">{{ 'ONBOARDING.FEATURE_TABLES' | translate }}</div>
-        <div class="feature-item">{{ 'ONBOARDING.FEATURE_CHECKLIST' | translate }}</div>
-        <div class="feature-item">{{ 'ONBOARDING.FEATURE_ALBUM' | translate }}</div>
+        <div class="feature-item"><app-icon name="invitados" [size]="25"></app-icon>{{ 'ONBOARDING.FEATURE_GUESTS' | translate }}</div>
+        <div class="feature-item"><app-icon name="plano" [size]="25"></app-icon>{{ 'ONBOARDING.FEATURE_TABLES' | translate }}</div>
+        <div class="feature-item"><app-icon name="checklist" [size]="25"></app-icon>{{ 'ONBOARDING.FEATURE_CHECKLIST' | translate }}</div>
+        <div class="feature-item"><app-icon name="album" [size]="25"></app-icon>{{ 'ONBOARDING.FEATURE_ALBUM' | translate }}</div>
       </div>
       <button class="btn-primary" (click)="siguiente()">{{ 'ONBOARDING.START_BTN' | translate }}</button>
     </div>
 
     <!-- PASO 2 — Datos de la boda (obligatorios + opcionales) -->
     <div class="ob-step" *ngIf="paso === 2">
-      <div class="step-emoji">📋</div>
+      <div class="step-emoji"><app-icon name="editar" [size]="40"></app-icon></div>
       <h2 class="step-title">{{ 'ONBOARDING.WEDDING_DATA_TITLE' | translate }}</h2>
       <p class="step-desc" [innerHTML]="'ONBOARDING.WEDDING_DATA_DESC' | translate"></p>
 
@@ -93,7 +93,7 @@
 
     <!-- PASO 3 — Invitados -->
     <div class="ob-step" *ngIf="paso === 3">
-      <div class="step-emoji">👥</div>
+      <div class="step-emoji"><app-icon name="grupoAmigos" [size]="50"></app-icon></div>
       <h2 class="step-title">{{ 'ONBOARDING.GUESTS_TITLE' | translate }}</h2>
       <p class="step-desc">{{ 'ONBOARDING.GUESTS_DESC' | translate }}</p>
       <div class="slider-wrapper">
@@ -103,25 +103,27 @@
         <div class="slider-range"><span>1</span><span>500+</span></div>
       </div>
       <div class="plan-hint" *ngIf="estimadoInvitados > 50">
-        <span>💡</span>
+        <span><app-icon name="notificacion" [size]="18"></app-icon></span>
         <span>{{ 'ONBOARDING.GUESTS_HINT' | translate }}</span>
       </div>
       <div class="btn-row">
-        <button class="btn-secondary" (click)="anterior()">← Atrás</button>
-        <button class="btn-primary" (click)="siguiente()">Continuar →</button>
+        <button class="btn-secondary" (click)="anterior()">{{ 'ONBOARDING.BACK_BTN' | translate }}</button>
+        <button class="btn-primary" (click)="siguiente()">{{ 'ONBOARDING.CONTINUE_BTN' | translate }}</button>
       </div>
     </div>
 
     <!-- PASO 4 — Prioridad -->
     <div class="ob-step" *ngIf="paso === 4">
-      <div class="step-emoji">🎯</div>
+      <div class="step-emoji"><app-icon name="misBodas" [size]="50"></app-icon></div>
       <h2 class="step-title">{{ 'ONBOARDING.PRIORITY_TITLE' | translate }}</h2>
       <p class="step-desc">{{ 'ONBOARDING.PRIORITY_DESC' | translate }}</p>
       <div class="priority-grid">
         <div class="priority-card" *ngFor="let p of prioridades"
              [class.selected]="prioridad === p.key"
              (click)="seleccionarPrioridad(p.key)">
-          <span class="priority-emoji">{{ p.emoji }}</span>
+          <span class="priority-emoji">
+            <app-icon [name]="p.emoji" [size]="18"></app-icon>
+          </span>
           <div>
             <div class="priority-label">{{ p.label }}</div>
             <div class="priority-desc">{{ p.desc }}</div>
@@ -130,15 +132,15 @@
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn-secondary" (click)="anterior()">← Atrás</button>
-        <button class="btn-primary" (click)="siguiente()">Continuar →</button>
+        <button class="btn-secondary" (click)="anterior()">{{ 'ONBOARDING.BACK_BTN' | translate }}</button>
+        <button class="btn-primary" (click)="siguiente()">{{ 'ONBOARDING.CONTINUE_BTN' | translate }}</button>
       </div>
     </div>
 
     <!-- PASO 5 — Primera acción -->
     <div class="ob-step" *ngIf="paso === 5">
       <ng-container *ngIf="prioridad === 'invitados'">
-        <div class="step-emoji">👤</div>
+        <div class="step-emoji"><app-icon name="perfil" [size]="50"></app-icon></div>
         <h2 class="step-title">{{ 'ONBOARDING.FIRST_GUEST_TITLE' | translate }}</h2>
         <p class="step-desc">{{ 'ONBOARDING.FIRST_GUEST_DESC' | translate }}</p>
         <div class="form-group">
@@ -155,7 +157,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="prioridad !== 'invitados'">
-        <div class="step-emoji">🚀</div>
+        <div class="step-emoji"><app-icon name="planes" [size]="50"></app-icon></div>
         <h2 class="step-title">{{ 'ONBOARDING.READY_TITLE' | translate }}</h2>
         <p class="step-desc">{{ 'ONBOARDING.READY_DESC' | translate }}</p>
         <div class="ready-card">
@@ -164,7 +166,7 @@
         </div>
       </ng-container>
       <div class="btn-row">
-        <button class="btn-secondary" (click)="anterior()">← Atrás</button>
+        <button class="btn-secondary" (click)="anterior()">{{ 'ONBOARDING.BACK_BTN' | translate }}</button>
         <button class="btn-primary" (click)="siguiente()" [disabled]="cargando">
           <span *ngIf="!cargando">{{ 'ONBOARDING.FINISH_BTN' | translate }}</span>
           <span *ngIf="cargando" class="spinner">{{ 'ONBOARDING.LOADING' | translate }}</span>
@@ -174,32 +176,32 @@
 
     <!-- PASO 6 — Confirmación -->
     <div class="ob-step" *ngIf="paso === 6">
-      <div class="step-emoji confetti-anim">🎉</div>
+      <div class="step-emoji confetti-anim"><app-icon name="planes" [size]="60"></app-icon></div>
       <h2 class="step-title">{{ 'ONBOARDING.CONFIRM_TITLE' | translate }}</h2>
       <p class="step-desc">{{ 'ONBOARDING.CONFIRM_DESC' | translate }}</p>
       <div class="summary-card">
         <div class="summary-row">
-          <span class="summary-icon">💍</span>
+          <span class="summary-icon"><app-icon name="anillo" [size]="30"></app-icon></span>
           <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_WEDDING' | translate }}</div><div class="summary-val">{{ nombre }}</div></div>
         </div>
         <div class="summary-row">
-          <span class="summary-icon">📅</span>
+          <span class="summary-icon"><app-icon name="fecha" [size]="30"></app-icon></span>
           <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_DATE' | translate }}</div><div class="summary-val">{{ fecha | date:'longDate':'':'es' }}</div></div>
         </div>
         <div class="summary-row">
-          <span class="summary-icon">📍</span>
+          <span class="summary-icon"><app-icon name="ubicacion" [size]="30"></app-icon></span>
           <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_VENUE' | translate }}</div><div class="summary-val">{{ ciudad }}</div></div>
         </div>
         <div class="summary-row" *ngIf="direccion">
-          <span class="summary-icon">🗺️</span>
+          <span class="summary-icon"><app-icon name="plano" [size]="30"></app-icon></span>
           <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_ADDRESS' | translate }}</div><div class="summary-val">{{ direccion }}</div></div>
         </div>
         <div class="summary-row" *ngIf="dresscode">
-          <span class="summary-icon">👗</span>
+          <span class="summary-icon"><app-icon name="dresscode" [size]="30"></app-icon></span>
           <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_DRESSCODE' | translate }}</div><div class="summary-val">{{ dresscode }}</div></div>
         </div>
         <div class="summary-row">
-          <span class="summary-icon">👥</span>
+          <span class="summary-icon"><app-icon name="invitados" [size]="30"></app-icon></span>
           <div><div class="summary-key">{{ 'ONBOARDING.SUMMARY_GUESTS' | translate }}</div><div class="summary-val">{{ estimadoInvitados }}</div></div>
         </div>
       </div>

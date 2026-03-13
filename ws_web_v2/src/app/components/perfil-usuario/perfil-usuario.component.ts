@@ -7,6 +7,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { Perfil2faComponent } from '../perfil2fa/perfil2fa.component';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 interface FormErrors {
   first_name?: string;
@@ -24,7 +25,7 @@ interface PasswordErrors {
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, HttpClientModule, Perfil2faComponent],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, HttpClientModule, Perfil2faComponent, IconComponent],
   templateUrl: './perfil-usuario.component.html',
   styleUrl: './perfil-usuario.component.css',
 })

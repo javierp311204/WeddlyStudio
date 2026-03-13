@@ -5,11 +5,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GestionService } from '../../services/gestion/gestion.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { Router } from '@angular/router';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 @Component({
   selector: 'app-lista-invitados',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, IconComponent],
   templateUrl: './lista-invitados.component.html',
   styleUrl: './lista-invitados.component.css',
 })

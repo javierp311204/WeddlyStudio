@@ -8,10 +8,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { WeddingStatusBannerComponent } from './components/wedding-status-banner/wedding-status-banner.component';
+import { IconComponent } from './shared/icons/icon.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent, TranslateModule, SidebarComponent, WeddingStatusBannerComponent],
+  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent, TranslateModule, SidebarComponent, WeddingStatusBannerComponent, IconComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
