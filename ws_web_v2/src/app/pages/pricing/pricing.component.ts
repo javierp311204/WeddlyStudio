@@ -197,7 +197,7 @@ export class PricingComponent implements OnInit, OnDestroy {
     if (!weddingId) { this.planActual = 'free'; return; }
 
     const token = localStorage.getItem('token');
-    this.http.get<any>(`http://localhost:3000/api/weddings/${weddingId}`, {
+    this.http.get<any>(`https://weddly-api-production.up.railway.app/api/weddings/${weddingId}`, {
       headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
     }).subscribe({
       next:  (res) => { this.planActual = res?.data?.plan_type ?? 'free'; },

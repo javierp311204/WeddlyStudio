@@ -38,7 +38,7 @@ export class VerificarEmailComponent implements OnInit {
 
   verificarToken(token: string) {
     // v2: GET /api/auth/verify-email/:token
-    this.http.get(`http://localhost:3000/api/auth/verify-email/${token}`).subscribe({
+    this.http.get(`https://weddly-api-production.up.railway.app/api/auth/verify-email/${token}`).subscribe({
       next: () => {
         this.verificando = false;
         this.verificacionExitosa = true;

@@ -256,7 +256,7 @@ export class Perfil2faComponent implements OnInit {
   showDisableForm  = false;
   disablePassword  = '';
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(
     private http:  HttpClient,

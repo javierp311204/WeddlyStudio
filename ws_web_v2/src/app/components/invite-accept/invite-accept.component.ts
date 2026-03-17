@@ -6,7 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService }         from '../../services/auth/auth.service';
 import { IconComponent } from '../../shared/icons/icon.component';
 
-const API = 'http://localhost:3000/api';
+const API = 'https://weddly-api-production.up.railway.app/api';
 
 type PageState = 'loading' | 'preview' | 'accepting' | 'success' | 'error';
 

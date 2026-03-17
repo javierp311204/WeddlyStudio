@@ -56,7 +56,7 @@ export class CalendarioPageComponent implements OnInit {
     }
 
     // Leer el plan real desde el backend, igual que PlanGuard
-    this.http.get<any>('http://localhost:3000/api/weddings/can-create').subscribe({
+    this.http.get<any>('https://weddly-api-production.up.railway.app/api/weddings/can-create').subscribe({
       next: (response) => {
         this.planType = response?.data?.plan ?? 'free';
         // Opcional: cachear para evitar el parpadeo en recargas

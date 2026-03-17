@@ -55,7 +55,7 @@ export class AlbumDigitalComponent implements OnInit {
   totalPages   = 1;
   totalPhotos  = 0;
 
-  private readonly apiUrl = 'http://localhost:3000/api';
+  private readonly apiUrl = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(
     private http:          HttpClient,

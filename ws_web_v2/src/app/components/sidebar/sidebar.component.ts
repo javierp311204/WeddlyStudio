@@ -52,7 +52,7 @@ export class SidebarComponent implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    this.http.get<any>('http://localhost:3000/api/auth/me', {
+    this.http.get<any>('https://weddly-api-production.up.railway.app/api/auth/me', {
       headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
     }).subscribe({
       next: (res) => {

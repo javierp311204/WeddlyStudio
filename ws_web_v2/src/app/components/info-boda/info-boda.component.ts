@@ -30,7 +30,7 @@ export class InfoBodaComponent implements OnInit {
     notes:         '',   // wedding.menu_description
   };
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(
     public authService: AuthService,

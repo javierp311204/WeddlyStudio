@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-const API = 'http://localhost:3000/api';
+const API = 'https://weddly-api-production.up.railway.app/api';
 
 export interface Member {
   id:          string;   

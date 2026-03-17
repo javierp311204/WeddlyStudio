@@ -54,8 +54,8 @@ export class PerfilUsuarioComponent implements OnInit {
   passwordErrors: PasswordErrors = {};
   passwordForm = { current: '', new: '', confirm: '' };
 
-  private authUrl  = 'http://localhost:3000/api/auth';
-  private usersUrl = 'http://localhost:3000/api/users';
+  private authUrl  = 'https://weddly-api-production.up.railway.app/api/auth';
+  private usersUrl = 'https://weddly-api-production.up.railway.app/api/users';
 
   constructor(
     private http: HttpClient,

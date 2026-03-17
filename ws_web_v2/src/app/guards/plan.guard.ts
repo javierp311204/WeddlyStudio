@@ -51,7 +51,7 @@ export class PlanGuard implements CanActivate {
 
     // FIX: leer el plan del USUARIO (can-create devuelve el plan activo del usuario)
     // en vez de el plan_type de la boda (que siempre es 'free' por defecto)
-    return this.http.get<any>(`http://localhost:3000/api/weddings/can-create`).pipe(
+    return this.http.get<any>(`https://weddly-api-production.up.railway.app/api/weddings/can-create`).pipe(
       map((response) => {
         // can-create devuelve { success, data: { allowed, plan, limit, current } }
         const planActual: string = response?.data?.plan ?? response?.plan ?? 'free';

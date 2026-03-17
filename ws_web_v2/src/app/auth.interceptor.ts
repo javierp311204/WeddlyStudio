@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 // Estado compartido para serializar refreshes concurrentes
 let isRefreshing = false;
 const refreshDone$ = new BehaviorSubject<string | null>(null);
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://weddly-api-production.up.railway.app/api';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);

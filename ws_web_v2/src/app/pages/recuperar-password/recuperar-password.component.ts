@@ -19,7 +19,7 @@ export class RecuperarPasswordComponent {
   enviando: boolean = false;
   emailEnviado: boolean = false;
 
-  private readonly API = 'http://localhost:3000/api';
+  private readonly API = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(
     private http: HttpClient,

@@ -55,7 +55,7 @@ const ROLE_HIERARCHY: Record<string, number> = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private API_URL = 'http://localhost:3000/api';
+  private API_URL = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(private http: HttpClient) {}
 

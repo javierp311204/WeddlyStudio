@@ -45,7 +45,7 @@ export class PlanLimitsWidgetComponent implements OnInit {
   limites: Limites = { maxBodas: 1 };
   uso: Uso         = { bodasActivas: 0, puedeCrearMasBodas: true };
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(private http: HttpClient, private router: Router) {}
 

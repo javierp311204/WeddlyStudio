@@ -26,7 +26,7 @@ export class ResetearPasswordComponent implements OnInit {
   tokenInvalido: boolean = false;
   mensajeError: string = '';
 
-  private readonly API = 'http://localhost:3000/api';
+  private readonly API = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(
     private route: ActivatedRoute,

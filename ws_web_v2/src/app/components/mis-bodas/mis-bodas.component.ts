@@ -50,7 +50,7 @@ export class MisBodasComponent implements OnInit {
   bodaAEliminar: Boda | null = null;
   eliminando         = false;
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(
     private http:         HttpClient,

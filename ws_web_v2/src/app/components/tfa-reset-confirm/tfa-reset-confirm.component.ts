@@ -85,7 +85,7 @@ export class TfaResetConfirmComponent implements OnInit {
   step:     Step   = 'loading';
   errorMsg: string = 'El enlace puede haber expirado (válido 30 min) o ya fue usado. Solicita uno nuevo desde la pantalla de verificación.';
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(
     private route:  ActivatedRoute,

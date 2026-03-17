@@ -28,7 +28,7 @@ export class RegisterComponent implements OnInit {
   codigoBodaReferencia: string = '';
   private redirectUrl: string  = '';   // ← para saber a dónde ir tras registro
 
-  private API_URL = 'http://localhost:3000/api/auth';
+  private API_URL = 'https://weddly-api-production.up.railway.app/api/auth';
 
   constructor(
     private http:         HttpClient,

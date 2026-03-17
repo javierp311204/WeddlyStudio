@@ -26,7 +26,7 @@ export interface PDFExportData {
 
 @Injectable({ providedIn: 'root' })
 export class ExportService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
 
   constructor(private http: HttpClient) {}
 

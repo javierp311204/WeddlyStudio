@@ -11,7 +11,7 @@ describe('PlanGuard', () => {
   let routerSpy: { navigate: jasmine.Spy };
   let notifSpy: jasmine.SpyObj<NotificationService>;
 
-  const API_URL = 'http://localhost:3000/api/subscriptions/current';
+  const API_URL = 'https://weddly-api-production.up.railway.app/api/subscriptions/current';
 
   // Helper para crear un ActivatedRouteSnapshot con data
   const mockRoute = (planRequerido?: string): ActivatedRouteSnapshot => {
