@@ -56,8 +56,8 @@
 
       <!-- Precio -->
       <div class="plan-price">
-        <span class="price-currency" *ngIf="plan.precio > 0">€</span>
-        <span class="price-amount">{{ plan.precio > 0 ? plan.precio : 'PRICING.PLANS.FREE_NAME' | translate }}</span>
+        <span class="price-currency" >€</span>
+        <span class="price-amount">{{ plan.precio }}</span>
         <span class="price-period" *ngIf="plan.periodo">{{ plan.periodo }}</span>
       </div>
       <p class="plan-subtitle">{{ plan.subtitulo }}</p>
@@ -111,10 +111,13 @@
   <!-- Footer garantía -->
   <footer class="pricing-footer" *ngIf="!cargando">
     <div class="guarantee-row">
+      <app-icon name="aprobar" [size]="20"></app-icon>
       <span class="guarantee-item">{{ 'PRICING.SECURE_PAYMENT' | translate }}</span>
       <span class="guarantee-sep">·</span>
+      <app-icon name="invitacion" [size]="15"></app-icon>
       <span class="guarantee-item">{{ 'PRICING.INVOICE_EMAIL' | translate }}</span>
       <span class="guarantee-sep">·</span>
+      <app-icon name="rechazar" [size]="15"></app-icon>
       <span class="guarantee-item">{{ 'PRICING.CANCEL_ANYTIME' | translate }}</span>
     </div>
   </footer>

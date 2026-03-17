@@ -3,27 +3,28 @@ import { CommonModule }      from '@angular/common';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 type Step = 'loading' | 'success' | 'error';
 
 @Component({
   selector: 'app-tfa-reset-confirm',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, IconComponent],
   template: `
 <div class="reset-shell">
   <div class="reset-card">
 
     <!-- Cargando -->
     <ng-container *ngIf="step === 'loading'">
-      <div class="reset-icon spin-icon">⏳</div>
+      <div class="reset-icon spin-icon"><app-icon name="relojCargando" [size]="65"></app-icon></div>
       <h1>{{ 'TFA.RESET_CONFIRM.LOADING_TITLE' | translate }}</h1>
       <p>{{ 'TFA.RESET_CONFIRM.LOADING_DESC' | translate }}</p>
     </ng-container>
 
     <!-- Éxito -->
     <ng-container *ngIf="step === 'success'">
-      <div class="reset-icon">✅</div>
+      <div class="reset-icon"><app-icon name="aprobar" [size]="65"></app-icon></div>
       <h1>{{ 'TFA.RESET_CONFIRM.SUCCESS_TITLE' | translate }}</h1>
       <p [innerHTML]="'TFA.RESET_CONFIRM.SUCCESS_DESC' | translate"></p>
       <a routerLink="/login" class="btn-primary">{{ 'TFA.RESET_CONFIRM.GO_LOGIN' | translate }}</a>
@@ -31,7 +32,7 @@ type Step = 'loading' | 'success' | 'error';
 
     <!-- Error -->
     <ng-container *ngIf="step === 'error'">
-      <div class="reset-icon">❌</div>
+      <div class="reset-icon"><app-icon name="rechazar" [size]="65"></app-icon></div>
       <h1>{{ 'TFA.RESET_CONFIRM.ERROR_TITLE' | translate }}</h1>
       <p>{{ errorMsg }}</p>
       <a routerLink="/login" class="btn-secondary">{{ 'TFA.RESET_CONFIRM.BACK_LOGIN' | translate }}</a>
@@ -102,8 +103,7 @@ export class TfaResetConfirmComponent implements OnInit {
       return;
     }
 
-    // Llamar al backend para confirmar el reset
-    this.http.post<any>(`${this.apiUrl}/auth/2fa/reset/confirm`, { token })
+    this.http.post<any>(`${this.apiUrl}/auth/2fa/reset/confirm`, { reset_token: token })
       .subscribe({
         next:  () => { this.step = 'success'; },
         error: (err) => {

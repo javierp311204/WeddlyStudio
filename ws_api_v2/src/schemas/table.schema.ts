@@ -53,6 +53,7 @@ export const createTableSchema = z.object({
       .default(10),
     pos_x: z.number().min(-5000).max(10000).optional().default(600),
     pos_y: z.number().min(-5000).max(10000).optional().default(400),
+    angle: z.number().min(0).max(360).optional().default(0),
   }),
 });
 
@@ -68,6 +69,7 @@ export const updateTableSchema = z.object({
       max_capacity: z.number().int().min(1).max(50).optional(),
       pos_x:        z.number().min(-5000).max(10000).optional(),
       pos_y:        z.number().min(-5000).max(10000).optional(),
+      angle:        z.number().min(0).max(360).optional(),
     })
     .refine((data) => Object.keys(data).length > 0, {
       message: 'Debes enviar al menos un campo para actualizar',
@@ -101,6 +103,7 @@ export const updatePositionSchema = z.object({
   body: z.object({
     pos_x: z.number().min(-5000).max(10000).optional(),
     pos_y: z.number().min(-5000).max(10000).optional(),
+    angle: z.number().min(0).max(360).optional(),
   }),
 });
 

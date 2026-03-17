@@ -16,6 +16,7 @@
     "YES": "Yes",
     "NO": "No",
     "CONTINUE": "Continue",
+    "VERIFYCATED": "Verified",
     "DOWNLOAD": "Download",
     "UPLOAD": "Upload",
     "SEND": "Send",
@@ -643,12 +644,41 @@
     "TITLE": "Digital Album",
     "SUBTITLE": "Shared memories",
     "UPLOAD_BTN": "Upload new photo",
-    "UPLOAD_HINT": "Accepted formats: JPG, PNG. Max 5MB.",
-    "EMPTY_STATE": "No photos in this album yet. Be the first to upload one!",
+    "UPLOADING": "Uploading...",
+    "UPLOAD_HINT": "Accepted formats: JPG, PNG, WebP. Max 15MB.",
+    "UPLOAD_HINT_MODERATION": "Photos require organizer approval before being published.",
+    "UPLOAD_SUCCESS_TITLE": "Photo uploaded!",
+    "UPLOAD_SUCCESS_DESC": "Pending organizer approval.",
+    "UPLOAD_ERROR": "The photo could not be uploaded.",
+    "UPLOAD_LIMIT_TITLE": "Limit reached",
+    "UPLOAD_LIMIT_DESC": "You have reached the maximum number of photos for the {{plan}} plan. Upgrade your plan to upload more.",
+    "EMPTY_STATE": "There are no photos in this album yet.",
+    "EMPTY_PENDING": "No photos pending moderation.",
+    "EMPTY_APPROVED": "No approved photos yet.",
+    "EMPTY_REJECTED": "No rejected photos.",
+    "EMPTY_ALL": "There are no photos in the album.",
     "PHOTO_ALT": "Wedding photo",
-    "UPLOAD_SUCCESS_TITLE": "Uploaded!",
-    "UPLOAD_SUCCESS_DESC": "Photo added to the album.",
-    "UPLOAD_ERROR": "Could not upload."
+    "MODERATION_PANEL_TITLE": "Moderation panel",
+    "FILTER_ALL": "All",
+    "FILTER_PENDING": "Pending",
+    "FILTER_APPROVED": "Approved",
+    "FILTER_REJECTED": "Rejected",
+    "STATUS_PENDING": "Pending",
+    "STATUS_APPROVED": "Approved",
+    "STATUS_REJECTED": "Rejected",
+    "STATUS_DELETED": "Deleted",
+    "BTN_APPROVE": "Approve",
+    "BTN_REJECT": "Reject",
+    "BTN_DELETE": "Delete",
+    "MODERATE_SUCCESS": "Photo moderated successfully.",
+    "MODERATE_ERROR": "The photo could not be moderated.",
+    "STATS_APPROVED": "Approved",
+    "STATS_PENDING": "Pending",
+    "STATS_REJECTED": "Rejected",
+    "STATS_LIMIT": "{{total}} / {{limit}} photos",
+    "STATS_UNLIMITED": "✨ Unlimited photos (Premium)",
+    "PAGINATION_OF": "of",
+    "LOAD_ERROR": "Photos could not be loaded."
   },
 
   "PRICING": {
@@ -667,8 +697,8 @@
     "CANCEL_ANYTIME": "Cancel anytime",
     "NO_MONTHLY": "One-time payment, no monthly fees",
     "FOREVER_FREE": "Free forever",
-    "SECURE_PAYMENT": "🔒 Secure payment with Stripe",
-    "INVOICE_EMAIL": "📧 Invoice by email",
+    "SECURE_PAYMENT": "Secure payment with Stripe",
+    "INVOICE_EMAIL": "Invoice by email",
     "SECURE_DESC": "We process payments securely with Stripe. We do not store credit card information.",
     "CURRENT_PLAN_BADGE": "✓ Current plan",
     "SELECT_PLAN_WITH_NAME": "Choose",
@@ -777,9 +807,20 @@
     "SUCCESS_ADDITIONAL": "You can now log in with your new password.",
     "BACK_TO_LOGIN": "Back to login",
     "ERROR_TITLE": "Error",
-    "ERROR_INVALID": "The password reset link is not valid",
+    "ERROR_INVALID": "The reset link is not valid",
     "ERROR_MISMATCH": "Passwords do not match",
-    "ERROR_SHORT": "Password must be at least 8 characters"
+    "ERROR_SHORT": "The password must be at least 8 characters long",
+    "INVALID_TOKEN_CAUSES_TITLE": "Possible causes:",
+    "INVALID_TOKEN_CAUSE_EXPIRED": "The link has expired (1 hour validity)",
+    "INVALID_TOKEN_CAUSE_USED": "The link has already been used",
+    "INVALID_TOKEN_CAUSE_INVALID": "The link is invalid or incorrect",
+    "REQUEST_NEW_LINK_BTN": "Request New Link",
+    "BACK_TO_LOGIN_SHORT": "Back to Login",
+    "TIPS_TITLE": "💡 Tips:",
+    "TIPS_ITEM_MIN_LENGTH": "Use at least 8 characters",
+    "TIPS_ITEM_MIX": "Mix letters and numbers",
+    "TIPS_ITEM_NOT_OBVIOUS": "Avoid obvious passwords",
+    "SUCCESS_REDIRECT_MSG": "You will be redirected to login in a few seconds..."
   },
 
   "CHECKLIST": {
@@ -894,19 +935,25 @@
 
   "RECOVERY": {
     "TITLE": "Forgot your password?",
-    "SUBTITLE": "Don't worry, we'll send you instructions to recover it.",
+    "SUBTITLE": "Don’t worry, we’ll send you instructions to recover it.",
     "EMAIL_LABEL": "Email Address",
     "EMAIL_PLACEHOLDER": "your@email.com",
-    "EMAIL_HINT": "Enter the email you registered with.",
+    "EMAIL_HINT": "Enter the email you used to register.",
     "SEND_BTN": "Send Instructions",
     "SENDING": "Sending...",
     "BACK_TO_LOGIN": "Back to Login",
     "SUCCESS_TITLE": "Email Sent!",
-    "SUCCESS_DESC": "We've sent recovery instructions to {{email}}. Please check your inbox and spam folder.",
+    "SUCCESS_DESC": "We’ve sent recovery instructions. Please check your inbox and spam folder.",
     "CHECK_EMAIL": "Check my email →",
     "ERROR_TITLE": "Error",
-    "ERROR_EMAIL_NOT_FOUND": "We couldn't find an account with that email.",
-    "ERROR_SEND": "Could not send email. Please try again later."
+    "ERROR_EMAIL_NOT_FOUND": "We couldn’t find an account with this email.",
+    "ERROR_SEND": "The email could not be sent. Try again later.",
+    "STEP_TITLE": "Next steps:",
+    "STEP_1": "Check your inbox.",
+    "STEP_2": "If you don’t see it, check your spam folder.",
+    "STEP_3": "Click the link in the email.",
+    "STEP_4": "Create your new password.",
+    "EXPIRE_WARNING": "The link will expire in 1 hour for security reasons."
   },
 
   "VERIFICATION": {
@@ -992,6 +1039,7 @@
     "NAV_PLANS": "Plans",
     "NAV_TERMS": "Terms & Conditions",
     "NAV_PRIVACY": "Privacy Policy",
+    "NAV_REVIEWS": "Reviews",
     "COPYRIGHT": "Copyright © 2026 · Weddly Studio"
   },
 
@@ -1138,9 +1186,9 @@
     "INVITE_TITLE": "Invite person",
     "INVITE_SUCCESS": "Invitation sent successfully!",
     "SEND_INVITE": "Send invitation",
-    "HINT_CO_ORGANIZER": "🔑 Can edit the wedding, manage guests, tables and send invitations.",
-    "HINT_PLANNER": "📋 Can edit information, manage guests and tables. Cannot invite.",
-    "HINT_GUEST": "👁️ Can only view the checklist and photo album.",
+    "HINT_CO_ORGANIZER": "Can edit the wedding, manage guests, tables and send invitations.",
+    "HINT_PLANNER": "Can edit information, manage guests and tables. Cannot invite.",
+    "HINT_GUEST": "Can only view the checklist and photo album.",
     "REVOKE_CONFIRM": "Revoke access for <strong>{{label}}</strong>? This action cannot be undone.",
     "REVOKE_CONFIRM_BTN": "Yes, revoke",
     "STATUS_PENDING": "Pending",
@@ -1176,8 +1224,8 @@
     "PERM_GUEST_1": "View the checklist",
     "PERM_GUEST_2": "View and upload photos to the album",
     "PERM_GUEST_3": "Cannot edit information",
-    "EXPIRES": "⏳ This invitation expires on {{date}}",
-    "EXPIRED": "⛔ This invitation has expired.",
+    "EXPIRES": "This invitation expires on {{date}}",
+    "EXPIRED": "This invitation has expired.",
     "ACCEPT_BTN": "✓ Accept invitation",
     "LOGGED_AS": "Connected as <strong>{{nick}}</strong>",
     "AUTH_REQUIRED": "To accept the invitation you need a Weddly Studio account.",
@@ -1188,5 +1236,276 @@
     "SUCCESS_DESC": "You are now part of the organisation of <strong>{{name}}</strong>.",
     "GO_DASHBOARD": "Go to dashboard",
     "ERROR_ACCEPT": "Error accepting invitation."
+  },
+
+  "RSVP": {
+    "LOADING": "Loading your invitation...",
+    "INVALID_CODE": "Invalid code",
+    "GO_HOME": "Return to home",
+    "SEE_YOU_SOON": "See you soon!",
+    "RESPONSE_REGISTERED": "Response recorded",
+    "CONFIRMED_MSG": "Your attendance for <strong>{{name}}</strong> has been confirmed.<br>We can’t wait to celebrate with you!",
+    "DECLINED_MSG": "We’ve recorded that you won’t be able to attend. Thank you for letting us know!",
+    "INVITATION_FOR": "Invitation for",
+    "QUESTION": "Will you be able to join us on this very special day?",
+    "CONFIRM_BTN": "With pleasure!",
+    "DECLINE_BTN": "Sorry, I can’t",
+    "ALLERGIES_LABEL": "Allergies or dietary restrictions",
+    "ALLERGIES_PLACEHOLDER": "None / Gluten / Lactose / ...",
+    "NOTES_LABEL": "Additional notes",
+    "NOTES_PLACEHOLDER": "Any details you’d like us to know...",
+    "DECLINE_NOTE": "We understand, thanks for letting us know 💌",
+    "SUBMIT_BTN": "Submit response",
+    "SENDING": "Sending",
+    "CODE_LABEL": "Code",
+    "ERROR_NO_CODE": "Invitation code not found.",
+    "ERROR_DEFAULT": "Your response could not be processed. The code may be invalid or expired."
+  },
+
+  "CALENDARIO": {
+    "TITLE": "Calendar",
+    "LOADING": "Loading calendar…",
+    "TASKS_THIS_MONTH_SINGULAR": "task this month",
+    "TASKS_THIS_MONTH_PLURAL": "tasks this month",
+    "MONTH_JAN": "January",
+    "MONTH_FEB": "February",
+    "MONTH_MAR": "March",
+    "MONTH_APR": "April",
+    "MONTH_MAY": "May",
+    "MONTH_JUN": "June",
+    "MONTH_JUL": "July",
+    "MONTH_AUG": "August",
+    "MONTH_SEP": "September",
+    "MONTH_OCT": "October",
+    "MONTH_NOV": "November",
+    "MONTH_DEC": "December",
+    "DAY_MON": "Mon",
+    "DAY_TUE": "Tue",
+    "DAY_WED": "Wed",
+    "DAY_THU": "Thu",
+    "DAY_FRI": "Fri",
+    "DAY_SAT": "Sat",
+    "DAY_SUN": "Sun",
+    "EXPORT_GOOGLE": "Google Calendar",
+    "EXPORT_GOOGLE_TOOLTIP": "Export to Google Calendar (.ics)",
+    "EXPORTING": "Exporting…",
+    "EXPORT_PDF": "Export PDF",
+    "EXPORT_PDF_TOOLTIP": "Export checklist PDF",
+    "PDF_LOCKED_TOOLTIP": "Requires paid plan",
+    "GENERATING_PDF": "Generating…",
+    "PREV_MONTH": "Previous month",
+    "NEXT_MONTH": "Next month",
+    "TODAY": "Today",
+    "WEDDING_DAY": "Wedding day",
+    "WEDDING_DAY_TITLE": "Wedding day!",
+    "NO_TASKS_DAY": "No tasks for this day",
+    "ASSIGN_TASK": "Assign task to this day",
+    "UNDATED_SINGULAR": "task without assigned date",
+    "UNDATED_PLURAL": "tasks without assigned date",
+    "MORE": "more",
+    "ASSIGN_MODAL_TITLE": "Assign task",
+    "SEARCH_TASK": "Search task...",
+    "NO_ASSIGNABLE_TASKS": "No pending tasks without date",
+    "ASSIGN_SUCCESS_TITLE": "Task assigned",
+    "ASSIGN_SUCCESS_DESC": "\"{{title}}\" assigned to {{date}}",
+    "EXPORT_SUCCESS_TITLE": "Calendar exported!",
+    "EXPORT_SUCCESS_DESC": "Open the .ics file to import it into Google Calendar or Apple Calendar.",
+    "PDF_SUCCESS_TITLE": "PDF generated!",
+    "PDF_SUCCESS_DESC": "The print dialog will open.",
+    "PDF_PLAN_REQUIRED_TITLE": "Plan required",
+    "PDF_PLAN_REQUIRED_DESC": "PDF export is available on paid plans. Upgrade your plan!",
+    "ERROR_LOAD_TASKS": "Calendar tasks could not be loaded",
+    "ERROR_ASSIGN_TASK": "Task could not be assigned",
+    "ERROR_EXPORT_ICS": "Calendar could not be exported",
+    "ERROR_EXPORT_PDF": "PDF could not be generated"
+  },
+
+  "TASKS": {
+    "12_MONTHS": {
+      "DEFINE_BUDGET": {
+        "TITLE": "Define total budget",
+        "DESC": "Set a realistic budget and allocate the main categories."
+      },
+      "CEREMONY_VENUE": {
+        "TITLE": "Choose and book the ceremony venue",
+        "DESC": "Visit at least 3 options before deciding. Confirm availability for your date."
+      },
+      "BANQUET_VENUE": {
+        "TITLE": "Choose and book the banquet venue",
+        "DESC": "It can be the same as the ceremony or a different one."
+      },
+      "GUEST_LIST": {
+        "TITLE": "Create preliminary guest list",
+        "DESC": "Approximate number to negotiate with the venue and catering."
+      },
+      "LEGAL": {
+        "TITLE": "Start legal marriage paperwork",
+        "DESC": "Check required documents at the civil registry or notary."
+      }
+    },
+    "9_MONTHS": {
+      "PHOTOGRAPHER": {
+        "TITLE": "Hire photographer",
+        "DESC": "Review portfolios, read reviews, and book early."
+      },
+      "VIDEOGRAPHER": {
+        "TITLE": "Hire videographer",
+        "DESC": "Optional. Decide if you want full video, highlights, or drone."
+      },
+      "MUSIC": {
+        "TITLE": "Hire music (DJ or band)",
+        "DESC": "Define music style for ceremony, cocktail, and banquet."
+      },
+      "CATERING": {
+        "TITLE": "Choose catering service",
+        "DESC": "Request at least 3 quotes. Schedule a tasting."
+      },
+      "WEDDING_DRESS": {
+        "TITLE": "Start wedding dress search",
+        "DESC": "Dresses can take 4–6 months to arrive. Start early."
+      }
+    },
+    "6_MONTHS": {
+      "CONFIRM_DRESS": {
+        "TITLE": "Confirm wedding dress",
+        "DESC": "Place the official order and schedule fittings."
+      },
+      "GROOM_SUIT": {
+        "TITLE": "Choose groom's suit",
+        "DESC": "Purchase or rental. Coordinate with dress style."
+      },
+      "FLORIST": {
+        "TITLE": "Hire florist",
+        "DESC": "Define floral style: bouquet, centerpieces, ceremony decor."
+      },
+      "CAKE": {
+        "TITLE": "Choose wedding cake",
+        "DESC": "Schedule a tasting with at least 2 bakers."
+      },
+      "HONEYMOON": {
+        "TITLE": "Plan honeymoon",
+        "DESC": "Book flights and accommodation early for better prices."
+      },
+      "INVITATIONS_DESIGN": {
+        "TITLE": "Design invitations",
+        "DESC": "Define design and text. Remember to include RSVP deadline."
+      }
+    },
+    "3_MONTHS": {
+      "SEND_INVITATIONS": {
+        "TITLE": "Send invitations",
+        "DESC": "Send them at least 2–3 months in advance."
+      },
+      "CONFIRM_GUEST_LIST": {
+        "TITLE": "Confirm final guest list",
+        "DESC": "Close the list to give final numbers to catering."
+      },
+      "BEAUTY": {
+        "TITLE": "Book hair and makeup",
+        "DESC": "Do a trial to confirm the look."
+      },
+      "RINGS": {
+        "TITLE": "Order wedding rings",
+        "DESC": "Choose material, design, and engraving if desired."
+      },
+      "TRANSPORT": {
+        "TITLE": "Hire wedding transport",
+        "DESC": "Bridal car, guest bus, etc."
+      },
+      "ACCOMMODATION": {
+        "TITLE": "Arrange accommodation for out-of-town guests",
+        "DESC": "Negotiate special rates with nearby hotels."
+      }
+    },
+    "1_MONTH": {
+      "CONFIRM_CATERING_COUNT": {
+        "TITLE": "Confirm final catering headcount",
+        "DESC": "Most caterers require confirmation 3–4 weeks before."
+      },
+      "CONFIRM_VENDORS": {
+        "TITLE": "Confirm details with all vendors",
+        "DESC": "Call or message each vendor to reconfirm time and details."
+      },
+      "FINAL_FITTING": {
+        "TITLE": "Final dress/suit fitting",
+        "DESC": "Ensure all adjustments are perfect."
+      },
+      "SEATING_PLAN": {
+        "TITLE": "Organize seating plan",
+        "DESC": "Assign each guest to a table considering affinities."
+      },
+      "CEREMONY_ORDER": {
+        "TITLE": "Prepare ceremony order",
+        "DESC": "Define readings, music, vows, and timing."
+      }
+    },
+    "1_WEEK": {
+      "CONFIRM_OFFICIANT": {
+        "TITLE": "Confirm time and place with officiant/judge",
+        "DESC": "Final reminder for the person officiating the ceremony."
+      },
+      "VENDOR_PAYMENTS": {
+        "TITLE": "Prepare envelopes with vendor payments",
+        "DESC": "Many vendors are paid in cash on the wedding day."
+      },
+      "CONFIRM_BEAUTY": {
+        "TITLE": "Confirm hair and makeup appointment",
+        "DESC": "Confirm time, place, and number of people."
+      },
+      "PICK_UP_ATTIRE": {
+        "TITLE": "Pick up dress/suit",
+        "DESC": "Pick it up and check everything is in perfect condition."
+      },
+      "FINAL_VENUE_VISIT": {
+        "TITLE": "Final venue visit",
+        "DESC": "Review decor, table layout, and access points."
+      }
+    }
+  },
+
+  "WEDDING_STATUS": {
+    "BANNER_ARCHIVED": "This wedding is archived.",
+    "BANNER_READONLY_PAYMENT": "Your subscription has a payment issue. The wedding is in read‑only mode.",
+    "BANNER_READONLY_COMPLETED": "Your wedding has already taken place! You are in memory mode, read‑only.",
+    "BANNER_SEE_PLANS": "See plans",
+    "MODAL_ARCHIVED_TITLE": "Archived wedding",
+    "MODAL_ARCHIVED_DESC": "This wedding is archived and cannot be edited. You can unarchive it from \"My Weddings\" if your plan allows it.",
+    "MODAL_PAYMENT_TITLE": "Subscription issue",
+    "MODAL_PAYMENT_DESC": "Your subscription has expired or there is a pending payment. Renew your plan to continue editing.",
+    "MODAL_COMPLETED_TITLE": "Memory mode",
+    "MODAL_COMPLETED_DESC": "The wedding has already happened. You can view guests, photos, and timeline, but not make changes.",
+    "MODAL_BTN_PLANS": "See plans",
+    "MODAL_BTN_BACK": "Back to home"
+  },
+
+  "REVIEWS": {
+    "PAGE_TITLE": "Reviews",
+    "PAGE_SUBTITLE": "Real experiences from couples who planned their wedding with us",
+    "WRITE_REVIEW": "Write my review",
+    "ALREADY_REVIEWED": "You've already left a review",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "LOGIN_CTA": "to share your experience",
+    "LOGIN_LINK": "Sign in",
+    "ORDER_RECENT": "Most recent",
+    "ORDER_BEST": "Highest rated",
+    "FORM_TITLE_NEW": "Write your review",
+    "FORM_TITLE_EDIT": "Edit your review",
+    "FORM_RATING_LABEL": "Rating",
+    "FORM_COMMENT_LABEL": "Your comment",
+    "FORM_COMMENT_PLACEHOLDER": "Tell us about your experience planning with Weddly (minimum 10 characters)…",
+    "FORM_CHARS_REMAINING": "remaining",
+    "FORM_SUBMIT_NEW": "Publish review",
+    "FORM_SUBMIT_EDIT": "Update review",
+    "EMPTY_STATE": "Be the first to share your experience",
+    "WRITE_FIRST": "Write the first review",
+    "ERROR_RATING": "Please select a rating between 1 and 5 stars.",
+    "ERROR_COMMENT_SHORT": "Comment must be at least 10 characters.",
+    "ERROR_COMMENT_LONG": "Comment cannot exceed 1000 characters.",
+    "ERROR_GENERIC": "Error submitting review.",
+    "REVIEW_SINGULAR": "review",
+    "REVIEW_PLURAL": "reviews"
   }
+
+
 }

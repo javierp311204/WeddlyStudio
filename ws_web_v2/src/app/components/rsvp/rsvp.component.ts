@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 type RsvpState = 'loading' | 'form' | 'success' | 'error';
 
 @Component({
   selector: 'app-rsvp',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule, IconComponent],
   template: `
     <div class="rsvp-page">
 
@@ -33,34 +35,33 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
           <div class="spinner">
             <div class="ring"></div>
           </div>
-          <p class="loading-text">Cargando tu invitación...</p>
+          <p class="loading-text">{{ 'RSVP.LOADING' | translate }}</p>
         </div>
 
         <!-- ERROR -->
         <div *ngIf="state === 'error'" class="state-card error-card">
           <div class="icon-circle error-icon">✕</div>
-          <h2>Código inválido</h2>
+          <h2>{{ 'RSVP.INVALID_CODE' | translate }}</h2>
           <p>{{ errorMsg }}</p>
-          <button class="btn-home" (click)="goHome()">Volver al inicio</button>
+          <button class="btn-home" (click)="goHome()">{{ 'RSVP.GO_HOME' | translate }}</button>
         </div>
 
         <!-- SUCCESS -->
         <div *ngIf="state === 'success'" class="state-card success-card">
           <div class="icon-circle success-icon">
-            <span *ngIf="confirmedStatus === 'confirmed'">♥</span>
-            <span *ngIf="confirmedStatus === 'declined'">✓</span>
+            <span *ngIf="confirmedStatus === 'confirmed'"><app-icon name="dressCode" [size]="30"></app-icon></span>
+            <span *ngIf="confirmedStatus === 'declined'"><app-icon name="dressCode" [size]="30"></app-icon></span>
           </div>
-          <h2 *ngIf="confirmedStatus === 'confirmed'">¡Nos vemos pronto!</h2>
-          <h2 *ngIf="confirmedStatus === 'declined'">Respuesta registrada</h2>
-          <p *ngIf="confirmedStatus === 'confirmed'" class="success-msg">
-            Tu asistencia a <strong>{{ guestData?.wedding?.name }}</strong> ha sido confirmada.<br>
-            ¡Estamos deseando celebrarlo contigo!
+          <h2 *ngIf="confirmedStatus === 'confirmed'">{{ 'RSVP.SEE_YOU_SOON' | translate }}</h2>
+          <h2 *ngIf="confirmedStatus === 'declined'">{{ 'RSVP.RESPONSE_REGISTERED' | translate }}</h2>
+          <p *ngIf="confirmedStatus === 'confirmed'" class="success-msg"
+             [innerHTML]="'RSVP.CONFIRMED_MSG' | translate:{ name: guestData?.wedding?.name }">
           </p>
           <p *ngIf="confirmedStatus === 'declined'" class="success-msg">
-            Hemos registrado que no podrás asistir. ¡Gracias por avisarnos!
+            {{ 'RSVP.DECLINED_MSG' | translate }}
           </p>
           <div class="wedding-pill" *ngIf="guestData?.wedding">
-            <span class="pill-date">{{ guestData.wedding.wedding_date | date:'d MMM yyyy' : '' : 'es' }}</span>
+            <span class="pill-date">{{ guestData.wedding.wedding_date | date:'d MMM yyyy' }}</span>
           </div>
         </div>
 
@@ -71,7 +72,7 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
           <div class="form-header">
             <div class="guest-avatar">{{ getInitial() }}</div>
             <div class="guest-info">
-              <p class="guest-label">Invitación para</p>
+              <p class="guest-label">{{ 'RSVP.INVITATION_FOR' | translate }}</p>
               <h1 class="guest-name">{{ guestData?.first_name }} {{ guestData?.last_name }}</h1>
             </div>
           </div>
@@ -80,7 +81,7 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
           <div class="wedding-info" *ngIf="guestData?.wedding">
             <div class="wedding-name">{{ guestData.wedding.name }}</div>
             <div class="wedding-date" *ngIf="guestData.wedding.wedding_date">
-              {{ guestData.wedding.wedding_date | date:"EEEE, d 'de' MMMM 'de' y" : '' : 'es' }}
+              {{ guestData.wedding.wedding_date | date:"EEEE, d 'de' MMMM 'de' y" }}
             </div>
           </div>
 
@@ -91,7 +92,7 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
 
           <!-- Pregunta principal -->
           <div class="rsvp-question">
-            <p>¿Podrás acompañarnos en este día tan especial?</p>
+            <p>{{ 'RSVP.QUESTION' | translate }}</p>
           </div>
 
           <!-- Botones de respuesta -->
@@ -100,33 +101,33 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
               class="rsvp-btn confirm-btn"
               [class.selected]="selectedStatus === 'confirmed'"
               (click)="selectStatus('confirmed')">
-              <span class="btn-icon">♥</span>
-              <span class="btn-text">¡Con mucho gusto!</span>
+              <span class="btn-icon"><app-icon name="planGratuito" [size]="25"></app-icon></span>
+              <span class="btn-text">{{ 'RSVP.CONFIRM_BTN' | translate }}</span>
             </button>
             <button
               class="rsvp-btn decline-btn"
               [class.selected]="selectedStatus === 'declined'"
               (click)="selectStatus('declined')">
-              <span class="btn-icon">♡</span>
-              <span class="btn-text">Lo siento, no podré</span>
+              <span class="btn-icon"><app-icon name="rechazar" [size]="25"></app-icon></span>
+              <span class="btn-text">{{ 'RSVP.DECLINE_BTN' | translate }}</span>
             </button>
           </div>
 
           <!-- Campos extra (solo si confirma) -->
           <div class="extra-fields" *ngIf="selectedStatus === 'confirmed'">
             <div class="field-group">
-              <label>Alergias o restricciones alimentarias</label>
+              <label>{{ 'RSVP.ALLERGIES_LABEL' | translate }}</label>
               <input
                 type="text"
                 [(ngModel)]="allergies"
-                placeholder="Ninguna / Gluten / Lactosa / ..."
+                [placeholder]="'RSVP.ALLERGIES_PLACEHOLDER' | translate"
                 class="rsvp-input" />
             </div>
             <div class="field-group">
-              <label>Notas adicionales</label>
+              <label>{{ 'RSVP.NOTES_LABEL' | translate }}</label>
               <textarea
                 [(ngModel)]="dietaryNotes"
-                placeholder="Cualquier detalle que quieras que sepamos..."
+                [placeholder]="'RSVP.NOTES_PLACEHOLDER' | translate"
                 class="rsvp-input"
                 rows="3"></textarea>
             </div>
@@ -134,7 +135,7 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
 
           <!-- Mensaje si declina -->
           <div class="decline-note" *ngIf="selectedStatus === 'declined'">
-            <p>Lo entendemos, gracias por avisarnos 💌</p>
+            <p>{{ 'RSVP.DECLINE_NOTE' | translate }}</p>
           </div>
 
           <!-- Botón enviar -->
@@ -143,15 +144,15 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
             [disabled]="!selectedStatus || sending"
             (click)="submitRsvp()"
             *ngIf="selectedStatus">
-            <span *ngIf="!sending">Confirmar respuesta</span>
+            <span *ngIf="!sending">{{ 'RSVP.SUBMIT_BTN' | translate }}</span>
             <span *ngIf="sending" class="sending-dots">
-              Enviando<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+              {{ 'RSVP.SENDING' | translate }}<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
             </span>
           </button>
 
           <!-- Código de invitación -->
           <div class="invitation-code">
-            <span>Código: {{ invitationCode }}</span>
+            <span>{{ 'RSVP.CODE_LABEL' | translate }}: {{ invitationCode }}</span>
           </div>
 
         </div>
@@ -176,7 +177,6 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
       padding: 2rem 1rem;
     }
 
-    /* Pétalos decorativos */
     .bg-decoration { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
     .petal {
       position: absolute;
@@ -196,11 +196,7 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
       max-width: 480px;
     }
 
-    /* Marca */
-    .brand {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+    .brand { text-align: center; margin-bottom: 2rem; }
     .brand-script {
       font-family: 'Great Vibes', cursive;
       font-size: 2.8rem;
@@ -208,7 +204,6 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
       letter-spacing: 1px;
     }
 
-    /* Cards de estado */
     .state-card {
       background: white;
       border-radius: 20px;
@@ -216,14 +211,9 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
       text-align: center;
       box-shadow: 0 20px 60px rgba(139, 94, 60, 0.12);
     }
-    .state-card h2 {
-      font-family: 'Playfair Display', serif;
-      color: #3d2b1f;
-      margin: 1rem 0 0.5rem;
-    }
+    .state-card h2 { font-family: 'Playfair Display', serif; color: #3d2b1f; margin: 1rem 0 0.5rem; }
     .state-card p { color: #7a6055; line-height: 1.7; }
 
-    /* Spinner */
     .spinner { display: flex; justify-content: center; margin-bottom: 1rem; }
     .ring {
       width: 48px; height: 48px;
@@ -235,7 +225,6 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-text { color: #a08070; font-style: italic; }
 
-    /* Icon circles */
     .icon-circle {
       width: 72px; height: 72px;
       border-radius: 50%;
@@ -273,7 +262,6 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
     }
     .btn-home:hover { background: #bc6c25; color: white; }
 
-    /* Form card */
     .form-card {
       background: white;
       border-radius: 24px;
@@ -286,13 +274,7 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Header del form */
-    .form-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
+    .form-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
     .guest-avatar {
       width: 56px; height: 56px;
       border-radius: 50%;
@@ -306,7 +288,6 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
     .guest-label { font-size: 0.78rem; color: #a08070; letter-spacing: 1.5px; text-transform: uppercase; margin: 0 0 0.2rem; }
     .guest-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #3d2b1f; margin: 0; }
 
-    /* Info boda */
     .wedding-info {
       background: #fdf5ec;
       border-left: 3px solid #d4a373;
@@ -317,13 +298,10 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
     .wedding-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #3d2b1f; margin-bottom: 0.2rem; }
     .wedding-date { font-size: 0.95rem; color: #8b5e3c; font-style: italic; }
 
-    /* Divider */
     .floral-divider { text-align: center; color: #d4a373; font-size: 1.5rem; margin: 1.2rem 0; }
 
-    /* Pregunta */
     .rsvp-question p { text-align: center; font-size: 1.15rem; color: #5c3d1e; font-style: italic; margin-bottom: 1.5rem; }
 
-    /* Botones RSVP */
     .rsvp-buttons { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; }
     .rsvp-btn {
       flex: 1;
@@ -355,7 +333,6 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
     }
     .decline-btn:not(.selected):hover { border-color: #8b7e74; color: #8b7e74; }
 
-    /* Extra fields */
     .extra-fields { animation: fadeUp 0.3s ease; }
     .field-group { margin-bottom: 1rem; }
     .field-group label { display: block; font-size: 0.85rem; color: #8b5e3c; letter-spacing: 0.5px; margin-bottom: 0.4rem; }
@@ -374,7 +351,6 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
     }
     .rsvp-input:focus { outline: none; border-color: #d4a373; }
 
-    /* Decline note */
     .decline-note {
       text-align: center;
       color: #a08070;
@@ -383,7 +359,6 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
       animation: fadeUp 0.3s ease;
     }
 
-    /* Botón submit */
     .btn-submit {
       width: 100%;
       margin-top: 1rem;
@@ -402,13 +377,11 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
     .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(188, 108, 37, 0.4); }
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* Puntos animados */
     .sending-dots .dot { animation: blink 1.2s infinite; }
     .sending-dots .dot:nth-child(2) { animation-delay: 0.2s; }
     .sending-dots .dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes blink { 0%, 80%, 100% { opacity: 0; } 40% { opacity: 1; } }
 
-    /* Código */
     .invitation-code {
       text-align: center;
       margin-top: 1.5rem;
@@ -443,6 +416,7 @@ export class RsvpComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -450,26 +424,20 @@ export class RsvpComponent implements OnInit {
 
     if (!this.invitationCode) {
       this.state = 'error';
-      this.errorMsg = 'No se encontró el código de invitación.';
+      this.errorMsg = this.translate.instant('RSVP.ERROR_NO_CODE');
       return;
     }
 
-    // Intentar obtener datos básicos del invitado via GET /api/rsvp/:code/info
-    // Si no existe ese endpoint, usamos el código directamente para el PATCH
     this.loadGuestInfo();
   }
 
   private loadGuestInfo(): void {
-    // El backend tiene GET /api/rsvp/:code — intentamos primero
-    // Si no existe, simplemente mostramos el form con el código
     this.http.get<any>(`${this.apiUrl}/rsvp/${this.invitationCode}/info`).subscribe({
       next: (res) => {
         this.guestData = res?.data ?? res;
         this.state = 'form';
       },
       error: () => {
-        // El endpoint GET no existe — mostramos form de todas formas
-        // con datos mínimos (solo el código)
         this.guestData = null;
         this.state = 'form';
       }
@@ -499,7 +467,7 @@ export class RsvpComponent implements OnInit {
         this.sending = false;
       },
       error: (err) => {
-        this.errorMsg = err?.error?.message || 'No se pudo procesar tu respuesta. El código puede ser inválido o haber vencido.';
+        this.errorMsg = err?.error?.message || this.translate.instant('RSVP.ERROR_DEFAULT');
         this.state = 'error';
         this.sending = false;
       }

@@ -8,7 +8,8 @@
           {{ modoEdicion ? ("PLANO.LOCK" | translate) : ("COMMON.EDIT" | translate) }}
         </button>
         <button class="btn btn-action rounded-3 px-3 py-2" (click)="agregarMesa()">
-          ➕ {{ "TABLES.ADD_TABLE" | translate }}
+          <app-icon name="anadir" [size]="25"></app-icon>
+          {{ "TABLES.ADD_TABLE" | translate }}
         </button>
 
         <!-- ── NUEVO: Botón Descargar PDF ── -->
@@ -16,7 +17,7 @@
                 (click)="descargarPDF()"
                 [disabled]="exportandoPDF"
                 title="{{ 'PLANO.DOWNLOAD_PDF_TOOLTIP' | translate }}">
-          <span *ngIf="!exportandoPDF">📄 {{ "PLANO.DOWNLOAD_PDF" | translate }}</span>
+          <span *ngIf="!exportandoPDF"><app-icon name="pdf" [size]="18"></app-icon> {{ "PLANO.DOWNLOAD_PDF" | translate }}</span>
           <span *ngIf="exportandoPDF" class="d-flex align-items-center gap-2">
             <span class="pdf-spinner"></span> {{ "PLANO.GENERATING_PDF" | translate }}
           </span>
@@ -28,15 +29,23 @@
         <button class="btn btn-zoom rounded-3 px-3 py-2"
                 (click)="alejar()"
                 [disabled]="zoomActual <= zoomMin">
-          🔍−
+          <app-icon name="zoomOut" [size]="18"></app-icon>
         </button>
         <span class="zoom-label">{{ zoomPorcentaje }}%</span>
         <button class="btn btn-zoom rounded-3 px-3 py-2"
                 (click)="acercar()"
                 [disabled]="zoomActual >= zoomMax">
-          🔍+
+          <app-icon name="zoomIn" [size]="18"></app-icon>
         </button>
       </div>
+
+      <button class="btn btn-ai rounded-3 px-3 py-2"
+              (click)="sugerirDistribucion()"
+              [disabled]="sugirendoIA"
+              title="Sugerir distribución de mesas con IA">
+        <span *ngIf="!sugirendoIA">✨ IA: Distribuir mesas</span>
+        <span *ngIf="sugirendoIA">Analizando...</span>
+      </button>
     </nav>
 
     <!-- Header compacto -->
@@ -57,7 +66,7 @@
       <div class="panel-header rounded-top-4 d-flex justify-content-between align-items-center p-3 position-sticky top-0">
         <h3 class="h5 mb-0">{{ mesaSeleccionada.name }}</h3>
         <button class="btn-close-panel d-flex align-items-center justify-content-center"
-                (click)="mesaSeleccionada = null">×</button>
+                (click)="mesaSeleccionada = null"><app-icon name="x" [size]="15"></app-icon></button>
       </div>
 
       <!-- Info básica -->
@@ -69,9 +78,9 @@
         <div class="d-flex justify-content-between align-items-center py-1">
           <span class="small text-muted">{{ "GUESTS.TYPE" | translate }}:</span>
           <span class="badge-tipo small rounded-pill px-2">
-            {{ mesaSeleccionada.shape === 'rectangular' ? ('▬ ' + ('TABLES.TYPE_RECTANGULAR' | translate)) :
-               mesaSeleccionada.shape === 'presidential' ? ('👑 ' + ('TABLES.PRESIDENTIAL_LABEL' | translate)) :
-               ('⭕ ' + ('TABLES.TYPE_ROUND' | translate)) }}
+            {{ mesaSeleccionada.shape === 'rectangular' ? (('TABLES.TYPE_RECTANGULAR' | translate)) :
+               mesaSeleccionada.shape === 'presidential' ? (('TABLES.PRESIDENTIAL_LABEL' | translate)) :
+               (('TABLES.TYPE_ROUND' | translate)) }}
           </span>
         </div>
       </div>
@@ -80,11 +89,11 @@
       <div class="panel-edit-tip p-3 border-bottom" *ngIf="puedeEditar && modoEdicion">
         <div class="edit-tip-box rounded-3 p-2">
           <p class="small mb-1">
-            <span class="handle-dot rotate-dot">↻</span>
+            <span class="handle-dot rotate-dot"><app-icon name="rotate" [size]="10"></app-icon></span>
             <strong>{{ "PLANO.TIP_ROTATE" | translate }}</strong> — {{ "PLANO.TIP_ROTATE_DESC" | translate }}
           </p>
           <p class="small mb-0">
-            <span class="handle-dot resize-dot">↔</span>
+            <span class="handle-dot resize-dot"><app-icon name="expand" [size]="10"></app-icon></span>
             <strong>{{ "PLANO.TIP_RESIZE" | translate }}</strong> — {{ "PLANO.TIP_RESIZE_DESC" | translate }}
           </p>
         </div>
@@ -93,7 +102,7 @@
       <!-- Agregar invitado -->
       <div class="panel-section p-3 border-bottom">
         <h4 class="h6 mb-2 d-flex align-items-center gap-2">
-          <span class="section-icon">➕</span> {{ "GUESTS.ADD_GUEST" | translate }}
+          <span class="section-icon"><app-icon name="anadir" [size]="20"></app-icon></span> {{ "GUESTS.ADD_GUEST" | translate }}
         </h4>
 
         <div class="search-container position-relative mb-2">
@@ -121,7 +130,6 @@
 
         <div class="selected-invitado d-flex align-items-center gap-2 p-2 rounded-3 mb-2"
              *ngIf="invitadoSeleccionado">
-          <span class="check-icon">✓</span>
           <span class="small flex-grow-1">{{ getNombreCompleto(invitadoSeleccionado) }}</span>
           <button class="btn-clear d-flex align-items-center justify-content-center"
                   (click)="limpiarBusqueda()">×</button>
@@ -130,7 +138,7 @@
         <button class="btn btn-primary w-100 rounded-3 py-2 small d-flex align-items-center justify-content-center gap-2"
                 (click)="agregarInvitadoAMesa()"
                 [disabled]="!invitadoSeleccionado">
-          <span class="btn-icon">✓</span> {{ "PLANO.CONFIRM_ASSIGNMENT" | translate }}
+          {{ "PLANO.CONFIRM_ASSIGNMENT" | translate }}
         </button>
       </div>
 
@@ -139,7 +147,7 @@
         <div class="section-header-toggle d-flex justify-content-between align-items-center rounded-3 p-2"
              (click)="toggleListaInvitados()">
           <h4 class="h6 mb-0 d-flex align-items-center gap-2">
-            <span class="section-icon">👥</span> {{ "PLANO.GUESTS_IN_TABLE" | translate }}
+            <span class="section-icon"><app-icon name="invitados" [size]="20"></app-icon></span> {{ "PLANO.GUESTS_IN_TABLE" | translate }}
           </h4>
           <span class="toggle-icon" [class.rotated]="listaInvitadosAbierta">▼</span>
         </div>
@@ -158,14 +166,14 @@
                   </div>
                 </div>
                 <button class="btn-remove-inv d-flex align-items-center justify-content-center"
-                        (click)="quitarInvitadoDeMesa(inv.id)">×</button>
+                        (click)="quitarInvitadoDeMesa(inv.id)"><app-icon name="x" [size]="15"></app-icon></button>
               </div>
             </li>
           </ul>
 
           <div class="text-center py-3"
                *ngIf="getInvitadosDeMesa(mesaSeleccionada).length === 0">
-            <span class="empty-icon d-block mb-2">🪑</span>
+            <span class="empty-icon d-block mb-2"><app-icon name="silla" [size]="40"></app-icon></span>
             <p class="small text-muted mb-0">{{ "PLANO.NO_GUESTS_ASSIGNED" | translate }}</p>
           </div>
         </div>
@@ -174,11 +182,11 @@
       <!-- Acciones -->
       <div class="panel-section p-3">
         <h4 class="h6 mb-2 d-flex align-items-center gap-2">
-          <span class="section-icon">⚙️</span> {{ "GUESTS.ACTIONS" | translate }}
+          <span class="section-icon"><app-icon name="gear" [size]="20"></app-icon></span> {{ "GUESTS.ACTIONS" | translate }}
         </h4>
         <button class="btn btn-danger w-100 rounded-3 py-2 small d-flex align-items-center justify-content-center gap-2"
                 (click)="eliminarMesa()">
-          <span class="btn-icon">🗑️</span> {{ "TABLES.DELETE_TABLE" | translate }}
+          <span class="btn-icon"><app-icon name="eliminar" [size]="18"></app-icon></span> {{ "TABLES.DELETE_TABLE" | translate }}
         </button>
       </div>
     </aside>
@@ -194,10 +202,10 @@
        (click)="$event.stopPropagation()">
 
     <button class="btn-close-modal position-absolute d-flex align-items-center justify-content-center"
-            (click)="cerrarModalCrearMesa()">×</button>
+            (click)="cerrarModalCrearMesa()"><app-icon name="x" [size]="15"></app-icon></button>
 
     <div class="modal-header-inv text-center rounded-top-4 p-4">
-      <h3 class="h4 mb-0">➕ {{ "TABLES.NEW_TABLE_TITLE" | translate }}</h3>
+      <h3 class="h4 mb-0">{{ "TABLES.NEW_TABLE_TITLE" | translate }}</h3>
     </div>
 
     <div class="modal-body-inv p-4">
@@ -236,26 +244,26 @@
                [class.forma-selected]="nuevaMesa.shape === 'round'"
                (click)="nuevaMesa.shape = 'round'">
             <div class="forma-preview forma-round mx-auto mb-2"></div>
-            <small>⭕ {{ "TABLES.TYPE_ROUND" | translate }}</small>
+            <small>{{ "TABLES.TYPE_ROUND" | translate }}</small>
           </div>
           <div class="forma-option flex-grow-1 text-center p-3 rounded-3"
                [class.forma-selected]="nuevaMesa.shape === 'rectangular'"
                (click)="nuevaMesa.shape = 'rectangular'">
             <div class="forma-preview forma-rect mx-auto mb-2"></div>
-            <small>▬ {{ "TABLES.TYPE_RECTANGULAR" | translate }}</small>
+            <small>{{ "TABLES.TYPE_RECTANGULAR" | translate }}</small>
           </div>
           <div class="forma-option flex-grow-1 text-center p-3 rounded-3"
                [class.forma-selected]="nuevaMesa.shape === 'presidential'"
                (click)="nuevaMesa.shape = 'presidential'">
             <div class="forma-preview forma-round forma-presidential mx-auto mb-2"></div>
-            <small>👑 {{ "TABLES.PRESIDENTIAL_LABEL" | translate }}</small>
+            <small>{{ "TABLES.PRESIDENTIAL_LABEL" | translate }}</small>
           </div>
         </div>
       </div>
 
       <button class="btn btn-primary w-100 rounded-3 py-2"
               (click)="confirmarCrearMesa()">
-        ✓ {{ "PLANO.CREATE_TABLE_BTN" | translate }}
+        {{ "PLANO.CREATE_TABLE_BTN" | translate }}
       </button>
     </div>
   </div>
@@ -268,7 +276,7 @@
   <div class="modal-invitado rounded-4 shadow-lg position-relative"
        (click)="$event.stopPropagation()">
     <button class="btn-close-modal position-absolute d-flex align-items-center justify-content-center"
-            (click)="cerrarModalForzado()">×</button>
+            (click)="cerrarModalForzado()"><app-icon name="x" [size]="15"></app-icon></button>
 
     <div class="modal-header-inv text-center rounded-top-4 p-4">
       <div class="modal-avatar d-flex align-items-center justify-content-center mx-auto mb-3"
@@ -281,7 +289,7 @@
     <div class="modal-body-inv p-4">
 
       <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-        <span class="modal-label small fw-semibold text-muted">👥 {{ "GUESTS.TYPE" | translate }}:</span>
+        <span class="modal-label small fw-semibold text-muted"><app-icon name="invitados" [size]="15"></app-icon> {{ "GUESTS.TYPE" | translate }}:</span>
         <span class="modal-badge small rounded-pill px-3 py-1 text-white"
               [style.background-color]="getColorPorGrupo(invitadoModalInfo.group)">
           {{ invitadoModalInfo.group }}
@@ -289,18 +297,18 @@
       </div>
 
       <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-        <span class="modal-label small fw-semibold text-muted">✉️ {{ "PLANO.CONFIRMATION_LABEL" | translate }}:</span>
+        <span class="modal-label small fw-semibold text-muted"><app-icon name="invitacion" [size]="15"></app-icon> {{ "PLANO.CONFIRMATION_LABEL" | translate }}:</span>
         <span class="modal-value small"
               [class.confirmado]="invitadoModalInfo.rsvp_status === 'confirmed'">
-          {{ invitadoModalInfo.rsvp_status === 'confirmed' ? ('✅ ' + ('PLANO.RSVP_CONFIRMED' | translate)) :
-             invitadoModalInfo.rsvp_status === 'declined'  ? ('❌ ' + ('PLANO.RSVP_DECLINED' | translate))  :
-             ('⏳ ' + ('GUESTS.PENDING' | translate)) }}
+          {{ invitadoModalInfo.rsvp_status === 'confirmed' ? (('PLANO.RSVP_CONFIRMED' | translate)) :
+             invitadoModalInfo.rsvp_status === 'declined'  ? (('PLANO.RSVP_DECLINED' | translate))  :
+             (('GUESTS.PENDING' | translate)) }}
         </span>
       </div>
 
       <div class="d-flex justify-content-between align-items-center py-2 border-bottom"
            *ngIf="invitadoModalInfo.allergies">
-        <span class="modal-label small fw-semibold text-muted">⚠️ {{ "GUESTS.ALLERGIES" | translate }}:</span>
+        <span class="modal-label small fw-semibold text-muted"><app-icon name="advertencia" [size]="15"></app-icon> {{ "GUESTS.ALLERGIES" | translate }}:</span>
         <span class="modal-value small alergias">{{ invitadoModalInfo.allergies }}</span>
       </div>
       <div class="d-flex justify-content-between align-items-center py-2 border-bottom"
@@ -311,10 +319,68 @@
 
       <div class="d-flex justify-content-between align-items-center py-2"
            *ngIf="invitadoModalInfo.email">
-        <span class="modal-label small fw-semibold text-muted">📧 {{ "GUESTS.EMAIL" | translate }}:</span>
+        <span class="modal-label small fw-semibold text-muted"><app-icon name="email" [size]="15"></app-icon> {{ "GUESTS.EMAIL" | translate }}:</span>
         <span class="modal-value small">{{ invitadoModalInfo.email }}</span>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<div class="modal-plano-overlay d-flex align-items-center justify-content-center"
+     *ngIf="mostrarModalIA"
+     (click)="cerrarModalIA()">
+  <div class="modal-invitado rounded-4 shadow-lg position-relative"
+       style="max-width: 560px; width: 95%;"
+       (click)="$event.stopPropagation()">
+ 
+    <button class="btn-close-modal position-absolute d-flex align-items-center justify-content-center"
+            (click)="cerrarModalIA()">✕</button>
+ 
+    <div class="modal-header-inv text-center rounded-top-4 p-4">
+      <h3 class="h4 mb-1">✨ Sugerencia de distribución</h3>
+      <p class="small mb-0" style="opacity:0.8">{{ sugerenciaIA?.summary }}</p>
+    </div>
+ 
+    <div class="modal-body-inv p-4" style="max-height: 400px; overflow-y: auto;">
+ 
+      <div class="ai-limit-inline mb-3" *ngIf="aiLimitReached">
+        ⚠️ Límite alcanzado. <a routerLink="/pricing">Ver planes →</a>
+      </div>
+ 
+      <div *ngIf="!sugerenciaIA?.assignments?.length" class="text-center text-muted py-3">
+        No hay asignaciones sugeridas.
+      </div>
+ 
+      <div *ngFor="let a of sugerenciaIA?.assignments"
+           class="d-flex align-items-center justify-content-between p-3 mb-2 rounded-3"
+           style="background: #fdfaf5; border: 1px solid rgba(188,108,37,0.15);">
+        <div>
+          <p class="mb-0 fw-semibold small">{{ getGuestNameById(a.guest_id) }}</p>
+          <p class="mb-0 small text-muted">→ {{ getTableNameById(a.table_id) }}</p>
+          <p class="mb-0" style="font-size:0.7rem; color:#bc6c25;">{{ a.reason }}</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm rounded-pill px-3"
+                  style="background:#d4a373; color:white; font-size:0.75rem;"
+                  (click)="aplicarAsignacionIA(a)">
+            ✓ Aplicar
+          </button>
+          <button class="btn btn-sm rounded-pill px-3"
+                  style="background:#f0ece8; color:#555; font-size:0.75rem;"
+                  (click)="rechazarAsignacionIA(a)">
+            ✕
+          </button>
+        </div>
+      </div>
+ 
+      <div class="text-center mt-3" *ngIf="sugerenciaIA?.assignments?.length">
+        <button class="btn rounded-pill px-5 py-2 text-white fw-semibold"
+                style="background: linear-gradient(135deg,#d4a373,#bc6c25);"
+                (click)="aplicarTodasLasAsignaciones()">
+          ✨ Aplicar todas
+        </button>
+      </div>
     </div>
   </div>
 </div>

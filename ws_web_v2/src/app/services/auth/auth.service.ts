@@ -62,7 +62,7 @@ export class AuthService {
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(
       `${this.API_URL}/auth/login`,
-      { email, password }
+      { email: email.trim().toLowerCase(), password }
     ).pipe(
       tap(res => {
         // FIX: el backend envuelve en data, comprobar AMBOS lugares

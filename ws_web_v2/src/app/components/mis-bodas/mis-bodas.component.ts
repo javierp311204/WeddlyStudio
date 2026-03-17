@@ -9,14 +9,15 @@ import { AuthService, WeddingRole } from '../../services/auth/auth.service';
 import { IconComponent } from '../../shared/icons/icon.component';
 
 interface Boda {
-  id:            string;
-  name:          string;
-  wedding_date:  string | null;
-  location_name: string | null;
-  status:        string;
-  plan_type:     string;
-  is_owner:      boolean;
-  my_role:       WeddingRole;
+  id:             string;
+  name:           string;
+  wedding_date:   string | null;
+  location_name:  string | null;
+  status:         string;
+  readonly_reason?: string | null; // 👈 añadido
+  plan_type:      string;
+  is_owner:       boolean;
+  my_role:        WeddingRole;
   _count: {
     guests: number;
     tables: number;
@@ -79,9 +80,13 @@ export class MisBodasComponent implements OnInit {
         if (!this.activaId && this.bodas.length > 0) {
           this.seleccionarBoda(this.bodas[0]);
         } else if (this.activaId) {
-          // Sincronizar el rol de la boda activa en localStorage
+          // Sincronizar rol, status y readonlyReason de la boda activa
           const activa = this.bodas.find(b => b.id === this.activaId);
-          if (activa) this.authService.setWeddingRole(activa.my_role);
+          if (activa) {
+            this.authService.setWeddingRole(activa.my_role);
+            this.authService.setWeddingStatus(activa.status ?? 'active');           // 👈
+            this.authService.setReadonlyReason(activa.readonly_reason ?? null);     // 👈
+          }
         }
       },
       error: () => {
@@ -97,10 +102,14 @@ export class MisBodasComponent implements OnInit {
     this.activaId = boda.id;
     localStorage.setItem('weddingId', boda.id);
 
-    // PASO 5: guardar el rol del usuario en esta boda
     this.authService.setWeddingRole(boda.my_role);
+    this.authService.setWeddingStatus(boda.status ?? 'active');           // 👈
+    this.authService.setReadonlyReason(boda.readonly_reason ?? null);     // 👈
 
-    this.notifService.showSuccess(this.translate.instant('WEDDINGS.SUCCESS_CHANGE'), this.translate.instant('WEDDINGS.SUCCESS_ACTIVE', {name: boda.name}));
+    this.notifService.showSuccess(
+      this.translate.instant('WEDDINGS.SUCCESS_CHANGE'),
+      this.translate.instant('WEDDINGS.SUCCESS_ACTIVE', { name: boda.name }),
+    );
     this.router.navigate(['/dashboard']);
   }
 
@@ -117,7 +126,10 @@ export class MisBodasComponent implements OnInit {
           this.showUpgradeModal = true;
         }
       },
-      error: () => this.notifService.showError(this.translate.instant('COMMON.ERROR'), this.translate.instant('WEDDINGS.ERROR_VERIFY_PLAN')),
+      error: () => this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'),
+        this.translate.instant('WEDDINGS.ERROR_VERIFY_PLAN'),
+      ),
     });
   }
 
@@ -137,7 +149,7 @@ export class MisBodasComponent implements OnInit {
       next: (res) => {
         this.creando        = false;
         this.showNuevaModal = false;
-        this.notifService.showSuccess('✓', this.translate.instant('WEDDINGS.SUCCESS_CREATED', {name: res.data.name}));
+        this.notifService.showSuccess('✓', this.translate.instant('WEDDINGS.SUCCESS_CREATED', { name: res.data.name }));
         this.cargarBodas();
 
         setTimeout(() => {
@@ -149,9 +161,15 @@ export class MisBodasComponent implements OnInit {
         this.creando = false;
         const code = err?.error?.code;
         if (code === 'PLAN_LIMIT_REACHED') {
-          this.showNuevaModal  = false;
-          this.upgradeReason   = err.error.message;
+          this.showNuevaModal   = false;
+          this.upgradeReason    = err.error.message;
           this.showUpgradeModal = true;
+        } else if (code === 'EMAIL_NOT_VERIFIED') {
+          this.showNuevaModal = false;
+          this.notifService.showError(
+            this.translate.instant('AUTH.EMAIL_NOT_VERIFIED_TITLE'),
+            this.translate.instant('AUTH.EMAIL_NOT_VERIFIED_DESC'),
+          );
         } else {
           this.nuevaError = err?.error?.message || this.translate.instant('WEDDINGS.ERROR_CREATE');
         }
@@ -162,7 +180,10 @@ export class MisBodasComponent implements OnInit {
   confirmarEliminar(boda: Boda, event: Event) {
     event.stopPropagation();
     if (boda.my_role !== 'owner') {
-      this.notifService.showError(this.translate.instant('COMMON.ERROR'), this.translate.instant('WEDDINGS.ERROR_PERMISSIONS'));
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'),
+        this.translate.instant('WEDDINGS.ERROR_PERMISSIONS'),
+      );
       return;
     }
     this.bodaAEliminar    = boda;
@@ -185,6 +206,8 @@ export class MisBodasComponent implements OnInit {
         if (this.activaId === this.bodaAEliminar!.id) {
           localStorage.removeItem('weddingId');
           localStorage.removeItem('weddingRole');
+          localStorage.removeItem('weddingStatus');       // 👈 limpiar también
+          localStorage.removeItem('weddingReadonlyReason'); // 👈
           this.activaId = '';
         }
 
@@ -193,27 +216,23 @@ export class MisBodasComponent implements OnInit {
       },
       error: (err) => {
         this.eliminando = false;
-        this.notifService.showError(this.translate.instant('COMMON.ERROR'), err?.error?.message || this.translate.instant('WEDDINGS.ERROR_DELETE'));
+        this.notifService.showError(
+          this.translate.instant('COMMON.ERROR'),
+          err?.error?.message || this.translate.instant('WEDDINGS.ERROR_DELETE'),
+        );
       },
     });
   }
 
   // ── Helpers UI ───────────────────────────────────────────────
 
-  // Solo mostrar botón eliminar si es owner
-  puedeEliminar(boda: Boda): boolean {
-    return boda.my_role === 'owner';
-  }
-
-  // Solo mostrar botón editar si tiene permisos suficientes
-  puedeEditar(boda: Boda): boolean {
-    return boda.my_role === 'owner' || boda.my_role === 'co_organizer';
-  }
+  puedeEliminar(boda: Boda): boolean { return boda.my_role === 'owner'; }
+  puedeEditar(boda: Boda):   boolean { return boda.my_role === 'owner' || boda.my_role === 'co_organizer'; }
 
   getPlanLabel(plan: string): string {
     const map: Record<string, string> = {
-      free: this.translate.instant('WEDDINGS.PLAN_FREE'),
-      one_time: this.translate.instant('WEDDINGS.PLAN_ONE_TIME'),
+      free:         this.translate.instant('WEDDINGS.PLAN_FREE'),
+      one_time:     this.translate.instant('WEDDINGS.PLAN_ONE_TIME'),
       subscription: this.translate.instant('WEDDINGS.PLAN_SUBSCRIPTION'),
     };
     return map[plan] ?? plan;
@@ -235,10 +254,10 @@ export class MisBodasComponent implements OnInit {
 
   getRoleLabel(role: string): string {
     const map: Record<string, string> = {
-      owner: this.translate.instant('WEDDINGS.ROLE_OWNER'),
+      owner:        this.translate.instant('WEDDINGS.ROLE_OWNER'),
       co_organizer: this.translate.instant('WEDDINGS.ROLE_CO_ORGANIZER'),
-      planner: this.translate.instant('WEDDINGS.ROLE_PLANNER'),
-      guest: this.translate.instant('WEDDINGS.ROLE_GUEST'),
+      planner:      this.translate.instant('WEDDINGS.ROLE_PLANNER'),
+      guest:        this.translate.instant('WEDDINGS.ROLE_GUEST'),
     };
     return map[role] ?? role;
   }

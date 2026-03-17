@@ -20,7 +20,7 @@
 
   <!-- ── Error ───────────────────────────────────────────────── -->
   <div class="colab-error" *ngIf="error && !loading">
-    <p>⚠️ {{ error }}</p>
+    <p><app-icon name="advertencia" [size]="15"></app-icon> {{ error }}</p>
     <button (click)="load()">{{ 'COLLABORATORS.RETRY' | translate }}</button>
   </div>
 
@@ -70,7 +70,7 @@
                     *ngIf="isOwner() && m.role !== 'owner'"
                     (click)="startEditRole(m)"
                     [title]="'COLLABORATORS.CHANGE_ROLE' | translate">
-              ✏️
+              <app-icon name="diseno" [size]="20"></app-icon>
             </button>
           </ng-template>
 
@@ -79,7 +79,7 @@
                   *ngIf="isOwner() && m.role !== 'owner'"
                   (click)="askRevoke('member', m.user.id, m.user.first_name + ' ' + m.user.last_name)"
                   [title]="'COLLABORATORS.REVOKE_ACCESS' | translate">
-            ✕
+            <app-icon name="x" [size]="12"></app-icon>
           </button>
 
         </div>
@@ -97,7 +97,7 @@
       <div class="invites-list" *ngIf="pendingInvites.length; else noInvites">
         <div class="invite-row" *ngFor="let inv of pendingInvites">
 
-          <div class="invite-icon">📧</div>
+          <div class="invite-icon"><app-icon name="email" [size]="15"></app-icon></div>
 
           <div class="invite-info">
             <p class="invite-email">{{ inv.email }}</p>
@@ -115,7 +115,7 @@
                   *ngIf="isOwner()"
                   (click)="askRevoke('invite', inv.id, inv.email)"
                   [title]="'COLLABORATORS.CANCEL_INVITE' | translate">
-            ✕
+            <app-icon name="x" [size]="12"></app-icon>
           </button>
 
         </div>
@@ -142,7 +142,6 @@
     </div>
 
     <div class="modal-success" *ngIf="sendSuccess">
-      <span>✅</span>
       <p>{{ 'COLLABORATORS.INVITE_SUCCESS' | translate }}</p>
     </div>
 
@@ -174,7 +173,7 @@
         {{ 'COLLABORATORS.HINT_GUEST' | translate }}
       </p>
 
-      <div class="modal-error" *ngIf="sendError">⚠️ {{ sendError }}</div>
+      <div class="modal-error" *ngIf="sendError"><app-icon name="advertencia" [size]="15"></app-icon> {{ sendError }}</div>
 
       <div class="modal-actions">
         <button class="btn-cancel" (click)="closeModal()" [disabled]="sending">

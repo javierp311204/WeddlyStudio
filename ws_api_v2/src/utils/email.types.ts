@@ -41,3 +41,10 @@ export interface SendResult {
   success: boolean;
   error?: string;
 }
+
+export interface PasswordResetEmailData {
+  to:        string;
+  firstName: string;
+  resetToken: string;
+  lang?:     string;
+}

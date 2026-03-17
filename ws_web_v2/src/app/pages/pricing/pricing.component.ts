@@ -106,7 +106,7 @@ export class PricingComponent implements OnInit, OnDestroy {
       free: {
         nombre:    this.translate.instant('PRICING.PLANS.FREE_NAME')       || 'Gratuito',
         icon:     'planGratuito',
-        periodo:   '',
+        periodo:   this.translate.instant('PRICING.ONE_TIME_PAYMENT')          || 'pago único',
         subtitulo: this.translate.instant('PRICING.PLANS.FREE_SUBTITLE')   || 'Para empezar',
         badge:     '',
         destacado: false,

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
 html, body { 
   height: 100%; 
 }
@@ -79,7 +81,7 @@ body {
 /* =========================================
    MODAL DE CONFIRMACIÓN
    ========================================= */
-.modal-overlay {
+.modal-overlay.modal-confirm {
   background: rgba(40, 54, 24, 0.5);
   backdrop-filter: blur(6px);
   z-index: 10000;
@@ -88,7 +90,7 @@ body {
   transition: all 0.3s ease;
 }
 
-.modal-overlay.active {
+.modal-overlay.modal-confirm.active {
   opacity: 1;
   pointer-events: all;
 }

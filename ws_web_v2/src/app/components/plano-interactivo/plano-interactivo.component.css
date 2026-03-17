@@ -1,5 +1,3 @@
-/* ─── (Todo el CSS existente se mantiene igual, solo se añaden las reglas nuevas al final) ─── */
-
 .plano-wrapper {
   background: #fdfaf7;
   font-family: 'Playfair Display', serif;
@@ -17,10 +15,19 @@
   border: none;
   font-weight: 600;
   transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 .btn-action:hover {
   background: #b8860b;
   transform: translateY(-2px);
+}
+.btn-action app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 /* ─── Botones de zoom ─── */
@@ -32,6 +39,9 @@
   font-size: 1rem;
   transition: all 0.2s ease;
   min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .btn-zoom:hover:not(:disabled) {
   background: #d4af37;
@@ -40,6 +50,11 @@
 .btn-zoom:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+.btn-zoom app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .zoom-label {
@@ -70,10 +85,7 @@
   touch-action: none;
   overscroll-behavior: none;
 }
-
-.canvas-container:active {
-  cursor: grabbing;
-}
+.canvas-container:active { cursor: grabbing; }
 
 canvas {
   display: block;
@@ -116,15 +128,20 @@ canvas {
   background: rgba(255,255,255,0.2);
   border: none;
   color: white;
-  font-size: 22px;
   width: 32px;
   height: 32px;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s;
   display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
 .btn-close-panel:hover { background: rgba(255,255,255,0.35); transform: rotate(90deg); }
+.btn-close-panel app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .badge-tipo {
   background: #f0f0f0;
@@ -136,7 +153,20 @@ canvas {
 
 .panel-section { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; }
 .panel-section h4 { margin: 0 0 12px 0; color: #333; font-size: 1rem; }
-.section-icon { font-size: 1.1rem; }
+
+/* Icono de sección — antes era font-size emoji */
+.section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.section-icon app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* ─── Desplegable ─── */
 .section-header-toggle {
@@ -194,7 +224,6 @@ canvas {
   border-radius: 10px;
   margin-bottom: 12px;
 }
-.check-icon { color: #4caf50; font-size: 1.1rem; }
 
 .btn-clear {
   background: rgba(0,0,0,0.1);
@@ -202,7 +231,6 @@ canvas {
   width: 22px; height: 22px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 15px;
   transition: all 0.2s;
   display: flex; align-items: center; justify-content: center;
 }
@@ -227,14 +255,32 @@ canvas {
   width: 26px; height: 26px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 17px;
   transition: all 0.2s;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 .btn-remove-inv:hover { background: #f44336; color: white; }
+.btn-remove-inv app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-/* ─── Botones ─── */
+/* Empty state silla */
+.empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  margin-bottom: 8px;
+}
+.empty-icon app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Botones primarios ─── */
 .btn-primary {
   background: #d4af37;
   color: white;
@@ -245,6 +291,10 @@ canvas {
   cursor: pointer;
   transition: all 0.3s;
   font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 .btn-primary:hover:not(:disabled) {
   background: #b8860b;
@@ -263,14 +313,23 @@ canvas {
   cursor: pointer;
   transition: all 0.3s;
   font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 .btn-danger:hover {
   background: #d32f2f;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(244,67,54,0.3);
 }
-
-.empty-icon { font-size: 2rem; }
+.btn-danger app-icon,
+.btn-primary app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
 /* ─── Modal overlay ─── */
 .modal-plano-overlay {
@@ -311,7 +370,6 @@ canvas {
   background: rgba(0,0,0,0.1);
   border: none;
   color: #666;
-  font-size: 22px;
   width: 34px; height: 34px;
   border-radius: 50%;
   cursor: pointer;
@@ -320,6 +378,11 @@ canvas {
   display: flex; align-items: center; justify-content: center;
 }
 .btn-close-modal:hover { background: rgba(0,0,0,0.2); transform: rotate(90deg); }
+.btn-close-modal app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .modal-header-inv {
   text-align: center;
@@ -338,9 +401,26 @@ canvas {
   display: flex; align-items: center; justify-content: center;
 }
 .modal-header-inv h3 { margin: 0; font-size: 1.6rem; color: #333; }
+
 .modal-body-inv { padding: 24px; }
 .modal-body-inv > div { padding: 12px 0; }
-.modal-label  { font-weight: 600; color: #666; font-size: 0.9rem; }
+
+/* Iconos inline en modal body */
+.modal-label {
+  font-weight: 600;
+  color: #666;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.modal-label app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .modal-value  { color: #333; font-size: 0.9rem; text-align: right; max-width: 60%; }
 .modal-value.confirmado { color: #27ae60; font-weight: 600; }
 .modal-value.alergias   { color: #f44336; font-weight: 600; }
@@ -370,9 +450,7 @@ canvas {
 .panel-lateral::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
 
 /* ─── Responsive ─── */
-@media (max-width: 1200px) {
-  .panel-lateral { width: 300px; }
-}
+@media (max-width: 1200px) { .panel-lateral { width: 300px; } }
 @media (max-width: 900px) {
   .panel-lateral { position: static; width: 100%; max-height: none; margin-top: 16px; }
 }
@@ -400,7 +478,6 @@ canvas {
 .btn-stepper:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
 .capacity-value { font-size: 1.4rem; color: #333; min-width: 32px; text-align: center; }
-
 .capacity-bar { height: 5px; background: #e9e9e9; border-radius: 99px; overflow: hidden; }
 .capacity-bar-fill {
   height: 100%;
@@ -440,26 +517,28 @@ canvas {
   border: 1px solid #e0daf7;
 }
 .edit-tip-box p { color: #555; line-height: 1.6; }
+
 .handle-dot {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 22px; height: 22px;
   border-radius: 50%;
-  font-size: 12px;
   color: white;
   font-weight: bold;
   margin-right: 6px;
   vertical-align: middle;
+  flex-shrink: 0;
+}
+.handle-dot app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .rotate-dot { background: #6c5ce7; }
 .resize-dot { background: #00b894; }
 
-/* ════════════════════════════════════════════════════════════════
-   ── NUEVO: Botón PDF y spinner ──────────────────────────────────
-   ════════════════════════════════════════════════════════════════ */
-
-/* Botón con estilo distinto al dorado para diferenciarlo visualmente */
+/* ─── Botón PDF ─── */
 .btn-pdf {
   background: #2c3e50;
   color: white;
@@ -476,20 +555,18 @@ canvas {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(44, 62, 80, 0.35);
 }
-.btn-pdf:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-  transform: none;
+.btn-pdf:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+.btn-pdf app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-/* Spinner CSS puro — sin dependencias adicionales */
-@keyframes pdf-spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes pdf-spin { to { transform: rotate(360deg); } }
 .pdf-spinner {
   display: inline-block;
-  width: 14px;
-  height: 14px;
+  width: 14px; height: 14px;
   border: 2px solid rgba(255, 255, 255, 0.35);
   border-top-color: white;
   border-radius: 50%;

@@ -36,6 +36,7 @@ export const createGuestSchema = z.object({
     last_name: z.string().max(100).optional(),
     email: z.string().email('Email inválido').optional(),
     phone: z.string().max(30).optional(),
+    group: z.string().max(50).optional(),
     allergies: z.string().optional(),
     dietary_notes: z.string().optional(),
   }),
@@ -66,6 +67,7 @@ export const updateGuestSchema = z.object({
       last_name: z.string().max(100).nullable().optional(),
       email: z.string().email().nullable().optional(),
       phone: z.string().max(30).nullable().optional(),
+      group: z.string().max(50).nullable().optional(),
       allergies: z.string().nullable().optional(),
       dietary_notes: z.string().nullable().optional(),
     })

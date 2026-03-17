@@ -8,7 +8,7 @@
 
   <!-- ── Error ───────────────────────────────────────────────── -->
   <div class="ia-card" *ngIf="state === 'error'">
-    <div class="ia-icon ia-icon--error">⚠️</div>
+    <div class="ia-icon ia-icon--error"><app-icon name="advertencia" [size]="50"></app-icon></div>
     <h1 class="ia-title">{{ 'INVITE.INVALID_TITLE' | translate }}</h1>
     <p class="ia-desc">{{ errorMsg }}</p>
     <button class="btn-primary" routerLink="/home">{{ 'COMMON.BACK' | translate }}</button>
@@ -22,7 +22,7 @@
       <span>{{ 'HOME.BRAND' | translate }}</span>
     </div>
 
-    <div class="ia-icon">💌</div>
+    <div class="ia-icon"><app-icon name="invitacion" [size]="50"></app-icon></div>
     <h1 class="ia-title">{{ 'INVITE.HERO_TITLE' | translate }}</h1>
 
     <p class="ia-inviter"
@@ -34,8 +34,8 @@
     <div class="ia-wedding-card">
       <h2 class="ia-wedding-name">{{ preview.wedding.name }}</h2>
       <div class="ia-wedding-meta">
-        <span>📅 {{ preview.wedding.wedding_date | date:'dd MMMM yyyy' }}</span>
-        <span *ngIf="preview.wedding.location_name">📍 {{ preview.wedding.location_name }}</span>
+        <span><app-icon name="calendario" [size]="15"></app-icon> {{ preview.wedding.wedding_date | date:'dd MMMM yyyy' }}</span>
+        <span *ngIf="preview.wedding.location_name"><app-icon name="ubicacion" [size]="15"></app-icon> {{ preview.wedding.location_name }}</span>
       </div>
     </div>
 
@@ -48,23 +48,23 @@
       <p class="ia-perms-title">{{ 'INVITE.PERMISSIONS_TITLE' | translate }}</p>
       <ul>
         <ng-container *ngIf="preview.role === 'co_organizer'">
-          <li>✅ {{ 'INVITE.PERM_CO_1' | translate }}</li>
-          <li>✅ {{ 'INVITE.PERM_CO_2' | translate }}</li>
-          <li>✅ {{ 'INVITE.PERM_CO_3' | translate }}</li>
-          <li>✅ {{ 'INVITE.PERM_CO_4' | translate }}</li>
-          <li>✅ {{ 'INVITE.PERM_CO_5' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_CO_1' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_CO_2' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_CO_3' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_CO_4' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_CO_5' | translate }}</li>
         </ng-container>
         <ng-container *ngIf="preview.role === 'planner'">
-          <li>✅ {{ 'INVITE.PERM_PLANNER_1' | translate }}</li>
-          <li>✅ {{ 'INVITE.PERM_PLANNER_2' | translate }}</li>
-          <li>✅ {{ 'INVITE.PERM_PLANNER_3' | translate }}</li>
-          <li>✅ {{ 'INVITE.PERM_PLANNER_4' | translate }}</li>
-          <li>❌ {{ 'INVITE.PERM_PLANNER_5' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_PLANNER_1' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_PLANNER_2' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_PLANNER_3' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_PLANNER_4' | translate }}</li>
+          <li><app-icon name="rechazar" [size]="15"></app-icon> {{ 'INVITE.PERM_PLANNER_5' | translate }}</li>
         </ng-container>
         <ng-container *ngIf="preview.role === 'guest'">
-          <li>✅ {{ 'INVITE.PERM_GUEST_1' | translate }}</li>
-          <li>✅ {{ 'INVITE.PERM_GUEST_2' | translate }}</li>
-          <li>❌ {{ 'INVITE.PERM_GUEST_3' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_GUEST_1' | translate }}</li>
+          <li><app-icon name="aprobar" [size]="15"></app-icon> {{ 'INVITE.PERM_GUEST_2' | translate }}</li>
+          <li><app-icon name="rechazar" [size]="15"></app-icon> {{ 'INVITE.PERM_GUEST_3' | translate }}</li>
         </ng-container>
       </ul>
     </div>
@@ -108,7 +108,7 @@
 
   <!-- ── Success ──────────────────────────────────────────────── -->
   <div class="ia-card" *ngIf="state === 'success'">
-    <div class="ia-icon ia-icon--success">🎉</div>
+    <div class="ia-icon ia-icon--success"><app-icon name="planGratuito" [size]="50"></app-icon></div>
     <h1 class="ia-title">{{ 'INVITE.SUCCESS_TITLE' | translate }}</h1>
     <p class="ia-desc"
        [innerHTML]="'INVITE.SUCCESS_DESC' | translate: { name: preview?.wedding?.name }">

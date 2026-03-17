@@ -48,7 +48,7 @@ export const routes: Routes = [
 
   // ── Rutas 2FA ───────────────────────────────────────────────
   { path: 'auth/2fa',               component: TwoFactorComponent },
-  { path: 'auth/2fa/reset',         component: TfaResetConfirmComponent },
+  { path: 'auth/2fa-reset',         component: TfaResetConfirmComponent },
 
   // ── Rutas de pago ───────────────────────────────────────────
   { path: 'payment/success',        component: PagoExitosoComponent },
@@ -108,6 +108,12 @@ export const routes: Routes = [
     component: ColaboradoresComponent,
     canActivate: [authGuard, minRoleGuard('co_organizer'), PlanGuard],
     data: { blockOnReadonly: true },
+  },
+
+  {
+    path: 'reviews',
+    loadComponent: () =>
+      import('./components/reviews/reviews.component').then(m => m.ReviewsComponent),
   },
 
   // ── Fallback ────────────────────────────────────────────────

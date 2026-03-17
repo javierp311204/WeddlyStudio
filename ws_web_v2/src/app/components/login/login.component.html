@@ -38,7 +38,7 @@
             class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-decoration-none p-0 me-2"
             (click)="togglePassword()"
             style="z-index: 10;">
-            <span class="eye-icon">{{ mostrarPassword ? '👁️' : '👁️‍🗨️' }}</span>
+            <span class="eye-icon"><app-icon [name]="mostrarPassword ? 'eye' : 'eyeSlash'" [size]="16"></app-icon></span>
           </button>
         </div>
       </div>

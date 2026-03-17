@@ -56,7 +56,8 @@ export class OnboardingComponent implements OnInit {
   ngOnInit() {
     if (this.authService.getWeddingId()) {
       this.router.navigate(['/dashboard']);
-  }
+      return;
+    }
 
   this.dresscodeOpciones = [
     { value: 'Gala (Etiqueta)',   label: this.translate.instant('INFO.DRESSCODE_GALA') },

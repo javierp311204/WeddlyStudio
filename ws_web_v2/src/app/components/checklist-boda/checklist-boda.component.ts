@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TareasService } from '../../services/tareas/tareas.service';
 import { NotificationService } from '../../services/notification/notification.service';
+import { AiService } from '../../services/ai/ai.service';
 import {
   Tarea,
   TareaFase,
@@ -59,6 +60,12 @@ export class ChecklistBodaComponent implements OnInit {
   filtroCategoria: string = 'todas';
   busqueda: string = '';
 
+  sugirendoIA    = false;
+  sugerenciasIA: any[] = [];
+  mostrarSugerenciasIA = false;
+  aiUsage: any = null;
+  aiLimitReached = false;
+
   readonly FASES_BODA = FASES_BODA;
   readonly CATEGORIAS = CATEGORIAS_TAREA;
 
@@ -68,6 +75,7 @@ export class ChecklistBodaComponent implements OnInit {
     private router: Router,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef,
+    private aiService: AiService,
   ) {}
 
   ngOnInit(): void {
@@ -303,6 +311,64 @@ export class ChecklistBodaComponent implements OnInit {
       this.translate.instant('COMMON.ERROR'),
       'Los recordatorios no están disponibles aún en esta versión.'
     );
+  }
+
+  async sugerirTareasIA(): Promise<void> {
+    if (this.sugirendoIA || this.aiLimitReached) return;
+    this.sugirendoIA = true;
+    this.sugerenciasIA = [];
+ 
+    this.aiService.suggestTasks(this.weddingId).subscribe({
+      next: (res: any) => {
+        this.sugirendoIA       = false;
+        this.sugerenciasIA     = res?.data?.tasks ?? [];
+        this.mostrarSugerenciasIA = true;
+        this.aiUsage           = res?.data?.usage;
+        if (this.aiUsage && !this.aiUsage.unlimited) {
+          this.aiLimitReached = (this.aiUsage.remaining ?? 1) <= 0;
+        }
+      },
+      error: (err: any) => {
+        this.sugirendoIA = false;
+        if (err?.error?.code === 'AI_LIMIT_REACHED') {
+          this.aiLimitReached = true;
+          this.notifService.showError(
+            '⚠️ Límite alcanzado',
+            'Has agotado las sugerencias IA de este mes. Actualiza tu plan.'
+          );
+        } else {
+          this.notifService.showError(this.translate.instant('COMMON.ERROR'), 'Error al obtener sugerencias IA');
+        }
+      },
+    });
+  }
+ 
+  async aceptarSugerenciaIA(tarea: any): Promise<void> {
+    try {
+      await this.tareasService.crearTarea(this.weddingId, {
+        title:       tarea.title,
+        description: tarea.description,
+        phase:       tarea.phase,
+        category:    tarea.category,
+        status:      'pending',
+      }).toPromise();
+ 
+      // Quitar de la lista de sugerencias
+      this.sugerenciasIA = this.sugerenciasIA.filter(s => s.title !== tarea.title);
+      this.notifService.showSuccess('✓', `Tarea "${tarea.title}" añadida`);
+      await this.cargarTareas();
+    } catch {
+      this.notifService.showError(this.translate.instant('COMMON.ERROR'), 'No se pudo añadir la tarea');
+    }
+  }
+ 
+  rechazarSugerenciaIA(tarea: any): void {
+    this.sugerenciasIA = this.sugerenciasIA.filter(s => s.title !== tarea.title);
+  }
+ 
+  cerrarSugerenciasIA(): void {
+    this.mostrarSugerenciasIA = false;
+    this.sugerenciasIA = [];
   }
 
   // ============================================

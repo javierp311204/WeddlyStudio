@@ -67,7 +67,7 @@
                      [(ngModel)]="pass" name="pass"
                      [placeholder]="'AUTH.PASSWORD_PLACEHOLDER' | translate" />
               <span class="eye-icon" (click)="togglePassword()">
-                {{ mostrarPassword ? '👁️' : '👁️‍🗨️' }}
+               <app-icon [name]="mostrarPassword ? 'eye' : 'eyeSlash'" [size]="16"></app-icon>
               </span>
             </div>
           </div>

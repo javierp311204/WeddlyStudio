@@ -88,7 +88,7 @@
   border-color: rgba(212, 163, 115, 0.45);
 }
 
-/* ── Profile — ahora es un <a> clickable ────────────────────── */
+/* ── Profile ────────────────────────────────────────────────── */
 .sidebar-profile {
   display: flex;
   align-items: center;
@@ -96,21 +96,15 @@
   padding: 6px 14px 12px;
   flex-shrink: 0;
   min-width: 0;
-  text-decoration: none;        /* quitar subrayado del <a> */
+  text-decoration: none;
   border-radius: 10px;
   margin: 0 6px;
   transition: background 0.18s;
   cursor: pointer;
 }
 
-/* ✅ Hover visual para indicar que es clickable */
-.sidebar-profile:hover {
-  background: var(--bg-hover);
-}
-
-.sidebar-profile:hover .profile-name {
-  color: #d4a373;
-}
+.sidebar-profile:hover { background: var(--bg-hover); }
+.sidebar-profile:hover .profile-name { color: #d4a373; }
 
 .profile-avatar {
   width: 34px;
@@ -223,11 +217,11 @@
 }
 .nav-item.active .active-bar { display: block; }
 
-/* ── Icons & labels ─────────────────────────────────────────── */
-.nav-emoji {
-  font-size: 1rem;
+/* ── nav-icon: wrapper del app-icon ────────────────────────── */
+.nav-icon {
   width: 22px;
   min-width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -235,6 +229,16 @@
   line-height: 1;
 }
 
+/* Centrado interno del SVG generado por app-icon */
+.nav-icon app-icon,
+.nav-icon svg {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ── Nav label ──────────────────────────────────────────────── */
 .nav-label {
   overflow: hidden;
   white-space: nowrap;
@@ -246,6 +250,8 @@
 .collapsed .logo-text {
   opacity: 0;
   max-width: 0;
+  visibility: hidden;
+  transition: opacity 0.22s var(--ease), max-width 0.22s var(--ease), visibility 0s 0.22s;
 }
 
 .collapsed .profile-info {
@@ -287,7 +293,7 @@
   max-width: 0;
 }
 
-/* Logout */
+/* ── Logout ─────────────────────────────────────────────────── */
 .logout-btn { color: var(--text-dim); }
 .logout-btn:hover { color: #e07070; background: rgba(224, 112, 112, 0.08); }
 

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 export class AppError extends Error {
   public statusCode:    number;
   public isOperational: boolean;
-  public code?:         string; // ← código de error para el frontend (ej: PLAN_LIMIT_REACHED)
+  public code?:         string;
 
   constructor(message: string, statusCode: number, code?: string) {
     super(message);

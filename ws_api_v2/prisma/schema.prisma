@@ -159,6 +159,8 @@ model User {
   email_verified               Boolean   @default(false)
   email_verification_token     String?   @unique @db.VarChar(255)
   email_verification_expires   DateTime?
+  password_reset_token         String?   
+  password_reset_expires       DateTime?
 
   // Relaciones
   wedding_roles      UserWeddingRole[]
@@ -171,6 +173,8 @@ model User {
   subscriptions      Subscription[]
   payments           Payment[]
   activity_logs      ActivityLog[]
+  ai_usage           AiUsage[]
+  reviews            Review[]
 
   @@index([email])
   @@index([deleted_at])
@@ -212,6 +216,7 @@ model Wedding {
   payments         Payment[]
   activity_logs    ActivityLog[]
   invites          WeddingInvite[]
+  ai_usage         AiUsage[]
 
   @@index([created_by])
   @@index([status])
@@ -290,6 +295,7 @@ model Table {
   shape        GuestShape @default(round)
   pos_x        Float      @default(50)
   pos_y        Float      @default(50)
+  angle        Float      @default(0)
   max_capacity Int        @default(10)
   created_at   DateTime   @default(now())
   updated_at   DateTime   @updatedAt
@@ -535,4 +541,45 @@ model ActivityLog {
   @@index([entity_type, entity_id])
   @@index([created_at])
   @@map("activity_logs")
+}
+
+// ─────────────────────────────────────────────
+// 4.15 AI_USAGE
+// ─────────────────────────────────────────────
+
+model AiUsage {
+  id         String   @id @default(uuid()) @db.Uuid
+  user_id    String   @db.Uuid
+  wedding_id String   @db.Uuid
+  module     String   @db.VarChar(50) // "chat" | "checklist" | "seating" | "guest"
+  month      String   @db.VarChar(7)  // "2026-03"
+  count      Int      @default(0)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  wedding Wedding @relation(fields: [wedding_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, wedding_id, module, month])
+  @@index([user_id])
+  @@index([wedding_id])
+  @@map("ai_usage")
+}
+
+// ─────────────────────────────────────────────
+// 4.16 REVIEW
+// ─────────────────────────────────────────────
+
+model Review {
+  id         String    @id @default(uuid()) @db.Uuid
+  user_id    String    @unique              @db.Uuid  
+  rating     Int
+  comment    String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("reviews")
 }

@@ -2,7 +2,6 @@
 
   <!-- Header -->
   <header class="seating-header">
-    <div class="header-ornament">✦</div>
     <h1>{{ 'TABLES.HALL_TITLE' | translate }}</h1>
     <p class="header-subtitle">{{ 'TABLES.HALL_SUBTITLE' | translate }}</p>
   </header>
@@ -11,11 +10,7 @@
   <div class="stats-bar container">
     <div class="stat-card">
       <div class="stat-icon seated">
-        <svg width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-          <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
-          <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
-        </svg>
+        <app-icon name="invitados" [size]="25"></app-icon>
       </div>
       <div class="stat-info">
         <span class="stat-number gold">{{ totalInvitados }}</span>
@@ -25,10 +20,7 @@
 
     <div class="stat-card accent">
       <div class="stat-icon unseated">
-        <svg width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-        </svg>
+        <app-icon name="anadir" [size]="25"></app-icon>
       </div>
       <div class="stat-info">
         <span class="stat-number orange">{{ invitadosDisponibles.length - totalInvitados }}</span>
@@ -38,10 +30,7 @@
 
     <div class="stat-card">
       <div class="stat-icon tables">
-        <svg width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M0 2.5A.5.5 0 0 1 .5 2h15a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-2zM0 12.5A.5.5 0 0 1 .5 12h15a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z"/>
-          <path d="M8 5v7"/>
-        </svg>
+        <app-icon name="mesaCircular" [size]="25"></app-icon>
       </div>
       <div class="stat-info">
         <span class="stat-number gold">{{ totalMesas }}</span>
@@ -51,9 +40,7 @@
 
     <div class="stat-card" [class.presidential-active]="tieneMesaPresidencial">
       <div class="stat-icon presidential" [class.lit]="tieneMesaPresidencial">
-        <svg width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
-        </svg>
+        <app-icon name="flor" [size]="25"></app-icon>
       </div>
       <div class="stat-info">
         <span class="stat-number gold">{{ tieneMesaPresidencial ? '1' : '0' }}</span>
@@ -72,7 +59,6 @@
         <!-- Nueva Mesa -->
         <div class="panel-card">
           <div class="panel-card-header">
-            <span class="panel-icon">🪑</span>
             <h3>{{ 'TABLES.NEW_TABLE_TITLE' | translate }}</h3>
           </div>
 
@@ -88,13 +74,15 @@
             <div class="shape-toggle">
               <button class="shape-btn" [class.active]="nuevaMesa.shape === 'round'"
                       (click)="nuevaMesa.shape = 'round'">
-                <span class="shape-icon">⬤</span>
                 {{ 'TABLES.TYPE_ROUND' | translate }}
               </button>
               <button class="shape-btn" [class.active]="nuevaMesa.shape === 'rectangular'"
                       (click)="nuevaMesa.shape = 'rectangular'">
-                <span class="shape-icon">▬</span>
                 {{ 'TABLES.TYPE_RECTANGULAR' | translate }}
+              </button>
+              <button class="shape-btn" [class.active]="nuevaMesa.shape === 'presidential'"
+                      (click)="nuevaMesa.shape = 'presidential'">
+                {{ 'TABLES.PRESIDENTIAL_LABEL' | translate }}
               </button>
             </div>
           </div>
@@ -119,16 +107,13 @@
         <!-- Sentar Invitado -->
         <div class="panel-card">
           <div class="panel-card-header">
-            <span class="panel-icon">💌</span>
             <h3>{{ 'TABLES.SEAT_GUEST_TITLE' | translate }}</h3>
           </div>
 
           <div class="field-group search-wrapper">
             <label>{{ 'TABLES.SEARCH_GUEST_LABEL' | translate }}</label>
             <div class="search-input-wrap">
-              <svg class="search-icon" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-              </svg>
+              <app-icon name="buscar" [size]="15" class="search-icon"></app-icon>
               <input type="text" class="field-input with-icon"
                      [(ngModel)]="busquedaInvitado"
                      (input)="filtrarInvitados()"
@@ -147,7 +132,7 @@
             </div>
           </div>
 
-          <!-- Invitado seleccionado badge -->
+          <!-- Invitado seleccionado badge -->  
           <div class="selected-badge" *ngIf="invitadoSeleccionado">
             <span class="guest-avatar small">{{ getNombreCompleto(invitadoSeleccionado).charAt(0) }}</span>
             <span>{{ getNombreCompleto(invitadoSeleccionado) }}</span>
@@ -189,12 +174,11 @@
             <!-- Card Header -->
             <div class="table-card-top">
               <div class="table-card-title">
-                <span class="presidential-crown" *ngIf="mesa.is_presidential">👑</span>
                 <div>
                   <div class="table-name">{{ mesa.name }}</div>
                   <div class="table-meta">
                     {{ mesa.listaInvitados?.length || 0 }}/{{ mesa.max_capacity }} ·
-                    {{ mesa.shape === 'round' ? ('TABLES.TYPE_ROUND' | translate) : ('TABLES.TYPE_RECTANGULAR' | translate) }}
+                    {{ mesa.shape === 'round' ? ('TABLES.TYPE_ROUND' | translate) : mesa.shape === 'rectangular' ? ('TABLES.TYPE_RECTANGULAR' | translate) : ('TABLES.PRESIDENTIAL_LABEL' | translate) }}
                   </div>
                 </div>
               </div>
@@ -209,7 +193,7 @@
                 </div>
               </div>
 
-              <button class="remove-table-btn" (click)="eliminarMesa(mesa.id)" title="Eliminar mesa">×</button>
+              <button class="remove-table-btn" (click)="eliminarMesa(mesa.id)" title="Eliminar mesa"><app-icon name="x" [size]="10"></app-icon></button>
             </div>
 
             <!-- Guest List -->
@@ -218,7 +202,7 @@
                 <li *ngFor="let inv of mesa.listaInvitados" class="guest-row">
                   <span class="guest-dot"></span>
                   <span class="guest-name">{{ getNombreCompleto(inv) }}</span>
-                  <button class="remove-guest-btn" (click)="eliminarInvitado(inv.id, mesa.id)">×</button>
+                  <button class="remove-guest-btn" (click)="eliminarInvitado(inv.id, mesa.id)"><app-icon name="x" [size]="10"></app-icon></button>
                 </li>
               </ul>
               <div class="empty-table-msg" *ngIf="!mesa.listaInvitados || mesa.listaInvitados.length === 0">
@@ -231,7 +215,7 @@
 
         <!-- Estado vacío -->
         <div class="empty-state" *ngIf="!cargando && mesas.length === 0">
-          <div class="empty-state-icon">🪑</div>
+          <div class="empty-state-icon"><app-icon name="silla" [size]="50"></app-icon></div>
           <h3>{{ 'TABLES.EMPTY_STATE_TITLE' | translate }}</h3>
           <p>{{ 'TABLES.EMPTY_STATE_DESC' | translate }}</p>
         </div>

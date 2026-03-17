@@ -5,6 +5,16 @@ import { provideHttpClient, HttpClient, withInterceptors } from '@angular/common
 import { authInterceptor } from './auth.interceptor';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import localeEn from '@angular/common/locales/en';
+import localeFr from '@angular/common/locales/fr';
+import localeCa from '@angular/common/locales/ca';
+
+registerLocaleData(localeEs);
+registerLocaleData(localeEn);
+registerLocaleData(localeFr);
+registerLocaleData(localeCa);
 
 // Función factory que crea el loader
 export function HttpLoaderFactory(http: HttpClient) {

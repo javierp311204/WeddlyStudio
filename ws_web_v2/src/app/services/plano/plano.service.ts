@@ -29,6 +29,7 @@ export interface Table {
   max_capacity: number;
   pos_x:        number;
   pos_y:        number;
+  angle:        number;
   occupied:     number;
   available:    number;
   is_full:      boolean;
@@ -83,10 +84,10 @@ export class PlanoService {
     );
   }
 
-  actualizarPosicionMesa(tableId: string, x: number, y: number): Observable<any> {
+  actualizarPosicionMesa(tableId: string, x: number, y: number, angle?: number): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/tables/${tableId}/position`,
-      { pos_x: x, pos_y: y },
+      { pos_x: x, pos_y: y, ...(angle !== undefined && { angle }) },
       this.getHeaders(),
     );
   }

@@ -14,8 +14,8 @@
           <div class="pf-avatar" [style.background-image]="avatarPreview ? 'url(' + avatarPreview + ')' : ''">
             <span *ngIf="!avatarPreview" class="pf-avatar__initials">{{ getInitials() }}</span>
             <label class="pf-avatar__overlay" for="avatarInput" *ngIf="editMode">
-              <span class="pf-avatar__overlay-icon">📷</span>
-              <span class="pf-avatar__overlay-text">Cambiar</span>
+              <span class="pf-avatar__overlay-icon"><app-icon name="camera" [size]="20"></app-icon></span>
+              <span class="pf-avatar__overlay-text">{{ 'COMMON.CHANGE' | translate }}</span>
             </label>
           </div>
         </div>
@@ -34,7 +34,7 @@
       </div>
 
       <div class="pf-verify-banner" *ngIf="!user.email_verified">
-        <span class="pf-verify-banner__icon"><app-icon name="advertencia" [size]="20" ></app-icon></span>
+        <span class="pf-verify-banner__icon"><app-icon name="advertencia" [size]="20"></app-icon></span>
         <div>
           <p class="pf-verify-banner__title">{{ 'PROFILE.EMAIL_UNVERIFIED' | translate }}</p>
           <button class="pf-verify-banner__btn" (click)="resendVerification()">
@@ -145,7 +145,7 @@
           <div class="pf-field pf-field--full">
             <label class="pf-label">
               {{ 'PROFILE.EMAIL' | translate }}
-              <span class="pf-label__verified" *ngIf="user.email_verified">✓ verificado</span>
+              <span class="pf-label__verified" *ngIf="user.email_verified">✓ {{ 'COMMON.VERIFYCATED' | translate }}</span>
             </label>
             <div *ngIf="!editMode" class="pf-value">{{ user.email }}</div>
             <ng-container *ngIf="editMode">

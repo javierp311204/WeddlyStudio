@@ -120,7 +120,7 @@ export const collaboratorT: Record<SupportedLang, {
 }> = {
   es: {
     subject:  (n) => `Te invitaron a colaborar en "${n}" — Weddly`,
-    title:    'Te han invitado 🎉',
+    title:    'Te han invitado',
     body:     (i, w, r) => `<strong>${i}</strong> te ha invitado a colaborar en la boda <strong>${w}</strong> con el rol de <strong>${r}</strong>.`,
     cta:      'Aceptar invitación',
     expiry:   'Este enlace expira en <strong>48 horas</strong>.',
@@ -129,7 +129,7 @@ export const collaboratorT: Record<SupportedLang, {
   },
   en: {
     subject:  (n) => `You've been invited to collaborate on "${n}" — Weddly`,
-    title:    'You\'ve been invited 🎉',
+    title:    'You\'ve been invited',
     body:     (i, w, r) => `<strong>${i}</strong> has invited you to collaborate on the wedding <strong>${w}</strong> as <strong>${r}</strong>.`,
     cta:      'Accept invitation',
     expiry:   'This link expires in <strong>48 hours</strong>.',
@@ -138,7 +138,7 @@ export const collaboratorT: Record<SupportedLang, {
   },
   fr: {
     subject:  (n) => `Vous avez été invité(e) à collaborer sur "${n}" — Weddly`,
-    title:    'Vous avez été invité(e) 🎉',
+    title:    'Vous avez été invité(e)',
     body:     (i, w, r) => `<strong>${i}</strong> vous a invité(e) à collaborer sur le mariage <strong>${w}</strong> en tant que <strong>${r}</strong>.`,
     cta:      'Accepter l\'invitation',
     expiry:   'Ce lien expire dans <strong>48 heures</strong>.',
@@ -147,7 +147,7 @@ export const collaboratorT: Record<SupportedLang, {
   },
   ca: {
     subject:  (n) => `T'han convidat a col·laborar a "${n}" — Weddly`,
-    title:    'T\'han convidat 🎉',
+    title:    'T\'han convidat',
     body:     (i, w, r) => `<strong>${i}</strong> t'ha convidat a col·laborar al casament <strong>${w}</strong> amb el rol de <strong>${r}</strong>.`,
     cta:      'Acceptar la invitació',
     expiry:   'Aquest enllaç caduca en <strong>48 hores</strong>.',
@@ -169,7 +169,7 @@ export const tfaResetT: Record<SupportedLang, {
 }> = {
   es: {
     subject:  'Recuperar acceso 2FA — Weddly Studio',
-    title:    'Recuperar acceso 2FA 🔐',
+    title:    'Recuperar acceso 2FA',
     body:     (n) => `Hola <strong>${n}</strong>, recibimos una solicitud para desactivar la autenticación de doble factor en tu cuenta. Si fuiste tú, haz clic en el botón.`,
     cta:      'Desactivar mi 2FA',
     expiry:   'Este enlace expira en <strong>30 minutos</strong>.',
@@ -178,7 +178,7 @@ export const tfaResetT: Record<SupportedLang, {
   },
   en: {
     subject:  'Recover 2FA access — Weddly Studio',
-    title:    'Recover 2FA access 🔐',
+    title:    'Recover 2FA access',
     body:     (n) => `Hi <strong>${n}</strong>, we received a request to disable two-factor authentication on your account. If that was you, click the button below.`,
     cta:      'Disable my 2FA',
     expiry:   'This link expires in <strong>30 minutes</strong>.',
@@ -187,7 +187,7 @@ export const tfaResetT: Record<SupportedLang, {
   },
   fr: {
     subject:  'Récupérer l\'accès 2FA — Weddly Studio',
-    title:    'Récupérer l\'accès 2FA 🔐',
+    title:    'Récupérer l\'accès 2FA',
     body:     (n) => `Bonjour <strong>${n}</strong>, nous avons reçu une demande de désactivation de la double authentification sur votre compte. Si c'était vous, cliquez sur le bouton.`,
     cta:      'Désactiver mon 2FA',
     expiry:   'Ce lien expire dans <strong>30 minutes</strong>.',
@@ -196,11 +196,63 @@ export const tfaResetT: Record<SupportedLang, {
   },
   ca: {
     subject:  'Recuperar accés 2FA — Weddly Studio',
-    title:    'Recuperar accés 2FA 🔐',
+    title:    'Recuperar accés 2FA',
     body:     (n) => `Hola <strong>${n}</strong>, hem rebut una sol·licitud per desactivar la doble autenticació del teu compte. Si has estat tu, fes clic al botó.`,
     cta:      'Desactivar el meu 2FA',
     expiry:   'Aquest enllaç caduca en <strong>30 minuts</strong>.',
     warning:  '⚠️ Si no has sol·licitat això, ignora aquest email. El teu compte segueix protegit.',
     fallback: 'El botó no funciona?',
+  },
+};
+
+export const passwordResetT: Record<SupportedLang, {
+  subject:  string;
+  title:    string;
+  body:     (firstName: string) => string;
+  cta:      string;
+  expiry:   string;
+  warning:  string;
+  fallback: string;
+  ignore:   string;
+}> = {
+  es: {
+    subject:  'Restablecer contraseña — Weddly Studio',
+    title:    'Restablecer contraseña',
+    body:     (n) => `Hola <strong>${n}</strong>, recibimos una solicitud para restablecer la contraseña de tu cuenta. Haz clic en el botón para crear una nueva. El enlace es válido durante 30 minutos.`,
+    cta:      'Restablecer contraseña',
+    expiry:   'Este enlace expira en <strong>30 minutos</strong>.',
+    warning:  '⚠️ Si no solicitaste este cambio, ignora este email. Tu contraseña actual no se ha modificado.',
+    fallback: '¿El botón no funciona? Copia este enlace en tu navegador:',
+    ignore:   'Si no reconoces esta solicitud, puedes ignorar este mensaje con total seguridad.',
+  },
+  en: {
+    subject:  'Reset your password — Weddly Studio',
+    title:    'Reset your password',
+    body:     (n) => `Hi <strong>${n}</strong>, we received a request to reset the password for your account. Click the button below to set a new one. The link is valid for 30 minutes.`,
+    cta:      'Reset password',
+    expiry:   'This link expires in <strong>30 minutes</strong>.',
+    warning:  '⚠️ If you didn\'t request this, ignore this email. Your current password has not been changed.',
+    fallback: 'Button not working? Copy this link into your browser:',
+    ignore:   'If you don\'t recognize this request, you can safely ignore this message.',
+  },
+  fr: {
+    subject:  'Réinitialiser votre mot de passe — Weddly Studio',
+    title:    'Réinitialiser votre mot de passe',
+    body:     (n) => `Bonjour <strong>${n}</strong>, nous avons reçu une demande de réinitialisation du mot de passe de votre compte. Cliquez sur le bouton pour en créer un nouveau. Le lien est valable 30 minutes.`,
+    cta:      'Réinitialiser le mot de passe',
+    expiry:   'Ce lien expire dans <strong>30 minutes</strong>.',
+    warning:  '⚠️ Si vous n\'avez pas fait cette demande, ignorez cet email. Votre mot de passe actuel n\'a pas été modifié.',
+    fallback: 'Le bouton ne fonctionne pas ? Copiez ce lien dans votre navigateur :',
+    ignore:   'Si vous ne reconnaissez pas cette demande, vous pouvez ignorer ce message en toute sécurité.',
+  },
+  ca: {
+    subject:  'Restablir contrasenya — Weddly Studio',
+    title:    'Restablir contrasenya',
+    body:     (n) => `Hola <strong>${n}</strong>, hem rebut una sol·licitud per restablir la contrasenya del teu compte. Fes clic al botó per crear-ne una de nova. L'enllaç és vàlid durant 30 minuts.`,
+    cta:      'Restablir contrasenya',
+    expiry:   'Aquest enllaç caduca en <strong>30 minuts</strong>.',
+    warning:  '⚠️ Si no has sol·licitat aquest canvi, ignora aquest email. La teva contrasenya actual no s\'ha modificat.',
+    fallback: 'El botó no funciona? Copia aquest enllaç al teu navegador:',
+    ignore:   'Si no reconèixes aquesta sol·licitud, pots ignorar aquest missatge amb total seguretat.',
   },
 };

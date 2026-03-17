@@ -5,6 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { FormsModule } from '@angular/forms';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 export type PhotoStatus = 'pending' | 'approved' | 'rejected' | 'deleted';
 
@@ -31,7 +32,7 @@ export interface PhotoStats {
 @Component({
   selector: 'app-album-digital',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, TranslateModule, FormsModule],
+  imports: [CommonModule, HttpClientModule, TranslateModule, FormsModule, IconComponent],
   templateUrl: './album-digital.component.html',
   styleUrl:    './album-digital.component.css',
 })
@@ -171,10 +172,10 @@ export class AlbumDigitalComponent implements OnInit {
   // ─── Helpers template ─────────────────────────────────────────
   getStatusLabel(status: PhotoStatus): string {
     const map: Record<PhotoStatus, string> = {
-      pending:  'Pendiente',
-      approved: 'Aprobada',
-      rejected: 'Rechazada',
-      deleted:  'Eliminada',
+      pending:  this.translate.instant('ALBUM.STATUS_PENDING'),
+      approved: this.translate.instant('ALBUM.STATUS_APPROVED'),
+      rejected: this.translate.instant('ALBUM.STATUS_REJECTED'),
+      deleted:  this.translate.instant('ALBUM.STATUS_DELETED'),
     };
     return map[status] ?? status;
   }

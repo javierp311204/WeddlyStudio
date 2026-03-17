@@ -16,6 +16,7 @@
     "YES": "Sí",
     "NO": "No",
     "CONTINUE": "Continuar",
+    "VERIFYCATED": "Verificat",
     "DOWNLOAD": "Descarregar",
     "UPLOAD": "Pujar",
     "SEND": "Enviar",
@@ -643,12 +644,41 @@
     "TITLE": "Àlbum Digital",
     "SUBTITLE": "Records compartits",
     "UPLOAD_BTN": "Pujar nova foto",
-    "UPLOAD_HINT": "Formats acceptats: JPG, PNG. Màx 5MB.",
-    "EMPTY_STATE": "Encara no hi ha fotos en aquest àlbum. Sigues el primer a pujar-ne una!",
+    "UPLOADING": "Pujant...",
+    "UPLOAD_HINT": "Formats acceptats: JPG, PNG, WebP. Màx 15MB.",
+    "UPLOAD_HINT_MODERATION": "Les fotos requereixen l'aprovació de l'organitzador abans de publicar-se.",
+    "UPLOAD_SUCCESS_TITLE": "Foto pujada!",
+    "UPLOAD_SUCCESS_DESC": "Pendent d'aprovació per part de l'organitzador.",
+    "UPLOAD_ERROR": "No s'ha pogut pujar la foto.",
+    "UPLOAD_LIMIT_TITLE": "Límit assolit",
+    "UPLOAD_LIMIT_DESC": "Has arribat al màxim de fotos del pla {{plan}}. Actualitza el teu pla per pujar-ne més.",
+    "EMPTY_STATE": "Encara no hi ha fotos en aquest àlbum.",
+    "EMPTY_PENDING": "No hi ha fotos pendents de moderació.",
+    "EMPTY_APPROVED": "Encara no hi ha fotos aprovades.",
+    "EMPTY_REJECTED": "No hi ha fotos rebutjades.",
+    "EMPTY_ALL": "No hi ha fotos a l'àlbum.",
     "PHOTO_ALT": "Foto del casament",
-    "UPLOAD_SUCCESS_TITLE": "Pujada!",
-    "UPLOAD_SUCCESS_DESC": "Foto afegida a l'àlbum.",
-    "UPLOAD_ERROR": "No s'ha pogut pujar."
+    "MODERATION_PANEL_TITLE": "Panell de moderació",
+    "FILTER_ALL": "Totes",
+    "FILTER_PENDING": "Pendents",
+    "FILTER_APPROVED": "Aprovades",
+    "FILTER_REJECTED": "Rebutjades",
+    "STATUS_PENDING": "Pendent",
+    "STATUS_APPROVED": "Aprovada",
+    "STATUS_REJECTED": "Rebutjada",
+    "STATUS_DELETED": "Eliminada",
+    "BTN_APPROVE": "Aprovar",
+    "BTN_REJECT": "Rebutjar",
+    "BTN_DELETE": "Eliminar",
+    "MODERATE_SUCCESS": "Foto moderada correctament.",
+    "MODERATE_ERROR": "No s'ha pogut moderar la foto.",
+    "STATS_APPROVED": "Aprovades",
+    "STATS_PENDING": "Pendents",
+    "STATS_REJECTED": "Rebutjades",
+    "STATS_LIMIT": "{{total}} / {{limit}} fotos",
+    "STATS_UNLIMITED": "✨ Fotos il·limitades (Premium)",
+    "PAGINATION_OF": "de",
+    "LOAD_ERROR": "No s'han pogut carregar les fotos."
   },
 
   "PRICING": {
@@ -667,8 +697,8 @@
     "CANCEL_ANYTIME": "Cancel·la quan vulguis",
     "NO_MONTHLY": "Pagament únic, sense mensualitats",
     "FOREVER_FREE": "Per sempre gratuït",
-    "SECURE_PAYMENT": "🔒 Pagament segur amb Stripe",
-    "INVOICE_EMAIL": "📧 Factura per email",
+    "SECURE_PAYMENT": "Pagament segur amb Stripe",
+    "INVOICE_EMAIL": "Factura per email",
     "SECURE_DESC": "Processem els pagaments de forma segura amb Stripe. No emmagatzemem informació de targetes de crèdit.",
     "CURRENT_PLAN_BADGE": "✓ Pla actual",
     "SELECT_PLAN_WITH_NAME": "Triar",
@@ -779,7 +809,18 @@
     "ERROR_TITLE": "Error",
     "ERROR_INVALID": "L'enllaç de restabliment no és vàlid",
     "ERROR_MISMATCH": "Les contrasenyes no coincideixen",
-    "ERROR_SHORT": "La contrasenya ha de tenir almenys 8 caràcters"
+    "ERROR_SHORT": "La contrasenya ha de tenir almenys 8 caràcters",
+    "INVALID_TOKEN_CAUSES_TITLE": "Possibles causes:",
+    "INVALID_TOKEN_CAUSE_EXPIRED": "L'enllaç ha caducat (1 hora de validesa)",
+    "INVALID_TOKEN_CAUSE_USED": "L'enllaç ja ha estat utilitzat",
+    "INVALID_TOKEN_CAUSE_INVALID": "L'enllaç és invàlid o incorrecte",
+    "REQUEST_NEW_LINK_BTN": "Sol·licitar Nou Enllaç",
+    "BACK_TO_LOGIN_SHORT": "Tornar al Login",
+    "TIPS_TITLE": "💡 Consells:",
+    "TIPS_ITEM_MIN_LENGTH": "Utilitza almenys 8 caràcters",
+    "TIPS_ITEM_MIX": "Combina lletres i números",
+    "TIPS_ITEM_NOT_OBVIOUS": "No utilitzis contrasenyes òbvies",
+    "SUCCESS_REDIRECT_MSG": "Seràs redirigit al login en uns segons..."
   },
 
   "CHECKLIST": {
@@ -893,20 +934,26 @@
   },
 
   "RECOVERY": {
-    "TITLE": "Has oblidat la contrasenya?",
-    "SUBTITLE": "No et preocupis, t'enviarem instruccions per recuperar-la.",
-    "EMAIL_LABEL": "Correu Electrònic",
-    "EMAIL_PLACEHOLDER": "tu@email.com",
-    "EMAIL_HINT": "Introdueix l'email amb el qual et vas registrar.",
-    "SEND_BTN": "Enviar Instruccions",
+    "TITLE": "Has oblidat la teva contrasenya?",
+    "SUBTITLE": "No et preocupis, t’enviarem instruccions per recuperar-la.",
+    "EMAIL_LABEL": "Correu electrònic",
+    "EMAIL_PLACEHOLDER": "elteu@email.com",
+    "EMAIL_HINT": "Introdueix el correu amb el qual et vas registrar.",
+    "SEND_BTN": "Enviar instruccions",
     "SENDING": "Enviant...",
-    "BACK_TO_LOGIN": "Tornar al Login",
-    "SUCCESS_TITLE": "Email Enviat!",
-    "SUCCESS_DESC": "Hem enviat instruccions de recuperació a {{email}}. Si us plau, revisa la teva safata d'entrada i la carpeta de correu no desitjat.",
+    "BACK_TO_LOGIN": "Tornar al login",
+    "SUCCESS_TITLE": "Email enviat!",
+    "SUCCESS_DESC": "Hem enviat les instruccions de recuperació. Si us plau, revisa la teva safata d’entrada i la carpeta de spam.",
     "CHECK_EMAIL": "Revisar el meu email →",
     "ERROR_TITLE": "Error",
     "ERROR_EMAIL_NOT_FOUND": "No hem trobat cap compte amb aquest email.",
-    "ERROR_SEND": "No s'ha pogut enviar l'email. Torna-ho a intentar més tard."
+    "ERROR_SEND": "No s’ha pogut enviar l’email. Torna-ho a intentar més tard.",
+    "STEP_TITLE": "Passos a seguir:",
+    "STEP_1": "Revisa la teva safata d’entrada.",
+    "STEP_2": "Si no el veus, revisa la carpeta de spam.",
+    "STEP_3": "Fes clic a l’enllaç del correu.",
+    "STEP_4": "Crea la teva nova contrasenya.",
+    "EXPIRE_WARNING": "L’enllaç caducarà en 1 hora per seguretat."
   },
 
   "VERIFICATION": {
@@ -992,6 +1039,7 @@
     "NAV_PLANS": "Plans",
     "NAV_TERMS": "Termes i Condicions",
     "NAV_PRIVACY": "Política de Privacitat",
+    "NAV_REVIEWS": "Ressenyes",
     "COPYRIGHT": "Copyright © 2026 · Weddly Studio"
   },
 
@@ -1138,9 +1186,9 @@
     "INVITE_TITLE": "Convidar persona",
     "INVITE_SUCCESS": "Invitació enviada correctament!",
     "SEND_INVITE": "Enviar invitació",
-    "HINT_CO_ORGANIZER": "🔑 Pot editar el casament, gestionar convidats, taules i enviar invitacions.",
-    "HINT_PLANNER": "📋 Pot editar informació, gestionar convidats i taules. No pot convidar.",
-    "HINT_GUEST": "👁️ Només pot veure el checklist i l'àlbum de fotos.",
+    "HINT_CO_ORGANIZER": "Pot editar el casament, gestionar convidats, taules i enviar invitacions.",
+    "HINT_PLANNER": "Pot editar informació, gestionar convidats i taules. No pot convidar.",
+    "HINT_GUEST": "Només pot veure el checklist i l'àlbum de fotos.",
     "REVOKE_CONFIRM": "Revocar l'accés de <strong>{{label}}</strong>? Aquesta acció no es pot desfer.",
     "REVOKE_CONFIRM_BTN": "Sí, revocar",
     "STATUS_PENDING": "Pendent",
@@ -1176,8 +1224,8 @@
     "PERM_GUEST_1": "Veure el checklist",
     "PERM_GUEST_2": "Veure i pujar fotos a l'àlbum",
     "PERM_GUEST_3": "No pot editar informació",
-    "EXPIRES": "⏳ Aquesta invitació expira el {{date}}",
-    "EXPIRED": "⛔ Aquesta invitació ha expirat.",
+    "EXPIRES": "Aquesta invitació expira el {{date}}",
+    "EXPIRED": "Aquesta invitació ha expirat.",
     "ACCEPT_BTN": "✓ Acceptar invitació",
     "LOGGED_AS": "Connectat com a <strong>{{nick}}</strong>",
     "AUTH_REQUIRED": "Per acceptar la invitació necessites un compte a Weddly Studio.",
@@ -1188,5 +1236,276 @@
     "SUCCESS_DESC": "Ja formes part de l'organització de <strong>{{name}}</strong>.",
     "GO_DASHBOARD": "Anar al tauler",
     "ERROR_ACCEPT": "Error en acceptar la invitació."
+  },
+
+  "RSVP": {
+    "LOADING": "Carregant la teva invitació...",
+    "INVALID_CODE": "Codi invàlid",
+    "GO_HOME": "Tornar a l'inici",
+    "SEE_YOU_SOON": "Ens veiem aviat!",
+    "RESPONSE_REGISTERED": "Resposta registrada",
+    "CONFIRMED_MSG": "La teva assistència a <strong>{{name}}</strong> ha estat confirmada.<br>Tenim moltes ganes de celebrar-ho amb tu!",
+    "DECLINED_MSG": "Hem registrat que no podràs assistir. Gràcies per avisar-nos!",
+    "INVITATION_FOR": "Invitació per a",
+    "QUESTION": "Podràs acompanyar-nos en aquest dia tan especial?",
+    "CONFIRM_BTN": "Amb molt de gust!",
+    "DECLINE_BTN": "Ho sento, no podré",
+    "ALLERGIES_LABEL": "Al·lèrgies o restriccions alimentàries",
+    "ALLERGIES_PLACEHOLDER": "Cap / Gluten / Lactosa / ...",
+    "NOTES_LABEL": "Notes addicionals",
+    "NOTES_PLACEHOLDER": "Qualsevol detall que vulguis que sapiguem...",
+    "DECLINE_NOTE": "Ho entenem, gràcies per avisar-nos 💌",
+    "SUBMIT_BTN": "Confirmar resposta",
+    "SENDING": "Enviant",
+    "CODE_LABEL": "Codi",
+    "ERROR_NO_CODE": "No s'ha trobat el codi d'invitació.",
+    "ERROR_DEFAULT": "No s'ha pogut processar la teva resposta. El codi pot ser invàlid o haver caducat."
+  },
+
+  "CALENDARIO": {
+    "TITLE": "Calendari",
+    "LOADING": "Carregant calendari…",
+    "TASKS_THIS_MONTH_SINGULAR": "tasca aquest mes",
+    "TASKS_THIS_MONTH_PLURAL": "tasques aquest mes",
+    "MONTH_JAN": "Gener",
+    "MONTH_FEB": "Febrer",
+    "MONTH_MAR": "Març",
+    "MONTH_APR": "Abril",
+    "MONTH_MAY": "Maig",
+    "MONTH_JUN": "Juny",
+    "MONTH_JUL": "Juliol",
+    "MONTH_AUG": "Agost",
+    "MONTH_SEP": "Setembre",
+    "MONTH_OCT": "Octubre",
+    "MONTH_NOV": "Novembre",
+    "MONTH_DEC": "Desembre",
+    "DAY_MON": "Dl",
+    "DAY_TUE": "Dt",
+    "DAY_WED": "Dc",
+    "DAY_THU": "Dj",
+    "DAY_FRI": "Dv",
+    "DAY_SAT": "Ds",
+    "DAY_SUN": "Dg",
+    "EXPORT_GOOGLE": "Google Calendar",
+    "EXPORT_GOOGLE_TOOLTIP": "Exportar a Google Calendar (.ics)",
+    "EXPORTING": "Exportant…",
+    "EXPORT_PDF": "Exportar PDF",
+    "EXPORT_PDF_TOOLTIP": "Exportar PDF del checklist",
+    "PDF_LOCKED_TOOLTIP": "Requereix un pla de pagament",
+    "GENERATING_PDF": "Generant…",
+    "PREV_MONTH": "Mes anterior",
+    "NEXT_MONTH": "Mes següent",
+    "TODAY": "Avui",
+    "WEDDING_DAY": "Dia del casament",
+    "WEDDING_DAY_TITLE": "Dia del casament!",
+    "NO_TASKS_DAY": "Sense tasques per a aquest dia",
+    "ASSIGN_TASK": "Assignar tasca a aquest dia",
+    "UNDATED_SINGULAR": "tasca sense data assignada",
+    "UNDATED_PLURAL": "tasques sense data assignada",
+    "MORE": "més",
+    "ASSIGN_MODAL_TITLE": "Assignar tasca",
+    "SEARCH_TASK": "Cercar tasca...",
+    "NO_ASSIGNABLE_TASKS": "No hi ha tasques pendents sense data",
+    "ASSIGN_SUCCESS_TITLE": "Tasca assignada",
+    "ASSIGN_SUCCESS_DESC": "\"{{title}}\" assignada al {{date}}",
+    "EXPORT_SUCCESS_TITLE": "Calendari exportat!",
+    "EXPORT_SUCCESS_DESC": "Obre el fitxer .ics per importar-lo a Google Calendar o Apple Calendar.",
+    "PDF_SUCCESS_TITLE": "PDF generat!",
+    "PDF_SUCCESS_DESC": "S'obrirà el diàleg d'impressió.",
+    "PDF_PLAN_REQUIRED_TITLE": "Pla requerit",
+    "PDF_PLAN_REQUIRED_DESC": "L'exportació PDF està disponible en els plans de pagament. Actualitza el teu pla!",
+    "ERROR_LOAD_TASKS": "No s'han pogut carregar les tasques del calendari",
+    "ERROR_ASSIGN_TASK": "No s'ha pogut assignar la tasca",
+    "ERROR_EXPORT_ICS": "No s'ha pogut exportar el calendari",
+    "ERROR_EXPORT_PDF": "No s'ha pogut generar el PDF"
+  },
+
+  "TASKS": {
+    "12_MONTHS": {
+      "DEFINE_BUDGET": {
+        "TITLE": "Definir pressupost total",
+        "DESC": "Estableix un pressupost realista i reparteix les partides principals."
+      },
+      "CEREMONY_VENUE": {
+        "TITLE": "Triar i reservar el lloc de la cerimònia",
+        "DESC": "Visita almenys 3 opcions abans de decidir. Confirma disponibilitat per a la teva data."
+      },
+      "BANQUET_VENUE": {
+        "TITLE": "Triar i reservar el lloc del banquet",
+        "DESC": "Pot ser el mateix que la cerimònia o un de diferent."
+      },
+      "GUEST_LIST": {
+        "TITLE": "Fer una llista preliminar d'invitats",
+        "DESC": "Nombre orientatiu per negociar amb el venue i el càtering."
+      },
+      "LEGAL": {
+        "TITLE": "Iniciar tràmits legals del matrimoni",
+        "DESC": "Consulta al registre civil o notaria els documents necessaris."
+      }
+    },
+    "9_MONTHS": {
+      "PHOTOGRAPHER": {
+        "TITLE": "Contractar fotògraf",
+        "DESC": "Revisa portfolis, llegeix ressenyes i reserva amb antelació."
+      },
+      "VIDEOGRAPHER": {
+        "TITLE": "Contractar videògraf",
+        "DESC": "Opcional. Decideix si vols vídeo complet, highlights o dron."
+      },
+      "MUSIC": {
+        "TITLE": "Contractar música (DJ o banda)",
+        "DESC": "Defineix l'estil musical per a cerimònia, còctel i banquet."
+      },
+      "CATERING": {
+        "TITLE": "Triar servei de càtering",
+        "DESC": "Sol·licita almenys 3 pressupostos. Organitza una degustació."
+      },
+      "WEDDING_DRESS": {
+        "TITLE": "Començar la cerca del vestit de núvia",
+        "DESC": "Els vestits poden trigar 4-6 mesos a arribar. Comença com més aviat millor."
+      }
+    },
+    "6_MONTHS": {
+      "CONFIRM_DRESS": {
+        "TITLE": "Confirmar vestit de núvia",
+        "DESC": "Realitza la comanda oficial i programa les proves."
+      },
+      "GROOM_SUIT": {
+        "TITLE": "Triar vestit del nuvi",
+        "DESC": "Compra o lloguer. Coordina amb l'estil del vestit."
+      },
+      "FLORIST": {
+        "TITLE": "Contractar florista",
+        "DESC": "Defineix l'estil floral: ram, centres de taula, decoració de la cerimònia."
+      },
+      "CAKE": {
+        "TITLE": "Triar pastís nupcial",
+        "DESC": "Organitza una degustació amb almenys 2 pastissers."
+      },
+      "HONEYMOON": {
+        "TITLE": "Planificar viatge de noces",
+        "DESC": "Reserva vols i allotjament amb antelació per obtenir millors preus."
+      },
+      "INVITATIONS_DESIGN": {
+        "TITLE": "Dissenyar invitacions",
+        "DESC": "Defineix el disseny i el text. Recorda incloure data límit d'RSVP."
+      }
+    },
+    "3_MONTHS": {
+      "SEND_INVITATIONS": {
+        "TITLE": "Enviar invitacions",
+        "DESC": "Envia-les amb almenys 2-3 mesos d'antelació."
+      },
+      "CONFIRM_GUEST_LIST": {
+        "TITLE": "Confirmar llista definitiva d'invitats",
+        "DESC": "Tanca la llista per comunicar el nombre final al càtering."
+      },
+      "BEAUTY": {
+        "TITLE": "Reservar perruqueria i maquillatge",
+        "DESC": "Fes una prova prèvia per confirmar el look."
+      },
+      "RINGS": {
+        "TITLE": "Encarregar aliances",
+        "DESC": "Tria material, disseny i grava la inscripció si ho desitges."
+      },
+      "TRANSPORT": {
+        "TITLE": "Contractar transport nupcial",
+        "DESC": "Cotxe dels nuvis, autobús per a convidats, etc."
+      },
+      "ACCOMMODATION": {
+        "TITLE": "Gestionar allotjament per a convidats de fora",
+        "DESC": "Negocia tarifes especials amb hotels propers."
+      }
+    },
+    "1_MONTH": {
+      "CONFIRM_CATERING_COUNT": {
+        "TITLE": "Confirmar nombre final d'assistents al càtering",
+        "DESC": "La majoria de càterings demanen confirmació 3-4 setmanes abans."
+      },
+      "CONFIRM_VENDORS": {
+        "TITLE": "Confirmar detalls amb tots els proveïdors",
+        "DESC": "Truca o escriu a cada proveïdor per reconfirmar hora i detalls."
+      },
+      "FINAL_FITTING": {
+        "TITLE": "Prova final del vestit/vestit",
+        "DESC": "Assegura't que els ajustos estan perfectes."
+      },
+      "SEATING_PLAN": {
+        "TITLE": "Organitzar distribució de taules",
+        "DESC": "Assigna cada convidat a la seva taula tenint en compte afinitats."
+      },
+      "CEREMONY_ORDER": {
+        "TITLE": "Preparar ordre de la cerimònia",
+        "DESC": "Defineix lectures, música, vots i temps."
+      }
+    },
+    "1_WEEK": {
+      "CONFIRM_OFFICIANT": {
+        "TITLE": "Confirmar hora i lloc amb l'oficiant/jutge",
+        "DESC": "Últim recordatori per a qui oficia la cerimònia."
+      },
+      "VENDOR_PAYMENTS": {
+        "TITLE": "Preparar sobres amb pagaments per a proveïdors",
+        "DESC": "Molts proveïdors cobren en efectiu el dia de la boda."
+      },
+      "CONFIRM_BEAUTY": {
+        "TITLE": "Confirmar cita de perruqueria i maquillatge",
+        "DESC": "Confirma hora, lloc i nombre de persones."
+      },
+      "PICK_UP_ATTIRE": {
+        "TITLE": "Recollir vestit/vestit",
+        "DESC": "Recull i comprova que tot estigui en perfecte estat."
+      },
+      "FINAL_VENUE_VISIT": {
+        "TITLE": "Visita final al venue",
+        "DESC": "Repassa decoració, distribució de taules i accessos."
+      }
+    }
+  },
+
+  "WEDDING_STATUS": {
+    "BANNER_ARCHIVED": "Aquesta boda està arxivada.",
+    "BANNER_READONLY_PAYMENT": "La teva subscripció té un problema de pagament. La boda està en mode de només lectura.",
+    "BANNER_READONLY_COMPLETED": "La teva boda ja s’ha celebrat! Estàs en mode record, només lectura.",
+    "BANNER_SEE_PLANS": "Veure plans",
+    "MODAL_ARCHIVED_TITLE": "Boda arxivada",
+    "MODAL_ARCHIVED_DESC": "Aquesta boda està arxivada i no permet canvis. Pots desarxivar-la des de \"Les meves bodes\" si el teu pla ho permet.",
+    "MODAL_PAYMENT_TITLE": "Problema amb la teva subscripció",
+    "MODAL_PAYMENT_DESC": "La teva subscripció ha caducat o hi ha un pagament pendent. Renova el teu pla per tornar a editar.",
+    "MODAL_COMPLETED_TITLE": "Mode record",
+    "MODAL_COMPLETED_DESC": "La boda ja ha tingut lloc. Pots consultar convidats, fotos i cronograma, però no fer canvis.",
+    "MODAL_BTN_PLANS": "Veure plans",
+    "MODAL_BTN_BACK": "Tornar a l'inici"
+  },
+
+  "REVIEWS": {
+    "PAGE_TITLE": "Ressenyes",
+    "PAGE_SUBTITLE": "Experiències reals de parelles que van planificar el seu casament amb nosaltres",
+    "WRITE_REVIEW": "Escriure la meva ressenya",
+    "ALREADY_REVIEWED": "Ja has deixat la teva ressenya",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "LOGIN_CTA": "per compartir la teva experiència",
+    "LOGIN_LINK": "Inicia sessió",
+    "ORDER_RECENT": "Més recents",
+    "ORDER_BEST": "Millor valorades",
+    "FORM_TITLE_NEW": "Escriu la teva ressenya",
+    "FORM_TITLE_EDIT": "Edita la teva ressenya",
+    "FORM_RATING_LABEL": "Puntuació",
+    "FORM_COMMENT_LABEL": "El teu comentari",
+    "FORM_COMMENT_PLACEHOLDER": "Explica'ns com va ser la teva experiència planificant amb Weddly (mínim 10 caràcters)…",
+    "FORM_CHARS_REMAINING": "restants",
+    "FORM_SUBMIT_NEW": "Publicar ressenya",
+    "FORM_SUBMIT_EDIT": "Actualitzar ressenya",
+    "EMPTY_STATE": "Sigues el primer a compartir la teva experiència",
+    "WRITE_FIRST": "Escriure la primera ressenya",
+    "ERROR_RATING": "Selecciona una puntuació entre 1 i 5 estrelles.",
+    "ERROR_COMMENT_SHORT": "El comentari ha de tenir almenys 10 caràcters.",
+    "ERROR_COMMENT_LONG": "El comentari no pot superar els 1000 caràcters.",
+    "ERROR_GENERIC": "Error en enviar la ressenya.",
+    "REVIEW_SINGULAR": "ressenya",
+    "REVIEW_PLURAL": "ressenyes"
   }
+
+
 }

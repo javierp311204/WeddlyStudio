@@ -19,6 +19,7 @@
 
 .btn-sm:hover { background: #e63946 !important; color: white !important; transition: all 0.2s ease; }
 
+/* ── Filtros ─────────────────────────────── */
 .filter-chip.active {
   background: linear-gradient(135deg, #bc6c25 0%, #8b5e3c 100%) !important;
   color: white !important;
@@ -35,10 +36,51 @@
 .filter-chip.active span:first-child { animation: chipBounce 0.5s ease; }
 @keyframes chipBounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
+/* Centrado app-icon dentro de filter-chip */
+.filter-chip span:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.filter-chip span:first-child app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Icono búsqueda */
+.position-absolute app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9a8070;
+}
+
 .form-control:focus,
 .form-select:focus {
   border-color: #d4a373;
   box-shadow: 0 0 0 0.25rem rgba(212, 163, 115, 0.25);
+}
+
+/* Iconos inline dentro de las cards de invitados */
+.invitado-card app-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Empty state icon */
+.display-1 app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4a373;
+  opacity: 0.5;
 }
 
 /* ========================================
@@ -78,10 +120,7 @@
 }
 
 /* Franja de color superior por grupo */
-.modal-top-stripe {
-  height: 6px;
-  width: 100%;
-}
+.modal-top-stripe { height: 6px; width: 100%; }
 .stripe-familia { background: linear-gradient(90deg, #a7c957, #c9d97a); }
 .stripe-amigos  { background: linear-gradient(90deg, #d4a373, #e76f51); }
 .stripe-trabajo { background: linear-gradient(90deg, #90a9b7, #8d99ae); }
@@ -134,8 +173,6 @@
 .avatar-familia { background: linear-gradient(135deg, #d4edaa, #a7c957); color: #4a6520; }
 .avatar-amigos  { background: linear-gradient(135deg, #fde8cc, #d4a373); color: #7a3e10; }
 .avatar-trabajo { background: linear-gradient(135deg, #cdd9e0, #90a9b7); color: #344a55; }
-
-/* Si no tiene grupo definido */
 .modal-avatar:not([class*="avatar-"]),
 .modal-avatar.avatar- {
   background: linear-gradient(135deg, #fef3c7, #fde68a);
@@ -211,13 +248,29 @@
 .modal-info-row:last-child { border-bottom: none; }
 .modal-info-row:hover { background: #fffbf5; }
 
-/* Fila destacada para alergias */
 .highlight-row {
   background: #fffbf0 !important;
   border-left: 3px solid #f59e0b;
 }
 
-.info-icon { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+/* Icono info-row — centrado vertical */
+.info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  line-height: 1;
+  color: #9a8070;
+}
+.info-icon app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .info-content { display: flex; flex-direction: column; gap: 2px; }
 
 .info-label {
@@ -234,7 +287,6 @@
 }
 .info-value.muted { color: #c0a890; font-style: italic; }
 
-/* Tag de alergia especial */
 .allergy-tag {
   display: inline-block;
   background: #fef3c7;
@@ -245,7 +297,7 @@
   font-weight: 600;
 }
 
-/* Mensaje / dietary_notes */
+/* Mensaje */
 .modal-message-box {
   background: linear-gradient(135deg, #fffef5, #fef7e8);
   border: 1px solid #ead5a8;
@@ -264,6 +316,12 @@
   color: #bc6c25;
   margin-bottom: 8px;
 }
+.message-header app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 .message-text {
   font-size: 0.92rem;
   color: #4a3520;
@@ -274,17 +332,26 @@
 }
 
 .modal-message-empty {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   color: #c8b89a;
   font-size: 0.82rem;
   font-style: italic;
   margin-bottom: 16px;
   padding: 8px;
 }
+.modal-message-empty app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
 /* Botón eliminar */
 .modal-delete-btn {
-  width: calc(100% - 0px);
+  width: 100%;
   margin: 0 0 28px;
   padding: 11px;
   border: 1.5px solid #ffcdd2;
@@ -295,6 +362,16 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.modal-delete-btn app-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 .modal-delete-btn:hover {
   background: #ffeded;

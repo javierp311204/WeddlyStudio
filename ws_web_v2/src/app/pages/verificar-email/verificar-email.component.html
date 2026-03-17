@@ -35,10 +35,9 @@
         {{ mensajeError }}
       </div>
       <p class="text-muted small mb-4">
-        Posibles causas:<br>
+        {{ 'PASSWORD_RESET.INVALID_TOKEN_CAUSES_TITLE' | translate }}<br>
         • {{ 'VERIFICATION.ERROR_LINK_INVALID' | translate }}<br>
         • {{ 'VERIFICATION.ERROR_ALREADY_USED' | translate }}<br>
-        • La URL es inválida
       </p>
       <div class="d-grid gap-2">
         <button class="btn btn-verify rounded-3 py-2 fw-semibold" routerLink="/register">

@@ -39,11 +39,14 @@ export class ChecklistPreviewComponent implements OnInit {
       return;
     }
 
-    // v2: GET /api/weddings/:weddingId/tasks → { tasks, grouped, totals }
     this.tareasService.getChecklist(weddingId).subscribe({
       next: (res: any) => {
-        // v2: estadísticas vienen en res.totals (o res.data.totals según el servicio)
-        this.totals = res?.totals ?? res?.data?.totals ?? null;
+        const t = res?.totals ?? res?.data?.totals ?? null;
+        if (t) {
+          // Calcular percentage aquí ya que el backend no lo devuelve
+          t.percentage = t.total > 0 ? Math.round((t.completed / t.total) * 100) : 0;
+        }
+        this.totals = t;
         this.cargando = false;
       },
       error: () => { this.cargando = false; }

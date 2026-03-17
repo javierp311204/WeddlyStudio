@@ -5,18 +5,12 @@ import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
-
-// ─────────────────────────────────────────────────────────────
-// MIGRACIÓN v2:
-//  • Endpoint: /api/auth/solicitar-recuperacion
-//           → /api/auth/forgot-password
-//  • Body y respuesta no cambian — sigue siendo { email }
-// ─────────────────────────────────────────────────────────────
+import { IconComponent } from '../../shared/icons/icon.component';
 
 @Component({
   selector: 'app-recuperar-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, IconComponent],
   templateUrl: './recuperar-password.component.html',
   styleUrl: './recuperar-password.component.css',
 })

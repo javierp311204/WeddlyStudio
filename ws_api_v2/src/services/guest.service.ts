@@ -167,6 +167,7 @@ export class GuestService {
         last_name: data.last_name,
         email: data.email,
         phone: data.phone,
+        group: data.group,
         allergies: data.allergies,
         dietary_notes: data.dietary_notes,
         invitation_code,

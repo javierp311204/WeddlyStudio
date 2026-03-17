@@ -10,7 +10,7 @@
       <label class="btn-primary d-flex align-items-center gap-2"
              [class.btn-disabled]="uploading"
              style="cursor:pointer; margin:0;">
-        <span>{{ uploading ? '⏳' : '📸' }}</span>
+        <span><app-icon [name]="uploading ? 'relojCargando' : 'camera'" [size]="20"></app-icon></span>
         {{ (uploading ? 'ALBUM.UPLOADING' : 'ALBUM.UPLOAD_BTN') | translate }}
         <input type="file"
                (change)="onFileSelected($event)"
@@ -97,7 +97,7 @@
 
     <!-- EMPTY STATE -->
     <div *ngIf="fotos.length === 0" class="empty-state">
-      <span style="font-size:2.5rem; opacity:0.3;">📷</span>
+      <span style="font-size:2.5rem; opacity:0.3;"><app-icon name="camera" [size]="40"></app-icon></span>
       <p>
         <ng-container *ngIf="activeFilter === 'pending'">{{ 'ALBUM.EMPTY_PENDING' | translate }}</ng-container>
         <ng-container *ngIf="activeFilter === 'approved'">{{ 'ALBUM.EMPTY_APPROVED' | translate }}</ng-container>

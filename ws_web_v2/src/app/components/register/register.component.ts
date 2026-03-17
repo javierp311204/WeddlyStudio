@@ -5,11 +5,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule, TranslateModule, IconComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })

@@ -11,8 +11,8 @@ import {
 // ─── FIX: claves alineadas con plan_type real del schema ─────────
 const PHOTO_LIMITS: Record<string, number> = {
   free:    20,
-  pro:     200,
-  premium: Infinity,
+  one_time:     200,
+  subscription: Infinity,
 };
 
 export class PhotoService {
@@ -120,7 +120,8 @@ export class PhotoService {
   async upload(weddingId: string, userId: string, file: Express.Multer.File, data: UploadPhotoInput) {
     const wedding = await this.assertWeddingAccess(weddingId, userId);
 
-    const photoLimit = PHOTO_LIMITS[wedding.plan_type] ?? 20;
+    const activePlan = await this.getActivePlan(userId);
+    const photoLimit = PHOTO_LIMITS[activePlan] ?? 20;
 
     if (photoLimit !== Infinity) {
       // FIX: contar solo fotos no eliminadas
@@ -129,7 +130,7 @@ export class PhotoService {
       });
       if (currentCount >= photoLimit) {
         throw new AppError(
-          `Has alcanzado el límite de ${photoLimit} fotos para el plan ${wedding.plan_type}. Actualiza tu plan para subir más.`,
+          `Has alcanzado el límite de ${photoLimit} fotos para el plan ${activePlan}. Actualiza tu plan para subir más.`,
           403,
         );
       }
@@ -160,7 +161,8 @@ export class PhotoService {
   async uploadBatch(weddingId: string, userId: string, files: Express.Multer.File[]) {
     const wedding = await this.assertWeddingAccess(weddingId, userId);
 
-    const photoLimit   = PHOTO_LIMITS[wedding.plan_type] ?? 20;
+    const activePlan = await this.getActivePlan(userId);
+    const photoLimit   = PHOTO_LIMITS[activePlan] ?? 20;
 
     if (photoLimit !== Infinity) {
       const currentCount = await prisma.photo.count({
@@ -316,6 +318,24 @@ export class PhotoService {
         deleted:  statusMap['deleted']?.count  ?? 0,
       },
     };
+  }
+
+  private async getActivePlan(userId: string): Promise<string> {
+    const activeSub = await prisma.subscription.findFirst({
+      where: { user_id: userId, status: { in: ['active', 'trialing'] } },
+    });
+    if (activeSub) return 'subscription';
+
+    const oneTimeWedding = await prisma.wedding.findFirst({
+      where: {
+        created_by: userId,
+        plan_type: 'one_time',
+        payments: { some: { status: 'completed' } },
+      },
+    });
+    if (oneTimeWedding) return 'one_time';
+
+    return 'free';
   }
 }
 

@@ -228,7 +228,7 @@ export class TableService {
 
     const updated = await prisma.table.update({
       where: { id: tableId },
-      data:  { pos_x: data.pos_x, pos_y: data.pos_y },
+      data:  { pos_x: data.pos_x, pos_y: data.pos_y, ...(data.angle !== undefined && { angle: data.angle }), },
       select: { id: true, pos_x: true, pos_y: true },
     });
 

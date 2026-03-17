@@ -26,6 +26,8 @@ router.post('/login',                validate(loginSchema),          authControl
 router.post('/refresh',              validate(refreshTokenSchema),   authController.refresh);
 router.get ('/verify-email/:token',                                  authController.verifyEmail);
 router.post('/resend-verification',                                  authController.resendVerification);
+router.post('/forgot-password',                                      authController.forgotPassword.bind(authController));
+router.post('/reset-pass',                                           authController.resetPassword.bind(authController));
 
 // ─── 2FA públicas (usan temp_token, no sesión completa) ───────────────────
 router.post('/2fa/verify',           validate(tfaLoginSchema),         tfaController.verifyLogin);

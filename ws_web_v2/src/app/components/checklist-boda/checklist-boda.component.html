@@ -7,9 +7,20 @@
         <h1>{{ 'CHECKLIST.TITLE' | translate }}</h1>
         <p>{{ 'CHECKLIST.SUBTITLE' | translate }}</p>
       </div>
-      <button class="btn-primary" (click)="abrirModalNuevaTarea()">
-        {{ 'CHECKLIST.NEW_TASK' | translate }}
-      </button>
+      <div class="d-flex gap-2 align-items-center">
+        <button class="btn-ai-suggest"
+                (click)="sugerirTareasIA()"
+                [disabled]="sugirendoIA || aiLimitReached"
+                [title]="aiLimitReached ? 'Límite de IA alcanzado. Actualiza tu plan.' : 'Sugerir tareas con IA'">
+          <span *ngIf="!sugirendoIA">✨ Sugerir con IA</span>
+          <span *ngIf="sugirendoIA" class="ai-btn-loading">
+            <span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span>
+          </span>
+        </button>
+        <button class="btn-primary" (click)="abrirModalNuevaTarea()">
+          {{ 'CHECKLIST.NEW_TASK' | translate }}
+        </button>
+      </div>
     </div>
   </header>
 
@@ -17,6 +28,34 @@
   <div *ngIf="cargando" class="loader-state">
     <div class="loader-ring"></div>
     <p>{{ 'CHECKLIST.LOADING' | translate }}</p>
+  </div>
+
+  <!-- SUGERENCIAS IA — estado vacío (fases.length === 0) -->
+  <div class="ai-panel-standalone"
+       *ngIf="!cargando && fases.length === 0 && mostrarSugerenciasIA && sugerenciasIA.length > 0">
+    <div class="ai-suggestions-panel">
+      <div class="ai-suggestions-header">
+        <span class="ai-suggestions-title">✨ Sugerencias de IA</span>
+        <span class="ai-suggestions-count">{{ sugerenciasIA.length }} tareas sugeridas</span>
+        <button class="ai-suggestions-close" (click)="cerrarSugerenciasIA()">✕</button>
+      </div>
+      <div class="ai-suggestions-list">
+        <div class="ai-suggestion-card" *ngFor="let s of sugerenciasIA">
+          <div class="ai-suggestion-info">
+            <p class="ai-suggestion-title">{{ s.title }}</p>
+            <p class="ai-suggestion-desc">{{ s.description }}</p>
+            <div class="ai-suggestion-meta">
+              <span class="ai-tag">{{ s.phase }}</span>
+              <span class="ai-tag">{{ s.category }}</span>
+            </div>
+          </div>
+          <div class="ai-suggestion-actions">
+            <button class="ai-accept-btn" (click)="aceptarSugerenciaIA(s)">✓ Añadir</button>
+            <button class="ai-reject-btn" (click)="rechazarSugerenciaIA(s)">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- EMPTY -->
@@ -32,7 +71,37 @@
   <!-- CONTENIDO PRINCIPAL -->
   <div *ngIf="!cargando && fases.length > 0" class="cl-body">
 
-    <!-- ESTADÍSTICAS — v2: vienen en response.totals -->
+    <!-- FIX 2: Sugerencias y límite dentro del cl-body -->
+    <div class="ai-suggestions-panel" *ngIf="mostrarSugerenciasIA && sugerenciasIA.length > 0">
+      <div class="ai-suggestions-header">
+        <span class="ai-suggestions-title">✨ Sugerencias de IA</span>
+        <span class="ai-suggestions-count">{{ sugerenciasIA.length }} tareas sugeridas</span>
+        <button class="ai-suggestions-close" (click)="cerrarSugerenciasIA()">✕</button>
+      </div>
+      <div class="ai-suggestions-list">
+        <div class="ai-suggestion-card" *ngFor="let s of sugerenciasIA">
+          <div class="ai-suggestion-info">
+            <p class="ai-suggestion-title">{{ s.title }}</p>
+            <p class="ai-suggestion-desc">{{ s.description }}</p>
+            <div class="ai-suggestion-meta">
+              <span class="ai-tag">{{ s.phase }}</span>
+              <span class="ai-tag">{{ s.category }}</span>
+            </div>
+          </div>
+          <div class="ai-suggestion-actions">
+            <button class="ai-accept-btn" (click)="aceptarSugerenciaIA(s)">✓ Añadir</button>
+            <button class="ai-reject-btn" (click)="rechazarSugerenciaIA(s)">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-limit-inline" *ngIf="aiLimitReached">
+      ⚠️ Has alcanzado el límite de sugerencias IA este mes.
+      <a routerLink="/pricing">Actualiza tu plan →</a>
+    </div>
+
+    <!-- ESTADÍSTICAS -->
     <section *ngIf="estadisticas" class="stats-row">
       <div class="stat-item">
         <span class="stat-number">{{ estadisticas.total }}</span>
@@ -53,7 +122,6 @@
         <span class="stat-number" style="color: var(--muted);">{{ estadisticas.pending }}</span>
         <span class="stat-label">{{ 'CHECKLIST.STATS.PENDING' | translate }}</span>
       </div>
-      <!-- v2: porcentaje calculado desde completed/total -->
       <div class="stat-progress">
         <div class="progress-label">
           <span>{{ 'CHECKLIST.STATS.GENERAL_PROGRESS' | translate }}</span>
@@ -113,7 +181,6 @@
 
           <div class="filter-group">
             <label>{{ 'CHECKLIST.FILTERS.CATEGORY' | translate }}</label>
-            <!-- v2: CATEGORIAS es string[], no objeto con .nombre -->
             <select [(ngModel)]="filtroCategoria">
               <option value="todas">{{ 'CHECKLIST.FILTERS.ALL' | translate }}</option>
               <option *ngFor="let cat of CATEGORIAS" [value]="cat">{{ cat }}</option>
@@ -157,27 +224,22 @@
 
           <div class="task-content">
             <div class="task-top">
-              <!-- v2: tarea.title -->
               <h4 class="task-title" [class.done-text]="tarea.status === 'completed'">
-                {{ tarea.title }}
+                {{ tarea.title | translate }}
               </h4>
-              <!-- v2: tarea.status -->
               <span class="estado-pill" [attr.data-estado]="tarea.status">
                 {{ getEstadoLabel(tarea.status) }}
               </span>
             </div>
 
-            <!-- v2: tarea.description -->
             <p *ngIf="tarea.description" class="task-desc" [class.done-text]="tarea.status === 'completed'">
-              {{ tarea.description }}
+              {{ tarea.description | translate }}
             </p>
 
             <div class="task-meta">
-              <!-- v2: tarea.category es string directo -->
               <span class="meta-tag">
                 {{ tarea.category || ('CHECKLIST.TASK.NO_CATEGORY' | translate) }}
               </span>
-              <!-- v2: tarea.due_date -->
               <span *ngIf="tarea.due_date" class="meta-tag">
                 {{ tarea.due_date | date:'dd MMM yyyy' }}
               </span>
@@ -192,7 +254,6 @@
                       (click)="cambiarEstadoTarea(tarea, 'in_progress')">
                 {{ 'CHECKLIST.TASK.MARK_PROGRESS' | translate }}
               </button>
-              <!-- ⚠️ v2: recordatorios no implementados -->
               <button class="action-btn"
                       style="opacity: 0.4; cursor: not-allowed;"
                       title="Recordatorios no disponibles en v2"
@@ -249,7 +310,6 @@
         <div class="form-row">
           <div class="form-col full">
             <label>{{ 'CHECKLIST.MODALS.TASK_TITLE_REQUIRED' | translate }}</label>
-            <!-- v2: tareaActual.title -->
             <input type="text" [(ngModel)]="tareaActual.title"
                    [placeholder]="'CHECKLIST.MODALS.TASK_TITLE_PLACEHOLDER' | translate">
           </div>
@@ -258,7 +318,6 @@
         <div class="form-row">
           <div class="form-col full">
             <label>{{ 'CHECKLIST.MODALS.TASK_DESC' | translate }}</label>
-            <!-- v2: tareaActual.description -->
             <textarea [(ngModel)]="tareaActual.description" rows="3"
                       [placeholder]="'CHECKLIST.MODALS.TASK_DESC_PLACEHOLDER' | translate"></textarea>
           </div>
@@ -267,7 +326,6 @@
         <div class="form-row">
           <div class="form-col">
             <label>{{ 'CHECKLIST.MODALS.TASK_PHASE_REQUIRED' | translate }}</label>
-            <!-- v2: tareaActual.phase | FASES_BODA | keyvalue -->
             <select [(ngModel)]="tareaActual.phase">
               <option *ngFor="let fase of FASES_BODA | keyvalue" [value]="fase.key">
                 {{ fase.value.titulo }}
@@ -276,7 +334,6 @@
           </div>
           <div class="form-col">
             <label>{{ 'CHECKLIST.MODALS.TASK_CATEGORY' | translate }}</label>
-            <!-- v2: tareaActual.category | CATEGORIAS es string[] -->
             <select [(ngModel)]="tareaActual.category">
               <option *ngFor="let cat of CATEGORIAS" [value]="cat">{{ cat }}</option>
             </select>
@@ -286,7 +343,6 @@
         <div class="form-row">
           <div class="form-col">
             <label>{{ 'CHECKLIST.MODALS.TASK_STATUS' | translate }}</label>
-            <!-- v2: tareaActual.status -->
             <select [(ngModel)]="tareaActual.status">
               <option value="pending">{{ 'CHECKLIST.TASK.PENDING' | translate }}</option>
               <option value="in_progress">{{ 'CHECKLIST.TASK.IN_PROGRESS' | translate }}</option>
@@ -295,11 +351,9 @@
           </div>
           <div class="form-col">
             <label>{{ 'CHECKLIST.MODALS.TASK_DUE_DATE' | translate }}</label>
-            <!-- v2: tareaActual.due_date -->
             <input type="date" [(ngModel)]="tareaActual.due_date">
           </div>
         </div>
-        <!-- v2: campo 'notas' eliminado — no existe en Tarea v2 -->
       </div>
 
       <div class="modal-foot">

@@ -1,33 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { filter } from 'rxjs/operators';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 @Component({
   selector: 'app-wedding-status-banner',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule, IconComponent],
   template: `
     <!-- Banner sticky superior -->
     <div class="status-banner status-banner--{{ status }}" *ngIf="status !== 'active'">
-      <span class="status-banner__icon">{{ status === 'archived' ? '📦' : '⚠️' }}</span>
+      <app-icon [name]="status === 'archived' ? 'archive' : 'advertencia'" [size]="16" class="status-banner__icon"></app-icon>
       <span class="status-banner__text">{{ bannerMessage }}</span>
-      <a routerLink="/pricing" class="status-banner__cta">Ver planes →</a>
+      <a routerLink="/pricing" class="status-banner__cta">
+        {{ 'WEDDING_STATUS.BANNER_SEE_PLANS' | translate }}
+      </a>
     </div>
 
     <!-- Overlay modal -->
     <div class="readonly-overlay" *ngIf="showOverlay">
       <div class="readonly-modal">
-        <div class="readonly-modal__icon">{{ status === 'archived' ? '📦' : '🔒' }}</div>
+        <div class="readonly-modal__icon">
+          <app-icon [name]="status === 'archived' ? 'archive' : 'lock'" [size]="55"></app-icon>
+        </div>
         <h2 class="readonly-modal__title">{{ modalTitle }}</h2>
         <p class="readonly-modal__desc">{{ modalDesc }}</p>
         <div class="readonly-modal__actions">
           <a routerLink="/pricing" class="readonly-modal__btn readonly-modal__btn--primary">
-            💎 Ver planes
+            {{ 'WEDDING_STATUS.MODAL_BTN_PLANS' | translate }}
           </a>
           <a routerLink="/dashboard" class="readonly-modal__btn readonly-modal__btn--secondary">
-            ← Volver al inicio
+            {{ 'WEDDING_STATUS.MODAL_BTN_BACK' | translate }}
           </a>
         </div>
       </div>
@@ -102,6 +108,18 @@ import { filter } from 'rxjs/operators';
       text-decoration: none;
       transition: opacity 0.2s;
     }
+    .status-banner__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .status-banner__icon app-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .readonly-modal__btn:hover { opacity: 0.85; }
     .readonly-modal__btn--primary  { background: #c9a96e; color: #fff; }
     .readonly-modal__btn--secondary { background: #f0ece8; color: #2b2724; }
@@ -117,7 +135,8 @@ export class WeddingStatusBannerComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router:      Router,       // ← añadido
+    private router:      Router,
+    private translate:   TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -129,7 +148,14 @@ export class WeddingStatusBannerComponent implements OnInit {
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
     ).subscribe((e: any) => {
+      this.status = this.authService.getWeddingStatus();
+      this.updateMessages();
       this.checkOverlay(e.urlAfterRedirects);
+    });
+
+    // Re-evaluar cuando cambie el idioma
+    this.translate.onLangChange.subscribe(() => {
+      this.updateMessages();
     });
   }
 
@@ -139,9 +165,6 @@ export class WeddingStatusBannerComponent implements OnInit {
       '/mesas', '/plano', '/diseno', '/colaboradores',
     ];
     const isBlockedRoute = blockedPaths.some(p => path.startsWith(p));
-
-    // readonly → solo banner, puede entrar y ver
-    // archived → overlay completo, no puede entrar
     this.showOverlay = isBlockedRoute && this.status === 'archived';
   }
 
@@ -150,19 +173,18 @@ export class WeddingStatusBannerComponent implements OnInit {
 
     if (this.status === 'readonly') {
       if (reason === 'payment_failed') {
-        this.bannerMessage = 'Tu suscripción tiene un problema de pago. La boda está en modo lectura.';
-        this.modalTitle    = 'Problema con tu suscripción';
-        this.modalDesc     = 'Tu suscripción ha caducado o hay un pago pendiente. Renueva tu plan para volver a editar.';
+        this.bannerMessage = this.translate.instant('WEDDING_STATUS.BANNER_READONLY_PAYMENT');
+        this.modalTitle    = this.translate.instant('WEDDING_STATUS.MODAL_PAYMENT_TITLE');
+        this.modalDesc     = this.translate.instant('WEDDING_STATUS.MODAL_PAYMENT_DESC');
       } else {
-        // wedding_completed
-        this.bannerMessage = '¡Tu boda ya se celebró! Estás en modo recuerdo, solo lectura.';
-        this.modalTitle    = 'Modo recuerdo 💍';
-        this.modalDesc     = 'La boda ya ocurrió. Puedes consultar invitados, fotos y cronograma, pero no realizar cambios.';
+        this.bannerMessage = this.translate.instant('WEDDING_STATUS.BANNER_READONLY_COMPLETED');
+        this.modalTitle    = this.translate.instant('WEDDING_STATUS.MODAL_COMPLETED_TITLE');
+        this.modalDesc     = this.translate.instant('WEDDING_STATUS.MODAL_COMPLETED_DESC');
       }
     } else if (this.status === 'archived') {
-      this.bannerMessage = 'Esta boda está archivada.';
-      this.modalTitle    = 'Boda archivada';
-      this.modalDesc     = 'Esta boda está archivada y no admite cambios. Puedes desarchivarla desde "Mis Bodas" si tu plan lo permite.';
+      this.bannerMessage = this.translate.instant('WEDDING_STATUS.BANNER_ARCHIVED');
+      this.modalTitle    = this.translate.instant('WEDDING_STATUS.MODAL_ARCHIVED_TITLE');
+      this.modalDesc     = this.translate.instant('WEDDING_STATUS.MODAL_ARCHIVED_DESC');
     }
   }
 }

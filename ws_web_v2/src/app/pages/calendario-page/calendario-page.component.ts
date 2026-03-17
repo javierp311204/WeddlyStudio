@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { CalendarioComponent } from '../../components/calendario/calendario.component';
 import { NotificationService } from '../../services/notification/notification.service';
@@ -35,10 +36,11 @@ export class CalendarioPageComponent implements OnInit {
   weddingId: string = '';
   weddingDate: string | null = null;
   weddingName: string = 'Mi Boda';
-  planType: string = 'free';
+  planType: string = 'free'; 
 
   constructor(
     private router: Router,
+    private http: HttpClient,
     private notifService: NotificationService,
   ) {}
 
@@ -46,11 +48,24 @@ export class CalendarioPageComponent implements OnInit {
     this.weddingId   = localStorage.getItem('weddingId')   ?? '';
     this.weddingDate = localStorage.getItem('weddingDate') ?? null;
     this.weddingName = localStorage.getItem('weddingName') ?? 'Mi Boda';
-    this.planType    = localStorage.getItem('planType')    ?? 'free';
 
     if (!this.weddingId) {
       this.notifService.showError('Error', 'No hay boda seleccionada');
       this.router.navigate(['/home']);
+      return;
     }
+
+    // Leer el plan real desde el backend, igual que PlanGuard
+    this.http.get<any>('http://localhost:3000/api/weddings/can-create').subscribe({
+      next: (response) => {
+        this.planType = response?.data?.plan ?? 'free';
+        // Opcional: cachear para evitar el parpadeo en recargas
+        localStorage.setItem('planType', this.planType);
+      },
+      error: () => {
+        // Si falla la red, intentar con el valor cacheado
+        this.planType = localStorage.getItem('planType') ?? 'free';
+      },
+    });
   }
 }

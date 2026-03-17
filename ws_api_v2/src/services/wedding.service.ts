@@ -41,15 +41,36 @@ export class WeddingService {
 
   // ─── Helper: plan activo del usuario ─────────────────────────
   private async getActivePlan(userId: string): Promise<string> {
+    // 1. Suscripción activa del usuario → plan subscription
+    const activeSub = await prisma.subscription.findFirst({
+      where: {
+        user_id: userId,
+        status: { in: ['active', 'trialing'] },
+      },
+    });
+    if (activeSub) return 'subscription';
+
+    // 2. Pago completado asociado a una boda one_time
+    const oneTimeWedding = await prisma.wedding.findFirst({
+      where: {
+        created_by: userId,
+        plan_type: 'one_time',
+        payments: {
+          some: { status: 'completed' },
+        },
+      },
+    });
+    if (oneTimeWedding) return 'one_time';
+
+    // 3. Fallback — plan_type de las bodas (legado / test)
     const weddings = await prisma.wedding.findMany({
-      where: { created_by: userId },
+      where:  { created_by: userId },
       select: { plan_type: true },
     });
-
     const priority = ['subscription', 'one_time', 'free'];
     return priority.find(p => weddings.some(w => w.plan_type === p)) ?? 'free';
   }
-
+  
   // ─── GET /api/weddings ────────────────────────────────────────
   async getAll(userId: string) {
     const roles = await prisma.userWeddingRole.findMany({
@@ -122,6 +143,23 @@ export class WeddingService {
 
   // ─── POST /api/weddings ───────────────────────────────────────
   async create(userId: string, data: CreateWeddingInput) {
+    const user = await prisma.user.findUnique({
+      where:  { id: userId },
+      select: { email_verified: true, google_id: true },
+    });
+
+    if (!user) throw new AppError('Usuario no encontrado', 404);
+
+    // Los usuarios de Google tienen el email verificado por defecto
+    // si google_id está presente — pero igualmente exigimos email_verified
+    if (!user.email_verified) {
+      throw new AppError(
+        'Debes verificar tu email antes de crear una boda. Revisa tu bandeja de entrada.',
+        403,
+        'EMAIL_NOT_VERIFIED',
+      );
+    }
+
     const { allowed, plan, limit } = await this.canCreate(userId);
 
     if (!allowed) {

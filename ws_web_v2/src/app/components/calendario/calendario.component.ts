@@ -7,6 +7,7 @@ import { TareasService } from '../../services/tareas/tareas.service';
 import { ExportService } from '../../services/gestion/export.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { Tarea, TareaFase, FASES_BODA } from '../../models/Tarea';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 export interface CalendarDay {
   date: Date;
@@ -24,7 +25,7 @@ export interface CalendarWeek {
 @Component({
   selector: 'app-calendario',
   standalone: true,
-  imports: [CommonModule, TranslateModule, FormsModule],
+  imports: [CommonModule, TranslateModule, FormsModule, IconComponent],
   templateUrl: './calendario.component.html',
   styleUrl: './calendario.component.css',
 })
@@ -54,27 +55,37 @@ export class CalendarioComponent implements OnInit, OnChanges {
   exportingICS: boolean = false;
   exportingPDF: boolean = false;
 
-  readonly MONTH_NAMES = [
-    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
-  ];
+  // Locale activo para el date pipe
+  currentLocale: string = 'es-ES';
 
-  readonly DAY_NAMES = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+  private readonly LOCALE_MAP: Record<string, string> = {
+    'es': 'es-ES',
+    'fr': 'fr-FR',
+    'en': 'en-US',
+    'it': 'it-IT',
+    'de': 'de-DE',
+    'pt': 'pt-PT',
+    'ca': 'ca',
+  };
+
+  // Nombres de meses y días obtenidos del translate
+  MONTH_NAMES: string[] = [];
+  DAY_NAMES: string[] = [];
 
   readonly STATUS_COLORS: Record<string, string> = {
-    pending: '#94a3b8',
+    pending:     '#94a3b8',
     in_progress: '#f59e0b',
-    completed: '#10b981',
-    cancelled: '#ef4444',
+    completed:   '#10b981',
+    cancelled:   '#ef4444',
   };
 
   readonly PHASE_COLORS: Record<string, string> = {
     '12_months': '#8B5CF6',
-    '9_months': '#EC4899',
-    '6_months': '#F59E0B',
-    '3_months': '#10B981',
-    '1_month': '#3B82F6',
-    '1_week': '#EF4444',
+    '9_months':  '#EC4899',
+    '6_months':  '#F59E0B',
+    '3_months':  '#10B981',
+    '1_month':   '#3B82F6',
+    '1_week':    '#EF4444',
   };
 
   get isPlanFree(): boolean {
@@ -82,7 +93,7 @@ export class CalendarioComponent implements OnInit, OnChanges {
   }
 
   get currentMonthLabel(): string {
-    return `${this.MONTH_NAMES[this.viewMonth]} ${this.viewYear}`;
+    return `${this.MONTH_NAMES[this.viewMonth] ?? ''} ${this.viewYear}`;
   }
 
   constructor(
@@ -93,6 +104,17 @@ export class CalendarioComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
+    // Inicializar locale con el idioma actual
+    this.currentLocale = this.LOCALE_MAP[this.translate.currentLang ?? 'es'] ?? 'es-ES';
+
+    this.loadI18nArrays();
+
+    // Re-cargar arrays y locale cuando cambie el idioma
+    this.translate.onLangChange.subscribe((event) => {
+      this.currentLocale = this.LOCALE_MAP[event.lang] ?? 'es-ES';
+      this.loadI18nArrays();
+    });
+
     if (this.weddingId) {
       this.loadTasks();
     }
@@ -104,6 +126,32 @@ export class CalendarioComponent implements OnInit, OnChanges {
     }
   }
 
+  private loadI18nArrays(): void {
+    this.MONTH_NAMES = [
+      this.translate.instant('CALENDARIO.MONTH_JAN'),
+      this.translate.instant('CALENDARIO.MONTH_FEB'),
+      this.translate.instant('CALENDARIO.MONTH_MAR'),
+      this.translate.instant('CALENDARIO.MONTH_APR'),
+      this.translate.instant('CALENDARIO.MONTH_MAY'),
+      this.translate.instant('CALENDARIO.MONTH_JUN'),
+      this.translate.instant('CALENDARIO.MONTH_JUL'),
+      this.translate.instant('CALENDARIO.MONTH_AUG'),
+      this.translate.instant('CALENDARIO.MONTH_SEP'),
+      this.translate.instant('CALENDARIO.MONTH_OCT'),
+      this.translate.instant('CALENDARIO.MONTH_NOV'),
+      this.translate.instant('CALENDARIO.MONTH_DEC'),
+    ];
+    this.DAY_NAMES = [
+      this.translate.instant('CALENDARIO.DAY_MON'),
+      this.translate.instant('CALENDARIO.DAY_TUE'),
+      this.translate.instant('CALENDARIO.DAY_WED'),
+      this.translate.instant('CALENDARIO.DAY_THU'),
+      this.translate.instant('CALENDARIO.DAY_FRI'),
+      this.translate.instant('CALENDARIO.DAY_SAT'),
+      this.translate.instant('CALENDARIO.DAY_SUN'),
+    ];
+  }
+
   async loadTasks(): Promise<void> {
     this.loading = true;
     try {
@@ -113,27 +161,27 @@ export class CalendarioComponent implements OnInit, OnChanges {
       this.buildCalendar();
     } catch (error) {
       console.error('Error cargando tareas para calendario:', error);
-      this.notifService.showError('Error', 'No se pudieron cargar las tareas del calendario');
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'),
+        this.translate.instant('CALENDARIO.ERROR_LOAD_TASKS'),
+      );
     } finally {
       this.loading = false;
     }
   }
 
   buildCalendar(): void {
-    const year = this.viewYear;
+    const year  = this.viewYear;
     const month = this.viewMonth;
     const today = new Date();
     const weddingDate = this.weddingDate ? new Date(this.weddingDate) : null;
 
-    // First day of month (adjust for Monday start)
     const firstDay = new Date(year, month, 1);
-    let startDow = firstDay.getDay(); // 0=Sun
-    startDow = startDow === 0 ? 6 : startDow - 1; // Convert to Mon=0
+    let startDow = firstDay.getDay();
+    startDow = startDow === 0 ? 6 : startDow - 1;
 
-    // Last day of month
     const lastDay = new Date(year, month + 1, 0);
 
-    // Tasks with due_date in this period indexed by day key
     const tasksByDay = new Map<string, Tarea[]>();
     for (const task of this.allTasks) {
       if (!task.due_date) continue;
@@ -143,55 +191,42 @@ export class CalendarioComponent implements OnInit, OnChanges {
       tasksByDay.get(key)!.push(task);
     }
 
-    const dayKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    const dayKey    = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
     const isSameDay = (a: Date, b: Date) =>
       a.getFullYear() === b.getFullYear() &&
-      a.getMonth() === b.getMonth() &&
-      a.getDate() === b.getDate();
+      a.getMonth()    === b.getMonth()    &&
+      a.getDate()     === b.getDate();
 
     this.weeks = [];
     let week: CalendarDay[] = [];
 
-    // Fill leading days from previous month
     for (let i = startDow - 1; i >= 0; i--) {
       const d = new Date(year, month, -i);
       week.push({
-        date: d,
-        dayNumber: d.getDate(),
-        isCurrentMonth: false,
+        date: d, dayNumber: d.getDate(), isCurrentMonth: false,
         isToday: isSameDay(d, today),
         isWeddingDay: weddingDate ? isSameDay(d, weddingDate) : false,
         tasks: tasksByDay.get(dayKey(d)) ?? [],
       });
     }
 
-    // Fill days of month
     for (let day = 1; day <= lastDay.getDate(); day++) {
       const d = new Date(year, month, day);
       week.push({
-        date: d,
-        dayNumber: day,
-        isCurrentMonth: true,
+        date: d, dayNumber: day, isCurrentMonth: true,
         isToday: isSameDay(d, today),
         isWeddingDay: weddingDate ? isSameDay(d, weddingDate) : false,
         tasks: tasksByDay.get(dayKey(d)) ?? [],
       });
-
-      if (week.length === 7) {
-        this.weeks.push({ days: week });
-        week = [];
-      }
+      if (week.length === 7) { this.weeks.push({ days: week }); week = []; }
     }
 
-    // Fill trailing days from next month
     if (week.length > 0) {
       let nextDay = 1;
       while (week.length < 7) {
         const d = new Date(year, month + 1, nextDay++);
         week.push({
-          date: d,
-          dayNumber: d.getDate(),
-          isCurrentMonth: false,
+          date: d, dayNumber: d.getDate(), isCurrentMonth: false,
           isToday: isSameDay(d, today),
           isWeddingDay: weddingDate ? isSameDay(d, weddingDate) : false,
           tasks: tasksByDay.get(dayKey(d)) ?? [],
@@ -212,29 +247,21 @@ export class CalendarioComponent implements OnInit, OnChanges {
   }
 
   prevMonth(): void {
-    if (this.viewMonth === 0) {
-      this.viewMonth = 11;
-      this.viewYear--;
-    } else {
-      this.viewMonth--;
-    }
+    if (this.viewMonth === 0) { this.viewMonth = 11; this.viewYear--; }
+    else { this.viewMonth--; }
     this.buildCalendar();
   }
 
   nextMonth(): void {
-    if (this.viewMonth === 11) {
-      this.viewMonth = 0;
-      this.viewYear++;
-    } else {
-      this.viewMonth++;
-    }
+    if (this.viewMonth === 11) { this.viewMonth = 0; this.viewYear++; }
+    else { this.viewMonth++; }
     this.buildCalendar();
   }
 
   goToToday(): void {
     const today = new Date();
     this.viewMonth = today.getMonth();
-    this.viewYear = today.getFullYear();
+    this.viewYear  = today.getFullYear();
     this.buildCalendar();
   }
 
@@ -242,7 +269,7 @@ export class CalendarioComponent implements OnInit, OnChanges {
     if (!this.weddingDate) return;
     const d = new Date(this.weddingDate);
     this.viewMonth = d.getMonth();
-    this.viewYear = d.getFullYear();
+    this.viewYear  = d.getFullYear();
     this.buildCalendar();
   }
 
@@ -254,9 +281,7 @@ export class CalendarioComponent implements OnInit, OnChanges {
     }
   }
 
-  closeDetail(): void {
-    this.selectedDay = null;
-  }
+  closeDetail(): void { this.selectedDay = null; }
 
   get assignableTasks(): Tarea[] {
     const query = this.taskSearchQuery.toLowerCase().trim();
@@ -274,10 +299,10 @@ export class CalendarioComponent implements OnInit, OnChanges {
 
   getStatusLabel(status: string): string {
     const map: Record<string, string> = {
-      pending: 'Pendiente',
-      in_progress: 'En progreso',
-      completed: 'Completada',
-      cancelled: 'Cancelada',
+      pending:     this.translate.instant('CHECKLIST.TASK.PENDING'),
+      in_progress: this.translate.instant('CHECKLIST.TASK.IN_PROGRESS'),
+      completed:   this.translate.instant('CHECKLIST.TASK.COMPLETED'),
+      cancelled:   this.translate.instant('COMMON.CANCEL'),
     };
     return map[status] ?? status;
   }
@@ -287,7 +312,6 @@ export class CalendarioComponent implements OnInit, OnChanges {
     return FASES_BODA[phase as TareaFase]?.titulo ?? phase;
   }
 
-  // Tasks with due_date this month (for mini stats)
   get tasksThisMonth(): Tarea[] {
     return this.allTasks.filter(t => {
       if (!t.due_date) return false;
@@ -302,34 +326,32 @@ export class CalendarioComponent implements OnInit, OnChanges {
 
   async assignTaskToDay(task: Tarea): Promise<void> {
     if (!this.selectedDay || this.assigningTask || !task.id) return;
-
     this.assigningTask = true;
     try {
       const due_date = new Date(this.selectedDay.date);
-      due_date.setHours(12, 0, 0, 0); // mediodía para evitar problemas de zona horaria
-
+      due_date.setHours(12, 0, 0, 0);
       await this.tareasService
         .actualizarTarea(task.id, { due_date: due_date.toISOString() })
         .toPromise();
-
       this.notifService.showSuccess(
-        'Tarea asignada',
-        `"${task.title}" asignada al ${this.selectedDay.date.toLocaleDateString('es-ES')}`
+        this.translate.instant('CALENDARIO.ASSIGN_SUCCESS_TITLE'),
+        this.translate.instant('CALENDARIO.ASSIGN_SUCCESS_DESC', {
+          title: task.title,
+          date:  this.selectedDay.date.toLocaleDateString(),
+        }),
       );
-
       this.closeAssignModal();
-      await this.loadTasks(); // recargar para reflejar el cambio
+      await this.loadTasks();
     } catch (error) {
       console.error('Error asignando tarea:', error);
-      this.notifService.showError('Error', 'No se pudo asignar la tarea');
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'),
+        this.translate.instant('CALENDARIO.ERROR_ASSIGN_TASK'),
+      );
     } finally {
       this.assigningTask = false;
     }
   }
-
-  // ─────────────────────────────────────────────
-  // EXPORTACIONES
-  // ─────────────────────────────────────────────
 
   async exportToGoogleCalendar(): Promise<void> {
     if (this.exportingICS) return;
@@ -337,11 +359,14 @@ export class CalendarioComponent implements OnInit, OnChanges {
     try {
       await this.exportService.triggerICSDownload(this.weddingId, this.weddingName);
       this.notifService.showSuccess(
-        '¡Calendario exportado!',
-        'Abre el archivo .ics para importarlo en Google Calendar o Apple Calendar.',
+        this.translate.instant('CALENDARIO.EXPORT_SUCCESS_TITLE'),
+        this.translate.instant('CALENDARIO.EXPORT_SUCCESS_DESC'),
       );
-    } catch (error: any) {
-      this.notifService.showError('Error', 'No se pudo exportar el calendario.');
+    } catch {
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'),
+        this.translate.instant('CALENDARIO.ERROR_EXPORT_ICS'),
+      );
     } finally {
       this.exportingICS = false;
     }
@@ -350,8 +375,8 @@ export class CalendarioComponent implements OnInit, OnChanges {
   async exportToPDF(): Promise<void> {
     if (this.isPlanFree) {
       this.notifService.showError(
-        'Plan requerido',
-        'La exportación PDF está disponible en los planes de pago. ¡Actualiza tu plan!',
+        this.translate.instant('CALENDARIO.PDF_PLAN_REQUIRED_TITLE'),
+        this.translate.instant('CALENDARIO.PDF_PLAN_REQUIRED_DESC'),
       );
       return;
     }
@@ -359,10 +384,15 @@ export class CalendarioComponent implements OnInit, OnChanges {
     this.exportingPDF = true;
     try {
       await this.exportService.generateAndDownloadPDF(this.weddingId);
-      this.notifService.showSuccess('¡PDF generado!', 'Se abrirá el diálogo de impresión.');
+      this.notifService.showSuccess(
+        this.translate.instant('CALENDARIO.PDF_SUCCESS_TITLE'),
+        this.translate.instant('CALENDARIO.PDF_SUCCESS_DESC'),
+      );
     } catch (error: any) {
-      const msg = error?.error?.message ?? 'No se pudo generar el PDF.';
-      this.notifService.showError('Error', msg);
+      this.notifService.showError(
+        this.translate.instant('COMMON.ERROR'),
+        error?.error?.message ?? this.translate.instant('CALENDARIO.ERROR_EXPORT_PDF'),
+      );
     } finally {
       this.exportingPDF = false;
     }

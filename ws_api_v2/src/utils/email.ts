@@ -5,6 +5,7 @@ import {
   CollaboratorInviteEmailData,
   TfaResetEmailData,
   SendResult,
+  PasswordResetEmailData,
 } from './email.types';
 import {
   getLang,
@@ -13,6 +14,7 @@ import {
   invitationT,
   collaboratorT,
   tfaResetT,
+  passwordResetT,
 } from './email.i18n';
 
 const transporter = nodemailer.createTransport({
@@ -206,6 +208,50 @@ function buildTfaResetHtml(data: TfaResetEmailData): string {
 </html>`.trim();
 }
 
+function buildPasswordResetHtml(data: PasswordResetEmailData): string {
+  const lang = getLang(data.lang);
+  const t    = passwordResetT[lang];
+  const url  = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/reset-pass?token=${data.resetToken}`;
+ 
+  return `
+<!DOCTYPE html>
+<html lang="${lang}">
+<head><meta charset="UTF-8"><title>${t.subject}</title></head>
+<body style="margin:0;padding:20px;background:#f5f5f5;font-family:'Helvetica Neue',Arial,sans-serif;">
+  <div style="max-width:560px;margin:0 auto;">
+    <div style="text-align:center;padding:40px 0 24px;">
+      <h1 style="margin:0;font-size:28px;color:${brandColor};letter-spacing:1px;">Weddly</h1>
+      <p style="margin:4px 0 0;font-size:13px;color:#aaa;letter-spacing:2px;text-transform:uppercase;">Studio</p>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:48px 40px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <h2 style="margin:0 0 16px;font-size:22px;color:#222;">${t.title}</h2>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">${t.body(data.firstName)}</p>
+      <div style="text-align:center;margin:36px 0;">
+        <a href="${url}"
+           style="background:${brandColor};color:#fff;padding:15px 36px;text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;display:inline-block;">
+          ${t.cta}
+        </a>
+      </div>
+      <p style="margin:0 0 8px;font-size:13px;color:#888;text-align:center;">${t.expiry}</p>
+      <div style="background:#fff8f0;border:1px solid #f5dfc6;border-radius:6px;padding:16px;margin-top:28px;">
+        <p style="margin:0;font-size:13px;color:#a05a1a;">${t.warning}</p>
+      </div>
+      <div style="background:#f9f6f2;border-radius:6px;padding:16px;margin-top:16px;">
+        <p style="margin:0 0 6px;font-size:12px;color:#aaa;text-transform:uppercase;letter-spacing:1px;">${t.fallback}</p>
+        <p style="margin:0;font-size:12px;color:#888;word-break:break-all;">
+          <a href="${url}" style="color:${brandColor};">${url}</a>
+        </p>
+      </div>
+      <p style="margin:28px 0 0;font-size:13px;color:#bbb;text-align:center;">${t.ignore}</p>
+    </div>
+    <p style="text-align:center;font-size:12px;color:#ccc;margin:24px 0 40px;">
+      © ${new Date().getFullYear()} Weddly Studio
+    </p>
+  </div>
+</body>
+</html>`.trim();
+}
+
 // ─── Funciones de envío ──────────────────────────────────────────
 
 export async function sendVerificationEmail(data: VerificationEmailData): Promise<SendResult> {
@@ -278,5 +324,21 @@ export async function verifySmtpConnection(): Promise<void> {
     console.log('✅ SMTP conectado correctamente');
   } catch (err) {
     console.warn('⚠️  SMTP no disponible — los emails no se enviarán:', err);
+  }
+}
+
+export async function sendPasswordResetEmail(data: PasswordResetEmailData): Promise<SendResult> {
+  const lang = getLang(data.lang);
+  try {
+    await transporter.sendMail({
+      from:    `"Weddly Studio" <${process.env.SMTP_USER}>`,
+      to:      data.to,
+      subject: passwordResetT[lang].subject,
+      html:    buildPasswordResetHtml(data),
+    });
+    return { success: true };
+  } catch (err: any) {
+    console.error(`[Email] Error enviando reset password a ${data.to}:`, err.message);
+    return { success: false, error: err.message };
   }
 }

@@ -9,10 +9,11 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { WeddingStatusBannerComponent } from './components/wedding-status-banner/wedding-status-banner.component';
 import { IconComponent } from './shared/icons/icon.component';
+import { AiChatComponent } from './components/ai-chat/ai-chat.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent, TranslateModule, SidebarComponent, WeddingStatusBannerComponent, IconComponent],
+  imports: [RouterOutlet, RouterModule, CommonModule, PlanLimitsWidgetComponent, TranslateModule, SidebarComponent, WeddingStatusBannerComponent, IconComponent, AiChatComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

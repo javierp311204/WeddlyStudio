@@ -1,0 +1,192 @@
+<div class="reviews-page">
+
+  <!-- HERO -->
+  <div class="rp-hero">
+    <div class="rp-hero-ornament">✦</div>
+    <span class="rp-hero-label">Weddly Studio</span>
+    <h1 class="rp-hero-title">{{ 'REVIEWS.PAGE_TITLE' | translate }}</h1>
+    <p class="rp-hero-sub">{{ 'REVIEWS.PAGE_SUBTITLE' | translate }}</p>
+
+    <div class="rp-hero-stats" *ngIf="total > 0">
+      <div class="rp-stat">
+        <span class="rp-stat-num">{{ average }}</span>
+        <span class="rp-stat-stars">{{ getStars(average) }}</span>
+        <span class="rp-stat-label">
+          {{ total }} {{ total !== 1
+            ? ('REVIEWS.REVIEW_PLURAL' | translate)
+            : ('REVIEWS.REVIEW_SINGULAR' | translate) }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="rp-body">
+
+    <!-- CONTROLES -->
+    <div class="rp-controls">
+      <div class="rp-order">
+        <button class="rp-order-btn"
+                [class.active]="order === 'created_at'"
+                (click)="cambiarOrden('created_at')">
+          {{ 'REVIEWS.ORDER_RECENT' | translate }}
+        </button>
+        <span class="rp-order-sep">·</span>
+        <button class="rp-order-btn"
+                [class.active]="order === 'rating'"
+                (click)="cambiarOrden('rating')">
+          {{ 'REVIEWS.ORDER_BEST' | translate }}
+        </button>
+      </div>
+
+      <div class="rp-cta-area">
+        <ng-container *ngIf="isLoggedIn && !mostrarFormulario">
+          <button *ngIf="!myReview || myReview.deleted_at"
+                  class="rp-btn-write"
+                  (click)="mostrarFormulario = true">
+            <span class="rp-btn-icon">✦</span>
+            {{ 'REVIEWS.WRITE_REVIEW' | translate }}
+          </button>
+          <div *ngIf="myReview && !myReview.deleted_at" class="rp-my-badge">
+            <span class="rp-my-check">✓</span>
+            <span>{{ 'REVIEWS.ALREADY_REVIEWED' | translate }}</span>
+            <button class="rp-action-link"
+                    (click)="mostrarFormulario = true">
+              {{ 'REVIEWS.EDIT' | translate }}
+            </button>
+            <span class="rp-sep">·</span>
+            <button class="rp-action-link rp-action-danger"
+                    (click)="eliminarResena()">
+              {{ 'REVIEWS.DELETE' | translate }}
+            </button>
+          </div>
+        </ng-container>
+
+        <div *ngIf="!isLoggedIn" class="rp-login-cta">
+          <a routerLink="/login">{{ 'REVIEWS.LOGIN_LINK' | translate }}</a>
+          {{ 'REVIEWS.LOGIN_CTA' | translate }}
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMULARIO -->
+    <div class="rp-form-wrap" *ngIf="mostrarFormulario && isLoggedIn">
+      <div class="rp-form">
+        <div class="rp-form-head">
+          <div>
+            <span class="rp-form-ornament">✦</span>
+            <h3 class="rp-form-title">
+              {{ (myReview && !myReview.deleted_at
+                ? 'REVIEWS.FORM_TITLE_EDIT'
+                : 'REVIEWS.FORM_TITLE_NEW') | translate }}
+            </h3>
+          </div>
+          <button class="rp-form-close" (click)="mostrarFormulario = false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- ESTRELLAS -->
+        <div class="rp-stars-row">
+          <span class="rp-stars-label">
+            {{ 'REVIEWS.FORM_RATING_LABEL' | translate }}
+          </span>
+          <div class="rp-stars">
+            <span *ngFor="let s of [1,2,3,4,5]"
+                  class="rp-star"
+                  [class.lit]="s <= activeRating"
+                  (click)="setRating(s)"
+                  (mouseenter)="setHover(s)"
+                  (mouseleave)="clearHover()">★</span>
+          </div>
+          <span class="rp-stars-val" *ngIf="activeRating > 0">
+            {{ activeRating }} / 5
+          </span>
+        </div>
+
+        <!-- COMENTARIO -->
+        <div class="rp-field">
+          <label class="rp-label">
+            {{ 'REVIEWS.FORM_COMMENT_LABEL' | translate }}
+          </label>
+          <textarea class="rp-textarea"
+                    [(ngModel)]="newComment"
+                    rows="5"
+                    maxlength="1000"
+                    [placeholder]="'REVIEWS.FORM_COMMENT_PLACEHOLDER' | translate">
+          </textarea>
+          <div class="rp-field-foot">
+            <span class="rp-error" *ngIf="commentError">{{ commentError }}</span>
+            <span class="rp-chars" [class.warn]="charsRestantes < 100">
+              {{ charsRestantes }} {{ 'REVIEWS.FORM_CHARS_REMAINING' | translate }}
+            </span>
+          </div>
+        </div>
+
+        <button class="rp-btn-submit" (click)="enviarResena()" [disabled]="enviando">
+          <span *ngIf="!enviando">
+            {{ (myReview && !myReview.deleted_at
+              ? 'REVIEWS.FORM_SUBMIT_EDIT'
+              : 'REVIEWS.FORM_SUBMIT_NEW') | translate }}
+          </span>
+          <span *ngIf="enviando" class="rp-dots">
+            <span></span><span></span><span></span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- LOADER -->
+    <div *ngIf="cargando" class="rp-loader">
+      <div class="rp-ring"></div>
+    </div>
+
+    <!-- EMPTY -->
+    <div *ngIf="!cargando && reviews.length === 0" class="rp-empty">
+      <div class="rp-empty-ornament">✦</div>
+      <p>{{ 'REVIEWS.EMPTY_STATE' | translate }}</p>
+      <button *ngIf="isLoggedIn && !mostrarFormulario"
+              class="rp-btn-write rp-btn-write--sm"
+              (click)="mostrarFormulario = true">
+        {{ 'REVIEWS.WRITE_FIRST' | translate }}
+      </button>
+    </div>
+
+    <!-- GRID -->
+    <div *ngIf="!cargando && reviews.length > 0" class="rp-grid">
+      <article class="rp-card"
+               *ngFor="let r of reviews; let i = index"
+               [style.animation-delay]="i * 70 + 'ms'">
+
+        <div class="rp-card-top">
+          <div class="rp-card-author">
+            <div class="rp-avatar" *ngIf="!r.user?.avatar_url">
+              {{ getInitial(r) }}
+            </div>
+            <img class="rp-avatar-img"
+                 *ngIf="r.user?.avatar_url"
+                 [src]="r.user!.avatar_url!"
+                 [alt]="getNombreUsuario(r)">
+            <div>
+              <span class="rp-author-name">{{ getNombreUsuario(r) }}</span>
+              <span class="rp-author-date">
+                {{ r.created_at | date:'MMMM yyyy' }}
+              </span>
+            </div>
+          </div>
+          <div class="rp-card-stars">{{ getStars(r.rating) }}</div>
+        </div>
+
+        <div class="rp-card-divider"></div>
+
+        <p class="rp-card-comment">"{{ r.comment }}"</p>
+
+      </article>
+    </div>
+
+  </div>
+</div>

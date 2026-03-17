@@ -16,6 +16,7 @@
     "YES": "Sí",
     "NO": "No",
     "CONTINUE": "Continuar",
+    "VERIFYCATED": "Verificado",
     "DOWNLOAD": "Descargar",
     "UPLOAD": "Subir",
     "SEND": "Enviar",
@@ -661,9 +662,9 @@
     "PHOTO_ALT": "Foto de la boda",
     "MODERATION_PANEL_TITLE": "Panel de moderación",
     "FILTER_ALL": "Todas",
-    "FILTER_PENDING": "⏳ Pendientes",
-    "FILTER_APPROVED": "✅ Aprobadas",
-    "FILTER_REJECTED": "❌ Rechazadas",
+    "FILTER_PENDING": "Pendientes",
+    "FILTER_APPROVED": "Aprobadas",
+    "FILTER_REJECTED": "Rechazadas",
     "STATUS_PENDING": "Pendiente",
     "STATUS_APPROVED": "Aprobada",
     "STATUS_REJECTED": "Rechazada",
@@ -698,8 +699,8 @@
     "CANCEL_ANYTIME": "Cancela cuando quieras",
     "NO_MONTHLY": "Pago único, sin mensualidades",
     "FOREVER_FREE": "Para siempre gratis",
-    "SECURE_PAYMENT": "🔒 Pago seguro con Stripe",
-    "INVOICE_EMAIL": "📧 Factura por email",
+    "SECURE_PAYMENT": "Pago seguro con Stripe",
+    "INVOICE_EMAIL": "Factura por email",
     "SECURE_DESC": "Procesamos pagos de forma segura con Stripe. No almacenamos información de tarjetas de crédito.",
     "CURRENT_PLAN_BADGE": "✓ Plan actual",
     "SELECT_PLAN_WITH_NAME": "Elegir",
@@ -810,7 +811,18 @@
     "ERROR_TITLE": "Error",
     "ERROR_INVALID": "El enlace de restablecimiento no es válido",
     "ERROR_MISMATCH": "Las contraseñas no coinciden",
-    "ERROR_SHORT": "La contraseña debe tener al menos 8 caracteres"
+    "ERROR_SHORT": "La contraseña debe tener al menos 8 caracteres",
+    "INVALID_TOKEN_CAUSES_TITLE": "Posibles causas:",
+    "INVALID_TOKEN_CAUSE_EXPIRED": "El enlace ha expirado (1 hora de validez)",
+    "INVALID_TOKEN_CAUSE_USED": "El enlace ya fue usado",
+    "INVALID_TOKEN_CAUSE_INVALID": "El enlace es inválido o incorrecto",
+    "REQUEST_NEW_LINK_BTN": "Solicitar Nuevo Enlace",
+    "BACK_TO_LOGIN_SHORT": "Volver al Login",
+    "TIPS_TITLE": "💡 Consejos:",
+    "TIPS_ITEM_MIN_LENGTH": "Usa al menos 8 caracteres",
+    "TIPS_ITEM_MIX": "Combina letras y números",
+    "TIPS_ITEM_NOT_OBVIOUS": "No uses contraseñas obvias",
+    "SUCCESS_REDIRECT_MSG": "Serás redirigido al login en unos segundos..."
   },
 
   "CHECKLIST": {
@@ -933,11 +945,17 @@
     "SENDING": "Enviando...",
     "BACK_TO_LOGIN": "Volver al Login",
     "SUCCESS_TITLE": "¡Email Enviado!",
-    "SUCCESS_DESC": "Hemos enviado instrucciones de recuperación a {{email}}. Por favor, revisa tu bandeja de entrada y la carpeta de spam.",
+    "SUCCESS_DESC": "Hemos enviado instrucciones de recuperación. Por favor, revisa tu bandeja de entrada y la carpeta de spam.",
     "CHECK_EMAIL": "Revisar mi email →",
     "ERROR_TITLE": "Error",
     "ERROR_EMAIL_NOT_FOUND": "No encontramos ninguna cuenta con este email.",
-    "ERROR_SEND": "No se pudo enviar el email. Inténtalo más tarde."
+    "ERROR_SEND": "No se pudo enviar el email. Inténtalo más tarde.",
+    "STEP_TITLE": "Pasos a seguir:",
+    "STEP_1": "Revisa tu bandeja de entrada.",
+    "STEP_2": "Si no lo ves, revisa la carpeta de spam.",
+    "STEP_3": "Haz clic en el enlace del correo.",
+    "STEP_4": "Crea tu nueva contraseña.",
+    "EXPIRE_WARNING": "El enlace expirará en 1 hora por seguridad."
   },
 
   "VERIFICATION": {
@@ -1023,6 +1041,8 @@
     "NAV_PLANS": "Planes",
     "NAV_TERMS": "Términos y Condiciones",
     "NAV_PRIVACY": "Política de Privacidad",
+    "NAV_REVIEWS": "Reseñas",
+    
     "COPYRIGHT": "Copyright © 2026 · Weddly Studio"
   },
 
@@ -1169,9 +1189,9 @@
     "INVITE_TITLE": "Invitar persona",
     "INVITE_SUCCESS": "¡Invitación enviada correctamente!",
     "SEND_INVITE": "Enviar invitación",
-    "HINT_CO_ORGANIZER": "🔑 Puede editar la boda, gestionar invitados, mesas y enviar invitaciones.",
-    "HINT_PLANNER": "📋 Puede editar información, gestionar invitados y mesas. No puede invitar.",
-    "HINT_GUEST": "👁️ Solo puede ver el checklist y el álbum de fotos.",
+    "HINT_CO_ORGANIZER": "Puede editar la boda, gestionar invitados, mesas y enviar invitaciones.",
+    "HINT_PLANNER": "Puede editar información, gestionar invitados y mesas. No puede invitar.",
+    "HINT_GUEST": "Solo puede ver el checklist y el álbum de fotos.",
     "REVOKE_CONFIRM": "¿Revocar el acceso de <strong>{{label}}</strong>? Esta acción no se puede deshacer.",
     "REVOKE_CONFIRM_BTN": "Sí, revocar",
     "STATUS_PENDING": "Pendiente",
@@ -1207,8 +1227,8 @@
     "PERM_GUEST_1": "Ver el checklist",
     "PERM_GUEST_2": "Ver y subir fotos al álbum",
     "PERM_GUEST_3": "No puede editar información",
-    "EXPIRES": "⏳ Esta invitación expira el {{date}}",
-    "EXPIRED": "⛔ Esta invitación ha expirado.",
+    "EXPIRES": "Esta invitación expira el {{date}}",
+    "EXPIRED": "Esta invitación ha expirado.",
     "ACCEPT_BTN": "✓ Aceptar invitación",
     "LOGGED_AS": "Conectado como <strong>{{nick}}</strong>",
     "AUTH_REQUIRED": "Para aceptar la invitación necesitas una cuenta en Weddly Studio.",
@@ -1219,5 +1239,274 @@
     "SUCCESS_DESC": "Ya formas parte de la organización de <strong>{{name}}</strong>.",
     "GO_DASHBOARD": "Ir al panel",
     "ERROR_ACCEPT": "Error al aceptar la invitación."
+  },
+
+  "RSVP": {
+    "LOADING": "Cargando tu invitación...",
+    "INVALID_CODE": "Código inválido",
+    "GO_HOME": "Volver al inicio",
+    "SEE_YOU_SOON": "¡Nos vemos pronto!",
+    "RESPONSE_REGISTERED": "Respuesta registrada",
+    "CONFIRMED_MSG": "Tu asistencia a <strong>{{name}}</strong> ha sido confirmada.<br>¡Estamos deseando celebrarlo contigo!",
+    "DECLINED_MSG": "Hemos registrado que no podrás asistir. ¡Gracias por avisarnos!",
+    "INVITATION_FOR": "Invitación para",
+    "QUESTION": "¿Podrás acompañarnos en este día tan especial?",
+    "CONFIRM_BTN": "¡Con mucho gusto!",
+    "DECLINE_BTN": "Lo siento, no podré",
+    "ALLERGIES_LABEL": "Alergias o restricciones alimentarias",
+    "ALLERGIES_PLACEHOLDER": "Ninguna / Gluten / Lactosa / ...",
+    "NOTES_LABEL": "Notas adicionales",
+    "NOTES_PLACEHOLDER": "Cualquier detalle que quieras que sepamos...",
+    "DECLINE_NOTE": "Lo entendemos, gracias por avisarnos 💌",
+    "SUBMIT_BTN": "Confirmar respuesta",
+    "SENDING": "Enviando",
+    "CODE_LABEL": "Código",
+    "ERROR_NO_CODE": "No se encontró el código de invitación.",
+    "ERROR_DEFAULT": "No se pudo procesar tu respuesta. El código puede ser inválido o haber vencido."
+  },
+
+  "CALENDARIO": {
+    "TITLE": "Calendario",
+    "LOADING": "Cargando calendario…",
+    "TASKS_THIS_MONTH_SINGULAR": "tarea este mes",
+    "TASKS_THIS_MONTH_PLURAL": "tareas este mes",
+    "MONTH_JAN": "Enero",
+    "MONTH_FEB": "Febrero",
+    "MONTH_MAR": "Marzo",
+    "MONTH_APR": "Abril",
+    "MONTH_MAY": "Mayo",
+    "MONTH_JUN": "Junio",
+    "MONTH_JUL": "Julio",
+    "MONTH_AUG": "Agosto",
+    "MONTH_SEP": "Septiembre",
+    "MONTH_OCT": "Octubre",
+    "MONTH_NOV": "Noviembre",
+    "MONTH_DEC": "Diciembre",
+    "DAY_MON": "Lun",
+    "DAY_TUE": "Mar",
+    "DAY_WED": "Mié",
+    "DAY_THU": "Jue",
+    "DAY_FRI": "Vie",
+    "DAY_SAT": "Sáb",
+    "DAY_SUN": "Dom",
+    "EXPORT_GOOGLE": "Google Calendar",
+    "EXPORT_GOOGLE_TOOLTIP": "Exportar a Google Calendar (.ics)",
+    "EXPORTING": "Exportando…",
+    "EXPORT_PDF": "Exportar PDF",
+    "EXPORT_PDF_TOOLTIP": "Exportar PDF del checklist",
+    "PDF_LOCKED_TOOLTIP": "Requiere plan de pago",
+    "GENERATING_PDF": "Generando…",
+    "PREV_MONTH": "Mes anterior",
+    "NEXT_MONTH": "Mes siguiente",
+    "TODAY": "Hoy",
+    "WEDDING_DAY": "Día de la boda",
+    "WEDDING_DAY_TITLE": "¡Día de la boda!",
+    "NO_TASKS_DAY": "Sin tareas para este día",
+    "ASSIGN_TASK": "Asignar tarea a este día",
+    "UNDATED_SINGULAR": "tarea sin fecha asignada",
+    "UNDATED_PLURAL": "tareas sin fecha asignada",
+    "MORE": "más",
+    "ASSIGN_MODAL_TITLE": "Asignar tarea",
+    "SEARCH_TASK": "Buscar tarea...",
+    "NO_ASSIGNABLE_TASKS": "No hay tareas pendientes sin fecha",
+    "ASSIGN_SUCCESS_TITLE": "Tarea asignada",
+    "ASSIGN_SUCCESS_DESC": "\"{{title}}\" asignada al {{date}}",
+    "EXPORT_SUCCESS_TITLE": "¡Calendario exportado!",
+    "EXPORT_SUCCESS_DESC": "Abre el archivo .ics para importarlo en Google Calendar o Apple Calendar.",
+    "PDF_SUCCESS_TITLE": "¡PDF generado!",
+    "PDF_SUCCESS_DESC": "Se abrirá el diálogo de impresión.",
+    "PDF_PLAN_REQUIRED_TITLE": "Plan requerido",
+    "PDF_PLAN_REQUIRED_DESC": "La exportación PDF está disponible en los planes de pago. ¡Actualiza tu plan!",
+    "ERROR_LOAD_TASKS": "No se pudieron cargar las tareas del calendario",
+    "ERROR_ASSIGN_TASK": "No se pudo asignar la tarea",
+    "ERROR_EXPORT_ICS": "No se pudo exportar el calendario",
+    "ERROR_EXPORT_PDF": "No se pudo generar el PDF"
+  },
+
+  "TASKS": {
+    "12_MONTHS": {
+      "DEFINE_BUDGET": {
+        "TITLE": "Definir presupuesto total",
+        "DESC": "Establece un presupuesto realista y reparte las partidas principales."
+      },
+      "CEREMONY_VENUE": {
+        "TITLE": "Elegir y reservar el lugar de la ceremonia",
+        "DESC": "Visita al menos 3 opciones antes de decidir. Confirma disponibilidad para tu fecha."
+      },
+      "BANQUET_VENUE": {
+        "TITLE": "Elegir y reservar el lugar del banquete",
+        "DESC": "Puede ser el mismo que la ceremonia o uno diferente."
+      },
+      "GUEST_LIST": {
+        "TITLE": "Hacer lista preliminar de invitados",
+        "DESC": "Número orientativo para negociar con el venue y el catering."
+      },
+      "LEGAL": {
+        "TITLE": "Iniciar trámites legales del matrimonio",
+        "DESC": "Consulta en el registro civil o notaría los documentos necesarios."
+      }
+    },
+    "9_MONTHS": {
+      "PHOTOGRAPHER": {
+        "TITLE": "Contratar fotógrafo",
+        "DESC": "Revisa portfolios, lee reseñas y reserva con antelación."
+      },
+      "VIDEOGRAPHER": {
+        "TITLE": "Contratar videógrafo",
+        "DESC": "Opcional. Decide si quieres vídeo completo, highlights o drone."
+      },
+      "MUSIC": {
+        "TITLE": "Contratar música (DJ o banda)",
+        "DESC": "Define el estilo musical para ceremonia, cóctel y banquete."
+      },
+      "CATERING": {
+        "TITLE": "Elegir servicio de catering",
+        "DESC": "Solicita al menos 3 presupuestos. Organiza una degustación."
+      },
+      "WEDDING_DRESS": {
+        "TITLE": "Empezar búsqueda del vestido de novia",
+        "DESC": "Los vestidos pueden tardar 4-6 meses en llegar. Empieza cuanto antes."
+      }
+    },
+    "6_MONTHS": {
+      "CONFIRM_DRESS": {
+        "TITLE": "Confirmar vestido de novia",
+        "DESC": "Realiza el pedido oficial y programa las pruebas."
+      },
+      "GROOM_SUIT": {
+        "TITLE": "Elegir traje del novio",
+        "DESC": "Compra o alquiler. Coordinar con el estilo del vestido."
+      },
+      "FLORIST": {
+        "TITLE": "Contratar florista",
+        "DESC": "Define el estilo floral: ramo, centros de mesa, decoración ceremonia."
+      },
+      "CAKE": {
+        "TITLE": "Elegir tarta nupcial",
+        "DESC": "Organiza una degustación con al menos 2 pasteleros."
+      },
+      "HONEYMOON": {
+        "TITLE": "Planificar viaje de novios",
+        "DESC": "Reserva vuelos y alojamiento con antelación para mejores precios."
+      },
+      "INVITATIONS_DESIGN": {
+        "TITLE": "Diseñar invitaciones",
+        "DESC": "Define el diseño y texto. Recuerda incluir fecha límite de RSVP."
+      }
+    },
+    "3_MONTHS": {
+      "SEND_INVITATIONS": {
+        "TITLE": "Enviar invitaciones",
+        "DESC": "Envía con al menos 2-3 meses de antelación."
+      },
+      "CONFIRM_GUEST_LIST": {
+        "TITLE": "Confirmar lista definitiva de invitados",
+        "DESC": "Cierra la lista para comunicar número final al catering."
+      },
+      "BEAUTY": {
+        "TITLE": "Reservar peluquería y maquillaje",
+        "DESC": "Haz una prueba previa para confirmar el look."
+      },
+      "RINGS": {
+        "TITLE": "Encargar alianzas",
+        "DESC": "Elige material, diseño y graba la inscripción si lo deseas."
+      },
+      "TRANSPORT": {
+        "TITLE": "Contratar transporte nupcial",
+        "DESC": "Coche de novios, autobús para invitados, etc."
+      },
+      "ACCOMMODATION": {
+        "TITLE": "Gestionar alojamiento para invitados de fuera",
+        "DESC": "Negocia tarifas especiales con hoteles cercanos."
+      }
+    },
+    "1_MONTH": {
+      "CONFIRM_CATERING_COUNT": {
+        "TITLE": "Confirmar número final de asistentes al catering",
+        "DESC": "La mayoría de caterings pide confirmación 3-4 semanas antes."
+      },
+      "CONFIRM_VENDORS": {
+        "TITLE": "Confirmar detalles con todos los proveedores",
+        "DESC": "Llama o escribe a cada proveedor para reconfirmar hora y detalles."
+      },
+      "FINAL_FITTING": {
+        "TITLE": "Prueba final del vestido/traje",
+        "DESC": "Asegúrate de que los ajustes están perfectos."
+      },
+      "SEATING_PLAN": {
+        "TITLE": "Organizar la distribución de mesas",
+        "DESC": "Asigna cada invitado a su mesa teniendo en cuenta afinidades."
+      },
+      "CEREMONY_ORDER": {
+        "TITLE": "Preparar el orden de la ceremonia",
+        "DESC": "Define lecturas, música, votos y tiempos."
+      }
+    },
+    "1_WEEK": {
+      "CONFIRM_OFFICIANT": {
+        "TITLE": "Confirmar hora y lugar con el officiant/juez",
+        "DESC": "Último recordatorio para quien oficia la ceremonia."
+      },
+      "VENDOR_PAYMENTS": {
+        "TITLE": "Preparar sobres con pagos para proveedores",
+        "DESC": "Muchos proveedores cobran en efectivo el día de la boda."
+      },
+      "CONFIRM_BEAUTY": {
+        "TITLE": "Confirmar cita de peluquería y maquillaje",
+        "DESC": "Confirma hora, lugar y número de personas."
+      },
+      "PICK_UP_ATTIRE": {
+        "TITLE": "Recoger vestido/traje",
+        "DESC": "Recoge y comprueba que todo esté en perfecto estado."
+      },
+      "FINAL_VENUE_VISIT": {
+        "TITLE": "Visita final al venue",
+        "DESC": "Repasa la decoración, distribución de mesas y accesos."
+      }
+    }
+  },
+
+  "WEDDING_STATUS": {
+    "BANNER_ARCHIVED": "Esta boda está archivada.",
+    "BANNER_READONLY_PAYMENT": "Tu suscripción tiene un problema de pago. La boda está en modo lectura.",
+    "BANNER_READONLY_COMPLETED": "¡Tu boda ya se celebró! Estás en modo recuerdo, solo lectura.",
+    "BANNER_SEE_PLANS": "Ver planes",
+    "MODAL_ARCHIVED_TITLE": "Boda archivada",
+    "MODAL_ARCHIVED_DESC": "Esta boda está archivada y no admite cambios. Puedes desarchivarla desde \"Mis Bodas\" si tu plan lo permite.",
+    "MODAL_PAYMENT_TITLE": "Problema con tu suscripción",
+    "MODAL_PAYMENT_DESC": "Tu suscripción ha caducado o hay un pago pendiente. Renueva tu plan para volver a editar.",
+    "MODAL_COMPLETED_TITLE": "Modo recuerdo ",
+    "MODAL_COMPLETED_DESC": "La boda ya ocurrió. Puedes consultar invitados, fotos y cronograma, pero no realizar cambios.",
+    "MODAL_BTN_PLANS": "Ver planes",
+    "MODAL_BTN_BACK": "Volver al inicio"
+  },
+
+  "REVIEWS": {
+    "PAGE_TITLE": "Reseñas",
+    "PAGE_SUBTITLE": "Experiencias reales de parejas que planificaron su boda con nosotros",
+    "WRITE_REVIEW": "Escribir mi reseña",
+    "ALREADY_REVIEWED": "Ya has dejado tu reseña",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "LOGIN_CTA": "para compartir tu experiencia",
+    "LOGIN_LINK": "Inicia sesión",
+    "ORDER_RECENT": "Más recientes",
+    "ORDER_BEST": "Mejor valoradas",
+    "FORM_TITLE_NEW": "Escribe tu reseña",
+    "FORM_TITLE_EDIT": "Editar tu reseña",
+    "FORM_RATING_LABEL": "Puntuación",
+    "FORM_COMMENT_LABEL": "Tu comentario",
+    "FORM_COMMENT_PLACEHOLDER": "Cuéntanos cómo fue tu experiencia planificando con Weddly (mínimo 10 caracteres)…",
+    "FORM_CHARS_REMAINING": "restantes",
+    "FORM_SUBMIT_NEW": "Publicar reseña",
+    "FORM_SUBMIT_EDIT": "Actualizar reseña",
+    "EMPTY_STATE": "Sé el primero en compartir tu experiencia",
+    "WRITE_FIRST": "Escribir la primera reseña",
+    "ERROR_RATING": "Selecciona una puntuación entre 1 y 5 estrellas.",
+    "ERROR_COMMENT_SHORT": "El comentario debe tener al menos 10 caracteres.",
+    "ERROR_COMMENT_LONG": "El comentario no puede superar los 1000 caracteres.",
+    "ERROR_GENERIC": "Error al enviar la reseña.",
+    "REVIEW_SINGULAR": "reseña",
+    "REVIEW_PLURAL": "reseñas"
   }
 }

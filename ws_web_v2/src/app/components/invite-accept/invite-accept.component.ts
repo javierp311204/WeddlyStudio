@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService }         from '../../services/auth/auth.service';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 const API = 'http://localhost:3000/api';
 
@@ -28,7 +29,7 @@ interface InvitePreview {
 @Component({
   selector:    'app-invite-accept',
   standalone:  true,
-  imports:     [CommonModule, RouterModule, TranslateModule],
+  imports:     [CommonModule, RouterModule, TranslateModule, IconComponent],
   templateUrl: './invite-accept.component.html',
   styleUrl:    './invite-accept.component.css',
 })

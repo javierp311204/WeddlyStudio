@@ -5,34 +5,12 @@ import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { GestionService } from '../../services/gestion/gestion.service';
-
-// ─────────────────────────────────────────────────────────────
-// MIGRACIÓN v2:
-//  • codigoBoda          → weddingId (UUID)
-//  • mesa._id            → mesa.id
-//  • inv._id             → inv.id
-//  • inv.nombre          → inv.first_name + inv.last_name
-//  • inv.mesa (string)   → inv.table_id (UUID)
-//  • mesa.tipo           → mesa.shape ('round'|'rectangular')
-//  • mesa.capacidad      → mesa.max_capacity
-//  • mesa.nombre         → mesa.name
-//
-//  Endpoints:
-//  • GET  /gestion/config        → GET  /api/weddings/:weddingId/tables  +
-//                                       GET  /api/weddings/:weddingId/guests
-//  • POST /gestion/mesas         → POST /api/weddings/:weddingId/tables
-//  • DELETE /gestion/mesas/:id   → DELETE /api/tables/:tableId
-//  • PUT invitado (mesa)         → PATCH /api/tables/:tableId/assign  { guest_id }
-//  • PUT invitado (quitar mesa)  → PATCH /api/tables/:tableId/unassign/:guestId
-//
-//  NOTA: v2 separa completamente la gestión de mesas (plano interactivo)
-//  de la asignación de invitados. Este componente cubre la vista de lista.
-// ─────────────────────────────────────────────────────────────
+import { IconComponent } from '../../shared/icons/icon.component';
 
 @Component({
   selector: 'app-mesa-manager',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, IconComponent],
   templateUrl: './mesa-manager.component.html',
   styleUrl: './mesa-manager.component.css',
 })

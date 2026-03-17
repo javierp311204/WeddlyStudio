@@ -5,19 +5,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
-
-// ─────────────────────────────────────────────────────────────
-// MIGRACIÓN v2:
-//  • Endpoint: /api/auth/resetear-password
-//           → /api/auth/reset-password
-//  • Body:    { token, nuevaPassword }
-//          → { token, new_password }   ← snake_case
-// ─────────────────────────────────────────────────────────────
+import { IconComponent } from '../../shared/icons/icon.component';
 
 @Component({
   selector: 'app-resetear-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, IconComponent],
   templateUrl: './resetear-password.component.html',
   styleUrl: './resetear-password.component.css',
 })

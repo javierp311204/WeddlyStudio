@@ -6,6 +6,7 @@ import { GestionService } from '../../services/gestion/gestion.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { Router } from '@angular/router';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { AiService } from '../../services/ai/ai.service';
 
 @Component({
   selector: 'app-lista-invitados',
@@ -20,6 +21,10 @@ export class ListaInvitadosComponent implements OnInit {
   terminoBusqueda: string = '';
   filtroTipo: string = 'Todos';
   weddingId: string = '';
+
+  sugerenciaMesa: any = null;
+  sugerenciaMesaInvitado: any = null;
+  aiLimitReached = false;
 
   // Modal
   invitadoModal: any | null = null;
@@ -37,6 +42,7 @@ export class ListaInvitadosComponent implements OnInit {
     private notifService: NotificationService,
     private router: Router,
     private translate: TranslateService,
+    private aiService: AiService,
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +98,7 @@ export class ListaInvitadosComponent implements OnInit {
     this.gestionService.getInvitados(this.weddingId).subscribe({
       next: (res: any) => {
         const lista = res?.data?.guests ?? res?.guests ?? res ?? [];
+         console.log('Invitado ejemplo:', lista[0]);
         this.invitados = lista;
         this.invitadosFiltrados = lista;
       },
@@ -147,6 +154,56 @@ export class ListaInvitadosComponent implements OnInit {
     this.filtrar();
   }
 
+  sugerirMesaParaInvitado(inv: any): void {
+    if (this.aiLimitReached) {
+      this.notifService.showError('⚠️ Límite IA', 'Has agotado las sugerencias de este mes.');
+      return;
+    }
+ 
+    this.notifService.showSuccess('✨', 'Analizando la mejor mesa...');
+ 
+    this.aiService.suggestTableForGuest(this.weddingId, inv.id).subscribe({
+      next: (res: any) => {
+        this.sugerenciaMesa         = res?.data?.suggestion;
+        this.sugerenciaMesaInvitado = inv;
+ 
+        const usage = res?.data?.usage;
+        if (usage && !usage.unlimited) {
+          this.aiLimitReached = (usage.remaining ?? 1) <= 0;
+        }
+      },
+      error: (err: any) => {
+        if (err?.error?.code === 'AI_LIMIT_REACHED') {
+          this.aiLimitReached = true;
+          this.notifService.showError('⚠️ Límite IA', 'Has agotado las sugerencias de este mes.');
+        } else {
+          this.notifService.showError('Error', 'No se pudo obtener una sugerencia');
+        }
+      },
+    });
+  }
+ 
+  aceptarSugerenciaMesa(): void {
+    if (!this.sugerenciaMesa || !this.sugerenciaMesaInvitado) return;
+ 
+    // Usar GestionService o HttpClient para asignar — depende de lo que tengas
+    // Llamar al endpoint PATCH /api/tables/:tableId/assign
+    const tableId  = this.sugerenciaMesa.table_id;
+    const guestId  = this.sugerenciaMesaInvitado.id;
+ 
+    this.gestionService.asignarInvitado(tableId, guestId).subscribe({
+      next: () => {
+        this.notifService.showSuccess('✓', `${this.sugerenciaMesaInvitado.first_name} asignado a ${this.sugerenciaMesa.table_name}`);
+        this.sugerenciaMesa         = null;
+        this.sugerenciaMesaInvitado = null;
+        this.cargarInvitados();
+      },
+      error: (err: any) => {
+        this.notifService.showError('Error', err?.error?.message || 'No se pudo asignar la mesa');
+      },
+    });
+  }
+
   // ── Helpers ──────────────────────────────────────────────
 
   getNombreCompleto(inv: any): string {
@@ -159,9 +216,9 @@ export class ListaInvitadosComponent implements OnInit {
 
   getRsvpLabel(status: string): string {
     const map: Record<string, string> = {
-      confirmed: 'Confirmado',
-      pending:   'Pendiente',
-      declined:  'Declinado',
+      confirmed: this.translate.instant('PLANO.RSVP_CONFIRMED'),
+      pending:   this.translate.instant('GUESTS.PENDING'),
+      declined:  this.translate.instant('PLANO.RSVP_DECLINED'),
     };
     return map[status] || status;
   }

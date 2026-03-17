@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,6 @@ import { IconComponent } from '../../shared/icons/icon.component';
 import { TareasService } from '../../services/tareas/tareas.service';
 import { ChecklistPreviewComponent } from '../checklist-preview/checklist-preview.component';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
-
 
 @Component({
   selector: 'app-home',
@@ -32,6 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   showStickyNav    = false;
   mostrarPanel     = false;
   cargandoBoda     = false;
+  mostrarBannerVerificacion = false;
 
   notificaciones:        any[] = [];
   notificacionesSinLeer: number = 0;
@@ -55,10 +55,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private router:        Router,
     private translate:     TranslateService,
     private tareasService: TareasService,
+    private route:         ActivatedRoute,
   ) {}
 
   // ─── Lifecycle ────────────────────────────────────────────────
   ngOnInit(): void {
+
+      this.route.queryParams.subscribe(params => {
+        if (params['verify_email'] === 'required') {
+          setTimeout(() => {
+
+            this.mostrarBannerVerificacion = true;
+          }, 300);
+        }
+      });
+
     this.startCarousel();
 
     if (!this.authService.isLoggedIn()) return;
@@ -80,7 +91,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             localStorage.setItem('weddingRole', lista[0].myRole ?? 'owner');
             this.inicializarHome();
           } else {
-            this.router.navigate(['/onboarding']);
+            this.authService.getMe().subscribe({
+              next: (res: any) => {
+                const user = res?.data ?? res;
+                if (!user?.email_verified) {
+                  this.mostrarBannerVerificacion = true; // mostrar banner aquí, no navegar
+                } else {
+                  this.router.navigate(['/onboarding']);
+                }
+              },
+              error: () => this.router.navigate(['/onboarding'])
+            });
           }
         },
         error: () => { this.cargandoBoda = false; },

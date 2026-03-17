@@ -13,6 +13,8 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { PlanoService, Table, GuestSummary } from '../../services/plano/plano.service';
 import { environment } from '../../../enviroments/enviroment';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { IconComponent } from '../../shared/icons/icon.component';
+import { AiService } from '../../services/ai/ai.service';
 
 // ─── jsPDF (importación dinámica para lazy-loading) ───────────────────────────
 // Se importa de forma dinámica en descargarPDF() para no penalizar el bundle
@@ -37,7 +39,7 @@ type HandleTipo = 'resize' | 'rotate' | 'none';
 @Component({
   selector:    'app-plano-interactivo',
   standalone:  true,
-  imports:     [CommonModule, FormsModule, HttpClientModule, TranslateModule],
+  imports:     [CommonModule, FormsModule, HttpClientModule, TranslateModule , IconComponent],
   templateUrl: './plano-interactivo.component.html',
   styleUrl:    './plano-interactivo.component.css',
 })
@@ -70,6 +72,11 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
   invitadoSeleccionado: GuestSummary | null = null;
   listaInvitadosAbierta = false;
   invitadoModalInfo:    GuestSummary | null = null;
+
+  sugirendoIA    = false;
+  mostrarModalIA = false;
+  aiLimitReached = false;
+  sugerenciaIA: { assignments: any[]; summary: string } | null = null;
 
   mostrarModalCrearMesa = false;
   errorCrearMesa        = false;
@@ -138,6 +145,7 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     private router:       Router,
     private ngZone:       NgZone,
     private translate:    TranslateService,
+    private aiService:    AiService,
   ) {}
 
   private getHeaders() {
@@ -601,7 +609,7 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
   dibujarMesa(mesa: Table) {
     const xPx   = mesa.pos_x ?? this.canvasWidth  / 2;
     const yPx   = mesa.pos_y ?? this.canvasHeight / 2;
-    const angle = (mesa as any).angle ?? 0;
+    const angle = mesa.angle ?? 0;
 
     const grupoMesa = new Group([], {
       selectable:     this.modoEdicion,
@@ -787,8 +795,10 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     const gridSize = 25;
     const pos_x    = Math.round((objeto.left ?? 0) / gridSize) * gridSize;
     const pos_y    = Math.round((objeto.top  ?? 0) / gridSize) * gridSize;
-    this.planoService.actualizarPosicionMesa(mesaId, pos_x, pos_y).subscribe({
-      next:  () => console.log('✅ Posición guardada', pos_x, pos_y),
+    const angle    = +(objeto.angle ?? 0).toFixed(2);
+
+    this.planoService.actualizarPosicionMesa(mesaId, pos_x, pos_y, angle).subscribe({
+      next:  () => console.log('✅ Posición guardada', pos_x, pos_y, angle),
       error: (err) => { console.error('Error al guardar posición:', err); this.cargarPlano(); },
     });
   }
@@ -903,6 +913,90 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
         error: () => this.notifService.showError(this.t('COMMON.ERROR'), this.t('TABLES.TABLE_DELETE_ERROR')),
       });
     });
+  }
+
+  sugerirDistribucion(): void {
+    if (this.sugirendoIA || this.aiLimitReached) return;
+    this.sugirendoIA = true;
+ 
+    this.aiService.suggestSeating(this.weddingId).subscribe({
+      next: (res: any) => {
+        this.sugirendoIA  = false;
+        this.sugerenciaIA = {
+          assignments: res?.data?.assignments ?? [],
+          summary:     res?.data?.summary ?? '',
+        };
+        this.mostrarModalIA = true;
+ 
+        const usage = res?.data?.usage;
+        if (usage && !usage.unlimited) {
+          this.aiLimitReached = (usage.remaining ?? 1) <= 0;
+        }
+      },
+      error: (err: any) => {
+        this.sugirendoIA = false;
+        if (err?.error?.code === 'AI_LIMIT_REACHED') {
+          this.aiLimitReached = true;
+          this.notifService.showError('⚠️ Límite IA', 'Has agotado las sugerencias de este mes.');
+        } else {
+          this.notifService.showError(this.t('COMMON.ERROR'), 'Error al generar la distribución');
+        }
+      },
+    });
+  }
+ 
+  cerrarModalIA(): void {
+    this.mostrarModalIA = false;
+    this.sugerenciaIA   = null;
+  }
+ 
+  getGuestNameById(guestId: string): string {
+    const g = this.invitadosDisponibles.find(i => i.id === guestId);
+    return g ? this.getNombreCompleto(g) : guestId;
+  }
+ 
+  getTableNameById(tableId: string): string {
+    const t = this.mesas.find(m => m.id === tableId);
+    return t?.name ?? tableId;
+  }
+ 
+  aplicarAsignacionIA(assignment: { guest_id: string; table_id: string }): void {
+    this.planoService.asignarInvitadoAMesa(assignment.table_id, assignment.guest_id).subscribe({
+      next: () => {
+        this.notifService.showSuccess('✓', 'Invitado asignado correctamente');
+        // Quitar de la lista de sugerencias
+        if (this.sugerenciaIA) {
+          this.sugerenciaIA.assignments = this.sugerenciaIA.assignments
+            .filter(a => a.guest_id !== assignment.guest_id);
+        }
+        this.cargarPlano();
+      },
+      error: (err: any) => {
+        this.notifService.showError(this.t('COMMON.ERROR'), err?.error?.message || 'Error al asignar');
+      },
+    });
+  }
+ 
+  rechazarAsignacionIA(assignment: { guest_id: string }): void {
+    if (this.sugerenciaIA) {
+      this.sugerenciaIA.assignments = this.sugerenciaIA.assignments
+        .filter(a => a.guest_id !== assignment.guest_id);
+    }
+  }
+ 
+  async aplicarTodasLasAsignaciones(): Promise<void> {
+    if (!this.sugerenciaIA?.assignments?.length) return;
+    const assignments = [...this.sugerenciaIA.assignments];
+ 
+    for (const a of assignments) {
+      try {
+        await this.planoService.asignarInvitadoAMesa(a.table_id, a.guest_id).toPromise();
+      } catch {}
+    }
+ 
+    this.notifService.showSuccess('✨', 'Distribución aplicada correctamente');
+    this.cerrarModalIA();
+    this.cargarPlano();
   }
 
   // ─── Modal crear mesa ─────────────────────────────────────────

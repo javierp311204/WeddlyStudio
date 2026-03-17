@@ -226,6 +226,57 @@ export class AuthService {
     await prisma.user.update({ where: { id: userId }, data: { password_hash: newHash } });
     return { message: 'Contraseña actualizada correctamente' };
   }
+
+  async forgotPassword(email: string) {
+    const user = await prisma.user.findUnique({ where: { email } });
+    // Siempre respuesta genérica para no revelar si el email existe
+    if (!user || !user.email_verified) {
+      return { message: 'Si el email existe, recibirás un enlace en breve.' };
+    }
+
+    const resetToken   = crypto.randomBytes(32).toString('hex');
+    const resetExpires = new Date(Date.now() + 30 * 60 * 1000); // 30 min
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password_reset_token:   resetToken,
+        password_reset_expires: resetExpires,
+      },
+    });
+
+    const { sendPasswordResetEmail } = await import('../utils/email');
+    sendPasswordResetEmail({
+      to:         user.email,
+      firstName:  user.first_name,
+      resetToken,
+      lang:       user.language ?? 'es',
+    }).catch(err => console.error('[Auth] Error enviando reset password:', err));
+
+    return { message: 'Si el email existe, recibirás un enlace en breve.' };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const user = await prisma.user.findFirst({
+      where: {
+        password_reset_token:   token,
+        password_reset_expires: { gt: new Date() },
+      },
+    });
+    if (!user) throw new AppError('Token inválido o expirado', 400);
+
+    const newHash = await hashPassword(newPassword);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password_hash:          newHash,
+        password_reset_token:   null,
+        password_reset_expires: null,
+      },
+    });
+
+    return { message: 'Contraseña restablecida correctamente' };
+  }
 }
 
 export default new AuthService();

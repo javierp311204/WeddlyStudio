@@ -5,11 +5,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService }       from '../../services/auth/auth.service';
 import { ColaboradoresService, Member, Invite } from '../../services/colaboradores/colaboradores.service';
 import { Router } from '@angular/router';
+import { IconComponent } from '../../shared/icons/icon.component';
 
 @Component({
   selector:    'app-colaboradores',
   standalone:  true,
-  imports:     [CommonModule, FormsModule, TranslateModule],
+  imports:     [CommonModule, FormsModule, TranslateModule, IconComponent],
   templateUrl: './colaboradores.component.html',
   styleUrl:    './colaboradores.component.css',
 })
