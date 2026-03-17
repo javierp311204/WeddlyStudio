@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { PlanoService, Table, GuestSummary } from '../../services/plano/plano.service';
-import { environment } from '../../../enviroments/enviroment';
+import { environment } from '../../../enviroments/environment';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { IconComponent } from '../../shared/icons/icon.component';
 import { AiService } from '../../services/ai/ai.service';
