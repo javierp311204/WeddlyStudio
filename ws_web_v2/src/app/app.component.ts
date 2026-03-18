@@ -26,7 +26,6 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.languageService.initLanguage();
-    console.log('✅ App inicializada con idioma:', this.languageService.getCurrentLanguage());
   }
 
   salir() {

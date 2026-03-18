@@ -682,30 +682,193 @@
 .pf-modal__save-btn:hover:not(:disabled) { transform: translateY(-2px); }
 .pf-modal__save-btn:disabled { opacity:0.6; cursor:not-allowed; }
 
-/* ── Responsive ────────────────────────────── */
+/* ============================================================
+   RESPONSIVE — perfil-usuario.component.css
+   ============================================================ */
+
+/* ── Tablet (≤ 900px) ── */
 @media (max-width: 900px) {
   .pf-layout {
     grid-template-columns: 1fr;
   }
+
   .pf-sidebar {
     position: static;
     height: auto;
     border-right: none;
     border-bottom: 1px solid var(--gold-border);
     padding: 32px 24px;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
+    /* Columna en tablet: más legible que fila */
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 20px;
   }
-  .pf-avatar-zone { flex: 0 0 auto; }
-  .pf-verify-banner, .pf-verify-ok, .pf-plan-card { flex: 1 1 200px; }
-  .pf-main { padding: 36px 28px 80px; }
+
+  /* Avatar centrado */
+  .pf-avatar-zone {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Cards de verificación y plan: fila horizontal */
+  .pf-verify-banner,
+  .pf-verify-ok,
+  .pf-plan-card {
+    width: 100%;
+    max-width: 480px;
+    text-align: left;
+  }
+
+  .pf-main {
+    padding: 36px 28px 80px;
+  }
+
+  .pf-main-header__title {
+    font-size: 2rem;
+  }
 }
 
+/* ── Móvil (≤ 600px) ── */
 @media (max-width: 600px) {
-  .pf-fields-grid { grid-template-columns: 1fr; }
-  .pf-main-header { flex-direction: column; gap: 16px; }
-  .pf-toggle-btn { align-self: flex-start; }
-  .pf-danger-zone { flex-direction: column; align-items: flex-start; gap: 12px; }
+  /* Layout */
+  .pf-sidebar {
+    padding: 24px 16px;
+    gap: 16px;
+  }
+
+  .pf-main {
+    padding: 24px 16px 80px;
+  }
+
+  /* Header */
+  .pf-main-header {
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+  }
+
+  .pf-main-header__title {
+    font-size: 1.7rem;
+  }
+
+  .pf-toggle-btn {
+    align-self: flex-start;
+    padding: 9px 20px;
+    font-size: 0.95rem;
+  }
+
+  /* Avatar más pequeño */
+  .pf-avatar {
+    width: 88px;
+    height: 88px;
+  }
+
+  .pf-avatar__initials {
+    font-size: 1.8rem;
+  }
+
+  .pf-name {
+    font-size: 1.15rem;
+  }
+
+  /* Campos: 1 columna */
+  .pf-fields-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .pf-field--full {
+    grid-column: 1;
+  }
+
+  /* Inputs más compactos */
+  .pf-input {
+    padding: 10px 14px;
+    font-size: 1rem;
+  }
+
+  /* Sección seguridad: items en columna */
+  .pf-security-item {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .pf-security-item__icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* El div de texto ocupa toda la fila */
+  .pf-security-item > div {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* Botón de cambiar contraseña: ancho completo */
+  .pf-security-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 16px;
+  }
+
+  /* Sección número */
+  .pf-section {
+    margin-bottom: 32px;
+  }
+
+  /* Zona peligrosa */
+  .pf-danger-zone {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 36px;
+  }
+
+  .pf-danger-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Botón guardar */
+  .pf-save-btn {
+    font-size: 1rem;
+    padding: 14px 24px;
+  }
+
+  /* Modal contraseña */
+  .pf-modal {
+    padding: 28px 20px;
+    border-radius: 18px;
+  }
+
+  .pf-modal__title {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+}
+
+/* ── Móvil pequeño (≤ 380px) ── */
+@media (max-width: 380px) {
+  .pf-main {
+    padding: 16px 12px 72px;
+  }
+
+  .pf-sidebar {
+    padding: 20px 12px;
+  }
+
+  .pf-main-header__title {
+    font-size: 1.5rem;
+  }
+
+  .pf-plan-card {
+    padding: 14px;
+  }
+
+  .pf-plan-card__value {
+    font-size: 1.1rem;
+  }
 }

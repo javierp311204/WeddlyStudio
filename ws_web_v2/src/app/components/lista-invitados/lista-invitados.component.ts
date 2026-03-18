@@ -98,7 +98,6 @@ export class ListaInvitadosComponent implements OnInit {
     this.gestionService.getInvitados(this.weddingId).subscribe({
       next: (res: any) => {
         const lista = res?.data?.guests ?? res?.guests ?? res ?? [];
-         console.log('Invitado ejemplo:', lista[0]);
         this.invitados = lista;
         this.invitadosFiltrados = lista;
       },

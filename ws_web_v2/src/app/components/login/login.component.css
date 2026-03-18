@@ -134,25 +134,74 @@
   text-decoration: underline !important;
 }
 
-/* Ajustes responsivos */
+/* ============================================================
+   RESPONSIVE — login.component.css
+   ============================================================ */
+
+/* ── Tablet (≤ 576px) ── */
 @media (max-width: 576px) {
+  .auth-wrapper {
+    padding: 16px !important;
+    align-items: flex-start !important;
+    padding-top: 24px !important;
+  }
+
   .auth-card {
-    padding: 45px 30px;
+    padding: 48px 24px 32px;
     max-width: 100%;
+    border-radius: 16px !important;
   }
-  
-  .btn-back {
-    top: 15px;
-    left: 15px;
-    font-size: 0.85rem;
-    padding: 6px 10px;
+
+  /* Dar espacio al título para que no choque con el btn-back */
+  .auth-card .text-center.mb-4.pt-3 {
+    padding-top: 8px !important;
+    margin-top: 8px;
   }
-  
+
   .auth-card h2 {
-    font-size: 1.8rem;
+    font-size: 1.75rem;
+  }
+
+  /* Botón back: más pequeño y bien posicionado */
+  .btn-back {
+    top: 12px;
+    left: 12px;
+    font-size: 0.82rem;
+    padding: 5px 8px;
+  }
+
+  /* Inputs: font-size 16px para evitar zoom en iOS */
+  .form-control {
+    font-size: 16px !important;
+  }
+
+  /* Botón submit más compacto */
+  .btn-auth {
+    font-size: 1rem;
+    padding: 10px !important;
   }
 }
 
+/* ── Móvil pequeño (≤ 380px) ── */
+@media (max-width: 380px) {
+  .auth-card {
+    padding: 44px 18px 28px;
+  }
+
+  .auth-card h2 {
+    font-size: 1.55rem;
+  }
+
+  .auth-card .text-muted {
+    font-size: 0.88rem !important;
+  }
+
+  .form-label {
+    font-size: 0.78rem;
+  }
+}
+
+/* ── Desktop (≥ 768px) — sin cambios ── */
 @media (min-width: 768px) {
   .auth-card {
     padding: 70px 60px;

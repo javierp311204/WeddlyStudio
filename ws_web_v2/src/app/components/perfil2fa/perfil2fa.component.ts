@@ -243,6 +243,71 @@ type Step = 'loading' | 'disabled' | 'setup_qr' | 'setup_verify' | 'enabled';
       border: 1.5px solid #d4c4a8;
     }
     .tfa-btn--ghost:hover { background: #f5f0e8; }
+
+    @media (max-width: 480px) {
+      .tfa-card {
+        padding: 18px 16px;
+      }
+
+      /* Header: badge baja a segunda línea */
+      .tfa-header {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .tfa-badge {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+      }
+
+      /* QR más pequeño */
+      .tfa-qr {
+        width: 150px;
+        height: 150px;
+      }
+
+      /* Código + botón: columna en móvil */
+      .tfa-code-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .tfa-code-input {
+        width: 100%;
+        font-size: 16px;
+        letter-spacing: 6px;
+      }
+
+      .tfa-code-input--wide {
+        width: 100%;
+        letter-spacing: normal;
+        font-size: 16px;
+      }
+
+      /* Botones acción: columna */
+      .tfa-actions {
+        flex-direction: column;
+      }
+
+      .tfa-btn {
+        width: 100%;
+        text-align: center;
+        padding: 11px 16px;
+      }
+
+      /* Secret row: columna */
+      .tfa-secret-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .tfa-secret {
+        word-break: break-all;
+        letter-spacing: 0;
+      }
+    }
   `],
 })
 export class Perfil2faComponent implements OnInit {

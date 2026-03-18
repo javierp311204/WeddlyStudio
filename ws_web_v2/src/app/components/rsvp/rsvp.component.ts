@@ -391,8 +391,81 @@ type RsvpState = 'loading' | 'form' | 'success' | 'error';
     }
 
     @media (max-width: 480px) {
-      .form-card { padding: 2rem 1.5rem; }
-      .rsvp-buttons { flex-direction: column; }
+      .rsvp-page {
+        padding: 1.5rem 1rem;
+        align-items: flex-start;
+      }
+
+      .brand {
+        margin-bottom: 1.4rem;
+      }
+
+      .brand-script {
+        font-size: 2.2rem;
+      }
+
+      .form-card {
+        padding: 1.8rem 1.4rem;
+        border-radius: 18px;
+      }
+
+      .state-card {
+        padding: 2.2rem 1.4rem;
+      }
+
+      /* Header invitado: columna si el nombre es largo */
+      .form-header {
+        gap: 0.8rem;
+      }
+
+      .guest-name {
+        font-size: 1.15rem;
+      }
+
+      /* Botones RSVP: columna en móvil */
+      .rsvp-buttons {
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      .rsvp-btn {
+        flex-direction: row;
+        justify-content: center;
+        padding: 0.85rem 1rem;
+        gap: 0.6rem;
+      }
+
+      .btn-text {
+        font-size: 0.95rem;
+      }
+
+      /* Input y textarea a tamaño base para evitar zoom en iOS */
+      .rsvp-input {
+        font-size: 16px !important;
+      }
+
+      .invitation-code {
+        margin-top: 1.2rem;
+        font-size: 0.72rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .form-card {
+        padding: 1.5rem 1.2rem;
+      }
+
+      .guest-avatar {
+        width: 46px;
+        height: 46px;
+        font-size: 1.2rem;
+      }
+
+      .icon-circle {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
     }
   `]
 })

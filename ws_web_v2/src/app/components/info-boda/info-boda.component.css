@@ -517,19 +517,167 @@
 .ib-saving { animation: pulse 1.5s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
 
-/* ── Responsive ────────────────────────────── */
+/* ============================================================
+   RESPONSIVE — info-boda.component.css
+   ============================================================ */
+
+/* ── Tablet (≤ 768px) ── */
 @media (max-width: 768px) {
-  .ib-layout { padding: 24px 18px 90px; }
-  .ib-grid { grid-template-columns: 1fr; }
-  .ib-card--full { grid-column: 1; }
-  .ib-header__title { font-size: 2.2rem; }
-  .ib-topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .ib-date-block__day { font-size: 2.4rem; }
+  .ib-layout {
+    padding: 24px 16px 90px;
+  }
+
+  /* Grid: 1 columna */
+  .ib-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .ib-card--full {
+    grid-column: 1;
+  }
+
+  /* Header */
+  .ib-header {
+    margin-bottom: 36px;
+  }
+
+  .ib-header__title {
+    font-size: 2.2rem;
+  }
+
+  /* Topbar: columna */
+  .ib-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .ib-edit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Fecha */
+  .ib-date-block__day {
+    font-size: 2.4rem;
+    min-width: 44px;
+  }
+
+  /* Ocultar ornamentos en móvil (ocupan espacio visual innecesario) */
+  .ib-corner-ornament {
+    display: none;
+  }
 }
 
+/* ── Móvil (≤ 480px) ── */
 @media (max-width: 480px) {
-  .ib-layout { padding: 20px 14px 90px; }
-  .ib-card__body { padding: 20px 18px; }
-  .ib-card__label-side { width: 28px; }
-  .ib-header__title { font-size: 1.9rem; }
+  .ib-layout {
+    padding: 16px 12px 90px;
+  }
+
+  /* Card body más compacto */
+  .ib-card__body {
+    padding: 18px 16px;
+  }
+
+  /* Label lateral más estrecho */
+  .ib-card__label-side {
+    width: 26px;
+  }
+
+  .ib-card__label-side span {
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+  }
+
+  /* Header */
+  .ib-header {
+    margin-bottom: 28px;
+  }
+
+  .ib-header__title {
+    font-size: 1.8rem;
+  }
+
+  .ib-header__eyebrow {
+    font-size: 0.6rem;
+    gap: 10px;
+  }
+
+  .eyebrow-line {
+    width: 30px;
+  }
+
+  /* Topbar */
+  .ib-topbar {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+  }
+
+  /* Venue name */
+  .ib-venue-name {
+    font-size: 1.3rem;
+  }
+
+  /* Bloque fecha: más compacto */
+  .ib-date-block {
+    padding: 12px 14px;
+    gap: 12px;
+  }
+
+  .ib-date-block__day {
+    font-size: 2rem;
+    min-width: 36px;
+  }
+
+  .ib-date-block__month {
+    font-size: 0.85rem;
+  }
+
+  .ib-date-block__time {
+    font-size: 0.95rem;
+  }
+
+  /* Dress code */
+  .ib-dresscode-display {
+    padding: 18px 14px;
+  }
+
+  .ib-dresscode-display__text {
+    font-size: 1.15rem;
+  }
+
+  /* Menú quote */
+  .ib-menu-quote {
+    padding-left: 22px;
+  }
+
+  .ib-menu-quote__mark {
+    font-size: 3rem;
+  }
+
+  .ib-menu-quote__text {
+    font-size: 1rem;
+  }
+
+  /* Icono wrap */
+  .ib-card__icon-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+  }
+
+  /* Save bar: ajustar para que no tape contenido */
+  .ib-save-bar {
+    bottom: 16px;
+    width: calc(100% - 24px);
+  }
+
+  .ib-save-btn {
+    padding: 13px 24px;
+    font-size: 0.95rem;
+  }
 }

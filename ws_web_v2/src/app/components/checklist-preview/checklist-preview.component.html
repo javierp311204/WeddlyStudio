@@ -3,14 +3,14 @@
 
 <div class="checklist-preview" *ngIf="!cargando && totals">
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="d-flex justify-content-between align-items-center mb-3" style="gap: 12px;">
     <h2 class="h5 fw-semibold mb-0"
         style="font-family: 'Playfair Display', serif; color: var(--dark-charcoal);">
       {{ 'HOME.CHECKLIST_PREVIEW_TITLE' | translate }}
     </h2>
     <a routerLink="/checklist"
-       class="small fw-semibold text-decoration-none"
-       style="color: var(--gold);">
+      class="small fw-semibold text-decoration-none"
+      style="color: var(--gold); flex-shrink: 0; white-space: nowrap;">
       {{ 'HOME.CHECKLIST_PREVIEW_SEE_ALL' | translate }} →
     </a>
   </div>
@@ -37,27 +37,27 @@
 
   <!-- Stats — v2: completed / in_progress / pending (antes: completadas / enProgreso / pendientes) -->
   <div class="row g-3">
-    <div class="col-6 col-md-3">
+    <div class="col-6 col-sm-3">
       <div class="stat-card card border-0 rounded-4 p-3 text-center">
         <span class="stat-num" style="color: var(--dark-charcoal);">{{ totals.total }}</span>
         <span class="stat-label">{{ 'HOME.CHECKLIST_STATS_TOTAL' | translate }}</span>
       </div>
     </div>
-    <div class="col-6 col-md-3">
+    <div class="col-6 col-sm-3">
       <div class="stat-card card border-0 rounded-4 p-3 text-center">
         <!-- v2: totals.completed -->
         <span class="stat-num" style="color: #5c7a4e;">{{ totals.completed }}</span>
         <span class="stat-label">{{ 'HOME.CHECKLIST_STATS_COMPLETED' | translate }}</span>
       </div>
     </div>
-    <div class="col-6 col-md-3">
+    <div class="col-6 col-sm-3">
       <div class="stat-card card border-0 rounded-4 p-3 text-center">
         <!-- v2: totals.in_progress -->
         <span class="stat-num" style="color: #b07030;">{{ totals.in_progress }}</span>
         <span class="stat-label">{{ 'HOME.CHECKLIST_STATS_IN_PROGRESS' | translate }}</span>
       </div>
     </div>
-    <div class="col-6 col-md-3">
+    <div class="col-6 col-sm-3">
       <div class="stat-card card border-0 rounded-4 p-3 text-center">
         <!-- v2: totals.pending -->
         <span class="stat-num" style="color: #8b7e74;">{{ totals.pending }}</span>

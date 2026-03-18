@@ -30,7 +30,6 @@ export class LanguageService {
     if (this.AVAILABLE_LANGS.includes(lang)) {
       this.translate.use(lang);
       localStorage.setItem(this.STORAGE_KEY, lang);
-      console.log('✅ Idioma cambiado a:', lang);
     }
   }
 

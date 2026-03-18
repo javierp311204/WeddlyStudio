@@ -664,14 +664,196 @@
 }
 
 /* ── Responsive ──────────────────────────────────────────── */
+/* ============================================================
+   RESPONSIVE — calendario.component.css
+   ============================================================ */
+
+/* ── Tablet / móvil grande (≤ 640px) ── */
 @media (max-width: 640px) {
-  .cal-header { padding: 18px 16px 12px; }
-  .cal-nav { padding: 8px 16px 12px; }
-  .cal-grid-wrap { padding: 0 10px 16px; }
-  .cal-month-label { min-width: 140px; font-size: 0.9rem; }
-  .cal-day { min-height: 56px; padding: 6px 4px 4px; }
-  .export-btn span { display: none; }
-  .export-btn { padding: 8px 10px; }
-  .day-detail { margin: 0 10px 16px; }
-  .undated-section { margin: 0 10px 16px; }
+  .cal-header {
+    padding: 16px 16px 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* Botones export: solo iconos, sin texto */
+  .cal-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .export-btn span:not(.lock-badge) {
+    display: none;
+  }
+
+  .export-btn {
+    padding: 8px 10px;
+  }
+
+  /* Nav mes */
+  .cal-nav {
+    padding: 8px 16px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .cal-nav-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .cal-month-label {
+    min-width: 0;
+    flex: 1;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+
+  .cal-nav-shortcuts {
+    width: 100%;
+  }
+
+  .shortcut-btn {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Grid */
+  .cal-grid-wrap {
+    padding: 0 10px 16px;
+  }
+
+  .cal-dow {
+    font-size: 0.62rem;
+    padding: 4px 2px;
+    letter-spacing: 0;
+  }
+
+  /* Celdas días */
+  .cal-day {
+    min-height: 54px;
+    padding: 5px 3px 4px;
+    border-radius: 8px;
+  }
+
+  .day-number {
+    font-size: 0.75rem;
+  }
+
+  .cal-day.today .day-number {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+  }
+
+  .wedding-badge {
+    top: 3px;
+    right: 3px;
+    font-size: 0.65rem;
+  }
+
+  .task-dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .task-dot-more {
+    font-size: 0.55rem;
+  }
+
+  /* Panel detalle */
+  .day-detail {
+    margin: 0 10px 16px;
+  }
+
+  .day-detail-header {
+    padding: 12px 14px 10px;
+  }
+
+  .day-task-item {
+    padding: 8px 14px;
+  }
+
+  /* Tareas sin fecha */
+  .undated-section {
+    margin: 0 10px 16px;
+  }
+
+  /* Modal asignar: z-index por encima del sidebar */
+  .assign-overlay {
+    z-index: 1100;
+    padding: 12px;
+  }
+
+  .assign-modal {
+    max-height: 85vh;
+    border-radius: 14px;
+  }
+
+  .assign-modal-header {
+    padding: 16px 16px 10px;
+  }
+}
+
+/* ── Móvil pequeño (≤ 400px) ── */
+@media (max-width: 400px) {
+  .cal-grid-wrap {
+    padding: 0 6px 12px;
+  }
+
+  /* Días de la semana: abreviar a 1 letra */
+  .cal-dow {
+    font-size: 0.58rem;
+    padding: 4px 1px;
+  }
+
+  .cal-day {
+    min-height: 46px;
+    padding: 4px 2px 3px;
+    border-radius: 6px;
+  }
+
+  .day-number {
+    font-size: 0.7rem;
+  }
+
+  .cal-day.today .day-number {
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+  }
+
+  /* Ocultar dots en móvil muy pequeño, solo mostrar indicador */
+  .task-dots {
+    gap: 2px;
+  }
+
+  .task-dot {
+    width: 4px;
+    height: 4px;
+  }
+
+  .cal-week {
+    gap: 1px;
+  }
+
+  .cal-body {
+    gap: 1px;
+  }
+
+  /* Header más compacto */
+  .cal-header {
+    padding: 12px 12px 8px;
+  }
+
+  .cal-nav {
+    padding: 6px 12px 10px;
+  }
+
+  .cal-title {
+    font-size: 1.05rem;
+  }
 }

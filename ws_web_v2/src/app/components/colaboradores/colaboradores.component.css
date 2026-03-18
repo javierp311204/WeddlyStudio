@@ -241,7 +241,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1100;
   padding: 20px;
 }
 
@@ -516,9 +516,162 @@
   animation: spin 0.6s linear infinite;
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
+/* ============================================================
+   RESPONSIVE — colaboradores.component.css
+   ============================================================ */
+
+/* ── Tablet (≤ 768px) ── */
 @media (max-width: 768px) {
-  .colab-wrapper { padding: 24px 16px 40px; }
-  .colab-title   { font-size: 1.5rem; }
-  .modal-box     { padding: 24px 20px; }
+  .colab-wrapper {
+    padding: 24px 16px 40px;
+  }
+
+  .colab-title {
+    font-size: 1.5rem;
+  }
+
+  /* Header: título arriba, botón abajo */
+  .colab-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .btn-invite {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 20px;
+  }
+
+  /* Member card: 2 filas
+     Fila 1: avatar + info (flex: 1)
+     Fila 2: badge + botones (alineados a la derecha) */
+  .member-card {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .member-info {
+    /* Ocupa el espacio restante en la primera fila */
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Badge y botones bajan a segunda fila,
+     empujados a la derecha con margin-left auto en el badge */
+  .role-badge {
+    margin-left: auto; /* empuja hacia la derecha */
+    order: 3;
+  }
+
+  .btn-edit-role {
+    order: 4;
+  }
+
+  .btn-revoke {
+    order: 5;
+  }
+
+  /* El role-edit (select + botones) ocupa fila completa */
+  .role-edit {
+    width: 100%;
+    order: 3;
+  }
+
+  .role-select {
+    flex: 1;
+  }
+
+  /* Email: permitir wrap en móvil */
+  .member-email {
+    white-space: normal;
+    word-break: break-all;
+  }
+
+  /* Invite row: 2 filas */
+  .invite-row {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+
+  .invite-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .invite-email {
+    white-space: normal;
+    word-break: break-all;
+  }
+
+  .status-badge {
+    margin-left: auto;
+    order: 3;
+  }
+
+  .invite-row .btn-revoke {
+    order: 4;
+  }
+
+  /* Modal */
+  .modal-box {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Acciones del modal: columna en móvil */
+  .modal-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .btn-cancel,
+  .btn-send,
+  .btn-danger {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 12px 16px;
+  }
+}
+
+/* ── Móvil pequeño (≤ 480px) ── */
+@media (max-width: 480px) {
+  .colab-wrapper {
+    padding: 16px 12px 32px;
+  }
+
+  .colab-title {
+    font-size: 1.3rem;
+  }
+
+  .member-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .member-name {
+    font-size: 0.85rem;
+  }
+
+  .section-title {
+    font-size: 1rem;
+  }
+
+  /* Confirm box más compacto */
+  .confirm-box {
+    padding: 20px 16px;
+  }
+
+  .confirm-msg {
+    font-size: 0.88rem;
+  }
 }

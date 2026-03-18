@@ -149,13 +149,83 @@
   font-weight: 600;
 }
 
-/* === RESPONSIVE === */
+/* ============================================================
+   RESPONSIVE — register.component.css
+   ============================================================ */
+
+/* ── Tablet (≤ 900px): ocultar columna izquierda ── */
 @media (max-width: 900px) {
   .register-left {
     display: none;
   }
+
   .register-right {
     flex: 1;
-    padding: 40px 30px;
+    padding: 56px 32px 40px;
+    align-items: flex-start;
+  }
+
+  .form-container {
+    padding-top: 8px;
+  }
+}
+
+/* ── Móvil (≤ 576px) ── */
+@media (max-width: 576px) {
+  .register-right {
+    padding: 52px 20px 32px;
+  }
+
+  .btn-back {
+    top: 14px;
+    left: 14px;
+    font-size: 0.82rem;
+  }
+
+  .form-title {
+    font-size: 1.65rem;
+  }
+
+  .form-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  /* Nombre + Apellido: columna en móvil */
+  .row.g-3.mb-3 .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  /* Inputs: 16px para evitar zoom en iOS */
+  .form-control,
+  .form-select {
+    font-size: 16px !important;
+    padding: 9px 12px;
+  }
+
+  .btn-auth {
+    font-size: 1rem;
+    padding: 11px;
+  }
+
+  .auth-footer {
+    font-size: 0.85rem;
+    margin-top: 16px;
+  }
+}
+
+/* ── Móvil pequeño (≤ 380px) ── */
+@media (max-width: 380px) {
+  .register-right {
+    padding: 48px 16px 28px;
+  }
+
+  .form-title {
+    font-size: 1.45rem;
+  }
+
+  .form-label {
+    font-size: 0.7rem;
   }
 }

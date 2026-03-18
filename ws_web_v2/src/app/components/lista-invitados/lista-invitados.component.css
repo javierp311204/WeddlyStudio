@@ -378,8 +378,153 @@
   border-color: #e63946;
   color: #e63946;
 }
+/* ============================================================
+   RESPONSIVE — lista-invitados.component.css
+   ============================================================ */
 
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+
+  /* Wrapper principal */
+  .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Header */
+  header.text-center.mb-5 {
+    margin-bottom: 28px !important;
+  }
+
+  /* Formulario añadir: cada campo ocupa fila completa en móvil */
+  .card-body .row.g-3 > [class*="col-"] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  /* Filtros: scroll horizontal en lugar de wrap */
+  .d-flex.flex-wrap.gap-2.justify-content-center {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    justify-content: flex-start !important;
+    padding-bottom: 8px;
+    /* Ocultar scrollbar visualmente */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .d-flex.flex-wrap.gap-2.justify-content-center::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Filtros: no encoger */
+  .filter-chip {
+    flex-shrink: 0;
+    padding: 8px 16px !important;
+    font-size: 0.82rem;
+  }
+
+  /* Cards invitados: 1 columna en móvil
+     (Bootstrap ya da row-cols-1 pero por si acaso) */
+  .row.row-cols-1.row-cols-md-2.row-cols-lg-3 {
+    --bs-gutter-x: 12px;
+    --bs-gutter-y: 12px;
+  }
+
+  /* Card hover: desactivar en móvil (no hay hover real) */
+  .invitado-card:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+  }
+
+  /* Modal backdrop */
+  .guest-modal-backdrop {
+    padding: 12px;
+    align-items: flex-end; /* slide desde abajo en móvil */
+  }
+
+  /* Modal: ancho completo y bordes redondeados solo arriba */
+  .guest-modal {
+    max-width: 100%;
+    border-radius: 24px 24px 0 0;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* ── Móvil (≤ 480px) ── */
 @media (max-width: 480px) {
-  .guest-modal > *:not(.modal-top-stripe) { padding-left: 22px; padding-right: 22px; }
-  .modal-name { font-size: 1.2rem; }
+
+  /* Header más compacto */
+  header.text-center.mb-5 {
+    margin-bottom: 20px !important;
+  }
+
+  header h1 {
+    font-size: 1.6rem !important;
+  }
+
+  /* Formulario: padding reducido */
+  .card-body {
+    padding: 16px !important;
+  }
+
+  /* Filtros más pequeños */
+  .filter-chip {
+    padding: 7px 14px !important;
+    font-size: 0.78rem;
+  }
+
+  /* Cards invitados: padding reducido */
+  .invitado-card .card-body {
+    padding: 16px !important;
+  }
+
+  /* Nombre del invitado */
+  .invitado-card h3.h5 {
+    font-size: 1rem !important;
+  }
+
+  /* Modal padding reducido */
+  .guest-modal > *:not(.modal-top-stripe) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .modal-name {
+    font-size: 1.2rem;
+  }
+
+  .modal-avatar {
+    width: 64px;
+    height: 64px;
+    font-size: 1.7rem;
+  }
+
+  /* Info grid del modal: texto más pequeño */
+  .info-value {
+    font-size: 0.82rem;
+  }
+
+  /* Botones del modal sugerencia IA: columna */
+  .guest-modal .d-flex.gap-2.justify-content-center {
+    flex-direction: column;
+    gap: 8px !important;
+  }
+
+  .guest-modal .d-flex.gap-2.justify-content-center .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ── Móvil pequeño (≤ 360px) ── */
+@media (max-width: 360px) {
+  .filter-chip span:last-child {
+    display: none; /* solo icono en pantallas muy pequeñas */
+  }
+
+  .filter-chip {
+    padding: 8px 12px !important;
+  }
 }

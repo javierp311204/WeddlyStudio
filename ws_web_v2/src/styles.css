@@ -459,36 +459,25 @@ body {
 }
 
 /* --- RESPONSIVE --- */
-@media (max-width: 576px) {
-  .toast-notification {
-    min-width: 260px;
-    max-width: calc(100vw - 40px);
-    right: -600px;
+@media (max-width: 768px) {
+  .app-shell,
+  .app-shell.sidebar-collapsed {
+    --sw: 68px;
   }
-  
-  .toast-notification.show {
-    right: 10px;
+ 
+  /* El contenido no puede superar el ancho disponible */
+  .app-main {
+    max-width: calc(100vw - 68px);
+    overflow-x: hidden;
   }
-  
-  .modal-card {
-    padding: 25px;
-    max-width: 95%;
+ 
+  .app-content {
+    overflow-x: hidden;
   }
-  
-  .modal-icon {
-    font-size: 2.5rem;
-  }
-  
-  .modal-card h3 {
-    font-size: 1.3rem;
-  }
-  
-  .confirm-actions {
-    flex-direction: column;
-  }
-  
-  .btn-confirm-si,
-  .btn-confirm-no {
-    width: 100%;
-  }
+ 
+  .gf-body { padding: 28px 20px; flex-direction: column; align-items: flex-start; }
+  .gf-right { align-items: flex-start; }
+  .gf-contact { flex-direction: column; gap: 10px; }
+  .gf-bar { padding: 14px 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .gf-nav { gap: 16px; }
 }
