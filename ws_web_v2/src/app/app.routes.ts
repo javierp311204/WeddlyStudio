@@ -41,8 +41,8 @@ export const routes: Routes = [
   { path: 'reset-pass',             component: ResetearPasswordComponent },
   { path: 'reco-pass',              component: RecuperarPasswordComponent },
   { path: 'rsvp/:code',             component: RsvpComponent },
-  { path: 'terminos',               component: TerminosComponent },
-  { path: 'privacidad',             component: PrivacidadComponent },
+  { path: 'terms',                  component: TerminosComponent },
+  { path: 'privacy',             component: PrivacidadComponent },
   { path: 'invites/accept/:token',  component: InviteAcceptComponent },
   { path: 'pricing',                component: PricingComponent },
 
@@ -57,14 +57,13 @@ export const routes: Routes = [
   // ── Autenticadas — sin restricción de boda ──────────────────
   { path: 'dashboard',  component: HomeComponent,          canActivate: [authGuard] },
   { path: 'onboarding', component: OnboardingComponent,    canActivate: [authGuard] },
-  { path: 'perfil',     component: PerfilUsuarioComponent, canActivate: [authGuard] },
-  { path: 'mis-bodas',  component: MisBodasComponent,      canActivate: [authGuard] },
-  { path: 'perfil2fa',  component: Perfil2faComponent,     canActivate: [authGuard] },
+  { path: 'profile',     component: PerfilUsuarioComponent, canActivate: [authGuard] },
+  { path: 'my-weddings',  component: MisBodasComponent,      canActivate: [authGuard] },
+  { path: 'profile2fa',  component: Perfil2faComponent,     canActivate: [authGuard] },
 
   // ── Lectura (readonly/archived pueden entrar, no editar) ────
-  // album y calendario nunca bloquean — son consulta pura
   { path: 'album',      component: AlbumDigitalComponent,  canActivate: [authGuard, minRoleGuard('guest')] },
-  { path: 'calendario', component: CalendarioPageComponent, canActivate: [authGuard, minRoleGuard('guest')] },
+  { path: 'calendar', component: CalendarioPageComponent, canActivate: [authGuard, minRoleGuard('guest')] },
 
   // ── Escritura — se bloquean si boda es readonly o archived ──
   {
@@ -74,37 +73,37 @@ export const routes: Routes = [
     data: { blockOnReadonly: true },
   },
   {
-    path: 'info-boda',
+    path: 'wedding-info',
     component: InfoBodaComponent,
     canActivate: [authGuard, minRoleGuard('guest'), PlanGuard],
     data: { blockOnReadonly: true },
   },
   {
-    path: 'invitados',
+    path: 'guests',
     component: ListaInvitadosComponent,
     canActivate: [authGuard, minRoleGuard('planner'), PlanGuard],
     data: { blockOnReadonly: true },
   },
   {
-    path: 'mesas',
+    path: 'tables',
     component: MesaManagerComponent,
     canActivate: [authGuard, minRoleGuard('planner'), PlanGuard],
     data: { blockOnReadonly: true, planRequerido: 'one_time'},
   },
   {
-    path: 'plano',
+    path: 'map',
     component: PlanoInteractivoComponent,
     canActivate: [authGuard, minRoleGuard('planner'), PlanGuard],
     data: { blockOnReadonly: true, planRequerido: 'one_time' },
   },
   {
-    path: 'diseno',
+    path: 'design',
     component: DisenoPapeleriaComponent,
     canActivate: [authGuard, minRoleGuard('co_organizer'), PlanGuard],
     data: { blockOnReadonly: true },
   },
   {
-    path: 'colaboradores',
+    path: 'collaborators',
     component: ColaboradoresComponent,
     canActivate: [authGuard, minRoleGuard('co_organizer'), PlanGuard],
     data: { blockOnReadonly: true },

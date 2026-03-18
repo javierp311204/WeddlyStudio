@@ -31,15 +31,15 @@ export class SidebarComponent implements OnInit {
 
   navItems: NavItem[] = [
     { label: 'NAV.HOME',          title: 'NAV.HOME',          icon: 'home',          route: '/dashboard',      exact: true },
-    { label: 'NAV.INFO',          title: 'NAV.INFO',          icon: 'infoBoda',      route: '/info-boda',      minRole: 'planner' },
-    { label: 'NAV.GUESTS',        title: 'NAV.GUESTS',        icon: 'invitados',     route: '/invitados',      minRole: 'planner' },
+    { label: 'NAV.INFO',          title: 'NAV.INFO',          icon: 'infoBoda',      route: '/wedding-info',      minRole: 'planner' },
+    { label: 'NAV.GUESTS',        title: 'NAV.GUESTS',        icon: 'invitados',     route: '/guests',      minRole: 'planner' },
     { label: 'NAV.CHECKLIST',     title: 'NAV.CHECKLIST',     icon: 'checklist',     route: '/checklist' },
-    { label: 'NAV.CALENDAR',      title: 'NAV.CALENDAR',      icon: 'calendario',    route: '/calendario' },
-    { label: 'NAV.DESIGN',        title: 'NAV.DESIGN',        icon: 'diseno',        route: '/diseno',         minRole: 'co_organizer' },
-    { label: 'NAV.TABLES',        title: 'NAV.TABLES',        icon: 'mesas',         route: '/mesas',          minRole: 'planner' },
-    { label: 'NAV.MAP',           title: 'NAV.MAP',           icon: 'plano',         route: '/plano',          minRole: 'planner' },
+    { label: 'NAV.CALENDAR',      title: 'NAV.CALENDAR',      icon: 'calendario',    route: '/calendar' },
+    { label: 'NAV.DESIGN',        title: 'NAV.DESIGN',        icon: 'diseno',        route: '/design',         minRole: 'co_organizer' },
+    { label: 'NAV.TABLES',        title: 'NAV.TABLES',        icon: 'mesas',         route: '/tables',          minRole: 'planner' },
+    { label: 'NAV.MAP',           title: 'NAV.MAP',           icon: 'plano',         route: '/map',          minRole: 'planner' },
     { label: 'NAV.ALBUM',         title: 'NAV.ALBUM',         icon: 'album',         route: '/album' },
-    { label: 'NAV.COLLABORATORS', title: 'NAV.COLLABORATORS', icon: 'colaboradores', route: '/colaboradores',  minRole: 'co_organizer' },
+    { label: 'NAV.COLLABORATORS', title: 'NAV.COLLABORATORS', icon: 'colaboradores', route: '/collaborators',  minRole: 'co_organizer' },
     { label: 'NAV.PRICING',       title: 'NAV.PRICING',       icon: 'planes',        route: '/pricing' },
   ];
 

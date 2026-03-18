@@ -143,7 +143,7 @@
               class="phase-btn"
               [class.active]="faseActiva === fase.fase"
               (click)="cambiarFase(fase.fase)">
-        <span class="phase-btn-title">{{ fase.titulo }}</span>
+        <span class="phase-btn-title">{{ fase.titulo | translate }}</span>
         <span class="phase-btn-pct">{{ fase.progreso }}%</span>
       </button>
     </nav>
@@ -154,8 +154,8 @@
       <!-- SIDEBAR -->
       <aside class="cl-sidebar">
         <div class="sidebar-phase-info">
-          <h2>{{ faseActualData.titulo }}</h2>
-          <p>{{ faseActualData.descripcion }}</p>
+          <h2>{{ faseActualData.titulo | translate}}</h2>
+          <p>{{ faseActualData.descripcion | translate }}</p>
           <div class="sidebar-progress">
             <div class="progress-bar-wrap">
               <div class="progress-bar-fill" [style.width.%]="faseActualData.progreso"></div>
@@ -328,14 +328,14 @@
             <label>{{ 'CHECKLIST.MODALS.TASK_PHASE_REQUIRED' | translate }}</label>
             <select [(ngModel)]="tareaActual.phase">
               <option *ngFor="let fase of FASES_BODA | keyvalue" [value]="fase.key">
-                {{ fase.value.titulo }}
+                {{ fase.value.titulo | translate }}
               </option>
             </select>
           </div>
           <div class="form-col">
             <label>{{ 'CHECKLIST.MODALS.TASK_CATEGORY' | translate }}</label>
             <select [(ngModel)]="tareaActual.category">
-              <option *ngFor="let cat of CATEGORIAS" [value]="cat">{{ cat }}</option>
+              <option *ngFor="let cat of CATEGORIAS" [value]="cat">{{ cat | translate }}</option>
             </select>
           </div>
         </div>

@@ -168,11 +168,11 @@ export class OnboardingComponent implements OnInit {
 
   irAModulo() {
     const rutas: Record<string, string> = {
-      invitados:    '/invitados',
-      mesas:        '/plano',
+      invitados:    '/guests',
+      mesas:        '/map',
       checklist:    '/checklist',
       album:        '/album',
-      invitaciones: '/diseno',
+      invitaciones: '/design',
     };
     this.router.navigate([rutas[this.prioridad] ?? '/dashboard']);
   }

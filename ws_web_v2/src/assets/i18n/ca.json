@@ -25,6 +25,12 @@
     "DONT_ASK_AGAIN": "No tornar a preguntar"
   },
 
+  "ROLES": {
+    "user": "Usuari",
+    "admin": "Administrador",
+    "superadmin": "Propietari"
+  },
+
   "HOME": {
     "BRAND": "Weddly Studio",
     "ACCESS_BTN": "Accés",
@@ -861,6 +867,8 @@
       "INVITATIONS": "Invitacions",
       "DECORATION": "Decoració",
       "MUSIC": "Música",
+      "DRESS": "Vestimenta",
+      "TRANSPORT": "Transport",
       "PHOTOGRAPHY": "Fotografia",
       "LEGAL": "Legal/Documents",
       "OTHER": "Altre"
@@ -1321,6 +1329,26 @@
   },
 
   "TASKS": {
+    "WEDDING_PHASES": {
+      "12_MONTHS_TITLE": "12 mesos abans",
+      "12_MONTHS_DESC": "Planificació inicial i reserves importants",
+
+      "9_MONTHS_TITLE": "9 mesos abans",
+      "9_MONTHS_DESC": "Proveïdors clau i detalls de la cerimònia",
+
+      "6_MONTHS_TITLE": "6 mesos abans",
+      "6_MONTHS_DESC": "Confirmacions i preparatius intermedis",
+
+      "3_MONTHS_TITLE": "3 mesos abans",
+      "3_MONTHS_DESC": "Detalls finals i confirmacions",
+
+      "1_MONTH_TITLE": "1 mes abans",
+      "1_MONTH_DESC": "Últims preparatius",
+
+      "1_WEEK_TITLE": "1 setmana abans",
+      "1_WEEK_DESC": "Coordinació final del gran dia"
+    },
+
     "12_MONTHS": {
       "DEFINE_BUDGET": {
         "TITLE": "Definir pressupost total",
@@ -1505,7 +1533,14 @@
     "ERROR_GENERIC": "Error en enviar la ressenya.",
     "REVIEW_SINGULAR": "ressenya",
     "REVIEW_PLURAL": "ressenyes"
+  },
+
+  "ERRORS": {
+    "PLAN_REQUIRED_TITLE": "Pla requerit",
+    "PLAN_PREMIUM_REQUIRED_TITLE": "Pla Premium requerit",
+    "PLAN_REQUIRED_DESC": "Aquesta funció requereix un pla de pagament. Actualitza el teu pla per continuar.",
+    "PLAN_PREMIUM_REQUIRED_DESC": "Necessites el pla Premium per gestionar múltiples casaments.",
+    "ACCESS_DENEGATED_TITLE": "Accés denegat",
+    "ACCESS_DENEGATED_DESC": "Has d'iniciar sessió primer."
   }
-
-
 }

@@ -25,6 +25,12 @@
     "DONT_ASK_AGAIN": "Ne plus demander"
   },
 
+  "ROLES": {
+  "user": "Utilisateur",
+  "admin": "Administrateur",
+  "superadmin": "Propriétaire"
+},
+
   "HOME": {
     "BRAND": "Weddly Studio",
     "ACCESS_BTN": "Connexion",
@@ -861,6 +867,8 @@
       "INVITATIONS": "Invitations",
       "DECORATION": "Décoration",
       "MUSIC": "Musique",
+      "DRESS": "Tenue",
+      "TRANSPORT": "Transport", 
       "PHOTOGRAPHY": "Photographie",
       "LEGAL": "Légal/Documents",
       "OTHER": "Autre"
@@ -1321,6 +1329,28 @@
   },
 
   "TASKS": {
+
+    "WEDDING_PHASES" : {
+      
+      "12_MONTHS_TITLE": "12 mois avant",
+      "12_MONTHS_DESC": "Planification initiale et réservations importantes",
+
+      "9_MONTHS_TITLE": "9 mois avant",
+      "9_MONTHS_DESC": "Prestataires clés et détails de la cérémonie",
+
+      "6_MONTHS_TITLE": "6 mois avant",
+      "6_MONTHS_DESC": "Confirmations et préparatifs intermédiaires",
+
+      "3_MONTHS_TITLE": "3 mois avant",
+      "3_MONTHS_DESC": "Détails finaux et confirmations",
+
+      "1_MONTH_TITLE": "1 mois avant",
+      "1_MONTH_DESC": "Derniers préparatifs",
+
+      "1_WEEK_TITLE": "1 semaine avant",
+      "1_WEEK_DESC": "Coordination finale pour le grand jour"
+    },
+
     "12_MONTHS": {
       "DEFINE_BUDGET": {
         "TITLE": "Définir le budget total",
@@ -1505,6 +1535,16 @@
     "ERROR_GENERIC": "Erreur lors de l'envoi de l'avis.",
     "REVIEW_SINGULAR": "avis",
     "REVIEW_PLURAL": "avis"
+  },
+
+  "ERRORS": {
+    "PLAN_REQUIRED_TITLE": "Plan requis",
+    "PLAN_PREMIUM_REQUIRED_TITLE": "Plan Premium requis",
+    "PLAN_REQUIRED_DESC": "Cette fonctionnalité nécessite un plan payant. Mettez à niveau votre plan pour continuer.",
+    "PLAN_PREMIUM_REQUIRED_DESC": "Vous avez besoin du plan Premium pour gérer plusieurs mariages.",
+    "ACCESS_DENEGATED_TITLE": "Accès refusé",
+    "ACCESS_DENEGATED_DESC": "Vous devez d'abord vous connecter."
   }
+
 
 }

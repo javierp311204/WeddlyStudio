@@ -159,17 +159,16 @@ export class ChecklistBodaComponent implements OnInit {
 
   organizarTareasPorFase(tareas: Tarea[]): void {
     this.fases = Object.keys(FASES_BODA).map((faseKey) => {
-      const faseInfo = FASES_BODA[faseKey as TareaFase]; // FIX TS7053
-      // v2: campo 'phase' (antes 'fase')
+      const faseInfo = FASES_BODA[faseKey as TareaFase];
+
       const tareasFase = tareas.filter((t) => t.phase === faseKey);
-      // v2: campo 'status' (antes 'estado')
       const completadas = tareasFase.filter((t) => t.status === 'completed').length;
       const progreso = tareasFase.length > 0 ? (completadas / tareasFase.length) * 100 : 0;
 
       return {
         fase: faseKey,
-        titulo: faseInfo.titulo,
-        descripcion: faseInfo.descripcion,
+        titulo: faseInfo.titulo,           
+        descripcion: faseInfo.descripcion, 
         icon: faseInfo.icon,
         color: faseInfo.color,
         tareas: tareasFase,
@@ -177,6 +176,7 @@ export class ChecklistBodaComponent implements OnInit {
       };
     });
   }
+
 
   // ============================================
   // GESTIÓN DE TAREAS

@@ -25,6 +25,12 @@
     "DONT_ASK_AGAIN": "Don't ask again"
   },
 
+  "ROLES": {
+    "user": "User",
+    "admin": "Administrator",
+    "superadmin": "Owner"
+  },
+
   "HOME": {
     "BRAND": "Weddly Studio",
     "ACCESS_BTN": "Sign In",
@@ -861,6 +867,8 @@
       "INVITATIONS": "Invitations",
       "DECORATION": "Decoration",
       "MUSIC": "Music",
+      "DRESS": "Attire",
+      "TRANSPORT": "Transport",
       "PHOTOGRAPHY": "Photography",
       "LEGAL": "Legal/Documents",
       "OTHER": "Other"
@@ -1321,6 +1329,26 @@
   },
 
   "TASKS": {
+    "WEDDING_PHASES": {
+      "12_MONTHS_TITLE": "12 months before",
+      "12_MONTHS_DESC": "Initial planning and important bookings",
+
+      "9_MONTHS_TITLE": "9 months before",
+      "9_MONTHS_DESC": "Key vendors and ceremony details",
+
+      "6_MONTHS_TITLE": "6 months before",
+      "6_MONTHS_DESC": "Confirmations and mid-stage preparations",
+
+      "3_MONTHS_TITLE": "3 months before",
+      "3_MONTHS_DESC": "Final details and confirmations",
+
+      "1_MONTH_TITLE": "1 month before",
+      "1_MONTH_DESC": "Final preparations",
+
+      "1_WEEK_TITLE": "1 week before",
+      "1_WEEK_DESC": "Final coordination for the big day"
+    },
+
     "12_MONTHS": {
       "DEFINE_BUDGET": {
         "TITLE": "Define total budget",
@@ -1505,7 +1533,14 @@
     "ERROR_GENERIC": "Error submitting review.",
     "REVIEW_SINGULAR": "review",
     "REVIEW_PLURAL": "reviews"
+  },
+
+  "ERRORS": {
+    "PLAN_REQUIRED_TITLE": "Plan required",
+    "PLAN_PREMIUM_REQUIRED_TITLE": "Premium Plan Required",
+    "PLAN_REQUIRED_DESC": "This feature requires a paid plan. Upgrade your plan to continue.",
+    "PLAN_PREMIUM_REQUIRED_DESC": "You need the Premium plan to manage multiple weddings.",
+    "ACCESS_DENEGATED_TITLE": "Access denied",
+    "ACCESS_DENEGATED_DESC": "You must log in first."
   }
-
-
 }

@@ -172,11 +172,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   redirigirSegunTipo(n: any): void {
     this.mostrarPanel = false;
     if (n.ruta) { this.router.navigate([n.ruta]); return; }
-    const mapa: Record<string, string> = { foto: '/album', album: '/album', 'info-boda': '/info-boda', mesa: '/plano' };
+    const mapa: Record<string, string> = { foto: '/album', album: '/album', 'wedding-info': '/wedding-info', mesa: '/map' };
     if (mapa[n.tipo]) this.router.navigate([mapa[n.tipo]]);
   }
 
-  irAInfoBoda(): void { this.router.navigate(['/info-boda']); }
+  irAInfoBoda(): void { this.router.navigate(['/wedding-info']); }
 
   // ─── Scroll ───────────────────────────────────────────────────
   @HostListener('window:scroll', [])

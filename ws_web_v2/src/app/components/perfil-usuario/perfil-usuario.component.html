@@ -23,9 +23,9 @@
                class="d-none" (change)="onAvatarChange($event)" />
         <div class="pf-avatar-info">
           <h2 class="pf-name">{{ getFullName() }}</h2>
-          <span class="pf-role-badge" [ngClass]="'role-' + user.role_global">
-            {{ getRoleLabel(user.role_global) }}
-          </span>
+            <span class="pf-role-badge" [ngClass]="'role-' + user.role_global">
+              {{ 'ROLES.' + user.role_global | translate }}
+            </span>
           <p class="pf-member-since" *ngIf="user.created_at">
             {{ 'PROFILE.MEMBER_SINCE' | translate }}
             {{ user.created_at | date:'MMMM yyyy' }}

@@ -174,7 +174,7 @@ export class ColaboradoresComponent implements OnInit {
         if (type === 'member' && id === this.authService.getUserId()) {
           localStorage.removeItem('weddingId');
           localStorage.removeItem('weddingRole');
-          this.router.navigate(['/mis-bodas']);
+          this.router.navigate(['/my-weddings']);
           return;
         }
         this.load();

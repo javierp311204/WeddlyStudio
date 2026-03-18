@@ -161,8 +161,8 @@ export class WeddingStatusBannerComponent implements OnInit {
 
   private checkOverlay(path: string): void {
     const blockedPaths = [
-      '/checklist', '/info-boda', '/invitados',
-      '/mesas', '/plano', '/diseno', '/colaboradores',
+      '/checklist', '/wedding-info', '/invitados',
+      '/tables', '/map', '/design', '/collaborators',
     ];
     const isBlockedRoute = blockedPaths.some(p => path.startsWith(p));
     this.showOverlay = isBlockedRoute && this.status === 'archived';

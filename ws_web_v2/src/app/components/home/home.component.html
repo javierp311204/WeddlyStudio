@@ -463,7 +463,7 @@
 
       <div class="action-grid">
 
-        <div class="action-card" routerLink="/info-boda">
+        <div class="action-card" routerLink="/wedding-info">
           <div class="card-icon">
             <app-icon name="infoBoda" [size]="24"></app-icon>
           </div>
@@ -474,7 +474,7 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/invitados" *ngIf="authService.isWeddingOwner()">
+        <div class="action-card" routerLink="/guests" *ngIf="authService.isWeddingOwner()">
           <div class="card-icon">
             <app-icon name="invitados" [size]="24"></app-icon>
           </div>
@@ -496,7 +496,7 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/diseno" *ngIf="authService.isWeddingOwner()">
+        <div class="action-card" routerLink="/design" *ngIf="authService.isWeddingOwner()">
           <div class="card-icon">
             <app-icon name="diseno" [size]="24"></app-icon>
           </div>
@@ -507,7 +507,7 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/mesas" *ngIf="authService.isWeddingOwner()">
+        <div class="action-card" routerLink="/tables" *ngIf="authService.isWeddingOwner()">
           <div class="card-icon">
             <app-icon name="mesas" [size]="24"></app-icon>
           </div>
@@ -529,7 +529,7 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/colaboradores" *ngIf="authService.isWeddingOwner()">
+        <div class="action-card" routerLink="/collaborators" *ngIf="authService.isWeddingOwner()">
           <div class="card-icon">
             <app-icon name="colaboradores" [size]="24"></app-icon>
           </div>
@@ -551,7 +551,7 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/plano" *ngIf="authService.isWeddingOwner()">
+        <div class="action-card" routerLink="/map" *ngIf="authService.isWeddingOwner()">
           <div class="card-icon">
             <app-icon name="plano" [size]="24"></app-icon>
           </div>
@@ -562,7 +562,7 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/calendario" *ngIf="authService.isWeddingOwner()">
+        <div class="action-card" routerLink="/calendar" *ngIf="authService.isWeddingOwner()">
           <div class="card-icon">
             <app-icon name="calendario" [size]="24"></app-icon>
           </div>

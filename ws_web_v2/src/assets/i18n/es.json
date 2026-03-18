@@ -25,6 +25,12 @@
     "DONT_ASK_AGAIN": "No volver a preguntar"
   },
 
+  "ROLES": {
+    "user": "Usuario",
+    "admin": "Administrador",
+    "superadmin": "Owner"
+  },
+
   "HOME": {
     "BRAND": "Weddly Studio",
     "ACCESS_BTN": "Acceso",
@@ -127,7 +133,7 @@
     "FOOTER_HELP": "Ayuda",
     "FOOTER_FAQ": "Preguntas Frecuentes",
     "FOOTER_SUPPORT": "Soporte",
-    "FOOTER_COPYRIGHT": "© 2026 Weddly Studio. Hecho con ❤️ para momentos inolvidables.",
+    "FOOTER_COPYRIGHT": "© 2026 Weddly Studio. Hecho con cariño para momentos inolvidables.",
     "DASHBOARD_PANEL": "Panel de",
     "DASHBOARD_CONTROL": "Control",
     "DASHBOARD_GUEST": "Invitado",
@@ -863,6 +869,8 @@
       "INVITATIONS": "Invitaciones",
       "DECORATION": "Decoración",
       "MUSIC": "Música",
+      "DRESS": "Vestimenta",
+      "TRANSPORT": "Transporte",
       "PHOTOGRAPHY": "Fotografía",
       "LEGAL": "Legal/Documentos",
       "OTHER": "Otro"
@@ -1042,7 +1050,7 @@
     "NAV_TERMS": "Términos y Condiciones",
     "NAV_PRIVACY": "Política de Privacidad",
     "NAV_REVIEWS": "Reseñas",
-    
+
     "COPYRIGHT": "Copyright © 2026 · Weddly Studio"
   },
 
@@ -1324,6 +1332,26 @@
   },
 
   "TASKS": {
+    "WEDDING_PHASES": {
+      "12_MONTHS_TITLE": "12 meses antes",
+      "12_MONTHS_DESC": "Planificación inicial y reservas importantes",
+
+      "9_MONTHS_TITLE": "9 meses antes",
+      "9_MONTHS_DESC": "Proveedores clave y detalles de la ceremonia",
+
+      "6_MONTHS_TITLE": "6 meses antes",
+      "6_MONTHS_DESC": "Confirmaciones y preparativos intermedios",
+
+      "3_MONTHS_TITLE": "3 meses antes",
+      "3_MONTHS_DESC": "Detalles finales y confirmaciones",
+
+      "1_MONTH_TITLE": "1 mes antes",
+      "1_MONTH_DESC": "Últimos preparativos",
+
+      "1_WEEK_TITLE": "1 semana antes",
+      "1_WEEK_DESC": "Coordinación final del gran día"
+    },
+
     "12_MONTHS": {
       "DEFINE_BUDGET": {
         "TITLE": "Definir presupuesto total",
@@ -1508,5 +1536,14 @@
     "ERROR_GENERIC": "Error al enviar la reseña.",
     "REVIEW_SINGULAR": "reseña",
     "REVIEW_PLURAL": "reseñas"
+  },
+
+  "ERRORS": {
+    "PLAN_REQUIRED_TITLE": "Plan requerido",
+    "PLAN_PREMIUM_REQUIRED_TITLE": "Plan Premium Requerido",
+    "PLAN_REQUIRED_DESC": "Esta función requiere un plan de pago. Actualiza tu plan para continuar.",
+    "PLAN_PREMIUM_REQUIRED_DESC": "Necesitas el plan Premium para gestionar múltiples bodas.",
+    "ACCESS_DENEGATED_TITLE": "Acceso denegado",
+    "ACCESS_DENEGATED_DESC": "Debes iniciar sesión primero."
   }
 }

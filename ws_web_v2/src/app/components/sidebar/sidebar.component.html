@@ -17,7 +17,7 @@
   </div>
 
   <!-- Perfil -->
-  <a class="sidebar-profile" routerLink="/perfil" [title]="'SIDEBAR.PROFILE_TITLE' | translate">
+  <a class="sidebar-profile" routerLink="/profile" [title]="'SIDEBAR.PROFILE_TITLE' | translate">
     <div class="profile-avatar"
          [style.background-image]="avatarUrl ? 'url(' + avatarUrl + ')' : ''"
          [style.background-size]="'cover'"
@@ -32,7 +32,7 @@
 
   <!-- Mis Bodas -->
   <a class="nav-item mis-bodas-link"
-     routerLink="/mis-bodas"
+     routerLink="/my-weddings"
      routerLinkActive="active"
      [title]="'SIDEBAR.MY_WEDDINGS' | translate">
     <span class="nav-icon">

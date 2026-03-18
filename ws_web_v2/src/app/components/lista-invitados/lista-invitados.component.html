@@ -24,15 +24,15 @@
         <div class="row g-3">
           <div class="col-md-6 col-lg-2">
             <input type="text" class="form-control"
-                   [(ngModel)]="nuevoInvitado.first_name" placeholder="Nombre" />
+                   [(ngModel)]="nuevoInvitado.first_name" [placeholder]= "'ONBOARDING.FIRST_NAME_LABEL' | translate"/>
           </div>
           <div class="col-md-6 col-lg-2">
             <input type="text" class="form-control"
-                   [(ngModel)]="nuevoInvitado.last_name" placeholder="Apellidos" />
+                   [(ngModel)]="nuevoInvitado.last_name" [placeholder]= "'ONBOARDING.LAST_NAME_LABEL' | translate" />
           </div>
           <div class="col-md-6 col-lg-3">
             <input type="email" class="form-control"
-                   [(ngModel)]="nuevoInvitado.email" placeholder="tu@email.com" />
+                   [(ngModel)]="nuevoInvitado.email" [placeholder]= "'ONBOARDING.EMAIL_PLACEHOLDER' | translate" />
           </div>
           <div class="col-md-6 col-lg-2">
             <select class="form-select" [(ngModel)]="nuevoInvitado.group">
