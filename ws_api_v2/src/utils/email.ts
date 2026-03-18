@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import {
   InvitationEmailData,
   VerificationEmailData,
@@ -17,17 +17,17 @@ import {
   passwordResetT,
 } from './email.i18n';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM   = process.env.EMAIL_FROM || 'Weddly Studio <no-reply@weddlystudio.uk>';
 
 const brandColor = '#8B6F47';
+
+// ─── Helper de envío ─────────────────────────────────────────────
+
+async function sendEmail(to: string, subject: string, html: string, from = FROM): Promise<void> {
+  const { error } = await resend.emails.send({ from, to, subject, html });
+  if (error) throw new Error(error.message);
+}
 
 // ─── Templates HTML ──────────────────────────────────────────────
 
@@ -212,7 +212,7 @@ function buildPasswordResetHtml(data: PasswordResetEmailData): string {
   const lang = getLang(data.lang);
   const t    = passwordResetT[lang];
   const url  = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/reset-pass?token=${data.resetToken}`;
- 
+
   return `
 <!DOCTYPE html>
 <html lang="${lang}">
@@ -227,8 +227,7 @@ function buildPasswordResetHtml(data: PasswordResetEmailData): string {
       <h2 style="margin:0 0 16px;font-size:22px;color:#222;">${t.title}</h2>
       <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">${t.body(data.firstName)}</p>
       <div style="text-align:center;margin:36px 0;">
-        <a href="${url}"
-           style="background:${brandColor};color:#fff;padding:15px 36px;text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;display:inline-block;">
+        <a href="${url}" style="background:${brandColor};color:#fff;padding:15px 36px;text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;display:inline-block;">
           ${t.cta}
         </a>
       </div>
@@ -257,12 +256,7 @@ function buildPasswordResetHtml(data: PasswordResetEmailData): string {
 export async function sendVerificationEmail(data: VerificationEmailData): Promise<SendResult> {
   const lang = getLang(data.lang);
   try {
-    await transporter.sendMail({
-      from:    `"Weddly Studio" <${process.env.SMTP_USER}>`,
-      to:      data.to,
-      subject: verificationT[lang].subject,
-      html:    buildVerificationHtml(data),
-    });
+    await sendEmail(data.to, verificationT[lang].subject, buildVerificationHtml(data));
     return { success: true };
   } catch (err: any) {
     console.error(`[Email] Error enviando verificación a ${data.to}:`, err.message);
@@ -273,12 +267,12 @@ export async function sendVerificationEmail(data: VerificationEmailData): Promis
 export async function sendInvitationEmail(data: InvitationEmailData): Promise<SendResult> {
   const lang = getLang(data.lang);
   try {
-    await transporter.sendMail({
-      from:    `"${data.weddingName}" <${process.env.SMTP_USER}>`,
-      to:      data.to,
-      subject: invitationT[lang].subject(data.weddingName),
-      html:    buildInvitationHtml(data),
-    });
+    await sendEmail(
+      data.to,
+      invitationT[lang].subject(data.weddingName),
+      buildInvitationHtml(data),
+      `"${data.weddingName}" <no-reply@weddlystudio.uk>`,
+    );
     return { success: true };
   } catch (err: any) {
     console.error(`[Email] Error enviando invitación a ${data.to}:`, err.message);
@@ -289,12 +283,7 @@ export async function sendInvitationEmail(data: InvitationEmailData): Promise<Se
 export async function sendCollaboratorInviteEmail(data: CollaboratorInviteEmailData): Promise<SendResult> {
   const lang = getLang(data.lang);
   try {
-    await transporter.sendMail({
-      from:    `"Weddly Studio" <${process.env.SMTP_USER}>`,
-      to:      data.to,
-      subject: collaboratorT[lang].subject(data.weddingName),
-      html:    buildCollaboratorInviteHtml(data),
-    });
+    await sendEmail(data.to, collaboratorT[lang].subject(data.weddingName), buildCollaboratorInviteHtml(data));
     return { success: true };
   } catch (err: any) {
     console.error(`[Email] Error enviando invitación colaborador a ${data.to}:`, err.message);
@@ -305,12 +294,7 @@ export async function sendCollaboratorInviteEmail(data: CollaboratorInviteEmailD
 export async function sendTfaResetEmail(data: TfaResetEmailData): Promise<SendResult> {
   const lang = getLang(data.lang);
   try {
-    await transporter.sendMail({
-      from:    `"Weddly Studio" <${process.env.SMTP_USER}>`,
-      to:      data.to,
-      subject: tfaResetT[lang].subject,
-      html:    buildTfaResetHtml(data),
-    });
+    await sendEmail(data.to, tfaResetT[lang].subject, buildTfaResetHtml(data));
     return { success: true };
   } catch (err: any) {
     console.error(`[Email] Error enviando reset 2FA a ${data.to}:`, err.message);
@@ -318,27 +302,21 @@ export async function sendTfaResetEmail(data: TfaResetEmailData): Promise<SendRe
   }
 }
 
-export async function verifySmtpConnection(): Promise<void> {
-  try {
-    await transporter.verify();
-    console.log('✅ SMTP conectado correctamente');
-  } catch (err) {
-    console.warn('⚠️  SMTP no disponible — los emails no se enviarán:', err);
-  }
-}
-
 export async function sendPasswordResetEmail(data: PasswordResetEmailData): Promise<SendResult> {
   const lang = getLang(data.lang);
   try {
-    await transporter.sendMail({
-      from:    `"Weddly Studio" <${process.env.SMTP_USER}>`,
-      to:      data.to,
-      subject: passwordResetT[lang].subject,
-      html:    buildPasswordResetHtml(data),
-    });
+    await sendEmail(data.to, passwordResetT[lang].subject, buildPasswordResetHtml(data));
     return { success: true };
   } catch (err: any) {
     console.error(`[Email] Error enviando reset password a ${data.to}:`, err.message);
     return { success: false, error: err.message };
   }
+}
+
+export async function verifySmtpConnection(): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('⚠️  RESEND_API_KEY no configurada — los emails no se enviarán');
+    return;
+  }
+  console.log('✅ Resend configurado correctamente');
 }
