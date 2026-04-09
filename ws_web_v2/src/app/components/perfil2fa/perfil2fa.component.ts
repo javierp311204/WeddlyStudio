@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule }      from '@angular/common';
 import { FormsModule }       from '@angular/forms';
 import { IconComponent } from '../../shared/icons/icon.component';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { NotificationService } from '../../services/notification/notification.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { environment } from '../../../environments/environment';
 
 type Step = 'loading' | 'disabled' | 'setup_qr' | 'setup_verify' | 'enabled';
 
@@ -321,7 +322,7 @@ export class Perfil2faComponent implements OnInit {
   showDisableForm  = false;
   disablePassword  = '';
 
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http:  HttpClient,
@@ -333,13 +334,8 @@ export class Perfil2faComponent implements OnInit {
     this.cargarEstado();
   }
 
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  }
-
   cargarEstado() {
-    this.http.get<any>(`${this.apiUrl}/auth/2fa/status`, this.getHeaders()).subscribe({
+    this.http.get<any>(`${this.apiUrl}/auth/2fa/status`).subscribe({
       next:  (res) => { this.step = res.data?.enabled ? 'enabled' : 'disabled'; },
       error: ()    => { this.step = 'disabled'; },
     });
@@ -347,7 +343,7 @@ export class Perfil2faComponent implements OnInit {
 
   iniciarSetup() {
     this.loading = true;
-    this.http.post<any>(`${this.apiUrl}/auth/2fa/setup`, {}, this.getHeaders()).subscribe({
+    this.http.post<any>(`${this.apiUrl}/auth/2fa/setup`, {}).subscribe({
       next: (res) => {
         this.loading    = false;
         this.qrDataUrl  = res.data?.qr_data_url  ?? '';
@@ -369,7 +365,6 @@ export class Perfil2faComponent implements OnInit {
     this.http.post<any>(
       `${this.apiUrl}/auth/2fa/setup/verify`,
       { token: this.verifyCode },
-      this.getHeaders(),
     ).subscribe({
       next: () => {
         this.loading     = false;
@@ -391,7 +386,6 @@ export class Perfil2faComponent implements OnInit {
     this.errorMsg = '';
 
     this.http.delete<any>(`${this.apiUrl}/auth/2fa`, {
-      ...this.getHeaders(),
       body: { password: this.disablePassword },
     }).subscribe({
       next: () => {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 // ─────────────────────────────────────────────────────────────
 // FIXES aplicados:
@@ -45,7 +46,7 @@ export class PlanLimitsWidgetComponent implements OnInit {
   limites: Limites = { maxBodas: 1 };
   uso: Uso         = { bodasActivas: 0, puedeCrearMasBodas: true };
 
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private router: Router) {}
 

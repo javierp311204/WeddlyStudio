@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import {
   Component, OnInit, ViewChild, ElementRef,
   AfterViewInit, OnDestroy, NgZone, HostListener,
@@ -9,7 +10,7 @@ import { NotificationService } from '../../services/notification/notification.se
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+
 import { PlanoService, Table, GuestSummary } from '../../services/plano/plano.service';
 import { environment } from '../../../environments/environment';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -39,7 +40,7 @@ type HandleTipo = 'resize' | 'rotate' | 'none';
 @Component({
   selector:    'app-plano-interactivo',
   standalone:  true,
-  imports:     [CommonModule, FormsModule, HttpClientModule, TranslateModule , IconComponent],
+  imports:     [CommonModule, FormsModule, TranslateModule , IconComponent],
   templateUrl: './plano-interactivo.component.html',
   styleUrl:    './plano-interactivo.component.css',
 })
@@ -147,11 +148,6 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     private translate:    TranslateService,
     private aiService:    AiService,
   ) {}
-
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  }
 
   private t(key: string, params?: object): string {
     return this.translate.instant(key, params);
@@ -575,7 +571,7 @@ export class PlanoInteractivoComponent implements OnInit, AfterViewInit, OnDestr
     this.planoService.getPlano(this.weddingId).subscribe({
       next: (resTables) => {
         this.mesas = resTables?.data?.tables ?? [];
-        this.http.get<any>(`${this.apiUrl}/weddings/${this.weddingId}/guests`, this.getHeaders()).subscribe({
+        this.http.get<any>(`${this.apiUrl}/weddings/${this.weddingId}/guests`).subscribe({
           next: (resGuests) => {
             const todos: GuestSummary[] = resGuests?.data?.guests ?? resGuests?.guests ?? [];
             this.invitadosDisponibles   = todos;

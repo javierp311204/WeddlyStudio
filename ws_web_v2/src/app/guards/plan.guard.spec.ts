@@ -4,6 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { PlanGuard } from './plan.guard';
 import { NotificationService } from '../services/notification/notification.service';
+import { environment } from '../../environments/environment';
 
 describe('PlanGuard', () => {
   let guard: PlanGuard;
@@ -11,7 +12,7 @@ describe('PlanGuard', () => {
   let routerSpy: { navigate: jasmine.Spy };
   let notifSpy: jasmine.SpyObj<NotificationService>;
 
-  const API_URL = 'https://weddly-api-production.up.railway.app/api/subscriptions/current';
+  const API_URL = environment.apiUrl + '/subscriptions/current';
 
   // Helper para crear un ActivatedRouteSnapshot con data
   const mockRoute = (planRequerido?: string): ActivatedRouteSnapshot => {

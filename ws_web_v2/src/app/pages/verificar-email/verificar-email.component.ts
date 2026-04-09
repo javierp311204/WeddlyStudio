@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-verificar-email',
@@ -23,6 +24,8 @@ export class VerificarEmailComponent implements OnInit {
     private translate: TranslateService,
   ) {}
 
+  private apiUrl = environment.apiUrl;
+
   ngOnInit() {
     // v2: el token viene como path param /:token
     const token = this.route.snapshot.paramMap.get('token');
@@ -38,7 +41,7 @@ export class VerificarEmailComponent implements OnInit {
 
   verificarToken(token: string) {
     // v2: GET /api/auth/verify-email/:token
-    this.http.get(`https://weddly-api-production.up.railway.app/api/auth/verify-email/${token}`).subscribe({
+    this.http.get(`${this.apiUrl}/auth/verify-email/${token}`).subscribe({
       next: () => {
         this.verificando = false;
         this.verificacionExitosa = true;

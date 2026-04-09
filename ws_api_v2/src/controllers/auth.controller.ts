@@ -1,22 +1,85 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from '../services/auth.service';
 
+// Opciones compartidas para las cookies
+const COOKIE_OPTIONS = {
+  httpOnly: true,                                    // ← JS nunca puede leerlas
+  secure:   process.env.NODE_ENV === 'production',   // ← HTTPS solo en prod
+  sameSite: 'strict' as const,                       // ← protección CSRF
+  path:     '/',
+};
+
+const ACCESS_TOKEN_TTL  = 15 * 60 * 1000;           // 15 minutos
+const REFRESH_TOKEN_TTL = 7 * 24 * 60 * 60 * 1000;  // 7 días
+
+function setTokenCookies(res: Response, accessToken: string, refreshToken: string) {
+  res.cookie('access_token',  accessToken,  { ...COOKIE_OPTIONS, maxAge: ACCESS_TOKEN_TTL });
+  res.cookie('refresh_token', refreshToken, { ...COOKIE_OPTIONS, maxAge: REFRESH_TOKEN_TTL });
+}
+
 export class AuthController {
-  /**
-   * POST /api/auth/register
-   */
+
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await authService.register(req.body);
-      res.status(201).json({ success: true, data: result });
+
+      setTokenCookies(res, result.access_token, result.refresh_token);
+
+      res.status(201).json({
+        success: true,
+        data: {
+          user:    result.user,
+          message: result.message,
+        }
+      });
     } catch (err) {
       next(err);
     }
   }
 
-  /**
-   * GET /api/auth/verify-email/:token
-   */
+  async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await authService.login(req.body);
+
+      // Si requiere 2FA, no hay tokens todavía
+      if (result.requires_2fa) {
+        return res.json({ success: true, data: result });
+      }
+
+      // ✅ Tokens en cookies
+      setTokenCookies(res, result.access_token, result.refresh_token);
+
+      res.json({
+        success: true,
+        data: {
+          requires_2fa: false,
+          user:         result.user,
+          ...(result.warning && { warning: result.warning }),
+          
+        }
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async refresh(req: Request, res: Response, next: NextFunction) {
+    try {
+      const refreshToken = req.cookies?.refresh_token;
+      if (!refreshToken) {
+        return res.status(401).json({ success: false, message: 'Refresh token no encontrado' });
+      }
+
+      const result = await authService.refreshToken(refreshToken);
+
+      setTokenCookies(res, result.access_token, result.refresh_token);
+
+      res.json({ success: true, data: { message: 'Token renovado correctamente' } });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   async verifyEmail(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await authService.verifyEmail(req.params.token);
@@ -26,10 +89,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * POST /api/auth/resend-verification
-   * Body: { email }
-   */
   async resendVerification(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await authService.resendVerification(req.body.email);
@@ -39,33 +98,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * POST /api/auth/login
-   */
-  async login(req: Request, res: Response, next: NextFunction) {
-    try {
-      const result = await authService.login(req.body);
-      res.json({ success: true, data: result });
-    } catch (err) {
-      next(err);
-    }
-  }
-
-  /**
-   * POST /api/auth/refresh
-   */
-  async refresh(req: Request, res: Response, next: NextFunction) {
-    try {
-      const result = await authService.refreshToken(req.body.refresh_token);
-      res.json({ success: true, data: result });
-    } catch (err) {
-      next(err);
-    }
-  }
-
-  /**
-   * GET /api/auth/me
-   */
   async me(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await authService.getProfile(req.user!.userId);
@@ -75,9 +107,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * PATCH /api/auth/me
-   */
   async updateProfile(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await authService.updateProfile(req.user!.userId, req.body);
@@ -85,9 +114,6 @@ export class AuthController {
     } catch (err) { next(err); }
   }
 
-  /**
-   * PATCH /api/auth/change-password
-   */
   async changePassword(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await authService.changePassword(req.user!.userId, req.body);
@@ -97,10 +123,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * POST /api/auth/forgot-password
-   * Body: { email }
-   */
   async forgotPassword(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await authService.forgotPassword(req.body.email);
@@ -110,10 +132,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * POST /api/auth/reset-password
-   * Body: { token, new_password }
-   */
   async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {
       const { token, new_password } = req.body;

@@ -1,11 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 export type PhotoStatus = 'pending' | 'approved' | 'rejected' | 'deleted';
 
@@ -32,7 +34,7 @@ export interface PhotoStats {
 @Component({
   selector: 'app-album-digital',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, TranslateModule, FormsModule, IconComponent],
+  imports: [CommonModule, TranslateModule, FormsModule, IconComponent],
   templateUrl: './album-digital.component.html',
   styleUrl:    './album-digital.component.css',
 })
@@ -55,7 +57,7 @@ export class AlbumDigitalComponent implements OnInit {
   totalPages   = 1;
   totalPhotos  = 0;
 
-  private readonly apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http:          HttpClient,
@@ -70,17 +72,11 @@ export class AlbumDigitalComponent implements OnInit {
     this.cargarFotos();
   }
 
-  // ─── HTTP helper ──────────────────────────────────────────────
-  private getOptions() {
-    const token = localStorage.getItem('token');
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  }
-
   // ─── Cargar stats ─────────────────────────────────────────────
   cargarStats() {
     if (!this.weddingId) return;
     this.http
-      .get<any>(`${this.apiUrl}/weddings/${this.weddingId}/photos/stats`, this.getOptions())
+      .get<any>(`${this.apiUrl}/weddings/${this.weddingId}/photos/stats`)
       .subscribe({ next: res => (this.stats = res?.data ?? null) });
   }
 
@@ -92,7 +88,7 @@ export class AlbumDigitalComponent implements OnInit {
     const status = this.activeFilter === 'all' ? '' : `&status=${this.activeFilter}`;
     const url    = `${this.apiUrl}/weddings/${this.weddingId}/photos?page=${page}&limit=20${status}`;
 
-    this.http.get<any>(url, this.getOptions()).subscribe({
+    this.http.get<any>(url).subscribe({
       next: res => {
         const data       = res?.data ?? res;
         this.fotos       = data?.photos ?? [];
@@ -131,7 +127,7 @@ export class AlbumDigitalComponent implements OnInit {
     formData.append('photo', file);
 
     this.http
-      .post<any>(`${this.apiUrl}/weddings/${this.weddingId}/photos`, formData, this.getOptions())
+      .post<any>(`${this.apiUrl}/weddings/${this.weddingId}/photos`, formData)
       .subscribe({
         next: () => {
           this.uploading = false;
@@ -153,7 +149,7 @@ export class AlbumDigitalComponent implements OnInit {
     this.moderating[foto.id] = true;
 
     this.http
-      .patch<any>(`${this.apiUrl}/photos/${foto.id}/moderate`, { status }, this.getOptions())
+      .patch<any>(`${this.apiUrl}/photos/${foto.id}/moderate`, { status })
       .subscribe({
         next: () => {
           this.moderating[foto.id] = false;

@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { NotificationService } from '../services/notification/notification.service';
 import { Observable, map, catchError, of } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from '../../environments/environment';
 
 const PLAN_HIERARCHY: Record<string, number> = {
   free: 0,
@@ -34,12 +35,14 @@ export class PlanGuard implements CanActivate {
     private translate: TranslateService,
   ) {}
 
+  private apiUrl = environment.apiUrl;
+
   canActivate(
     route: ActivatedRouteSnapshot,
     _state: RouterStateSnapshot,
   ): Observable<boolean> {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
       this.notifService.showError(
         this.translate.instant('ERRORS.ACCESS_DENEGATED_TITLE'),
         this.translate.instant('ERRORS.ACCESS_DENEGATED_DESC'),
@@ -64,7 +67,7 @@ export class PlanGuard implements CanActivate {
     // en vez de el plan_type de la boda (que siempre es 'free' por defecto)
     return this.http
       .get<any>(
-        `https://weddly-api-production.up.railway.app/api/weddings/can-create`,
+        `${this.apiUrl}/weddings/can-create`,
       )
       .pipe(
         map((response) => {

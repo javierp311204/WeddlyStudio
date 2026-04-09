@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 type Step = 'loading' | 'success' | 'error';
 
@@ -85,7 +86,7 @@ export class TfaResetConfirmComponent implements OnInit {
   step:     Step   = 'loading';
   errorMsg: string = 'El enlace puede haber expirado (válido 30 min) o ya fue usado. Solicita uno nuevo desde la pantalla de verificación.';
 
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private route:  ActivatedRoute,

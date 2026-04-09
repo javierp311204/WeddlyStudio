@@ -16,6 +16,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tarea, TareaFase, TareaStatus, TareasResponse, InitializeResponse } from '../../models/Tarea';
+import { environment } from '../../../environments/environment';
 
 export interface EstadisticasChecklist {
   total:       number;
@@ -32,7 +33,7 @@ export interface EstadisticasChecklist {
 
 @Injectable({ providedIn: 'root' })
 export class TareasService {
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

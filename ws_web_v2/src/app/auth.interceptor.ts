@@ -3,58 +3,58 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, switchMap, throwError, BehaviorSubject, filter, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
+import { NotificationService } from './services/notification/notification.service';
 
-// Estado compartido para serializar refreshes concurrentes
 let isRefreshing = false;
-const refreshDone$ = new BehaviorSubject<string | null>(null);
-const API_URL = 'https://weddly-api-production.up.railway.app/api';
+const refreshDone$ = new BehaviorSubject<boolean>(false);
+const API_URL = environment.apiUrl;
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const http   = inject(HttpClient);
+  const notif  = inject(NotificationService);
 
-  const isRefreshCall = req.url.includes('/auth/refresh');
-  const token = localStorage.getItem('token');
-  const authedReq = (token && !isRefreshCall) ? addToken(req, token) : req;
+  // ✅ withCredentials en TODAS las peticiones para que las cookies vayan siempre
+  const authedReq = req.clone({ withCredentials: true });
 
   return next(authedReq).pipe(
     catchError((error: HttpErrorResponse) => {
 
+      // Rate limit
+      if (error.status === 429) {
+        const retryAfter = error.headers.get('Retry-After');
+        const minutes = retryAfter ? Math.ceil(Number(retryAfter) / 60) : 15;
+        notif.showError('Demasiados intentos', `Por favor, espera ${minutes} minutos.`);
+        return throwError(() => error);
+      }
+
+      const isRefreshCall = req.url.includes('/auth/refresh');
       if (error.status !== 401 || isRefreshCall) {
         return throwError(() => error);
       }
 
-      const refreshToken = localStorage.getItem('refresh_token');
-      if (!refreshToken) {
-        clearSession(router);
-        return throwError(() => error);
-      }
-
-      // Si ya hay un refresh en vuelo, encolar y esperar
+      // Si ya hay un refresh en vuelo, esperar
       if (isRefreshing) {
         return refreshDone$.pipe(
-          filter(t => t !== null),
+          filter(done => done),
           take(1),
-          switchMap(newToken => next(addToken(req, newToken!))),
+          switchMap(() => next(authedReq)),
         );
       }
 
       isRefreshing = true;
-      refreshDone$.next(null);
+      refreshDone$.next(false);
 
-      return http.post<any>(`${API_URL}/auth/refresh`, { refresh_token: refreshToken }).pipe(
-        switchMap(res => {
-          const newToken: string | undefined = res?.data?.access_token;
-          if (!newToken) { clearSession(router); return throwError(() => error); }
-
-          localStorage.setItem('token', newToken);
+      return http.post<any>(`${API_URL}/auth/refresh`, {}, { withCredentials: true }).pipe(
+        switchMap(() => {
           isRefreshing = false;
-          refreshDone$.next(newToken);
-          return next(addToken(req, newToken));
+          refreshDone$.next(true);
+          return next(authedReq);
         }),
         catchError(refreshErr => {
           isRefreshing = false;
-          refreshDone$.next(null);
+          refreshDone$.next(false);
           clearSession(router);
           return throwError(() => refreshErr);
         }),
@@ -63,12 +63,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   );
 };
 
-function addToken(req: HttpRequest<unknown>, token: string) {
-  return req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
-}
-
 function clearSession(router: Router) {
-  ['token','refresh_token','userId','userEmail','firstName','lastName','rol','weddingId']
+  ['userId', 'userEmail', 'firstName', 'lastName', 'rol',
+   'weddingId', 'weddingRole', 'avatarUrl', 'weddingStatus', 'weddingReadonlyReason']
     .forEach(k => localStorage.removeItem(k));
   router.navigate(['/login']);
 }

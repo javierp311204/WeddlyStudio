@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Request, Response } from 'express';
 import authController from '../controllers/auth.controller';
 import tfaController  from '../controllers/tfa.controller';
 import { authenticate } from '../middleware/auth.middleware';
@@ -28,6 +29,12 @@ router.get ('/verify-email/:token',                                  authControl
 router.post('/resend-verification',                                  authController.resendVerification);
 router.post('/forgot-password',                                      authController.forgotPassword.bind(authController));
 router.post('/reset-pass',                                           authController.resetPassword.bind(authController));
+
+router.post('/logout', (req: Request, res: Response) => {
+  res.clearCookie('access_token',  { httpOnly: true, secure: true, sameSite: 'strict', path: '/' });
+  res.clearCookie('refresh_token', { httpOnly: true, secure: true, sameSite: 'strict', path: '/' });
+  res.json({ success: true, message: 'Sesión cerrada correctamente' });
+});
 
 // ─── 2FA públicas (usan temp_token, no sesión completa) ───────────────────
 router.post('/2fa/verify',           validate(tfaLoginSchema),         tfaController.verifyLogin);

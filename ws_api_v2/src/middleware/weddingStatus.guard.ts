@@ -2,13 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import prisma from '../config/db';
 import { AppError } from './errorHandler.middleware';
 
-/**
- * Intercepta cualquier petición de escritura (POST, PATCH, PUT, DELETE)
- * sobre una boda cuyo status sea 'readonly' o 'archived'.
- *
- * Requiere que la ruta tenga :id como parámetro de weddingId.
- * Debe colocarse DESPUÉS de authenticate y ANTES del roleGuard.
- */
 export const weddingStatusGuard = async (
   req: Request,
   res: Response,
@@ -23,10 +16,13 @@ export const weddingStatusGuard = async (
   try {
     const wedding = await prisma.wedding.findUnique({
       where: { id: weddingId },
-      select: { status: true },
+      select: { status: true, created_by: true },
     });
 
     if (!wedding) return next(new AppError('Boda no encontrada', 404));
+
+    const isOwnerDeleting = req.method === 'DELETE' && wedding.created_by === req.user?.userId;
+    if (isOwnerDeleting) return next();
 
     if (wedding.status === 'readonly') {
       return next(

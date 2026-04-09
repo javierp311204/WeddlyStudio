@@ -10,6 +10,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface WeddingPayload {
   name:              string;
@@ -40,7 +41,7 @@ export interface TablePayload {
 
 @Injectable({ providedIn: 'root' })
 export class GestionService {
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

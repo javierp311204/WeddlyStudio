@@ -1,17 +1,19 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 type RsvpState = 'loading' | 'form' | 'success' | 'error';
 
 @Component({
   selector: 'app-rsvp',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule, IconComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, IconComponent],
   template: `
     <div class="rsvp-page">
 
@@ -483,7 +485,7 @@ export class RsvpComponent implements OnInit {
   dietaryNotes: string = '';
   sending: boolean = false;
 
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private route: ActivatedRoute,

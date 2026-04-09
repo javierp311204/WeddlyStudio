@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -30,24 +30,19 @@ export class ReviewsService {
 
   constructor(private http: HttpClient) {}
 
-  private getHeaders(): { headers: HttpHeaders } {
-    const token = localStorage.getItem('token') ?? '';
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  }
-
   getAll(order: 'created_at' | 'rating' = 'created_at'): Observable<any> {
     return this.http.get(`${this.apiUrl}/reviews?order=${order}`);
   }
 
   getMine(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/reviews/me`, this.getHeaders());
+    return this.http.get(`${this.apiUrl}/reviews/me`);
   }
 
   create(rating: number, comment: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reviews`, { rating, comment }, this.getHeaders());
+    return this.http.post(`${this.apiUrl}/reviews`, { rating, comment });
   }
 
   delete(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/reviews/${id}`, this.getHeaders());
+    return this.http.delete(`${this.apiUrl}/reviews/${id}`);
   }
 }

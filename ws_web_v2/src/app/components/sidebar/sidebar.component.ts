@@ -1,11 +1,12 @@
 import { Component, signal, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService, WeddingRole } from '../../services/auth/auth.service';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 interface NavItem {
   label:    string;
@@ -19,7 +20,7 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSelectorComponent, TranslateModule, HttpClientModule, IconComponent],
+  imports: [CommonModule, RouterModule, LanguageSelectorComponent, TranslateModule, IconComponent],
   templateUrl: './sidebar.component.html',
   styleUrl:    './sidebar.component.css',
 })
@@ -45,16 +46,13 @@ export class SidebarComponent implements OnInit {
 
   constructor(public authService: AuthService, private http: HttpClient, private translate: TranslateService) {}
 
+  private apiUrl = environment.apiUrl;
+
   ngOnInit(): void {
     const cached = this.authService.getAvatarUrl();
     if (cached) this.avatarUrl = cached;
 
-    const token = localStorage.getItem('token');
-    if (!token) return;
-
-    this.http.get<any>('https://weddly-api-production.up.railway.app/api/auth/me', {
-      headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
-    }).subscribe({
+    this.authService.getMe().subscribe({
       next: (res) => {
         const url = res?.data?.avatar_url ?? res?.avatar_url;
         if (url) {
@@ -62,7 +60,7 @@ export class SidebarComponent implements OnInit {
           this.authService.updateAvatar(url);
         }
       },
-    });
+})
   }
 
   get visibleNavItems(): NavItem[] {

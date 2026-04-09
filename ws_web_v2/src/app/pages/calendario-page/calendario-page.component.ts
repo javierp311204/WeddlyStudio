@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { CalendarioComponent } from '../../components/calendario/calendario.component';
 import { NotificationService } from '../../services/notification/notification.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-calendario-page',
@@ -44,6 +45,8 @@ export class CalendarioPageComponent implements OnInit {
     private notifService: NotificationService,
   ) {}
 
+  private apiUrl = environment.apiUrl;
+
   ngOnInit(): void {
     this.weddingId   = localStorage.getItem('weddingId')   ?? '';
     this.weddingDate = localStorage.getItem('weddingDate') ?? null;
@@ -56,7 +59,7 @@ export class CalendarioPageComponent implements OnInit {
     }
 
     // Leer el plan real desde el backend, igual que PlanGuard
-    this.http.get<any>('https://weddly-api-production.up.railway.app/api/weddings/can-create').subscribe({
+    this.http.get<any>(`${this.apiUrl}/weddings/can-create`).subscribe({
       next: (response) => {
         this.planType = response?.data?.plan ?? 'free';
         // Opcional: cachear para evitar el parpadeo en recargas

@@ -1,7 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification/notification.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -10,6 +11,7 @@ import html2canvas from 'html2canvas';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 registerLocaleData(localeEs);
 
@@ -23,7 +25,7 @@ interface InvitadoV2 {
 @Component({
   selector: 'app-diseno-papeleria',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule, IconComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, IconComponent],
   templateUrl: './diseno-papeleria.component.html',
   styleUrl: './diseno-papeleria.component.css',
 })
@@ -50,7 +52,7 @@ export class DisenoPapeleriaComponent implements OnInit {
   invitadosConEmail: InvitadoV2[] = [];
 
   weddingId: string = '';
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -70,11 +72,6 @@ export class DisenoPapeleriaComponent implements OnInit {
       },
       error: () => this.cargarConfiguracion()
     });
-  }
-
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
   }
 
   registrarCambio(): void {
@@ -141,7 +138,7 @@ export class DisenoPapeleriaComponent implements OnInit {
     } else {
       // Intentar cargar nombre desde la boda en v2
       if (this.weddingId) {
-        this.http.get<any>(`${this.apiUrl}/weddings/${this.weddingId}`, this.getHeaders()).subscribe({
+        this.http.get<any>(`${this.apiUrl}/weddings/${this.weddingId}`).subscribe({
           next: (res) => {
             const w = res?.data ?? res;
             if (w?.name) {
@@ -193,7 +190,7 @@ export class DisenoPapeleriaComponent implements OnInit {
 
     // v2: GET /api/weddings/:weddingId/guests
     this.http
-      .get<any>(`${this.apiUrl}/weddings/${this.weddingId}/guests`, this.getHeaders())
+      .get<any>(`${this.apiUrl}/weddings/${this.weddingId}/guests`)
       .subscribe({
         next: (res) => {
           const lista = res?.data?.guests ?? res?.guests ?? res ?? [];
@@ -239,7 +236,6 @@ export class DisenoPapeleriaComponent implements OnInit {
           secondary_color: this.colorFondo,
           custom_text:     this.textoExtra,
         },
-        this.getHeaders()
       ).toPromise();
 
       const invitationId = invRes?.data?.id ?? invRes?.id;
@@ -249,7 +245,6 @@ export class DisenoPapeleriaComponent implements OnInit {
       await this.http.post<any>(
         `${this.apiUrl}/invitations/${invitationId}/send`,
         { guest_ids: [invitado.id], send_to_all: false },
-        this.getHeaders()
       ).toPromise();
 
       this.notifService.showSuccess(
@@ -296,7 +291,6 @@ export class DisenoPapeleriaComponent implements OnInit {
           secondary_color: this.colorFondo,
           custom_text:     this.textoExtra,
         },
-        this.getHeaders()
       ).toPromise();
 
       const invitationId = invRes?.data?.id ?? invRes?.id;
@@ -306,7 +300,6 @@ export class DisenoPapeleriaComponent implements OnInit {
       const sendRes = await this.http.post<any>(
         `${this.apiUrl}/invitations/${invitationId}/send`,
         { send_to_all: true },
-        this.getHeaders()
       ).toPromise();
 
       const result = sendRes?.data ?? sendRes;

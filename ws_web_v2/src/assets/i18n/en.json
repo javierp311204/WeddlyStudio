@@ -364,7 +364,7 @@
     "LOGIN_ERROR_TITLE": "Login error",
     "LOGIN_INVALID_CREDENTIALS": "Incorrect credentials. Please try again.",
     "EMAIL_NOT_VERIFIED_TITLE": "Email not verified",
-    "EMAIL_NOT_VERIFIED_DESC": "You must verify your email before logging in. Check your inbox and spam folder."
+    "EMAIL_NOT_VERIFIED_DESC": "You must verify your email to create a wedding. Check your inbox and spam."
   },
 
   "INFO": {

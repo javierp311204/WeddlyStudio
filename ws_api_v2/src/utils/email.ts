@@ -22,8 +22,18 @@ const FROM   = process.env.EMAIL_FROM || 'Weddly Studio <no-reply@weddlystudio.u
 
 const brandColor = '#8B6F47';
 
-// ─── Helper de envío ─────────────────────────────────────────────
+// ─── Sanitización HTML ───────────────────────────────────────────
+function escapeHtml(str: string | null | undefined): string {
+  if (!str) return '';
+  return str
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;')
+    .replace(/'/g,  '&#039;');
+}
 
+// ─── Helper de envío ─────────────────────────────────────────────
 async function sendEmail(to: string, subject: string, html: string, from = FROM): Promise<void> {
   const { error } = await resend.emails.send({ from, to, subject, html });
   if (error) throw new Error(error.message);
@@ -32,9 +42,10 @@ async function sendEmail(to: string, subject: string, html: string, from = FROM)
 // ─── Templates HTML ──────────────────────────────────────────────
 
 function buildVerificationHtml(data: VerificationEmailData): string {
-  const lang = getLang(data.lang);
-  const t    = verificationT[lang];
-  const url  = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify-email/${data.verificationToken}`;
+  const lang      = getLang(data.lang);
+  const t         = verificationT[lang];
+  const url       = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify-email/${data.verificationToken}`;
+  const firstName = escapeHtml(data.firstName); // ✅ saneado
 
   return `
 <!DOCTYPE html>
@@ -51,7 +62,7 @@ function buildVerificationHtml(data: VerificationEmailData): string {
       <p style="margin:4px 0 0;font-size:13px;color:#aaa;letter-spacing:2px;text-transform:uppercase;">Studio</p>
     </div>
     <div style="background:#ffffff;border-radius:10px;padding:48px 40px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-      <h2 style="margin:0 0 16px;font-size:22px;color:#222;font-weight:600;">${t.greeting(data.firstName)}</h2>
+      <h2 style="margin:0 0 16px;font-size:22px;color:#222;font-weight:600;">${t.greeting(firstName)}</h2>
       <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">${t.body}</p>
       <div style="text-align:center;margin:36px 0;">
         <a href="${url}" style="background:${brandColor};color:#ffffff;padding:15px 36px;text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;display:inline-block;">
@@ -77,9 +88,13 @@ function buildVerificationHtml(data: VerificationEmailData): string {
 }
 
 function buildInvitationHtml(data: InvitationEmailData): string {
-  const lang = getLang(data.lang);
-  const t    = invitationT[lang];
-  const url  = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/rsvp/${data.rsvpCode}`;
+  const lang        = getLang(data.lang);
+  const t           = invitationT[lang];
+  const url         = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/rsvp/${data.rsvpCode}`;
+  const weddingName = escapeHtml(data.weddingName); 
+  const guestName   = escapeHtml(data.guestName);   // ✅ saneado
+  const customText  = escapeHtml(data.customText);  // ✅ saneado
+  const locationName = escapeHtml(data.locationName); // ✅ saneado
 
   const formattedDate = data.weddingDate.toLocaleDateString(
     lang === 'en' ? 'en-GB' : lang === 'fr' ? 'fr-FR' : lang === 'ca' ? 'ca-ES' : 'es-ES',
@@ -98,17 +113,17 @@ function buildInvitationHtml(data: InvitationEmailData): string {
 <html lang="${lang}">
 <head>
   <meta charset="UTF-8">
-  <title>${data.weddingName}</title>
+  <title>${weddingName}</title>
 </head>
 <body style="margin:0;padding:20px;background:#f0f0f0;">
   <div style="max-width:600px;margin:0 auto;padding:40px;${styles[data.template]}border-radius:8px;">
-    <h1 style="color:${data.primaryColor};text-align:center;margin-bottom:8px;">${data.weddingName}</h1>
+    <h1 style="color:${data.primaryColor};text-align:center;margin-bottom:8px;">${weddingName}</h1>
     <p style="text-align:center;color:#888;margin-bottom:32px;font-size:14px;">
-      ${formattedDate}${data.locationName ? ` · ${data.locationName}` : ''}
+      ${formattedDate}${locationName ? ` · ${locationName}` : ''}
     </p>
-    <p style="font-size:16px;margin-bottom:8px;">${t.dear(data.guestName)}</p>
+    <p style="font-size:16px;margin-bottom:8px;">${t.dear(guestName)}</p>
     <p style="font-size:15px;line-height:1.7;color:#444;margin-bottom:24px;">
-      ${data.customText ?? t.body}
+      ${customText ?? t.body}
     </p>
     <div style="text-align:center;margin:32px 0;">
       <a href="${url}" style="background:${data.primaryColor};color:#fff;padding:14px 32px;text-decoration:none;border-radius:4px;font-size:16px;font-weight:bold;display:inline-block;">
@@ -125,10 +140,12 @@ function buildInvitationHtml(data: InvitationEmailData): string {
 }
 
 function buildCollaboratorInviteHtml(data: CollaboratorInviteEmailData): string {
-  const lang      = getLang(data.lang);
-  const t         = collaboratorT[lang];
-  const roleLabel = ROLE_LABELS[lang][data.role] ?? data.role;
-  const url       = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/invites/accept/${data.token}`;
+  const lang        = getLang(data.lang);
+  const t           = collaboratorT[lang];
+  const roleLabel   = ROLE_LABELS[lang][data.role] ?? data.role;
+  const url         = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/invites/accept/${data.token}`;
+  const inviterName = escapeHtml(data.inviterName); // ✅ saneado
+  const weddingName = escapeHtml(data.weddingName); // ✅ saneado
 
   return `
 <!DOCTYPE html>
@@ -142,7 +159,7 @@ function buildCollaboratorInviteHtml(data: CollaboratorInviteEmailData): string 
     <div style="background:#fff;border-radius:10px;padding:48px 40px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
       <h2 style="margin:0 0 16px;font-size:22px;color:#222;">${t.title}</h2>
       <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">
-        ${t.body(data.inviterName, data.weddingName, roleLabel)}
+        ${t.body(inviterName, weddingName, roleLabel)}
       </p>
       <div style="text-align:center;margin:36px 0;">
         <a href="${url}" style="background:${brandColor};color:#fff;padding:15px 36px;text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;display:inline-block;">
@@ -167,9 +184,10 @@ function buildCollaboratorInviteHtml(data: CollaboratorInviteEmailData): string 
 }
 
 function buildTfaResetHtml(data: TfaResetEmailData): string {
-  const lang = getLang(data.lang);
-  const t    = tfaResetT[lang];
-  const url  = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/auth/2fa-reset?token=${data.token}`;
+  const lang      = getLang(data.lang);
+  const t         = tfaResetT[lang];
+  const url       = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/auth/2fa-reset?token=${data.token}`;
+  const firstName = escapeHtml(data.firstName); // ✅ saneado
 
   return `
 <!DOCTYPE html>
@@ -183,7 +201,7 @@ function buildTfaResetHtml(data: TfaResetEmailData): string {
     </div>
     <div style="background:#fff;border-radius:10px;padding:48px 40px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
       <h2 style="margin:0 0 16px;font-size:22px;color:#222;">${t.title}</h2>
-      <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">${t.body(data.firstName)}</p>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">${t.body(firstName)}</p>
       <div style="text-align:center;margin:36px 0;">
         <a href="${url}" style="background:#c0392b;color:#fff;padding:15px 36px;text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;display:inline-block;">
           ${t.cta}
@@ -209,9 +227,10 @@ function buildTfaResetHtml(data: TfaResetEmailData): string {
 }
 
 function buildPasswordResetHtml(data: PasswordResetEmailData): string {
-  const lang = getLang(data.lang);
-  const t    = passwordResetT[lang];
-  const url  = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/reset-pass?token=${data.resetToken}`;
+  const lang      = getLang(data.lang);
+  const t         = passwordResetT[lang];
+  const url       = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/reset-pass?token=${data.resetToken}`;
+  const firstName = escapeHtml(data.firstName); // ✅ saneado
 
   return `
 <!DOCTYPE html>
@@ -225,7 +244,7 @@ function buildPasswordResetHtml(data: PasswordResetEmailData): string {
     </div>
     <div style="background:#fff;border-radius:10px;padding:48px 40px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
       <h2 style="margin:0 0 16px;font-size:22px;color:#222;">${t.title}</h2>
-      <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">${t.body(data.firstName)}</p>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#555;">${t.body(firstName)}</p>
       <div style="text-align:center;margin:36px 0;">
         <a href="${url}" style="background:${brandColor};color:#fff;padding:15px 36px;text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;display:inline-block;">
           ${t.cta}
@@ -271,7 +290,7 @@ export async function sendInvitationEmail(data: InvitationEmailData): Promise<Se
       data.to,
       invitationT[lang].subject(data.weddingName),
       buildInvitationHtml(data),
-      `"${data.weddingName}" <no-reply@weddlystudio.uk>`,
+      `"${escapeHtml(data.weddingName)}" <no-reply@weddlystudio.uk>`,
     );
     return { success: true };
   } catch (err: any) {
