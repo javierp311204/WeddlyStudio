@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from '../services/auth.service';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' as const : 'strict' as const,
+  secure: isProduction,
+  sameSite: isProduction ? 'none' as const : 'strict' as const,
   path: '/',
-  domain: process.env.NODE_ENV === 'production' ? '.weddlystudio.uk' : undefined,
 };
 
 const ACCESS_TOKEN_TTL  = 15 * 60 * 1000;           // 15 minutos
