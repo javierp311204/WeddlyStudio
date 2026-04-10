@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { errorHandler } from './middleware/errorHandler.middleware';
 import prisma from './config/db';
 import authRoutes from './routes/auth.routes';
@@ -18,6 +19,7 @@ import inviteRoutes from './routes/invite.routes';
 import { exportRouter } from './routes/export.routes';
 import { aiRouter } from './routes/ai.routes';
 import { reviewsRouter } from './routes/reviews.routes';
+import { loginLimiter, forgotPasswordLimiter, webhookLimiter, generalLimiter } from './middleware/rateLimiter';
 
 const app = express();
 
@@ -36,6 +38,7 @@ app.use(
 // — Middlewares globales
 // ════════════════════════════════════════════════════════════════
 app.use(helmet());
+app.use(cookieParser());
 
 const allowedOrigins = process.env.CORS_ORIGIN?.split(',').map(o => o.trim()) ?? [];
 
@@ -72,6 +75,12 @@ app.get('/health', (_req, res) => {
 // ════════════════════════════════════════════════════════════════
 // — Rutas API
 // ════════════════════════════════════════════════════════════════
+
+// -— Rate limiters específicos
+app.use('/api', generalLimiter);
+app.use('/api/auth/login', loginLimiter);
+app.use('/api/auth/forgot-password', forgotPasswordLimiter);
+app.use('/api/webhooks', webhookLimiter);
 
 // ─── Auth ────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);

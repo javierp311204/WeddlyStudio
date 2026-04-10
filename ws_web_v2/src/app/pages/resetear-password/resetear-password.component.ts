@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-resetear-password',
@@ -26,7 +27,7 @@ export class ResetearPasswordComponent implements OnInit {
   tokenInvalido: boolean = false;
   mensajeError: string = '';
 
-  private readonly API = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private route: ActivatedRoute,
@@ -81,7 +82,7 @@ export class ResetearPasswordComponent implements OnInit {
     this.procesando = true;
 
     // v2: endpoint /api/auth/reset-password, body usa new_password (snake_case)
-    this.http.post(`${this.API}/auth/reset-password`, {
+    this.http.post(`${this.apiUrl}/auth/reset-password`, {
       token: this.token,
       new_password: this.nuevaPassword,   // v2: antes era 'nuevaPassword'
     }).subscribe({

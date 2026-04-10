@@ -6,6 +6,7 @@ import { HttpClient }        from '@angular/common/http';
 import { AuthService }       from '../../services/auth/auth.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 type Step = 'code' | 'reset_sent';
 
@@ -158,7 +159,7 @@ export class TwoFactorComponent implements OnInit {
   tempToken    = '';
   userEmail    = '';
 
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private route:       ActivatedRoute,

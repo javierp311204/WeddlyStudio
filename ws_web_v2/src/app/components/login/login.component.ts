@@ -53,6 +53,14 @@ export class LoginComponent {
           return;
         }
 
+        if (!res.success) {
+          this.notifService.showError(
+            this.translate.instant('AUTH.LOGIN_ERROR_TITLE'),
+            'Login failed. Please try again.',
+          );
+          return;
+        }
+
         const user = res.data?.user;
         this.notifService.showSuccess(
           this.translate.instant('AUTH.LOGIN_SUCCESS_TITLE'),

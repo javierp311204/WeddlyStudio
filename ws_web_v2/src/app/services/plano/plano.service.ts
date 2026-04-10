@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -25,7 +25,7 @@ export interface Table {
   id:           string;
   wedding_id:   string;
   name:         string;
-  shape:        'round' | 'rectangular' | 'presidential'; // ← añadido presidential
+  shape:        'round' | 'rectangular' | 'presidential';
   max_capacity: number;
   pos_x:        number;
   pos_y:        number;
@@ -53,7 +53,7 @@ export interface TablesResponse {
 
 export interface TablePayload {
   name:          string;
-  shape?:        'round' | 'rectangular' | 'presidential'; // ← añadido presidential
+  shape?:        'round' | 'rectangular' | 'presidential';
   max_capacity?: number;
   pos_x?:        number;
   pos_y?:        number;
@@ -65,69 +65,49 @@ export class PlanoService {
 
   constructor(private http: HttpClient) {}
 
-  private getHeaders(): { headers: HttpHeaders } {
-    const token = localStorage.getItem('token') ?? '';
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  }
-
   getPlano(weddingId: string): Observable<TablesResponse> {
     return this.http.get<TablesResponse>(
-      `${this.apiUrl}/weddings/${weddingId}/tables`,
-      this.getHeaders(),
+      `${this.apiUrl}/weddings/${weddingId}/tables`
     );
   }
 
   getMesa(tableId: string): Observable<any> {
-    return this.http.get<any>(
-      `${this.apiUrl}/tables/${tableId}`,
-      this.getHeaders(),
-    );
+    return this.http.get<any>(`${this.apiUrl}/tables/${tableId}`);
   }
 
   actualizarPosicionMesa(tableId: string, x: number, y: number, angle?: number): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/tables/${tableId}/position`,
-      { pos_x: x, pos_y: y, ...(angle !== undefined && { angle }) },
-      this.getHeaders(),
+      { pos_x: x, pos_y: y, ...(angle !== undefined && { angle }) }
     );
   }
 
   asignarInvitadoAMesa(tableId: string, guestId: string): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/tables/${tableId}/assign`,
-      { guest_id: guestId },
-      this.getHeaders(),
+      { guest_id: guestId }
     );
   }
 
   quitarInvitadoDeMesa(tableId: string, guestId: string): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/tables/${tableId}/unassign/${guestId}`,
-      {},
-      this.getHeaders(),
+      {}
     );
   }
 
   agregarMesa(weddingId: string, datos: TablePayload): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/weddings/${weddingId}/tables`,
-      { pos_x: 600, pos_y: 400, ...datos },
-      this.getHeaders(),
+      { pos_x: 600, pos_y: 400, ...datos }
     );
   }
 
   actualizarMesa(tableId: string, datos: Partial<TablePayload>): Observable<any> {
-    return this.http.patch(
-      `${this.apiUrl}/tables/${tableId}`,
-      datos,
-      this.getHeaders(),
-    );
+    return this.http.patch(`${this.apiUrl}/tables/${tableId}`, datos);
   }
 
   eliminarMesa(tableId: string): Observable<any> {
-    return this.http.delete(
-      `${this.apiUrl}/tables/${tableId}`,
-      this.getHeaders(),
-    );
+    return this.http.delete(`${this.apiUrl}/tables/${tableId}`);
   }
 }

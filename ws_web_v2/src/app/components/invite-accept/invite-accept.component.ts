@@ -1,12 +1,13 @@
 import { Component, OnInit }  from '@angular/core';
 import { CommonModule }        from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService }         from '../../services/auth/auth.service';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
-const API = 'https://weddly-api-production.up.railway.app/api';
+const API = environment.apiUrl;
 
 type PageState = 'loading' | 'preview' | 'accepting' | 'success' | 'error';
 
@@ -78,11 +79,7 @@ export class InviteAcceptComponent implements OnInit {
     this.state       = 'accepting';
     this.isAccepting = true;
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    });
-
-    this.http.post<any>(`${API}/invites/accept/${this.token}`, {}, { headers }).subscribe({
+    this.http.post<any>(`${API}/invites/accept/${this.token}`, {},).subscribe({
       next: (res) => {
         const weddingId = res?.data?.wedding_id ?? '';
         if (weddingId) {

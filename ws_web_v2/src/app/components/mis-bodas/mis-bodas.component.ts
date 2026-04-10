@@ -1,12 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService, WeddingRole } from '../../services/auth/auth.service';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 interface Boda {
   id:             string;
@@ -28,7 +30,7 @@ interface Boda {
 @Component({
   selector: 'app-mis-bodas',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, HttpClientModule, IconComponent],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, IconComponent],
   templateUrl: './mis-bodas.component.html',
   styleUrl:    './mis-bodas.component.css',
 })
@@ -50,7 +52,7 @@ export class MisBodasComponent implements OnInit {
   bodaAEliminar: Boda | null = null;
   eliminando         = false;
 
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http:         HttpClient,
@@ -65,14 +67,9 @@ export class MisBodasComponent implements OnInit {
     this.cargarBodas();
   }
 
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  }
-
   cargarBodas() {
     this.cargando = true;
-    this.http.get<any>(`${this.apiUrl}/weddings`, this.getHeaders()).subscribe({
+    this.http.get<any>(`${this.apiUrl}/weddings`).subscribe({
       next: (res) => {
         this.bodas    = res?.data ?? [];
         this.cargando = false;
@@ -114,7 +111,7 @@ export class MisBodasComponent implements OnInit {
   }
 
   abrirNuevaBoda() {
-    this.http.get<any>(`${this.apiUrl}/weddings/can-create`, this.getHeaders()).subscribe({
+    this.http.get<any>(`${this.apiUrl}/weddings/can-create`).subscribe({
       next: (res) => {
         const { allowed, plan, limit } = res.data;
         if (allowed) {
@@ -145,7 +142,7 @@ export class MisBodasComponent implements OnInit {
       payload.wedding_date = new Date(this.nuevaForm.wedding_date).toISOString();
     }
 
-    this.http.post<any>(`${this.apiUrl}/weddings`, payload, this.getHeaders()).subscribe({
+    this.http.post<any>(`${this.apiUrl}/weddings`, payload).subscribe({
       next: (res) => {
         this.creando        = false;
         this.showNuevaModal = false;
@@ -196,7 +193,6 @@ export class MisBodasComponent implements OnInit {
 
     this.http.delete<any>(
       `${this.apiUrl}/weddings/${this.bodaAEliminar.id}`,
-      this.getHeaders(),
     ).subscribe({
       next: () => {
         this.eliminando        = false;

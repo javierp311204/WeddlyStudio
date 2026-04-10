@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-const API = 'https://weddly-api-production.up.railway.app/api';
+import { environment } from '../../../environments/environment';
 
 export interface Member {
   id:          string;   
@@ -31,51 +30,45 @@ export interface Invite {
 @Injectable({ providedIn: 'root' })
 export class ColaboradoresService {
 
-  constructor(private http: HttpClient) {}
+  private apiUrl = environment.apiUrl;
 
-  private headers(): HttpHeaders {
-    return new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('token')}` });
-  }
+  constructor(private http: HttpClient) {}
 
   getMembers(weddingId: string): Observable<Member[]> {
     return this.http
-      .get<any>(`${API}/weddings/${weddingId}/members`, { headers: this.headers() })
+      .get<any>(`${this.apiUrl}/weddings/${weddingId}/members`)
       .pipe(map(r => r?.data ?? r));
   }
 
   getInvites(weddingId: string): Observable<Invite[]> {
     return this.http
-      .get<any>(`${API}/weddings/${weddingId}/invites`, { headers: this.headers() })
+      .get<any>(`${this.apiUrl}/weddings/${weddingId}/invites`)
       .pipe(map(r => r?.data ?? r));
   }
 
   sendInvite(weddingId: string, email: string, role: string): Observable<any> {
     return this.http.post(
-      `${API}/weddings/${weddingId}/invites`,
-      { email, role },
-      { headers: this.headers() },
+      `${this.apiUrl}/weddings/${weddingId}/invites`,
+      { email, role }
     );
   }
 
   revokeInvite(weddingId: string, inviteId: string): Observable<any> {
     return this.http.delete(
-      `${API}/weddings/${weddingId}/invites/${inviteId}`,
-      { headers: this.headers() },
+      `${this.apiUrl}/weddings/${weddingId}/invites/${inviteId}`
     );
   }
 
   revokeMember(weddingId: string, memberId: string): Observable<any> {
     return this.http.delete(
-      `${API}/weddings/${weddingId}/members/${memberId}`,
-      { headers: this.headers() },
+      `${this.apiUrl}/weddings/${weddingId}/members/${memberId}`
     );
   }
 
   updateMemberRole(weddingId: string, memberId: string, role: string): Observable<any> {
     return this.http.patch(
-      `${API}/weddings/${weddingId}/members/${memberId}/role`,
-      { role },
-      { headers: this.headers() },
+      `${this.apiUrl}/weddings/${weddingId}/members/${memberId}/role`,
+      { role }
     );
   }
 }

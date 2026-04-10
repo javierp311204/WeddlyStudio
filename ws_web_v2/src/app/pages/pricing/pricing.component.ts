@@ -8,6 +8,7 @@ import { NotificationService } from '../../services/notification/notification.se
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 interface PlanUI {
   id:        string;
@@ -48,6 +49,8 @@ export class PricingComponent implements OnInit, OnDestroy {
     private http:           HttpClient,
     private translate:      TranslateService,
   ) {}
+
+  private apiUrl = environment.apiUrl;
 
   ngOnInit() {
     // Renderizar cuando el idioma cambie (cubre reload directo en /pricing)
@@ -196,10 +199,7 @@ export class PricingComponent implements OnInit, OnDestroy {
     const weddingId = this.authService.getWeddingId();
     if (!weddingId) { this.planActual = 'free'; return; }
 
-    const token = localStorage.getItem('token');
-    this.http.get<any>(`https://weddly-api-production.up.railway.app/api/weddings/${weddingId}`, {
-      headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
-    }).subscribe({
+    this.http.get<any>(`${this.apiUrl}/weddings/${weddingId}`).subscribe({
       next:  (res) => { this.planActual = res?.data?.plan_type ?? 'free'; },
       error: ()    => { this.planActual = 'free'; },
     });

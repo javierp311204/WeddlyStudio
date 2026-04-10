@@ -214,6 +214,9 @@ export class WeddingService {
 
   // ─── DELETE /api/weddings/:id ─────────────────────────────────
   async remove(id: string, userId: string) {
+      console.log('🗑️ remove wedding:', id, 'by userId:', userId);
+  const wedding = await prisma.wedding.findUnique({ where: { id } });
+  console.log('💍 wedding.created_by:', wedding?.created_by);
     await this.assertOwner(id, userId);
 
     // Contar bodas activas del usuario

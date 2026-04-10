@@ -1,16 +1,18 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { NotificationService } from '../../services/notification/notification.service';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-info-boda',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, HttpClientModule, IconComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, IconComponent],
   templateUrl: './info-boda.component.html',
   styleUrl: './info-boda.component.css'
 })
@@ -30,7 +32,7 @@ export class InfoBodaComponent implements OnInit {
     notes:         '',   // wedding.menu_description
   };
 
-  private apiUrl = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     public authService: AuthService,
@@ -44,16 +46,11 @@ export class InfoBodaComponent implements OnInit {
     this.cargarInformacion();
   }
 
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  }
-
   cargarInformacion() {
     if (!this.weddingId) return;
     this.cargando = true;
 
-    this.http.get<any>(`${this.apiUrl}/weddings/${this.weddingId}`, this.getHeaders()).subscribe({
+    this.http.get<any>(`${this.apiUrl}/weddings/${this.weddingId}`).subscribe({
       next: (res) => {
         const w = res?.data ?? res;
         this.bodaInfo = {
@@ -92,7 +89,7 @@ export class InfoBodaComponent implements OnInit {
     // Eliminar claves undefined antes de enviar
     Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
 
-    this.http.patch(`${this.apiUrl}/weddings/${this.weddingId}`, payload, this.getHeaders()).subscribe({
+    this.http.patch(`${this.apiUrl}/weddings/${this.weddingId}`, payload).subscribe({
       next: () => {
         this.guardando = false;
         this.editMode  = false;

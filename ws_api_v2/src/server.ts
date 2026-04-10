@@ -1,7 +1,10 @@
 import 'dotenv/config';
+import { validateEnv } from './config/validateEnv';
 import app from './app';
 import prisma from './config/db';
 import { verifySmtpConnection } from './utils/email';
+
+validateEnv();
 
 const PORT = process.env.PORT || 3000;
 

@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import prisma from '../config/db';
 import { AppError } from './errorHandler.middleware';
+import { Request, Response, NextFunction } from 'express';
+import { verifyToken } from '../utils/jwt';
 
 export interface JwtPayload {
   userId: string;
@@ -18,37 +19,28 @@ declare global {
   }
 }
 
-export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-  try {
+export const authenticate = (req: Request, res: Response, next: NextFunction) => {
+  // 1️⃣ Primero busca en cookie HttpOnly
+  let token = req.cookies?.access_token;
+
+  // 2️⃣ Si no hay cookie, busca en header Authorization (fallback)
+  if (!token) {
     const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new AppError('Token de autenticación requerido', 401);
+    if (authHeader?.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
     }
+  }
 
-    const token = authHeader.split(' ')[1];
-    const secret = process.env.JWT_SECRET;
-    if (!secret) throw new AppError('Configuración de servidor inválida', 500);
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Token no proporcionado' });
+  }
 
-    const decoded = jwt.verify(token, secret) as JwtPayload;
-
-
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
-      select: { status: true },
-    });
-
-    if (!user) throw new AppError('Usuario no encontrado', 401);
-
-    if (user.status === 'suspended') {
-      return next(new AppError('ACCOUNT_SUSPENDED', 403));
-    }
-
-    req.user = decoded;
+  try {
+    const decoded = verifyToken(token);
+    (req as any).user = decoded;
     next();
-  } catch (err) {
-    if (err instanceof AppError) return next(err);
-    return next(new AppError('Token inválido o expirado', 401));
+  } catch {
+    return res.status(401).json({ success: false, message: 'Token inválido o expirado' });
   }
 };
 

@@ -1,16 +1,18 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule, TranslateModule, IconComponent],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, IconComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -28,7 +30,7 @@ export class RegisterComponent implements OnInit {
   codigoBodaReferencia: string = '';
   private redirectUrl: string  = '';   // ← para saber a dónde ir tras registro
 
-  private API_URL = 'https://weddly-api-production.up.railway.app/api/auth';
+  private API_URL = environment.apiUrl + '/auth';
 
   constructor(
     private http:         HttpClient,

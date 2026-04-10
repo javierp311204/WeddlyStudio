@@ -364,7 +364,7 @@
     "LOGIN_ERROR_TITLE": "Error d'inici de sessió",
     "LOGIN_INVALID_CREDENTIALS": "Credencials incorrectes. Torna-ho a intentar.",
     "EMAIL_NOT_VERIFIED_TITLE": "Email no verificat",
-    "EMAIL_NOT_VERIFIED_DESC": "Has de verificar el teu email abans d'iniciar sessió. Revisa la safata d'entrada i el correu brossa."
+    "EMAIL_NOT_VERIFIED_DESC": "Has de verificar el teu correu electrònic per crear un casament. Revisa la safata d’entrada i el correu brossa."
   },
 
   "INFO": {

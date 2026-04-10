@@ -37,7 +37,7 @@ export class ReviewsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isLoggedIn = !!localStorage.getItem('token');
+    this.isLoggedIn = !!localStorage.getItem('userId');
     this.cargarReseñas();
     if (this.isLoggedIn) this.cargarMiReseña();
   }

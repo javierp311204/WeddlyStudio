@@ -6,7 +6,7 @@
   <ng-container *ngIf="!authService.isLoggedIn()">
 
     <!-- Navbar sticky -->
-    <nav class="navbar fixed-top bg-white shadow-sm sticky-nav"
+    <nav class="navbar bg-white shadow-sm sticky-nav"
         [class.visible]="showStickyNav">
       <div class="container-fluid px-4" style="max-width:1200px; margin:0 auto;">
         <span class="navbar-brand mb-0 h5 fw-bold nav-logo"
@@ -31,7 +31,7 @@
     </nav>
 
     <!-- Hero con carrusel -->
-    <section class="hero-section position-relative d-flex align-items-center justify-content-center text-center vh-100">
+    <section class="hero-section position-relative d-flex align-items-center justify-content-center text-center vh-100" style="margin-top: 0 !important;">
 
       <div class="hero-slides">
         <div class="hero-slide"

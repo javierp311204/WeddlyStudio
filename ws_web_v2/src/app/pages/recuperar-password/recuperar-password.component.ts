@@ -6,6 +6,7 @@ import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-recuperar-password',
@@ -19,7 +20,7 @@ export class RecuperarPasswordComponent {
   enviando: boolean = false;
   emailEnviado: boolean = false;
 
-  private readonly API = 'https://weddly-api-production.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -49,7 +50,7 @@ export class RecuperarPasswordComponent {
     this.enviando = true;
 
     // v2: /api/auth/forgot-password (antes /api/auth/solicitar-recuperacion)
-    this.http.post(`${this.API}/auth/forgot-password`, {
+    this.http.post(`${this.apiUrl}/auth/forgot-password`, {
       email: this.email.toLowerCase(),
     }).subscribe({
       next: () => {

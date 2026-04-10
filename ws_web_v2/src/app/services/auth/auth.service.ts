@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 // LoginResponse — unión discriminada por requires_2fa
 // El backend envuelve TODO en { success, data: { ... } }
@@ -16,19 +17,16 @@ export interface LoginUser {
 
 // Lo que devuelve el backend en ambos casos
 export interface LoginResponseNormal {
-  success:      boolean;
-  requires_2fa: false;
+  success: boolean;
   data: {
-    requires_2fa:  false;
-    access_token:  string;
-    refresh_token: string;
-    user:          LoginUser;
+    requires_2fa: false;
+    user:         LoginUser;
+    warning?:     string;
   };
 }
 
 export interface LoginResponse2FA {
-  success:      boolean;
-  requires_2fa?: true;   // puede venir en raíz O solo en data
+  success: boolean;
   data: {
     requires_2fa: true;
     temp_token:   string;
@@ -55,30 +53,26 @@ const ROLE_HIERARCHY: Record<string, number> = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private API_URL = 'https://weddly-api-production.up.railway.app/api';
+  private API_URL = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(
       `${this.API_URL}/auth/login`,
-      { email: email.trim().toLowerCase(), password }
+      { email: email.trim().toLowerCase(), password },
+      { withCredentials: true }
     ).pipe(
       tap(res => {
-        // FIX: el backend envuelve en data, comprobar AMBOS lugares
         const requires2fa = res.data?.requires_2fa ?? (res as any).requires_2fa ?? false;
-        if (requires2fa) return;  // no guardar nada — login.component redirige a /auth/2fa
-
-        // Login normal
+        if (requires2fa) return;
         if (res.success) {
           const d = (res as LoginResponseNormal).data;
-          localStorage.setItem('token',         d.access_token);
-          localStorage.setItem('refresh_token', d.refresh_token);
-          localStorage.setItem('userId',        d.user.id);
-          localStorage.setItem('userEmail',     d.user.email);
-          localStorage.setItem('firstName',     d.user.first_name);
-          localStorage.setItem('lastName',      d.user.last_name);
-          localStorage.setItem('rol',           d.user.role_global);
+          localStorage.setItem('userId',    d.user.id);
+          localStorage.setItem('userEmail', d.user.email);
+          localStorage.setItem('firstName', d.user.first_name);
+          localStorage.setItem('lastName',  d.user.last_name);
+          localStorage.setItem('rol',       d.user.role_global);
         }
       })
     );
@@ -93,10 +87,12 @@ export class AuthService {
   }
 
   refreshToken(): Observable<any> {
-    const refresh_token = localStorage.getItem('refresh_token');
-    return this.http.post(`${this.API_URL}/auth/refresh`, { refresh_token }).pipe(
+    return this.http.post(
+      `${this.API_URL}/auth/refresh`,
+      {},
+      { withCredentials: true } 
+    ).pipe(
       tap((res: any) => {
-        if (res.success) localStorage.setItem('token', res.data.access_token);
       })
     );
   }
@@ -131,7 +127,7 @@ export class AuthService {
   }
 
   // ── Helpers básicos ──────────────────────────────────────────
-  isLoggedIn(): boolean { return !!localStorage.getItem('token'); }
+  isLoggedIn(): boolean { return !!localStorage.getItem('userId'); }
   isAdmin(): boolean {
     const role = localStorage.getItem('rol');
     return role === 'admin' || role === 'superadmin';
@@ -196,11 +192,16 @@ export class AuthService {
   canModeratePhotos():boolean { return this.hasMinRole('co_organizer'); }
 
   logout(): void {
+    
+    this.http.post(`${this.API_URL}/auth/logout`, {}, { withCredentials: true }).subscribe();
+    
     [
-      'token', 'refresh_token', 'userId', 'userEmail',
-      'firstName', 'lastName', 'rol', 'weddingId', 'weddingRole',
-      'avatarUrl', 'nick', 'codigoBoda', 'usuarioEmail', 'usuarioNick',
+      'userId', 'userEmail', 'firstName', 'lastName', 'rol',
+      'weddingId', 'weddingRole', 'avatarUrl', 'nick',
+      'codigoBoda', 'usuarioEmail', 'usuarioNick',
+      'weddingStatus', 'weddingReadonlyReason'
     ].forEach(k => localStorage.removeItem(k));
+    
     window.location.href = '/home';
   }
 }

@@ -1,13 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { Perfil2faComponent } from '../perfil2fa/perfil2fa.component';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { environment } from '../../../environments/environment';
 
 interface FormErrors {
   first_name?: string;
@@ -25,7 +27,7 @@ interface PasswordErrors {
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, HttpClientModule, Perfil2faComponent, IconComponent],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, Perfil2faComponent, IconComponent],
   templateUrl: './perfil-usuario.component.html',
   styleUrl: './perfil-usuario.component.css',
 })
@@ -54,8 +56,7 @@ export class PerfilUsuarioComponent implements OnInit {
   passwordErrors: PasswordErrors = {};
   passwordForm = { current: '', new: '', confirm: '' };
 
-  private authUrl  = 'https://weddly-api-production.up.railway.app/api/auth';
-  private usersUrl = 'https://weddly-api-production.up.railway.app/api/users';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -68,13 +69,8 @@ export class PerfilUsuarioComponent implements OnInit {
     this.cargarPerfil();
   }
 
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  }
-
   cargarPerfil() {
-    this.http.get<any>(`${this.authUrl}/me`, this.getHeaders()).subscribe({
+    this.http.get<any>(`${this.apiUrl}/auth/me`).subscribe({
       next: (res) => {
         this.user = res?.data ?? res;
         if (this.user.avatar_url) {
@@ -108,7 +104,7 @@ export class PerfilUsuarioComponent implements OnInit {
 
     if (emailCambiado) payload.email = this.form.email.trim();
 
-    this.http.patch<any>(`${this.authUrl}/me`, payload, this.getHeaders()).subscribe({
+    this.http.patch<any>(`${this.apiUrl}/auth/me`, payload).subscribe({
       next: (res) => {
         this.user      = res?.data ?? { ...this.user, ...payload };
         this.guardando = false;
@@ -159,10 +155,8 @@ export class PerfilUsuarioComponent implements OnInit {
   private subirAvatar(file: File) {
     const formData = new FormData();
     formData.append('avatar', file);
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-    this.http.post<any>(`${this.usersUrl}/me/avatar`, formData, { headers }).subscribe({
+    this.http.post<any>(`${this.apiUrl}/users/me/avatar`, formData).subscribe({
       next: (res) => {
         const newAvatarUrl = res?.data?.avatar_url ?? this.avatarPreview;
         this.user.avatar_url = newAvatarUrl;
@@ -185,7 +179,7 @@ export class PerfilUsuarioComponent implements OnInit {
   }
 
   resendVerification() {
-    this.http.post<any>(`${this.authUrl}/resend-verification`, { email: this.user.email }, this.getHeaders()).subscribe({
+    this.http.post<any>(`${this.apiUrl}/auth/resend-verification`, { email: this.user.email }).subscribe({
       next: () => this.notifService.showSuccess(
         this.translate.instant('COMMON.SUCCESS'),
         this.translate.instant('PROFILE.VERIFICATION_SENT'),
@@ -199,9 +193,8 @@ export class PerfilUsuarioComponent implements OnInit {
     this.guardandoPassword = true;
 
     this.http.patch<any>(
-      `${this.authUrl}/change-password`,
+      `${this.apiUrl}/auth/change-password`,
       { current_password: this.passwordForm.current, new_password: this.passwordForm.new },
-      this.getHeaders(),
     ).subscribe({
       next: () => {
         this.guardandoPassword = false;
@@ -226,7 +219,7 @@ export class PerfilUsuarioComponent implements OnInit {
       'delete',
     ).then((confirmed) => {
       if (!confirmed) return;
-      this.http.delete<any>(`${this.usersUrl}/me`, this.getHeaders()).subscribe({
+      this.http.delete<any>(`${this.apiUrl}/users/me`).subscribe({
         next: () => this.authService.logout(),
         error: () => this.notifService.showError('Error', this.translate.instant('PROFILE.DELETE_ERROR')),
       });
