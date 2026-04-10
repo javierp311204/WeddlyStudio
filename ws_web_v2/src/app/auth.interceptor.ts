@@ -63,9 +63,19 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   );
 };
 
+function isPublicRoute(router: Router) {
+  const publicPaths = ['/', '/home', '/login', '/register', '/pricing', '/terms', '/privacy', '/rsvp'];
+  const currentUrl = router.url.split('?')[0].split('#')[0];
+  return publicPaths.some(path =>
+    currentUrl === path || currentUrl.startsWith(path + '/')
+  );
+}
+
 function clearSession(router: Router) {
   ['userId', 'userEmail', 'firstName', 'lastName', 'rol',
    'weddingId', 'weddingRole', 'avatarUrl', 'weddingStatus', 'weddingReadonlyReason']
     .forEach(k => localStorage.removeItem(k));
-  router.navigate(['/login']);
+  if (!isPublicRoute(router)) {
+    router.navigate(['/login']);
+  }
 }

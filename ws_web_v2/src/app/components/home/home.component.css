@@ -19,6 +19,7 @@
   font-family: 'Plus Jakarta Sans', sans-serif;
   color: var(--text);
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 /* ========================================
