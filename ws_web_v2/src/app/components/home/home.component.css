@@ -24,8 +24,23 @@
 /* ========================================
    NAVBAR STICKY
    ======================================== */
-.sticky-nav { top: -80px; }
-.sticky-nav.visible { top: 0; }
+.sticky-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1030;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  margin: 0 !important;
+  will-change: transform;
+}
+
+.sticky-nav.visible {
+  transform: translateY(0);
+  padding: 12px 0 !important;
+}
 
 .nav-btn-gold:hover {
   background: #bc6c25 !important;
@@ -48,7 +63,9 @@
    HERO + CARRUSEL
    ======================================== */
 .hero-section {
-  overflow: hidden;
+  min-height: 100vh;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 .hero-slides {

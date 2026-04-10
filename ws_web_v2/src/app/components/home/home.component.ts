@@ -60,6 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // ─── Lifecycle ────────────────────────────────────────────────
   ngOnInit(): void {
+      this.onWindowScroll();
 
       this.route.queryParams.subscribe(params => {
         if (params['verify_email'] === 'required') {
