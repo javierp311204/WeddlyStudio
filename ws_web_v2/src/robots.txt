@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://weddlystudio.uk/sitemap.xml
