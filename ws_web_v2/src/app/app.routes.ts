@@ -29,6 +29,8 @@ import { TwoFactorComponent }          from './components/two-factor/two-factor.
 import { TfaResetConfirmComponent }    from './components/tfa-reset-confirm/tfa-reset-confirm.component';
 import { Perfil2faComponent }          from './components/perfil2fa/perfil2fa.component';
 import { CalendarioPageComponent }     from './pages/calendario-page/calendario-page.component';
+import { FaqComponent } from './components/faq/faq.component';
+import { SoporteComponent } from './components/soporte/soporte.component';
 
 export const routes: Routes = [
 
@@ -45,6 +47,9 @@ export const routes: Routes = [
   { path: 'privacy',             component: PrivacidadComponent },
   { path: 'invites/accept/:token',  component: InviteAcceptComponent },
   { path: 'pricing',                component: PricingComponent },
+  { path: 'faq',                    component: FaqComponent },
+  { path: 'soporte',                component: SoporteComponent },
+
 
   // ── Rutas 2FA ───────────────────────────────────────────────
   { path: 'auth/2fa',               component: TwoFactorComponent },
@@ -63,13 +68,13 @@ export const routes: Routes = [
 
   // ── Lectura (readonly/archived pueden entrar, no editar) ────
   { path: 'album',      component: AlbumDigitalComponent,  canActivate: [authGuard, minRoleGuard('guest')] },
-  { path: 'calendar', component: CalendarioPageComponent, canActivate: [authGuard, minRoleGuard('guest')] },
+  { path: 'calendar', component: CalendarioPageComponent, canActivate: [authGuard, minRoleGuard('planner')] },
 
   // ── Escritura — se bloquean si boda es readonly o archived ──
   {
     path: 'checklist',
     component: ChecklistBodaComponent,
-    canActivate: [authGuard, minRoleGuard('guest'), PlanGuard],
+    canActivate: [authGuard, minRoleGuard('planner'), PlanGuard],
     data: { blockOnReadonly: true },
   },
   {

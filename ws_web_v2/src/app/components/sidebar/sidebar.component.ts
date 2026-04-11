@@ -32,10 +32,10 @@ export class SidebarComponent implements OnInit {
 
   navItems: NavItem[] = [
     { label: 'NAV.HOME',          title: 'NAV.HOME',          icon: 'home',          route: '/dashboard',      exact: true },
-    { label: 'NAV.INFO',          title: 'NAV.INFO',          icon: 'infoBoda',      route: '/wedding-info',      minRole: 'planner' },
+    { label: 'NAV.INFO',          title: 'NAV.INFO',          icon: 'infoBoda',      route: '/wedding-info' },
     { label: 'NAV.GUESTS',        title: 'NAV.GUESTS',        icon: 'invitados',     route: '/guests',      minRole: 'planner' },
-    { label: 'NAV.CHECKLIST',     title: 'NAV.CHECKLIST',     icon: 'checklist',     route: '/checklist' },
-    { label: 'NAV.CALENDAR',      title: 'NAV.CALENDAR',      icon: 'calendario',    route: '/calendar' },
+    { label: 'NAV.CHECKLIST',     title: 'NAV.CHECKLIST',     icon: 'checklist',     route: '/checklist',     minRole: 'planner' },
+    { label: 'NAV.CALENDAR',      title: 'NAV.CALENDAR',      icon: 'calendario',    route: '/calendar',     minRole: 'planner' },
     { label: 'NAV.DESIGN',        title: 'NAV.DESIGN',        icon: 'diseno',        route: '/design',         minRole: 'co_organizer' },
     { label: 'NAV.TABLES',        title: 'NAV.TABLES',        icon: 'mesas',         route: '/tables',          minRole: 'planner' },
     { label: 'NAV.MAP',           title: 'NAV.MAP',           icon: 'plano',         route: '/map',          minRole: 'planner' },
