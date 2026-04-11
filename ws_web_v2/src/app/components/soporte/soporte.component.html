@@ -1,0 +1,131 @@
+<div class="soporte-page">
+
+  <!-- HEADER -->
+  <div class="soporte-header">
+    <span class="soporte-eyebrow">{{ 'SOPORTE.EYEBROW' | translate }}</span>
+    <h1 class="soporte-title">{{ 'SOPORTE.TITLE' | translate }}</h1>
+    <p class="soporte-subtitle">{{ 'SOPORTE.SUBTITLE' | translate }}</p>
+  </div>
+
+  <div class="soporte-layout">
+
+    <!-- FORMULARIO -->
+    <div class="soporte-form-wrap">
+
+      <!-- Estado: éxito -->
+      <div class="soporte-success" *ngIf="enviado">
+        <span class="soporte-success-icon">
+          <app-icon name="aprobar" [size]="32"></app-icon>
+        </span>
+        <h3>{{ 'SOPORTE.SUCCESS_TITLE' | translate }}</h3>
+        <p>{{ 'SOPORTE.SUCCESS_DESC' | translate }}</p>
+        <button class="soporte-success-btn" (click)="resetForm()">
+          {{ 'SOPORTE.SUCCESS_BTN' | translate }}
+        </button>
+      </div>
+
+      <!-- Formulario -->
+      <form class="soporte-form" *ngIf="!enviado" (ngSubmit)="enviar()">
+
+        <div class="soporte-row">
+          <div class="soporte-field">
+            <label class="soporte-label">{{ 'SOPORTE.FORM_NAME' | translate }}</label>
+            <input class="soporte-input"
+                   type="text"
+                   [(ngModel)]="form.nombre"
+                   name="nombre"
+                   [placeholder]="'SOPORTE.FORM_NAME_PLACEHOLDER' | translate"
+                   required />
+          </div>
+          <div class="soporte-field">
+            <label class="soporte-label">{{ 'SOPORTE.FORM_EMAIL' | translate }}</label>
+            <input class="soporte-input"
+                   type="email"
+                   [(ngModel)]="form.email"
+                   name="email"
+                   [placeholder]="'SOPORTE.FORM_EMAIL_PLACEHOLDER' | translate"
+                   required />
+          </div>
+        </div>
+
+        <div class="soporte-field">
+          <label class="soporte-label">{{ 'SOPORTE.FORM_SUBJECT' | translate }}</label>
+          <select class="soporte-input soporte-select"
+                  [(ngModel)]="form.asunto"
+                  name="asunto"
+                  required>
+            <option value="" disabled selected>{{ 'SOPORTE.FORM_SUBJECT_PLACEHOLDER' | translate }}</option>
+            <option value="Problema técnico">{{ 'SOPORTE.SUBJECT_TECHNICAL' | translate }}</option>
+            <option value="Pregunta sobre planes">{{ 'SOPORTE.SUBJECT_PLANS' | translate }}</option>
+            <option value="Gestión de invitados">{{ 'SOPORTE.SUBJECT_GUESTS' | translate }}</option>
+            <option value="Pagos y facturación">{{ 'SOPORTE.SUBJECT_BILLING' | translate }}</option>
+            <option value="Mi cuenta">{{ 'SOPORTE.SUBJECT_ACCOUNT' | translate }}</option>
+            <option value="Sugerencia">{{ 'SOPORTE.SUBJECT_SUGGESTION' | translate }}</option>
+            <option value="Otro">{{ 'SOPORTE.SUBJECT_OTHER' | translate }}</option>
+          </select>
+        </div>
+
+        <div class="soporte-field">
+          <label class="soporte-label">{{ 'SOPORTE.FORM_MESSAGE' | translate }}</label>
+          <textarea class="soporte-input soporte-textarea"
+                    [(ngModel)]="form.mensaje"
+                    name="mensaje"
+                    [placeholder]="'SOPORTE.FORM_MESSAGE_PLACEHOLDER' | translate"
+                    rows="6"
+                    required></textarea>
+        </div>
+
+        <div class="soporte-error" *ngIf="error">
+          <app-icon name="advertencia" [size]="16"></app-icon>
+          {{ error }}
+        </div>
+
+        <button class="soporte-btn" type="submit" [disabled]="enviando">
+          <ng-container *ngIf="!enviando">
+            <app-icon name="email" [size]="16"></app-icon>
+            {{ 'SOPORTE.SEND_BTN' | translate }}
+          </ng-container>
+          <span *ngIf="enviando" class="soporte-spinner">
+            <app-icon name="relojCargando" [size]="16"></app-icon>
+            {{ 'SOPORTE.SENDING' | translate }}
+          </span>
+        </button>
+
+      </form>
+    </div>
+
+    <!-- INFO LATERAL -->
+    <div class="soporte-info">
+
+      <div class="soporte-info-card">
+        <div class="soporte-info-icon">
+          <app-icon name="email" [size]="22"></app-icon>
+        </div>
+        <h3 class="soporte-info-title">{{ 'SOPORTE.INFO_EMAIL_TITLE' | translate }}</h3>
+        <p class="soporte-info-text">{{ 'SOPORTE.INFO_EMAIL_VALUE' | translate }}</p>
+      </div>
+
+      <div class="soporte-info-card">
+        <div class="soporte-info-icon">
+          <app-icon name="fecha" [size]="22"></app-icon>
+        </div>
+        <h3 class="soporte-info-title">{{ 'SOPORTE.INFO_RESPONSE_TITLE' | translate }}</h3>
+        <p class="soporte-info-text">{{ 'SOPORTE.INFO_RESPONSE_VALUE' | translate }}</p>
+      </div>
+
+      <div class="soporte-info-card">
+        <div class="soporte-info-icon">
+          <app-icon name="advertencia" [size]="22"></app-icon>
+        </div>
+        <h3 class="soporte-info-title">{{ 'SOPORTE.INFO_FAQ_TITLE' | translate }}</h3>
+        <p class="soporte-info-text">
+          {{ 'SOPORTE.INFO_FAQ_PRE' | translate }}
+          <a routerLink="/faq" class="soporte-link">{{ 'SOPORTE.INFO_FAQ_LINK' | translate }}</a>
+          {{ 'SOPORTE.INFO_FAQ_POST' | translate }}
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</div>

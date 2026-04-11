@@ -1,0 +1,97 @@
+<div class="faq-page">
+
+  <!-- HEADER -->
+  <div class="faq-header">
+    <span class="faq-eyebrow">{{ 'FAQ.EYEBROW' | translate }}</span>
+    <h1 class="faq-title">{{ 'FAQ.TITLE' | translate }}</h1>
+    <p class="faq-subtitle">{{ 'FAQ.SUBTITLE' | translate }}</p>
+  </div>
+
+  <!-- CATEGORÍAS -->
+  <div class="faq-container">
+
+    <!-- CUENTA -->
+    <div class="faq-section">
+      <h2 class="faq-section-title">
+        <span class="faq-section-num">01</span>
+        {{ 'FAQ.SECTION_ACCOUNT' | translate }}
+      </h2>
+      <div class="faq-item" *ngFor="let item of faqCuenta; let i = index"
+           [class.faq-item--open]="openIndex === 'cuenta-' + i"
+           (click)="toggle('cuenta-' + i)">
+        <div class="faq-question">
+          <span>{{ item.q }}</span>
+          <span class="faq-icon">{{ openIndex === 'cuenta-' + i ? '−' : '+' }}</span>
+        </div>
+        <div class="faq-answer" *ngIf="openIndex === 'cuenta-' + i">
+          <p>{{ item.a }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BODA -->
+    <div class="faq-section">
+      <h2 class="faq-section-title">
+        <span class="faq-section-num">02</span>
+        {{ 'FAQ.SECTION_WEDDING' | translate }}
+      </h2>
+      <div class="faq-item" *ngFor="let item of faqBoda; let i = index"
+           [class.faq-item--open]="openIndex === 'boda-' + i"
+           (click)="toggle('boda-' + i)">
+        <div class="faq-question">
+          <span>{{ item.q }}</span>
+          <span class="faq-icon">{{ openIndex === 'boda-' + i ? '−' : '+' }}</span>
+        </div>
+        <div class="faq-answer" *ngIf="openIndex === 'boda-' + i">
+          <p>{{ item.a }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLANES -->
+    <div class="faq-section">
+      <h2 class="faq-section-title">
+        <span class="faq-section-num">03</span>
+        {{ 'FAQ.SECTION_PLANS' | translate }}
+      </h2>
+      <div class="faq-item" *ngFor="let item of faqPlanes; let i = index"
+           [class.faq-item--open]="openIndex === 'planes-' + i"
+           (click)="toggle('planes-' + i)">
+        <div class="faq-question">
+          <span>{{ item.q }}</span>
+          <span class="faq-icon">{{ openIndex === 'planes-' + i ? '−' : '+' }}</span>
+        </div>
+        <div class="faq-answer" *ngIf="openIndex === 'planes-' + i">
+          <p>{{ item.a }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVITADOS -->
+    <div class="faq-section">
+      <h2 class="faq-section-title">
+        <span class="faq-section-num">04</span>
+        {{ 'FAQ.SECTION_GUESTS' | translate }}
+      </h2>
+      <div class="faq-item" *ngFor="let item of faqInvitados; let i = index"
+           [class.faq-item--open]="openIndex === 'invitados-' + i"
+           (click)="toggle('invitados-' + i)">
+        <div class="faq-question">
+          <span>{{ item.q }}</span>
+          <span class="faq-icon">{{ openIndex === 'invitados-' + i ? '−' : '+' }}</span>
+        </div>
+        <div class="faq-answer" *ngIf="openIndex === 'invitados-' + i">
+          <p>{{ item.a }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA SOPORTE -->
+  <div class="faq-cta">
+    <p class="faq-cta-text">{{ 'FAQ.CTA_TEXT' | translate }}</p>
+    <a routerLink="/soporte" class="faq-cta-btn">{{ 'FAQ.CTA_BTN' | translate }}</a>
+  </div>
+
+</div>

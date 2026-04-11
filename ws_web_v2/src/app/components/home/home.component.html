@@ -419,8 +419,8 @@
           </div>
           <div class="col-md-3">
             <h4 class="h6 mb-3" style="color:var(--gold);">{{ 'HOME.FOOTER_HELP' | translate }}</h4>
-            <a href="#" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_FAQ' | translate }}</a>
-            <a href="#" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_SUPPORT' | translate }}</a>
+            <a routerLink="/faq" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_FAQ' | translate }}</a>
+            <a routerLink="/soporte" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_SUPPORT' | translate }}</a>
               <a routerLink="/reviews" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">
                 {{ 'FOOTER.NAV_REVIEWS' | translate }}
               </a>
@@ -463,6 +463,7 @@
 
       <div class="action-grid">
 
+        <!-- Guía de la Boda — todos los roles -->
         <div class="action-card" routerLink="/wedding-info">
           <div class="card-icon">
             <app-icon name="infoBoda" [size]="24"></app-icon>
@@ -474,7 +475,9 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/guests" *ngIf="authService.isWeddingOwner()">
+        <!-- Invitados — planner+ -->
+        <div class="action-card" routerLink="/guests" 
+            *ngIf="authService.canManageGuests()">
           <div class="card-icon">
             <app-icon name="invitados" [size]="24"></app-icon>
           </div>
@@ -485,7 +488,9 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/checklist" *ngIf="authService.isWeddingOwner()">
+        <!-- Checklist — planner+ -->
+        <div class="action-card" routerLink="/checklist" 
+            *ngIf="authService.canManageGuests()">
           <div class="card-icon">
             <app-icon name="checklist" [size]="24"></app-icon>
           </div>
@@ -496,7 +501,9 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/design" *ngIf="authService.isWeddingOwner()">
+        <!-- Diseño — co-organizador+ -->
+        <div class="action-card" routerLink="/design" 
+            *ngIf="authService.canManageWedding()">
           <div class="card-icon">
             <app-icon name="diseno" [size]="24"></app-icon>
           </div>
@@ -507,7 +514,9 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/tables" *ngIf="authService.isWeddingOwner()">
+        <!-- Mesas — planner+ -->
+        <div class="action-card" routerLink="/tables" 
+            *ngIf="authService.canManageGuests()">
           <div class="card-icon">
             <app-icon name="mesas" [size]="24"></app-icon>
           </div>
@@ -518,6 +527,7 @@
           <span class="card-arrow">→</span>
         </div>
 
+        <!-- Álbum — todos los roles -->
         <div class="action-card" routerLink="/album">
           <div class="card-icon">
             <app-icon name="album" [size]="24"></app-icon>
@@ -529,7 +539,9 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/collaborators" *ngIf="authService.isWeddingOwner()">
+        <!-- Colaboradores — co-organizador+ -->
+        <div class="action-card" routerLink="/collaborators" 
+            *ngIf="authService.canManageWedding()">
           <div class="card-icon">
             <app-icon name="colaboradores" [size]="24"></app-icon>
           </div>
@@ -540,6 +552,7 @@
           <span class="card-arrow">→</span>
         </div>
 
+        <!-- Planes — todos los roles -->
         <div class="action-card" routerLink="/pricing">
           <div class="card-icon">
             <app-icon name="planes" [size]="24"></app-icon>
@@ -551,7 +564,9 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/map" *ngIf="authService.isWeddingOwner()">
+        <!-- Plano — planner+ -->
+        <div class="action-card" routerLink="/map" 
+            *ngIf="authService.canManageGuests()">
           <div class="card-icon">
             <app-icon name="plano" [size]="24"></app-icon>
           </div>
@@ -562,7 +577,9 @@
           <span class="card-arrow">→</span>
         </div>
 
-        <div class="action-card" routerLink="/calendar" *ngIf="authService.isWeddingOwner()">
+        <!-- Calendario — planner+ -->
+        <div class="action-card" routerLink="/calendar" 
+            *ngIf="authService.canManageGuests()">
           <div class="card-icon">
             <app-icon name="calendario" [size]="24"></app-icon>
           </div>

@@ -32,8 +32,8 @@ interface InvitadoV2 {
 export class DisenoPapeleriaComponent implements OnInit {
   @ViewChild('invitacionCard', { static: false }) invitacionCard!: ElementRef;
 
-  nombreNovia: string = 'Valery';
-  nombreNovio: string = 'Javier';
+  nombreNovia: string = 'Nombre Novia';
+  nombreNovio: string = 'Nombre Novio';
   fecha: string = '2025-09-20';
   colorFondo: string = '#ffffff';
   colorTexto: string = '#d4a373';
@@ -41,7 +41,7 @@ export class DisenoPapeleriaComponent implements OnInit {
   imagenFondo: string | null = null;
   // v2: plantillas mapeadas al sistema de invitaciones v2
   // 'elegant' | 'modern' | 'rustic' | 'minimalist'
-  plantillaActiva: string = 'elegant';  // antes: 'clasica'
+  plantillaActiva: string = 'clasica';  
 
   mostrarConfirmacionSalida: boolean = false;
   cambiosRealizados: boolean = false;
