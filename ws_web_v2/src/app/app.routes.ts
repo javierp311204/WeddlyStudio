@@ -48,7 +48,7 @@ export const routes: Routes = [
   { path: 'invites/accept/:token',  component: InviteAcceptComponent },
   { path: 'pricing',                component: PricingComponent },
   { path: 'faq',                    component: FaqComponent },
-  { path: 'soporte',                component: SoporteComponent },
+  { path: 'support',                component: SoporteComponent },
 
 
   // ── Rutas 2FA ───────────────────────────────────────────────

@@ -15,7 +15,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const http   = inject(HttpClient);
   const notif  = inject(NotificationService);
 
-  // ✅ withCredentials en TODAS las peticiones para que las cookies vayan siempre
+  if (req.url.includes('formspree.io')) {
+    return next(req);
+  }
+
   const authedReq = req.clone({ withCredentials: true });
 
   return next(authedReq).pipe(
