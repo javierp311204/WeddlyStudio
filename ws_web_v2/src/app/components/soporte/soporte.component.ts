@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { IconComponent } from '../../shared/icons/icon.component';
 
@@ -42,8 +42,6 @@ export class SoporteComponent {
     this.enviando = true;
     this.error    = '';
 
-    const headers = new HttpHeaders({ Accept: 'application/json' });
-
     const payload = {
       name:    this.form.nombre,
       email:   this.form.email,
@@ -51,7 +49,7 @@ export class SoporteComponent {
       message: this.form.mensaje,
     };
 
-    this.http.post(this.FORMSPREE_URL, payload, { headers }).subscribe({
+    this.http.post(this.FORMSPREE_URL, payload).subscribe({
       next: () => {
         this.enviando = false;
         this.enviado  = true;
