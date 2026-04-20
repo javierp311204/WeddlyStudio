@@ -1,0 +1,42 @@
+{
+  "name": "Weddly Studio — Organiza tu boda",
+  "short_name": "Weddly",
+  "description": "El wedding planner digital todo en uno: invitados, mesas, tareas, presupuesto y fotos.",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8B6F47",
+  "lang": "es-ES",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "assets/logo/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/logo/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "productivity", "wedding"],
+  "screenshots": [
+    {
+      "src": "assets/og-preview.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Weddly Studio — Panel principal"
+    }
+  ]
+}

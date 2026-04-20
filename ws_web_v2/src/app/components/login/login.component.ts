@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; // ← OnInit AÑADIDO
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -6,6 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { IconComponent } from '../../shared/icons/icon.component';
+import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import { IconComponent } from '../../shared/icons/icon.component';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit { // ← OnInit AÑADIDO
   email:           string  = '';
   pass:            string  = '';
   mostrarPassword: boolean = false;
@@ -22,10 +23,22 @@ export class LoginComponent {
   constructor(
     private authService:  AuthService,
     private router:       Router,
-    private route:        ActivatedRoute,   
+    private route:        ActivatedRoute,
     private notifService: NotificationService,
     private translate:    TranslateService,
+    private seo:          SeoService, // ← AÑADIDO
   ) {}
+
+  // ── SEO ────────────────────────────────────────────────────── // ← AÑADIDO
+  ngOnInit(): void {
+    this.seo.set({
+      title: 'Iniciar Sesión | Weddly Studio',
+      description: 'Accede a tu cuenta de Weddly Studio y retoma la organización de tu boda.',
+      url: 'https://weddlystudio.uk/login',
+      noIndex: true,
+    });
+  }
+  // ─────────────────────────────────────────────────────────────
 
   togglePassword() {
     this.mostrarPassword = !this.mostrarPassword;
@@ -69,7 +82,6 @@ export class LoginComponent {
           }),
         );
 
-        // ─── Redirect tras login ──────────────────────────────
         const redirect = this.route.snapshot.queryParamMap.get('redirect');
         this.router.navigateByUrl(redirect ?? '/dashboard');
       },

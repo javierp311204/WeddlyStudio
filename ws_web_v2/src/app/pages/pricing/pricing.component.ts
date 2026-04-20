@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IconComponent } from '../../shared/icons/icon.component';
 import { environment } from '../../../environments/environment';
+import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
 
 interface PlanUI {
   id:        string;
@@ -36,9 +37,8 @@ export class PricingComponent implements OnInit, OnDestroy {
   cargando   = true;
   procesandoPlanId: string | null = null;
 
-  private rawPlanes: any[] = [];        // guardamos el raw para re-renderizar si cambia idioma
+  private rawPlanes: any[] = [];
   private langSub!: Subscription;
-
   private featureLabels: Record<string, string> = {};
 
   constructor(
@@ -48,17 +48,24 @@ export class PricingComponent implements OnInit, OnDestroy {
     private router:         Router,
     private http:           HttpClient,
     private translate:      TranslateService,
+    private seo:            SeoService, // ← AÑADIDO
   ) {}
 
   private apiUrl = environment.apiUrl;
 
   ngOnInit() {
-    // Renderizar cuando el idioma cambie (cubre reload directo en /pricing)
+    // ── SEO ──────────────────────────────────────────────────── // ← AÑADIDO
+    this.seo.set({
+      title: 'Planes y Precios de Weddly Studio | Wedding Planner Digital desde 0 €',
+      description: 'Descubre los planes de Weddly Studio para organizar tu boda. Plan gratuito disponible. Gestión de invitados, mesas, checklist y fotos. Sin compromisos.',
+      url: 'https://weddlystudio.uk/pricing',
+    });
+    // ─────────────────────────────────────────────────────────────
+
     this.langSub = this.translate.onLangChange.subscribe(() => {
       if (this.rawPlanes.length > 0) this.buildPlanes();
     });
 
-    // Cargar planes del backend y luego construir UI
     this.cargarPlanesDesdeApi();
     this.cargarPlanActual();
 
@@ -71,8 +78,6 @@ export class PricingComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.langSub?.unsubscribe();
   }
-
-  // ── Carga raw desde la API y luego construye UI ─────────────
 
   cargarPlanesDesdeApi() {
     this.cargando = true;
@@ -91,9 +96,6 @@ export class PricingComponent implements OnInit, OnDestroy {
       },
     });
   }
-
-  // ── Construye PlanUI[] usando translate.instant() ───────────
-  // Se llama desde cargarPlanesDesdeApi() Y desde onLangChange
 
   private buildPlanes() {
     this.featureLabels = {
@@ -191,8 +193,6 @@ export class PricingComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  // ── Plan actual ─────────────────────────────────────────────
-
   cargarPlanActual() {
     if (!this.authService.isLoggedIn()) { this.planActual = 'free'; return; }
 
@@ -204,8 +204,6 @@ export class PricingComponent implements OnInit, OnDestroy {
       error: ()    => { this.planActual = 'free'; },
     });
   }
-
-  // ── Seleccionar plan ────────────────────────────────────────
 
   async seleccionarPlan(plan: PlanUI) {
     if (!this.authService.isLoggedIn()) {

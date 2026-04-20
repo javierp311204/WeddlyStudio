@@ -10,6 +10,7 @@ import { IconComponent } from '../../shared/icons/icon.component';
 import { TareasService } from '../../services/tareas/tareas.service';
 import { ChecklistPreviewComponent } from '../checklist-preview/checklist-preview.component';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
+import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
 
 @Component({
   selector: 'app-home',
@@ -56,20 +57,28 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private translate:     TranslateService,
     private tareasService: TareasService,
     private route:         ActivatedRoute,
+    private seo:           SeoService, // ← AÑADIDO
   ) {}
 
   // ─── Lifecycle ────────────────────────────────────────────────
   ngOnInit(): void {
-      this.onWindowScroll();
+    // ── SEO ──────────────────────────────────────────────────── // ← AÑADIDO
+    this.seo.set({
+      title: 'Organiza tu Boda Online Gratis | Weddly Studio — Wedding Planner Digital',
+      description: 'El wedding planner digital todo en uno: gestiona invitados, mesas, tareas, presupuesto y fotos de boda. Empieza gratis hoy y organiza la boda perfecta.',
+      url: 'https://weddlystudio.uk/home',
+    });
+    // ─────────────────────────────────────────────────────────────
 
-      this.route.queryParams.subscribe(params => {
-        if (params['verify_email'] === 'required') {
-          setTimeout(() => {
+    this.onWindowScroll();
 
-            this.mostrarBannerVerificacion = true;
-          }, 300);
-        }
-      });
+    this.route.queryParams.subscribe(params => {
+      if (params['verify_email'] === 'required') {
+        setTimeout(() => {
+          this.mostrarBannerVerificacion = true;
+        }, 300);
+      }
+    });
 
     this.startCarousel();
 
@@ -96,7 +105,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
               next: (res: any) => {
                 const user = res?.data ?? res;
                 if (!user?.email_verified) {
-                  this.mostrarBannerVerificacion = true; // mostrar banner aquí, no navegar
+                  this.mostrarBannerVerificacion = true;
                 } else {
                   this.router.navigate(['/onboarding']);
                 }

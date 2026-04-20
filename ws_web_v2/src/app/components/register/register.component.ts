@@ -8,6 +8,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { IconComponent } from '../../shared/icons/icon.component';
 import { environment } from '../../../environments/environment';
+import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
 
 @Component({
   selector: 'app-register',
@@ -28,7 +29,7 @@ export class RegisterComponent implements OnInit {
   mostrarPassword: boolean = false;
 
   codigoBodaReferencia: string = '';
-  private redirectUrl: string  = '';   // ← para saber a dónde ir tras registro
+  private redirectUrl: string  = '';
 
   private API_URL = environment.apiUrl + '/auth';
 
@@ -38,13 +39,21 @@ export class RegisterComponent implements OnInit {
     private route:        ActivatedRoute,
     private notifService: NotificationService,
     private translate:    TranslateService,
+    private seo:          SeoService, // ← AÑADIDO
   ) {}
 
   ngOnInit(): void {
+    // ── SEO ──────────────────────────────────────────────────── // ← AÑADIDO
+    this.seo.set({
+      title: 'Crear Cuenta Gratis | Weddly Studio — Organiza tu Boda',
+      description: 'Crea tu cuenta gratuita en Weddly Studio y empieza a organizar tu boda hoy mismo. Sin tarjeta de crédito. El wedding planner digital más completo.',
+      url: 'https://weddlystudio.uk/register',
+    });
+    // ─────────────────────────────────────────────────────────────
+
     const codigo = this.route.snapshot.queryParamMap.get('codigo');
     if (codigo) this.codigoBodaReferencia = codigo.toUpperCase();
 
-    // Guardar redirect si viene de una invitación
     this.redirectUrl = this.route.snapshot.queryParamMap.get('redirect') ?? '';
   }
 
@@ -97,7 +106,6 @@ export class RegisterComponent implements OnInit {
           this.translate.instant('AUTH.ACCOUNT_CREATED_DESC', { email: this.email })
         );
 
-        // ─── Redirect tras registro ───────────────────────────
         setTimeout(() => {
           this.router.navigateByUrl(this.redirectUrl || '/home');
         }, 1500);

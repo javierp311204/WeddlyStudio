@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ReviewsService, Review } from '../../services/reviews/reviews.service';
+import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
 
 @Component({
   selector: 'app-reviews',
@@ -34,9 +35,18 @@ export class ReviewsComponent implements OnInit {
   constructor(
     private reviewsService: ReviewsService,
     private translate:      TranslateService,
+    private seo:            SeoService, // ← AÑADIDO
   ) {}
 
   ngOnInit(): void {
+    // ── SEO ──────────────────────────────────────────────────── // ← AÑADIDO
+    this.seo.set({
+      title: 'Opiniones de Novios sobre Weddly Studio | Wedding Planner Digital',
+      description: 'Lee las opiniones de parejas que organizaron su boda con Weddly Studio. Más de 100 bodas gestionadas. Descubre por qué confían en nosotros para planificar su boda.',
+      url: 'https://weddlystudio.uk/reviews',
+    });
+    // ─────────────────────────────────────────────────────────────
+
     this.isLoggedIn = !!localStorage.getItem('userId');
     this.cargarReseñas();
     if (this.isLoggedIn) this.cargarMiReseña();

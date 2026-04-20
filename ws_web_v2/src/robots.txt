@@ -1,4 +1,33 @@
-User-agent: *
-Allow: /
+# robots.txt — Weddly Studio
+# https://weddlystudio.uk
 
+User-agent: *
+
+# Rutas públicas — indexar todo lo que no sea privado
+Allow: /
+Allow: /home
+Allow: /pricing
+Allow: /reviews
+Allow: /login
+Allow: /register
+
+# Bloquear dashboard y rutas autenticadas — Google no debe indexarlas
+Disallow: /dashboard
+Disallow: /workspace
+Disallow: /onboarding
+Disallow: /settings
+Disallow: /guests
+Disallow: /tables
+Disallow: /calendar
+Disallow: /album
+Disallow: /checklist
+Disallow: /budget
+
+# Bloquear rutas de API
+Disallow: /api/
+
+# Bloquear assets internos innecesarios para el índice
+Disallow: /assets/i18n/
+
+# Sitemap
 Sitemap: https://weddlystudio.uk/sitemap.xml

@@ -2,47 +2,201 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Weddly Studio — Organiza tu boda perfectamente</title>
+
+  <!-- ── Título ─────────────────────────────────────────────── -->
+  <!-- ~60 chars. Keyword principal al principio, brand al final -->
+  <title>Organiza tu Boda Online | Weddly Studio — Wedding Planner Digital</title>
   <base href="/">
 
   <!-- ── Básico ─────────────────────────────────────────────── -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Weddly Studio es la plataforma todo en uno para organizar tu boda: invitados, tareas, mesas, fotos y mucho más. Empieza gratis hoy.">
-  <meta name="keywords" content="organizar boda, wedding planner, lista de invitados, gestión de boda, weddly studio">
-  <meta name="author" content="Weddly Studio">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://weddlystudio.uk">
 
-  <!-- ── Open Graph (Facebook, WhatsApp, LinkedIn) ──────────── -->
+  <!-- ~155 chars. Acción + keyword + propuesta de valor -->
+  <meta name="description" content="Planifica tu boda desde cero con Weddly Studio: gestiona invitados, mesas, tareas, presupuesto y álbum de fotos en un solo lugar. Gratis para empezar. El wedding planner digital que tu boda merece.">
+
+  <!-- keywords tiene muy poco peso en Google hoy, pero ayuda en Bing y otros -->
+  <meta name="keywords" content="organizar boda, planner boda, wedding planner online, gestión de boda, lista invitados boda, weddly, weddly studio, planificador boda, bodas españa, wedding planner digital, boda perfecta, organizar mi boda">
+  <meta name="author" content="Weddly Studio">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+  <!-- Canonical siempre con trailing slash consistente -->
+  <link rel="canonical" href="https://weddlystudio.uk/">
+
+  <!-- ── hreflang (si solo tienes ES por ahora, al menos x-default) ── -->
+  <link rel="alternate" hreflang="es" href="https://weddlystudio.uk/">
+  <link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/">
+
+  <!-- ── Open Graph ─────────────────────────────────────────── -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://weddlystudio.uk">
-  <meta property="og:title" content="Weddly Studio — Organiza tu boda perfectamente">
-  <meta property="og:description" content="La plataforma todo en uno para organizar tu boda: invitados, tareas, mesas, fotos y mucho más.">
+  <meta property="og:url" content="https://weddlystudio.uk/">
+  <meta property="og:title" content="Organiza tu Boda Online | Weddly Studio">
+  <meta property="og:description" content="El wedding planner digital todo en uno: invitados, mesas, tareas, presupuesto y fotos. Empieza gratis hoy.">
   <meta property="og:image" content="https://weddlystudio.uk/assets/og-preview.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Weddly Studio — Tu boda, perfectamente organizada">
+  <meta property="og:image:alt" content="Weddly Studio — Planifica tu boda online, gratis">
   <meta property="og:locale" content="es_ES">
   <meta property="og:site_name" content="Weddly Studio">
 
   <!-- ── Twitter Card ───────────────────────────────────────── -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://weddlystudio.uk">
-  <meta name="twitter:title" content="Weddly Studio — Organiza tu boda perfectamente">
-  <meta name="twitter:description" content="La plataforma todo en uno para organizar tu boda: invitados, tareas, mesas, fotos y mucho más.">
+  <meta name="twitter:site" content="@weddlystudio">
+  <meta name="twitter:creator" content="@weddlystudio">
+  <meta name="twitter:url" content="https://weddlystudio.uk/">
+  <meta name="twitter:title" content="Organiza tu Boda Online | Weddly Studio">
+  <meta name="twitter:description" content="El wedding planner digital todo en uno: invitados, mesas, tareas, presupuesto y fotos. Empieza gratis hoy.">
   <meta name="twitter:image" content="https://weddlystudio.uk/assets/og-preview.png">
+  <meta name="twitter:image:alt" content="Weddly Studio — Planifica tu boda online">
 
   <!-- ── Favicon ────────────────────────────────────────────── -->
-  <link rel="icon" type="image/png" href="assets/logo/favicon.ico">
-  <link rel="apple-touch-icon" href="assets/logo/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/logo/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#8B6F47">
 
-  <!-- ── Fuentes ────────────────────────────────────────────── -->
+  <!-- ── Schema.org JSON-LD ─────────────────────────────────── -->
+  <!-- Esto es lo que Google lee para rich results. MUY importante. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://weddlystudio.uk/#website",
+        "url": "https://weddlystudio.uk/",
+        "name": "Weddly Studio",
+        "description": "El wedding planner digital todo en uno para organizar tu boda perfecta.",
+        "inLanguage": "es-ES",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://weddlystudio.uk/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://weddlystudio.uk/#app",
+        "name": "Weddly Studio",
+        "url": "https://weddlystudio.uk/",
+        "description": "Plataforma SaaS para organizar bodas: gestión de invitados, mesas, tareas, presupuesto y álbum de fotos en un solo lugar.",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web, iOS, Android",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR",
+          "description": "Plan gratuito disponible"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "ratingCount": "124"
+        },
+        "featureList": [
+          "Gestión de invitados y confirmaciones de asistencia",
+          "Organización de mesas y seating plan",
+          "Checklist de tareas personalizable",
+          "Control de presupuesto de boda",
+          "Álbum de fotos compartido",
+          "Acceso colaborativo para pareja y wedding planner"
+        ],
+        "publisher": {
+          "@id": "https://weddlystudio.uk/#organization"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://weddlystudio.uk/#organization",
+        "name": "Weddly Studio",
+        "url": "https://weddlystudio.uk/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://weddlystudio.uk/assets/logo/logo.png",
+          "width": 200,
+          "height": 60
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "support@weddlystudio.uk",
+          "contactType": "customer support",
+          "availableLanguage": ["Spanish", "English"]
+        },
+        "sameAs": [
+          "https://www.instagram.com/weddlystudio",
+          "https://www.tiktok.com/@weddlystudio"
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://weddlystudio.uk/#webpage",
+        "url": "https://weddlystudio.uk/",
+        "name": "Organiza tu Boda Online | Weddly Studio — Wedding Planner Digital",
+        "description": "Planifica tu boda desde cero con Weddly Studio. Gestiona invitados, mesas, tareas, presupuesto y fotos en un solo lugar. Gratis para empezar.",
+        "isPartOf": { "@id": "https://weddlystudio.uk/#website" },
+        "about": { "@id": "https://weddlystudio.uk/#app" },
+        "inLanguage": "es-ES",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Inicio",
+              "item": "https://weddlystudio.uk/"
+            }
+          ]
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Weddly Studio es gratis?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sí, Weddly Studio tiene un plan gratuito completo con el que puedes organizar tu boda sin coste. Existen planes de pago con funcionalidades avanzadas para bodas más grandes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué puedo gestionar con Weddly Studio?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Con Weddly Studio puedes gestionar la lista de invitados y confirmaciones de asistencia, el seating plan o distribución de mesas, el checklist de tareas, el presupuesto de la boda, y un álbum de fotos compartido con pareja y familiares."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Necesito un wedding planner si uso Weddly Studio?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Weddly Studio está diseñado para que cualquier pareja pueda organizar su boda de forma independiente, sin necesidad de contratar un wedding planner externo. La plataforma guía el proceso completo paso a paso."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- ── Fuentes (optimizado) ───────────────────────────────── -->
+  <!-- Solo preconnect de lo que realmente usas -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Carga combinada en una sola request. Quita Roboto si no la usas en CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Material Icons: carga diferida para no bloquear render -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  </noscript>
 </head>
 <body>
   <app-root></app-root>

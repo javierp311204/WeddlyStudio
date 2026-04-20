@@ -121,5 +121,10 @@ export const routes: Routes = [
   },
 
   // ── Fallback ────────────────────────────────────────────────
-  { path: '**', redirectTo: 'home' },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./components/notfound404/notfound404.component')
+        .then(m => m.NotFoundComponent),
+  }
 ];
