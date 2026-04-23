@@ -366,7 +366,10 @@
     "LOGIN_ERROR_TITLE": "Error de login",
     "LOGIN_INVALID_CREDENTIALS": "Credenciales incorrectas. Inténtalo de nuevo.",
     "EMAIL_NOT_VERIFIED_TITLE": "Email no verificado",
-    "EMAIL_NOT_VERIFIED_DESC": "Debes verificar tu email para crear una boda. Revisa tu bandeja de entrada y spam."
+    "EMAIL_NOT_VERIFIED_DESC": "Debes verificar tu email para crear una boda. Revisa tu bandeja de entrada y spam.",
+    "TERMS_ACCEPTED": "Acepto los términos y condiciones",
+    "TERMS_REQUIRED_TITLE": "Términos no aceptados",
+    "TERMS_REQUIRED_DESC": "Debes aceptar los términos y condiciones para crear tu cuenta."
   },
 
   "INFO": {

@@ -27,6 +27,7 @@ export class RegisterComponent implements OnInit {
   nickname: string = '';
   phone: string = '';
   mostrarPassword: boolean = false;
+  termsAccepted: boolean = false
 
   codigoBodaReferencia: string = '';
   private redirectUrl: string  = '';
@@ -43,13 +44,11 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // ── SEO ──────────────────────────────────────────────────── // ← AÑADIDO
     this.seo.set({
       title: 'Crear Cuenta Gratis | Weddly Studio — Organiza tu Boda',
       description: 'Crea tu cuenta gratuita en Weddly Studio y empieza a organizar tu boda hoy mismo. Sin tarjeta de crédito. El wedding planner digital más completo.',
       url: 'https://weddlystudio.uk/register',
     });
-    // ─────────────────────────────────────────────────────────────
 
     const codigo = this.route.snapshot.queryParamMap.get('codigo');
     if (codigo) this.codigoBodaReferencia = codigo.toUpperCase();
@@ -76,6 +75,14 @@ export class RegisterComponent implements OnInit {
       this.notifService.showError(
         this.translate.instant('AUTH.INCOMPLETE_FIELDS_TITLE'),
         this.translate.instant('AUTH.INCOMPLETE_FIELDS_DESC')
+      );
+      return;
+    }
+
+    if (!this.termsAccepted) {
+      this.notifService.showError(
+        this.translate.instant('AUTH.TERMS_REQUIRED_TITLE'),
+        this.translate.instant('AUTH.TERMS_REQUIRED_DESC')
       );
       return;
     }

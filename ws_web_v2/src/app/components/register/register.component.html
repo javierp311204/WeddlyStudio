@@ -103,6 +103,14 @@
           </select>
         </div>
 
+        <!-- TERMINOS Y CONDICIONES -->
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" [(ngModel)]="termsAccepted" name="termsAccepted" id="termsAccepted">
+          <label class="form-check-label" for="termsAccepted">
+            <a routerLink="/terms" target="_blank">{{ 'AUTH.TERMS_ACCEPTED' | translate }}</a>
+          </label>
+        </div>
+
         <!-- INFO INVITACIÓN -->
         <div class="mb-3" *ngIf="codigoBodaReferencia">
           <div class="alert alert-info small">

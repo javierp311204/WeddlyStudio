@@ -101,6 +101,12 @@
   box-shadow: 0 0 0 0.2rem rgba(212,163,115,0.2);
 }
 
+.form-check-label a{
+  font-size: 0.9rem;
+  color: #181a14;
+  text-decoration: none;
+}
+
 /* Password eye */
 .password-wrapper {
   position: relative;
@@ -147,6 +153,7 @@
 .auth-footer a {
   color: #d4a373;
   font-weight: 600;
+  text-decoration: none;
 }
 
 /* ============================================================

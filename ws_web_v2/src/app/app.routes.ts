@@ -93,7 +93,7 @@ export const routes: Routes = [
     path: 'tables',
     component: MesaManagerComponent,
     canActivate: [authGuard, minRoleGuard('planner'), PlanGuard],
-    data: { blockOnReadonly: true, planRequerido: 'one_time'},
+    data: { blockOnReadonly: true },
   },
   {
     path: 'map',
