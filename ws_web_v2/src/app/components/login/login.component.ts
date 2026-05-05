@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'; // ← OnInit AÑADIDO
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -6,7 +6,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { IconComponent } from '../../shared/icons/icon.component';
-import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
+import { SeoService } from '../../services/seo/seo.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -15,10 +16,12 @@ import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent implements OnInit { // ← OnInit AÑADIDO
+export class LoginComponent implements OnInit {
   email:           string  = '';
   pass:            string  = '';
   mostrarPassword: boolean = false;
+
+  private SOCIAL_URL = environment.apiUrl + '/auth/social';
 
   constructor(
     private authService:  AuthService,
@@ -26,10 +29,9 @@ export class LoginComponent implements OnInit { // ← OnInit AÑADIDO
     private route:        ActivatedRoute,
     private notifService: NotificationService,
     private translate:    TranslateService,
-    private seo:          SeoService, // ← AÑADIDO
+    private seo:          SeoService,
   ) {}
 
-  // ── SEO ────────────────────────────────────────────────────── // ← AÑADIDO
   ngOnInit(): void {
     this.seo.set({
       title: 'Iniciar Sesión | Weddly Studio',
@@ -38,10 +40,17 @@ export class LoginComponent implements OnInit { // ← OnInit AÑADIDO
       noIndex: true,
     });
   }
-  // ─────────────────────────────────────────────────────────────
 
   togglePassword() {
     this.mostrarPassword = !this.mostrarPassword;
+  }
+
+  loginConGoogle(): void {
+    window.location.href = `${this.SOCIAL_URL}/google`;
+  }
+
+  loginConFacebook(): void {
+    window.location.href = `${this.SOCIAL_URL}/facebook`;
   }
 
   login() {

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AlbumDigitalComponent }       from './components/album-digital/album-digital.component';
 import { DisenoPapeleriaComponent }    from './components/diseno-papeleria/diseno-papeleria.component';
 import { HomeComponent }               from './components/home/home.component';
+import { DashboardComponent }          from './components/dashboard/dashboard.component'; // ← NUEVO
 import { LoginComponent }              from './components/login/login.component';
 import { MesaManagerComponent }        from './components/mesa-manager/mesa-manager.component';
 import { authGuard, adminGuard, weddingOwnerGuard, minRoleGuard } from './guards/auth.guard';
@@ -29,14 +30,14 @@ import { TwoFactorComponent }          from './components/two-factor/two-factor.
 import { TfaResetConfirmComponent }    from './components/tfa-reset-confirm/tfa-reset-confirm.component';
 import { Perfil2faComponent }          from './components/perfil2fa/perfil2fa.component';
 import { CalendarioPageComponent }     from './pages/calendario-page/calendario-page.component';
-import { FaqComponent } from './components/faq/faq.component';
-import { SoporteComponent } from './components/soporte/soporte.component';
+import { FaqComponent }                from './components/faq/faq.component';
+import { SoporteComponent }            from './components/soporte/soporte.component';
 
 export const routes: Routes = [
 
   // ── Rutas públicas ──────────────────────────────────────────
   { path: '',                       redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home',                   component: HomeComponent },
+  { path: 'home',                   component: HomeComponent },       
   { path: 'login',                  component: LoginComponent },
   { path: 'register',               component: RegisterComponent },
   { path: 'verify-email/:token',    component: VerificarEmailComponent },
@@ -44,12 +45,11 @@ export const routes: Routes = [
   { path: 'reco-pass',              component: RecuperarPasswordComponent },
   { path: 'rsvp/:code',             component: RsvpComponent },
   { path: 'terms',                  component: TerminosComponent },
-  { path: 'privacy',             component: PrivacidadComponent },
+  { path: 'privacy',                component: PrivacidadComponent },
   { path: 'invites/accept/:token',  component: InviteAcceptComponent },
   { path: 'pricing',                component: PricingComponent },
   { path: 'faq',                    component: FaqComponent },
   { path: 'support',                component: SoporteComponent },
-
 
   // ── Rutas 2FA ───────────────────────────────────────────────
   { path: 'auth/2fa',               component: TwoFactorComponent },
@@ -60,15 +60,15 @@ export const routes: Routes = [
   { path: 'payment/cancel',         component: PagoCanceladoComponent },
 
   // ── Autenticadas — sin restricción de boda ──────────────────
-  { path: 'dashboard',  component: HomeComponent,          canActivate: [authGuard] },
-  { path: 'onboarding', component: OnboardingComponent,    canActivate: [authGuard] },
+  { path: 'dashboard',   component: DashboardComponent,     canActivate: [authGuard] }, 
+  { path: 'onboarding',  component: OnboardingComponent,    canActivate: [authGuard] },
   { path: 'profile',     component: PerfilUsuarioComponent, canActivate: [authGuard] },
-  { path: 'my-weddings',  component: MisBodasComponent,      canActivate: [authGuard] },
+  { path: 'my-weddings', component: MisBodasComponent,      canActivate: [authGuard] },
   { path: 'profile2fa',  component: Perfil2faComponent,     canActivate: [authGuard] },
 
   // ── Lectura (readonly/archived pueden entrar, no editar) ────
-  { path: 'album',      component: AlbumDigitalComponent,  canActivate: [authGuard, minRoleGuard('guest')] },
-  { path: 'calendar', component: CalendarioPageComponent, canActivate: [authGuard, minRoleGuard('planner')] },
+  { path: 'album',    component: AlbumDigitalComponent,   canActivate: [authGuard, minRoleGuard('guest')] },
+  { path: 'calendar', component: CalendarioPageComponent,  canActivate: [authGuard, minRoleGuard('planner')] },
 
   // ── Escritura — se bloquean si boda es readonly o archived ──
   {
@@ -119,6 +119,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/reviews/reviews.component').then(m => m.ReviewsComponent),
   },
+  {
+    path: 'wedding-guest-list-manager',
+    loadComponent: () =>
+      import('./pages/lista-invitados-boda/lista-invitados-boda.component').then(m => m.ListaInvitadosBodaComponent),
+  },
 
   // ── Fallback ────────────────────────────────────────────────
   {
@@ -126,5 +131,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/notfound404/notfound404.component')
         .then(m => m.NotFoundComponent),
-  }
+  },
 ];

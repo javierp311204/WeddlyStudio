@@ -1,0 +1,163 @@
+<div class="dashboard-wrapper">
+
+  <!-- Banner verificación email -->
+  <div *ngIf="mostrarBannerVerificacion"
+      style="background:#fef3c7; border:1px solid #fde68a; border-radius:10px;
+              padding:14px 20px; margin-bottom:20px; display:flex;
+              align-items:center; justify-content:space-between; gap:12px;">
+    <span style="color:#92400e; font-size:0.875rem;">
+      ⚠️ <strong>{{ 'AUTH.EMAIL_NOT_VERIFIED_TITLE' | translate }}</strong>
+      — {{ 'AUTH.EMAIL_NOT_VERIFIED_DESC' | translate }}
+    </span>
+    <button (click)="mostrarBannerVerificacion = false"
+            style="background:none; border:none; cursor:pointer;
+                  color:#92400e; font-size:1.2rem; line-height:1;">×</button>
+  </div>
+
+  <!-- Bienvenida -->
+  <div class="db-welcome">
+    <h1 class="db-title">
+      {{ 'HOME.WELCOME' | translate }},
+      <span class="db-name">{{ authService.getUserNick() }}</span>
+    </h1>
+    <p class="db-subtitle">{{ 'HOME.WELCOME_SUBTITLE' | translate }}</p>
+  </div>
+
+  <!-- Grid de accesos rápidos -->
+  <div class="action-grid">
+
+    <!-- Guía de la Boda — todos los roles -->
+    <div class="action-card" routerLink="/wedding-info">
+      <div class="card-icon">
+        <app-icon name="infoBoda" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_GUIDE_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_GUIDE_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <!-- Invitados — planner+ -->
+    <div class="action-card" routerLink="/guests"
+        *ngIf="authService.canManageGuests()">
+      <div class="card-icon">
+        <app-icon name="invitados" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_GUESTS_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_GUESTS_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <!-- Checklist — planner+ -->
+    <div class="action-card" routerLink="/checklist"
+        *ngIf="authService.canManageGuests()">
+      <div class="card-icon">
+        <app-icon name="checklist" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_CHECKLIST_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_CHECKLIST_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <!-- Diseño — co-organizador+ -->
+    <div class="action-card" routerLink="/design"
+        *ngIf="authService.canManageWedding()">
+      <div class="card-icon">
+        <app-icon name="diseno" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_DESIGN_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_DESIGN_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <!-- Mesas — planner+ -->
+    <div class="action-card" routerLink="/tables"
+        *ngIf="authService.canManageGuests()">
+      <div class="card-icon">
+        <app-icon name="mesas" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_TABLES_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_TABLES_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <!-- Álbum — todos los roles -->
+    <div class="action-card" routerLink="/album">
+      <div class="card-icon">
+        <app-icon name="album" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_ALBUM_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_ALBUM_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <!-- Colaboradores — co-organizador+ -->
+    <div class="action-card" routerLink="/collaborators"
+        *ngIf="authService.canManageWedding()">
+      <div class="card-icon">
+        <app-icon name="colaboradores" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_COLABORADORES_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_COLABORADORES_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <!-- Planes — todos los roles -->
+    <div class="action-card" routerLink="/pricing">
+      <div class="card-icon">
+        <app-icon name="planes" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_PRICING_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_PRICING_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <!-- Plano — planner+ -->
+    <div class="action-card" routerLink="/map"
+        *ngIf="authService.canManageGuests()">
+      <div class="card-icon">
+        <app-icon name="plano" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_PLANO_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_PLANO_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <!-- Calendario — planner+ -->
+    <div class="action-card" routerLink="/calendar"
+        *ngIf="authService.canManageGuests()">
+      <div class="card-icon">
+        <app-icon name="calendario" [size]="24"></app-icon>
+      </div>
+      <div class="card-body-text">
+        <h3>{{ 'HOME.CARD_CALENDARIO_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.CARD_CALENDARIO_DESC' | translate }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+  </div>
+
+  <!-- Preview checklist solo para owner -->
+  <div class="mt-4" *ngIf="authService.isWeddingOwner()">
+    <app-checklist-preview />
+  </div>
+
+</div>

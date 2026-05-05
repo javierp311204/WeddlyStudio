@@ -17,7 +17,7 @@
 .register-left .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.38);
 }
 
 .left-content {
@@ -74,7 +74,70 @@
 
 .form-subtitle {
   color: #777;
-  margin-bottom: 25px;
+  margin-bottom: 22px;
+}
+
+/* === BOTONES SOCIALES === */
+.social-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+  background: #fafafa;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.social-btn:hover {
+  background: #fff;
+  border-color: #d0d0d0;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+.social-btn:active {
+  transform: translateY(1px);
+}
+
+.social-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* === SEPARADOR === */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.auth-divider__line {
+  flex: 1;
+  height: 1px;
+  background: #ebebeb;
+}
+
+.auth-divider__text {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #aaa;
+  white-space: nowrap;
 }
 
 /* === FORM === */
@@ -101,10 +164,16 @@
   box-shadow: 0 0 0 0.2rem rgba(212,163,115,0.2);
 }
 
-.form-check-label a{
+.form-check-label{
   font-size: 0.9rem;
   color: #181a14;
   text-decoration: none;
+
+  a{
+    color: #d4a373;
+    font-weight: 550;
+    text-decoration: none;
+  }
 }
 
 /* Password eye */
@@ -148,6 +217,7 @@
   margin-top: 20px;
   font-size: 0.9rem;
   color: #777;
+  text-align: center;
 }
 
 .auth-footer a {
@@ -157,14 +227,11 @@
 }
 
 /* ============================================================
-   RESPONSIVE — register.component.css
+   RESPONSIVE
    ============================================================ */
 
-/* ── Tablet (≤ 900px): ocultar columna izquierda ── */
 @media (max-width: 900px) {
-  .register-left {
-    display: none;
-  }
+  .register-left { display: none; }
 
   .register-right {
     flex: 1;
@@ -172,31 +239,21 @@
     align-items: flex-start;
   }
 
-  .form-container {
-    padding-top: 8px;
-  }
+  .form-container { padding-top: 8px; }
 }
 
-/* ── Móvil (≤ 576px) ── */
 @media (max-width: 576px) {
-  .register-right {
-    padding: 52px 20px 32px;
-  }
+  .register-right { padding: 52px 20px 32px; }
 
-  .btn-back {
-    top: 14px;
-    left: 14px;
-    font-size: 0.82rem;
-  }
+  .btn-back { top: 14px; left: 14px; font-size: 0.82rem; }
 
-  .form-title {
-    font-size: 1.65rem;
-  }
+  .form-title { font-size: 1.65rem; }
 
-  .form-subtitle {
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-  }
+  .form-subtitle { font-size: 0.9rem; margin-bottom: 16px; }
+
+  /* Botones sociales: columna en móvil */
+  .social-grid { grid-template-columns: 1fr; }
+  .social-btn--facebook { grid-column: span 1; }
 
   /* Nombre + Apellido: columna en móvil */
   .row.g-3.mb-3 .col-md-6 {
@@ -211,28 +268,13 @@
     padding: 9px 12px;
   }
 
-  .btn-auth {
-    font-size: 1rem;
-    padding: 11px;
-  }
+  .btn-auth { font-size: 1rem; padding: 11px; }
 
-  .auth-footer {
-    font-size: 0.85rem;
-    margin-top: 16px;
-  }
+  .auth-footer { font-size: 0.85rem; margin-top: 16px; }
 }
 
-/* ── Móvil pequeño (≤ 380px) ── */
 @media (max-width: 380px) {
-  .register-right {
-    padding: 48px 16px 28px;
-  }
-
-  .form-title {
-    font-size: 1.45rem;
-  }
-
-  .form-label {
-    font-size: 0.7rem;
-  }
+  .register-right { padding: 48px 16px 28px; }
+  .form-title { font-size: 1.45rem; }
+  .form-label { font-size: 0.7rem; }
 }

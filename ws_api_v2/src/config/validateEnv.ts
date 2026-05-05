@@ -4,6 +4,9 @@ const REQUIRED_ENV_VARS = [
   'RESEND_API_KEY',
   'CORS_ORIGIN',
   'FRONTEND_URL',
+  'SUPABASE_URL',
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'BACKEND_URL', 
 ];
 
 export function validateEnv(): void {
@@ -12,7 +15,7 @@ export function validateEnv(): void {
   if (missing.length > 0) {
     console.error('❌ Faltan variables de entorno requeridas:');
     missing.forEach(key => console.error(`   - ${key}`));
-    console.error('\n💡 Copia .env.example a .env y rellena los valores.');
+    console.error('\n💡 Revisa tu archivo .env y asegúrate de incluir todas las variables.');
     process.exit(1); 
   }
 

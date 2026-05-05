@@ -10,8 +10,8 @@ const COOKIE_OPTIONS = {
   path: '/',
 };
 
-const ACCESS_TOKEN_TTL  = 15 * 60 * 1000;           // 15 minutos
-const REFRESH_TOKEN_TTL = 7 * 24 * 60 * 60 * 1000;  // 7 días
+const ACCESS_TOKEN_TTL  = 15 * 60 * 1000;          
+const REFRESH_TOKEN_TTL = 7 * 24 * 60 * 60 * 1000;  
 
 function setTokenCookies(res: Response, accessToken: string, refreshToken: string) {
   res.cookie('access_token',  accessToken,  { ...COOKIE_OPTIONS, maxAge: ACCESS_TOKEN_TTL });
@@ -19,6 +19,64 @@ function setTokenCookies(res: Response, accessToken: string, refreshToken: strin
 }
 
 export class AuthController {
+
+  async socialLogin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { provider } = req.params;
+      const result = await authService.getSocialUrl(provider as any);
+
+      if (result && result.url) {
+        return res.redirect(result.url); 
+      }
+      
+      throw new Error('No se pudo generar la URL de redirección');
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async socialCallback(req: Request, res: Response, next: NextFunction) {
+    try {
+      const code = req.query.code as string;
+      
+      if (!code) {
+        return res.redirect(`${process.env.CORS_ORIGIN}/login?error=no_code`);
+      }
+
+      const result = await authService.exchangeCodeForSession(code);
+
+      // Inyectar tokens en cookies httpOnly
+      setTokenCookies(res, result.access_token, result.refresh_token);
+
+      // Redirigir al usuario al frontend (Dashboard)
+      res.redirect(`${process.env.CORS_ORIGIN}/dashboard`);
+    } catch (err) {
+      console.error('[SocialAuth Error]:', err);
+      res.redirect(`${process.env.CORS_ORIGIN}/login?error=social_auth_failed`);
+    }
+  }
+
+  async socialToken(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { access_token } = req.body;
+      if (!access_token) {
+        return res.status(400).json({ success: false, message: 'Token requerido' });
+      }
+
+      const result = await authService.loginWithSupabaseToken(access_token);
+
+      setTokenCookies(res, result.access_token, result.refresh_token);
+
+      res.json({
+        success: true,
+        data: {
+          user: result.user,
+        }
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 
   async register(req: Request, res: Response, next: NextFunction) {
     try {

@@ -2,13 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { IconComponent } from '../../shared/icons/icon.component';
 import { environment } from '../../../environments/environment';
-import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
+import { SeoService } from '../../services/seo/seo.service';
 
 @Component({
   selector: 'app-register',
@@ -22,17 +21,18 @@ export class RegisterComponent implements OnInit {
   last_name:  string = '';
   email:      string = '';
   pass:       string = '';
-  gender: string = '';
-  language: string = 'es';
-  nickname: string = '';
-  phone: string = '';
+  gender:     string = '';
+  language:   string = 'es';
+  nickname:   string = '';
+  phone:      string = '';
   mostrarPassword: boolean = false;
-  termsAccepted: boolean = false
+  termsAccepted:   boolean = false;
 
   codigoBodaReferencia: string = '';
-  private redirectUrl: string  = '';
+  private redirectUrl:  string = '';
 
-  private API_URL = environment.apiUrl + '/auth';
+  private API_URL    = environment.apiUrl + '/auth';
+  private SOCIAL_URL = environment.apiUrl + '/auth/social';
 
   constructor(
     private http:         HttpClient,
@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
     private route:        ActivatedRoute,
     private notifService: NotificationService,
     private translate:    TranslateService,
-    private seo:          SeoService, // ← AÑADIDO
+    private seo:          SeoService,
   ) {}
 
   ngOnInit(): void {
@@ -52,15 +52,26 @@ export class RegisterComponent implements OnInit {
 
     const codigo = this.route.snapshot.queryParamMap.get('codigo');
     if (codigo) this.codigoBodaReferencia = codigo.toUpperCase();
-
     this.redirectUrl = this.route.snapshot.queryParamMap.get('redirect') ?? '';
   }
 
-  togglePassword() {
+  togglePassword(): void {
     this.mostrarPassword = !this.mostrarPassword;
   }
 
-  registrar() {
+  registrarConGoogle(): void {
+    const redirect = encodeURIComponent(this.redirectUrl || '/home');
+    const codigo   = encodeURIComponent(this.codigoBodaReferencia);
+    window.location.href = `${this.SOCIAL_URL}/google?redirect=${redirect}&codigo=${codigo}`;
+  }
+
+  registrarConFacebook(): void {
+    const redirect = encodeURIComponent(this.redirectUrl || '/home');
+    const codigo   = encodeURIComponent(this.codigoBodaReferencia);
+    window.location.href = `${this.SOCIAL_URL}/facebook?redirect=${redirect}&codigo=${codigo}`;
+  }
+
+  registrar(): void {
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
 
     if (!emailPattern.test(this.email.toLowerCase())) {
@@ -89,23 +100,23 @@ export class RegisterComponent implements OnInit {
 
     const datos = {
       first_name: this.first_name.trim(),
-      last_name:  this.last_name.trim() || undefined,
+      last_name:  this.last_name.trim()  || undefined,
       email:      this.email.toLowerCase(),
       password:   this.pass,
-      nickname:   this.nickname.trim() || undefined,
-      phone:      this.phone.trim() || undefined,
-      gender:     this.gender || undefined,
-      language:   this.language || 'es',
+      nickname:   this.nickname.trim()   || undefined,
+      phone:      this.phone.trim()      || undefined,
+      gender:     this.gender            || undefined,
+      language:   this.language          || 'es',
     };
 
     this.http.post<any>(`${this.API_URL}/register`, datos).subscribe({
       next: (res) => {
         if (res.access_token) {
-          localStorage.setItem('token', res.access_token);
+          localStorage.setItem('token',         res.access_token);
           localStorage.setItem('refresh_token', res.refresh_token ?? '');
           const user = res.user ?? {};
           localStorage.setItem('usuarioNick', user.nickname || user.first_name || this.first_name);
-          localStorage.setItem('rol', user.globalRole ?? 'user');
+          localStorage.setItem('rol',         user.globalRole ?? 'user');
         }
 
         this.notifService.showSuccess(
@@ -118,7 +129,8 @@ export class RegisterComponent implements OnInit {
         }, 1500);
       },
       error: (err) => {
-        const mensaje = err.error?.message || err.error?.error || this.translate.instant('NOTIFICATIONS.ERROR_SAVING');
+        const mensaje = err.error?.message || err.error?.error
+          || this.translate.instant('NOTIFICATIONS.ERROR_SAVING');
         this.notifService.showError(
           this.translate.instant('AUTH.REGISTER_ERROR_TITLE'),
           mensaje

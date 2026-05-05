@@ -365,8 +365,8 @@
     "LOGIN_INVALID_CREDENTIALS": "Incorrect credentials. Please try again.",
     "EMAIL_NOT_VERIFIED_TITLE": "Email not verified",
     "EMAIL_NOT_VERIFIED_DESC": "You must verify your email to create a wedding. Check your inbox and spam folder.",
-    "TERMS_ACCEPTED": "I accept the terms and conditions",
-    "TERMS_REQUIRED_TITLE": "Terms not accepted",
+    "TERMS_TITLE": "Terms and Conditions",
+    "TERMS_ACCEPTED": "I accept the",
     "TERMS_REQUIRED_DESC": "You must accept the terms and conditions to create your account."
   },
 

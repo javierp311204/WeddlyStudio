@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly Studio — La plataforma para bodas perfectas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="lista-invitados-boda.component.css" />
+</head>
+<body>
+
+<div class="landing-wrapper">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="nav-logo-img" />
+        <span class="logo-text">Weddly Studio</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Funciones</a></li>
+        <li><a href="#invitados">Invitados</a></li>
+        <li><a href="#mesas">Mesas</a></li>
+        <li><a href="#colaboradores">Equipo</a></li>
+      </ul>
+      <button class="nav-cta" onclick="location.href='/register'">Empezar gratis</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">La plataforma para bodas perfectas</p>
+      <h1 class="hero-title">
+        Cada invitado<br/>
+        <em>en su lugar</em>
+      </h1>
+      <p class="hero-subtitle">
+        Gestiona tu lista de invitados, organiza las mesas y coordina con tu equipo —
+        todo en un solo lugar, con la elegancia que tu día merece.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="location.href='/register'">Comenzar ahora</button>
+        <button class="btn-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Ver cómo funciona</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">12k+</span>
+          <span class="stat-label">Bodas organizadas</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">98%</span>
+          <span class="stat-label">Parejas satisfechas</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">0 estrés</span>
+          <span class="stat-label">Garantizado</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card card-1">
+        <div class="fc-top">
+          <span class="fc-avatar">M</span>
+          <div>
+            <div class="fc-name">María López</div>
+            <div class="fc-tag familia">Familia</div>
+          </div>
+        </div>
+        <div class="fc-info">Mesa del Jardín · Confirmado ✓</div>
+      </div>
+      <div class="floating-card card-2">
+        <div class="fc-top">
+          <span class="fc-avatar av2">C</span>
+          <div>
+            <div class="fc-name">Carlos Ruiz</div>
+            <div class="fc-tag amigos">Amigos</div>
+          </div>
+        </div>
+        <div class="fc-info">Mesa Principal · Pendiente</div>
+      </div>
+      <div class="floating-card card-3">
+        <div class="fc-mini">
+          <span class="fc-icon">⬡</span>
+          <div>
+            <div class="fc-mini-title">Mesa del Jardín</div>
+            <div class="fc-mini-sub">8/10 · Redonda</div>
+          </div>
+        </div>
+        <div class="mini-bar"><div class="mini-fill" style="width:80%"></div></div>
+      </div>
+      <div class="floating-card card-4">
+        <span class="notif-dot"></span>
+        <span class="notif-text">✨ Mesa sugerida por IA para Ana García</span>
+      </div>
+      <div class="hero-ring"></div>
+      <div class="hero-ring ring2"></div>
+    </div>
+  </section>
+
+  <!-- FEATURES BAR -->
+  <section class="features-bar" id="features">
+    <div class="fb-inner">
+      <div class="fb-item"><span class="fb-icon">◈</span><span>Lista de invitados inteligente</span></div>
+      <div class="fb-sep">·</div>
+      <div class="fb-item"><span class="fb-icon">◈</span><span>Plano de mesas visual</span></div>
+      <div class="fb-sep">·</div>
+      <div class="fb-item"><span class="fb-icon">◈</span><span>Colaboración en equipo</span></div>
+      <div class="fb-sep">·</div>
+      <div class="fb-item"><span class="fb-icon">◈</span><span>Sugerencias de IA</span></div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN INVITADOS -->
+  <section class="feature-section" id="invitados">
+    <div class="fs-inner">
+      <div class="fs-text">
+        <p class="fs-label">Lista de invitados</p>
+        <h2 class="fs-title">Todos tus<br/><em>invitados</em>, controlados</h2>
+        <p class="fs-body">
+          Añade invitados en segundos, organízalos por familia, amigos o trabajo,
+          gestiona sus restricciones alimentarias y controla el estado de confirmación
+          de cada persona.
+        </p>
+        <ul class="fs-bullets">
+          <li><span class="bullet-mark">✦</span> Búsqueda y filtros instantáneos</li>
+          <li><span class="bullet-mark">✦</span> RSVP y estado de confirmación</li>
+          <li><span class="bullet-mark">✦</span> Alergias y restricciones dietéticas</li>
+          <li><span class="bullet-mark">✦</span> Sugerencia de mesa con IA</li>
+        </ul>
+      </div>
+      <div class="fs-visual">
+        <div class="mock-panel">
+          <div class="mock-header">
+            <div class="mock-search">
+              <span class="mock-search-icon">⌕</span>
+              <span class="mock-search-text">Buscar invitado...</span>
+            </div>
+            <div class="mock-filters">
+              <span class="mf-chip active">Todos</span>
+              <span class="mf-chip">Familia</span>
+              <span class="mf-chip">Amigos</span>
+              <span class="mf-chip">Trabajo</span>
+            </div>
+          </div>
+          <div class="mock-cards">
+            <div class="mock-guest-card">
+              <div class="mgc-left">
+                <div class="mgc-avatar av-fam">S</div>
+                <div>
+                  <div class="mgc-name">Sofía Martínez</div>
+                  <div class="mgc-email">sofia&#64;email.com</div>
+                </div>
+              </div>
+              <div class="mgc-right">
+                <span class="mgc-badge fam">Familia</span>
+                <span class="mgc-rsvp confirmed">✓ Confirmado</span>
+              </div>
+            </div>
+            <div class="mock-guest-card highlighted">
+              <div class="mgc-left">
+                <div class="mgc-avatar av-ami">J</div>
+                <div>
+                  <div class="mgc-name">Jorge Pérez</div>
+                  <div class="mgc-email">jorge&#64;email.com</div>
+                </div>
+              </div>
+              <div class="mgc-right">
+                <span class="mgc-badge ami">Amigos</span>
+                <span class="mgc-rsvp pending">Pendiente</span>
+              </div>
+            </div>
+            <div class="mock-guest-card">
+              <div class="mgc-left">
+                <div class="mgc-avatar av-tra">L</div>
+                <div>
+                  <div class="mgc-name">Laura Sanz</div>
+                  <div class="mgc-email">laura&#64;email.com</div>
+                </div>
+              </div>
+              <div class="mgc-right">
+                <span class="mgc-badge tra">Trabajo</span>
+                <span class="mgc-rsvp confirmed">✓ Confirmado</span>
+              </div>
+            </div>
+          </div>
+          <div class="mock-footer">
+            <span class="mf-count">147 invitados · 89 confirmados · 58 pendientes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN MESAS -->
+  <section class="feature-section alt" id="mesas">
+    <div class="fs-inner reverse">
+      <div class="fs-text">
+        <p class="fs-label">Plano de mesas</p>
+        <h2 class="fs-title">El salón<br/>perfectamente<br/><em>distribuido</em></h2>
+        <p class="fs-body">
+          Crea mesas redondas, rectangulares o presidencial.
+          Asigna invitados con rapidez, visualiza el aforo en tiempo real
+          y deja que la IA te sugiera la distribución ideal.
+        </p>
+        <ul class="fs-bullets">
+          <li><span class="bullet-mark">✦</span> Mesas redondas, rectangulares y presidencial</li>
+          <li><span class="bullet-mark">✦</span> Capacidad y aforo en tiempo real</li>
+          <li><span class="bullet-mark">✦</span> Asignación rápida desde búsqueda</li>
+          <li><span class="bullet-mark">✦</span> Vista global del salón</li>
+        </ul>
+      </div>
+      <div class="fs-visual">
+        <div class="mock-panel tables-panel">
+          <div class="mock-tables-grid">
+            <div class="mock-table-card pres">
+              <div class="mtc-header">
+                <div class="mtc-name">Mesa Presidencial</div>
+                <div class="mtc-meta">12/12 · Presidencial</div>
+              </div>
+              <div class="mtc-bar"><div class="mtc-fill full" style="width:100%"></div></div>
+              <div class="mtc-guests">
+                <span class="mtg">Ana G.</span>
+                <span class="mtg">Pablo M.</span>
+                <span class="mtg">Rosa L.</span>
+                <span class="mtg more">+9</span>
+              </div>
+            </div>
+            <div class="mock-table-card">
+              <div class="mtc-header">
+                <div class="mtc-name">Mesa del Jardín</div>
+                <div class="mtc-meta">8/10 · Redonda</div>
+              </div>
+              <div class="mtc-bar"><div class="mtc-fill" style="width:80%"></div></div>
+              <div class="mtc-guests">
+                <span class="mtg">María L.</span>
+                <span class="mtg">Carlos R.</span>
+                <span class="mtg more">+6</span>
+              </div>
+            </div>
+            <div class="mock-table-card">
+              <div class="mtc-header">
+                <div class="mtc-name">Mesa Norte</div>
+                <div class="mtc-meta">4/8 · Rectangular</div>
+              </div>
+              <div class="mtc-bar"><div class="mtc-fill" style="width:50%"></div></div>
+              <div class="mtc-guests">
+                <span class="mtg">Luis P.</span>
+                <span class="mtg empty-seat">+ Añadir</span>
+              </div>
+            </div>
+          </div>
+          <div class="mock-stats-row">
+            <div class="msr-item"><span class="msr-n gold">89</span><span class="msr-l">Sentados</span></div>
+            <div class="msr-item"><span class="msr-n orange">58</span><span class="msr-l">Sin mesa</span></div>
+            <div class="msr-item"><span class="msr-n gold">14</span><span class="msr-l">Mesas</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN COLABORADORES -->
+  <section class="feature-section" id="colaboradores">
+    <div class="fs-inner">
+      <div class="fs-text">
+        <p class="fs-label">Colaboración en equipo</p>
+        <h2 class="fs-title">Organizad<br/>vuestra boda<br/><em>juntos</em></h2>
+        <p class="fs-body">
+          Invita a tu pareja, wedding planner o familia para que colaboren contigo.
+          Define roles y permisos, y tened todo sincronizado en tiempo real sin
+          confusiones de última hora.
+        </p>
+        <ul class="fs-bullets">
+          <li><span class="bullet-mark">✦</span> Roles: co-organizador, planner, invitado</li>
+          <li><span class="bullet-mark">✦</span> Invitaciones por email</li>
+          <li><span class="bullet-mark">✦</span> Gestión de permisos por rol</li>
+          <li><span class="bullet-mark">✦</span> Sincronización en tiempo real</li>
+        </ul>
+      </div>
+      <div class="fs-visual">
+        <div class="mock-panel colab-panel">
+          <div class="colab-title-mock">Equipo de organización</div>
+          <div class="colab-members">
+            <div class="colab-member-row">
+              <div class="cm-avatar" style="background:#f7ead8;color:#bc6c25">E</div>
+              <div class="cm-info">
+                <div class="cm-name">Elena Vidal</div>
+                <div class="cm-email">elena&#64;mail.com</div>
+              </div>
+              <span class="cm-badge owner">Propietaria</span>
+            </div>
+            <div class="colab-member-row">
+              <div class="cm-avatar" style="background:#e8e8f8;color:#4f46e5">D</div>
+              <div class="cm-info">
+                <div class="cm-name">David Vidal</div>
+                <div class="cm-email">david&#64;mail.com</div>
+              </div>
+              <span class="cm-badge co">Co-org.</span>
+            </div>
+            <div class="colab-member-row">
+              <div class="cm-avatar" style="background:#e8f5f0;color:#0f766e">P</div>
+              <div class="cm-info">
+                <div class="cm-name">Patricia Lara</div>
+                <div class="cm-email">wedding&#64;planner.com</div>
+              </div>
+              <span class="cm-badge planner">Planner</span>
+            </div>
+          </div>
+          <div class="colab-invite-row">
+            <div class="ci-icon">✉</div>
+            <div class="ci-info">
+              <div class="ci-email">mama&#64;correo.com</div>
+              <div class="ci-meta">Invitación enviada · Pendiente</div>
+            </div>
+            <span class="cm-badge pending">Pendiente</span>
+          </div>
+          <button class="mock-invite-btn">+ Invitar persona</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI HIGHLIGHT -->
+  <section class="ai-section">
+    <div class="ai-inner">
+      <div class="ai-badge">✨ Inteligencia Artificial</div>
+      <h2 class="ai-title">La IA que organiza<br/><em>por ti</em></h2>
+      <p class="ai-body">
+        Nuestra IA analiza las preferencias, grupos y restricciones de tus invitados
+        para sugerirte la distribución de mesas perfecta. Menos estrés, más tiempo
+        para disfrutar de vuestro gran día.
+      </p>
+      <div class="ai-demo">
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <span class="ai-spark">✨</span>
+            <span>Sugerencia de mesa para <strong>Ana García</strong></span>
+          </div>
+          <div class="ai-suggestion">
+            <p class="ai-table-name">Mesa del Jardín</p>
+            <p class="ai-reason">Comparte grupo de amigos con 3 personas ya asignadas y no tiene alergias registradas.</p>
+          </div>
+          <div class="ai-actions">
+            <button class="ai-accept">✓ Asignar a esta mesa</button>
+            <button class="ai-skip">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta">
+    <div class="cta-inner">
+      <p class="cta-eyebrow">Empieza hoy mismo</p>
+      <h2 class="cta-title">Tu boda perfecta<br/>te está esperando</h2>
+      <p class="cta-body">
+        Únete a miles de parejas que ya confían en Weddly Studio para organizar
+        el día más importante de su vida.
+      </p>
+      <div class="cta-actions">
+        <button class="btn-primary large" onclick="location.href='/register'">Crear mi boda gratis</button>
+        <p class="cta-fine">Sin tarjeta de crédito · Gratis para siempre en el plan básico</p>
+      </div>
+    </div>
+    <div class="cta-bg-ornament">✦</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="footer-logo-img" />
+        <span class="logo-text">Weddly Studio</span>
+      </div>
+      <p class="footer-tagline">El amor merece la mejor organización</p>
+      <p class="footer-copy">© 2025 Weddly Studio · Hecho con ♥ para parejas</p>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -70,7 +70,6 @@
           </div>
         </div>
 
-        <!-- Barra inferior -->
         <div class="gf-bar">
           <nav class="gf-nav">
             <a routerLink="dashboard">{{ 'FOOTER.NAV_HOME' | translate }}</a>
@@ -89,15 +88,11 @@
   <app-ai-chat />
 </ng-container>
 
-<!-- ── Layout público: sin sidebar ───────────────────────────── -->
 <ng-container *ngIf="!authService.isLoggedIn()">
   
   <router-outlet />
 </ng-container>
 
-<!-- ════════════════════════════════════════════════════════════ -->
-<!-- Toast Notification                                          -->
-<!-- ════════════════════════════════════════════════════════════ -->
 <div *ngIf="notifService.toastState$ | async as toast">
   <div
     class="toast-notification position-fixed shadow-lg rounded-4"
@@ -119,9 +114,6 @@
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════════ -->
-<!-- Modal de Confirmación                                       -->
-<!-- ════════════════════════════════════════════════════════════ -->
 <div
   class="modal-overlay modal-confirm position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
   *ngIf="notifService.confirmState$ | async as conf"

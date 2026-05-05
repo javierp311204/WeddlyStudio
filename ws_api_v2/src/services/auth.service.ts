@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import prisma from '../config/db';
 import { AppError } from '../middleware/errorHandler.middleware';
+import { supabase } from '../config/supabase';
 import { signTempToken } from '../services/tfa.service';
 import { hashPassword, comparePassword } from '../utils/password';
 import { generateAccessToken, generateRefreshToken, verifyToken } from '../utils/jwt';
@@ -13,6 +14,86 @@ import {
 } from '../schemas/auth.schema';
 
 export class AuthService {
+
+  async getSocialUrl(provider: 'facebook' | 'google' | 'apple') {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        // Redirige al endpoint de tu propio backend
+        redirectTo: `${process.env.BACKEND_URL}/api/auth/social/callback`,
+        skipBrowserRedirect: true,
+      },
+    });
+
+    if (error) throw new AppError(error.message, 400);
+    return data;
+  }
+
+  async exchangeCodeForSession(code: string) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error || !data.session) {
+      throw new AppError('Fallo en la autenticación con el proveedor social', 401);
+    }
+
+    const { user: sUser } = data;
+
+    // Sincronización con Prisma
+    let user = await prisma.user.findUnique({
+      where: { email: sUser.email },
+    });
+
+    if (!user) {
+      // Registro automático si el usuario no existe
+      user = await prisma.user.create({
+        data: {
+          email: sUser.email!,
+          first_name: sUser.user_metadata?.full_name?.split(' ')[0] || 'Usuario',
+          last_name: sUser.user_metadata?.full_name?.split(' ').slice(1).join(' ') || '',
+          avatar_url: sUser.user_metadata?.avatar_url,
+          email_verified: true, // OAuth garantiza la veracidad del email
+          role_global: 'user',
+        },
+      });
+    }
+
+    const tokenPayload = { userId: user.id, email: user.email, globalRole: user.role_global };
+
+    return {
+      user,
+      access_token: generateAccessToken(tokenPayload),
+      refresh_token: generateRefreshToken(tokenPayload),
+    };
+  }
+
+  async loginWithSupabaseToken(accessToken: string) {
+    const { data, error } = await supabase.auth.getUser(accessToken);
+    if (error || !data.user) throw new AppError('Token de Supabase inválido', 401);
+
+    const sUser = data.user;
+
+    let user = await prisma.user.findUnique({ where: { email: sUser.email } });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email: sUser.email!,
+          first_name: sUser.user_metadata?.full_name?.split(' ')[0] || 'Usuario',
+          last_name: sUser.user_metadata?.full_name?.split(' ').slice(1).join(' ') || '',
+          avatar_url: sUser.user_metadata?.avatar_url,
+          email_verified: true,
+          role_global: 'user',
+        },
+      });
+    }
+
+    const tokenPayload = { userId: user.id, email: user.email, globalRole: user.role_global };
+
+    return {
+      user,
+      access_token: generateAccessToken(tokenPayload),
+      refresh_token: generateRefreshToken(tokenPayload),
+    };
+  }
 
   async register(data: RegisterInput) {
     const existingUser = await prisma.user.findUnique({ where: { email: data.email } });

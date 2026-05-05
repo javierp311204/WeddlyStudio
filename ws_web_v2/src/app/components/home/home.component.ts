@@ -1,16 +1,11 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth/auth.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
-import { driver } from 'driver.js';
-import 'driver.js/dist/driver.css';
 import { IconComponent } from '../../shared/icons/icon.component';
-import { TareasService } from '../../services/tareas/tareas.service';
-import { ChecklistPreviewComponent } from '../checklist-preview/checklist-preview.component';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
-import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
+import { SeoService } from '../../services/seo/seo.service';
 
 @Component({
   selector: 'app-home',
@@ -21,26 +16,15 @@ import { SeoService } from '../../services/seo/seo.service'; // ← AÑADIDO
     TranslateModule,
     LanguageSelectorComponent,
     IconComponent,
-    ChecklistPreviewComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  // ─── Estado general ───────────────────────────────────────────
-  showStickyNav    = false;
-  mostrarPanel     = false;
-  cargandoBoda     = false;
-  mostrarBannerVerificacion = false;
+  showStickyNav = false;
 
-  notificaciones:        any[] = [];
-  notificacionesSinLeer: number = 0;
-  estadisticasChecklist: any = null;
-
-  private checklistSub?: Subscription;
-
-  // ─── Hero carousel ────────────────────────────────────────────
+  // Hero carousel
   heroSlides: string[] = [
     'https://weddly-photos-dev.s3.eu-west-1.amazonaws.com/landing/hero-1.jpg',
     'https://weddly-photos-dev.s3.eu-west-1.amazonaws.com/landing/hero-2.jpg',
@@ -52,77 +36,24 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private slideInterval: any;
 
   constructor(
-    public  authService:   AuthService,
-    private router:        Router,
-    private translate:     TranslateService,
-    private tareasService: TareasService,
-    private route:         ActivatedRoute,
-    private seo:           SeoService, // ← AÑADIDO
+    public  authService: AuthService,
+    private seo:         SeoService,
   ) {}
 
-  // ─── Lifecycle ────────────────────────────────────────────────
   ngOnInit(): void {
-    // ── SEO ──────────────────────────────────────────────────── // ← AÑADIDO
     this.seo.set({
       title: 'Organiza tu Boda Online Gratis | Weddly Studio — Wedding Planner Digital',
       description: 'El wedding planner digital todo en uno: gestiona invitados, mesas, tareas, presupuesto y fotos de boda. Empieza gratis hoy y organiza la boda perfecta.',
       url: 'https://weddlystudio.uk/home',
     });
-    // ─────────────────────────────────────────────────────────────
 
     this.onWindowScroll();
-
-    this.route.queryParams.subscribe(params => {
-      if (params['verify_email'] === 'required') {
-        setTimeout(() => {
-          this.mostrarBannerVerificacion = true;
-        }, 300);
-      }
-    });
-
     this.startCarousel();
-
-    if (!this.authService.isLoggedIn()) return;
-
-    const weddingId = this.authService.getWeddingId();
-
-    if (weddingId) {
-      this.inicializarHome();
-    } else {
-      this.cargandoBoda = true;
-      this.authService.loadActiveWedding().subscribe({
-        next: (res: any) => {
-          this.cargandoBoda = false;
-          const lista: any[] = res?.data ?? res?.weddings ?? [];
-          if (lista.length > 0) {
-            this.authService.setWeddingId(lista[0].id);
-            this.authService.setWeddingStatus(lista[0].status ?? 'active');
-            this.authService.setReadonlyReason(lista[0].readonly_reason ?? null);
-            localStorage.setItem('weddingRole', lista[0].myRole ?? 'owner');
-            this.inicializarHome();
-          } else {
-            this.authService.getMe().subscribe({
-              next: (res: any) => {
-                const user = res?.data ?? res;
-                if (!user?.email_verified) {
-                  this.mostrarBannerVerificacion = true;
-                } else {
-                  this.router.navigate(['/onboarding']);
-                }
-              },
-              error: () => this.router.navigate(['/onboarding'])
-            });
-          }
-        },
-        error: () => { this.cargandoBoda = false; },
-      });
-    }
   }
 
   ngAfterViewInit(): void {}
 
   ngOnDestroy(): void {
-    this.checklistSub?.unsubscribe();
     clearInterval(this.slideInterval);
   }
 
@@ -138,55 +69,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     clearInterval(this.slideInterval);
     this.startCarousel();
   }
-
-  // ─── Home init ────────────────────────────────────────────────
-  private inicializarHome(): void {
-    if (this.authService.isWeddingOwner()) {
-      this.cargarEstadisticasChecklist();
-    }
-
-    const userId  = this.authService.getUserId() || this.authService.getUserNick();
-    const tourKey = `tourVisto_${userId}`;
-    if (userId && !localStorage.getItem(tourKey)) {
-      setTimeout(() => { this.iniciarTour(); localStorage.setItem(tourKey, 'true'); }, 1000);
-    }
-  }
-
-  iniciarTour(): void {
-    driver({
-      showProgress: true, animate: true,
-      popoverClass: 'driverjs-theme',
-      overlayColor: 'rgba(51, 47, 44, 0.7)',
-      stagePadding: 10,
-      steps: [
-        { element: '.sidebar',     popover: { title: this.translate.instant('HOME.TOUR_STEP_1_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_1_DESC'), side: 'right' } },
-        { element: '.action-grid', popover: { title: this.translate.instant('HOME.TOUR_STEP_3_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_3_DESC'), side: 'top'   } },
-        { element: '.logout-btn',  popover: { title: this.translate.instant('HOME.TOUR_STEP_4_TITLE'), description: this.translate.instant('HOME.TOUR_STEP_4_DESC'), side: 'right' } },
-      ],
-    }).drive();
-  }
-
-  cargarEstadisticasChecklist(): void {
-    const weddingId = this.authService.getWeddingId();
-    if (!weddingId) return;
-    this.tareasService.getChecklist(weddingId).subscribe({
-      next: (res: any) => (this.estadisticasChecklist = res?.totals ?? res),
-      error: ()        => (this.estadisticasChecklist = null),
-    });
-  }
-
-  // ─── Notificaciones ───────────────────────────────────────────
-  toggleNotificaciones(): void { this.mostrarPanel = !this.mostrarPanel; }
-  leerNotificacion(n: any): void { this.redirigirSegunTipo(n); }
-
-  redirigirSegunTipo(n: any): void {
-    this.mostrarPanel = false;
-    if (n.ruta) { this.router.navigate([n.ruta]); return; }
-    const mapa: Record<string, string> = { foto: '/album', album: '/album', 'wedding-info': '/wedding-info', mesa: '/map' };
-    if (mapa[n.tipo]) this.router.navigate([mapa[n.tipo]]);
-  }
-
-  irAInfoBoda(): void { this.router.navigate(['/wedding-info']); }
 
   // ─── Scroll ───────────────────────────────────────────────────
   @HostListener('window:scroll', [])
