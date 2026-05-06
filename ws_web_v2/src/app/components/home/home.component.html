@@ -130,7 +130,7 @@
       </div>
       <div class="row g-4">
         <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
+          <div class="feature-card h-100" routerLink="/wedding-guest-list-manager" >
             <div class="feature-icon-wrap"><app-icon name="invitados" [size]="32"></app-icon></div>
             <h3 class="feature-title">{{ 'HOME.FEAT_GUESTS_TITLE' | translate }}</h3>
             <p class="feature-desc">{{ 'HOME.FEAT_GUESTS_DESC' | translate }}</p>
@@ -154,7 +154,7 @@
           </div>
         </div>
         <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
+          <div class="feature-card h-100" routerLink="/wedding-checklist">
             <div class="feature-icon-wrap"><app-icon name="checklist" [size]="32"></app-icon></div>
             <h3 class="feature-title">{{ 'HOME.FEAT_CHECKLIST_TITLE' | translate }}</h3>
             <p class="feature-desc">{{ 'HOME.FEAT_CHECKLIST_DESC' | translate }}</p>
@@ -190,7 +190,7 @@
           </div>
         </div>
         <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
+          <div class="feature-card h-100" routerLink="/wedding-guest-list-manager">
             <div class="feature-icon-wrap"><app-icon name="colaboradores" [size]="32"></app-icon></div>
             <h3 class="feature-title">{{ 'HOME.FEAT_COLLAB_TITLE' | translate }}</h3>
             <p class="feature-desc">{{ 'HOME.FEAT_COLLAB_DESC' | translate }}</p>
@@ -372,18 +372,33 @@
   <footer class="main-footer py-5" style="background:#2b2724; color:#d1c7bd;">
     <div class="container">
       <div class="row g-5 mb-5">
-        <div class="col-md-6">
+        <div class="col-md-3">
           <h3 class="h4 mb-3 text-white" style="font-family:'Playfair Display',serif;">
             <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="me-2 logo-navbar">
             {{ 'HOME.BRAND' | translate }}
           </h3>
           <p style="color:#8b7e74;">{{ 'HOME.FOOTER_TAGLINE' | translate }}</p>
         </div>
-        <div class="col-md-3">
+        <div class="footer-links col-md-3">
+          <h4 class="h6 mb-3" style="color:var(--gold);">Producto</h4>
+          <a routerLink="/wedding-guest-list-manager"     class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Guest List Manager</a>
+          <a routerLink="/wedding-rsvp-tool" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">RSVP Tracking</a>
+          <a routerLink="/wedding-budget-planner" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Budget Planner</a>
+          <a routerLink="/wedding-seating-chart" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Seating Chart</a>
+          <a routerLink="/wedding-checklist" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Task Checklist</a>
+          <a routerLink="/pricing" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Pricing</a>
+        </div>
+        <div class="footer-links col-md-3">
           <h4 class="h6 mb-3" style="color:var(--gold);">{{ 'HOME.FOOTER_HELP' | translate }}</h4>
           <a routerLink="/faq"     class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_FAQ' | translate }}</a>
           <a routerLink="/support" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_SUPPORT' | translate }}</a>
           <a routerLink="/reviews" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'FOOTER.NAV_REVIEWS' | translate }}</a>
+        </div>
+        <div class="footer-links col-md-3">
+          <h4 class="h6 mb-3" style="color:var(--gold);">Legal</h4>
+          <a routerLink="/support" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_SUPPORT' | translate }}</a>
+          <a routerLink="/privacy" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'FOOTER.NAV_PRIVACY' | translate }}</a>
+          <a routerLink="/terms" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'FOOTER.NAV_TERMS' | translate }}</a>
         </div>
       </div>
       <div class="border-top pt-4 text-center" style="border-color:rgba(255,255,255,0.05) !important;">
