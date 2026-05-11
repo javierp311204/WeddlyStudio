@@ -2,63 +2,472 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <!-- Raíz — redirige a /home, pero Google debe conocerla -->
+  <!-- Home - Prioridad máxima para SEO -->
   <url>
-    <loc>https://weddlystudio.uk/</loc>
-    <lastmod>2026-04-20</lastmod>
+    <loc>https://weddlystudio.uk/es/home</loc>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/home"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/home"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/home"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/home"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/home"/>
   </url>
-
-  <!-- Home pública -->
   <url>
-    <loc>https://weddlystudio.uk/home</loc>
-    <lastmod>2026-04-20</lastmod>
+    <loc>https://weddlystudio.uk/en/home</loc>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/home"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/home"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/home"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/home"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/home"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/home"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/home"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/home</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/home"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/home"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/home"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/home"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/home"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/home</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/home"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/home"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/home"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/home"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/home"/>
   </url>
 
-  <!-- Pricing — alta intención de compra, muy relevante para SEO -->
+  <!-- Pricing - Alta conversión -->
   <url>
-    <loc>https://weddlystudio.uk/pricing</loc>
-    <lastmod>2026-04-20</lastmod>
+    <loc>https://weddlystudio.uk/es/pricing</loc>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/pricing"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/pricing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/pricing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/pricing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/pricing"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/pricing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/pricing"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/en/pricing</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/pricing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/pricing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/pricing"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/pricing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/pricing"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/pricing</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/pricing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/pricing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/pricing"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/pricing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/pricing"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/pricing</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/pricing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/pricing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/pricing"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/pricing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/pricing"/>
   </url>
 
-  <!-- Reviews — contenido de confianza, bueno para E-E-A-T -->
+  <!-- Wedding RSVP Tool - Landing SEO importante -->
+  <url>
+    <loc>https://weddlystudio.uk/es/wedding-rsvp-tool</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-rsvp-tool"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/en/wedding-rsvp-tool</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-rsvp-tool"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/wedding-rsvp-tool</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-rsvp-tool"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/wedding-rsvp-tool</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-rsvp-tool"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-rsvp-tool"/>
+  </url>
+
+  <!-- Wedding Seating Chart - Landing SEO importante -->
+  <url>
+    <loc>https://weddlystudio.uk/es/wedding-seating-chart</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-seating-chart"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/en/wedding-seating-chart</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-seating-chart"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/wedding-seating-chart</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-seating-chart"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/wedding-seating-chart</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-seating-chart"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-seating-chart"/>
+  </url>
+
+  <!-- Wedding Guest List Manager - Landing SEO importante -->
+  <url>
+    <loc>https://weddlystudio.uk/es/wedding-guest-list-manager</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-guest-list-manager"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/en/wedding-guest-list-manager</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-guest-list-manager"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/wedding-guest-list-manager</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-guest-list-manager"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/wedding-guest-list-manager</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-guest-list-manager"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-guest-list-manager"/>
+  </url>
+
+  <!-- Wedding Checklist - Landing SEO importante -->
+  <url>
+    <loc>https://weddlystudio.uk/es/wedding-checklist</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-checklist"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/en/wedding-checklist</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-checklist"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/wedding-checklist</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-checklist"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/wedding-checklist</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/wedding-checklist"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/wedding-checklist"/>
+  </url>
+
+  <!-- Reviews - Contenido de confianza -->
   <url>
     <loc>https://weddlystudio.uk/reviews</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/reviews"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/reviews"/>
+    <priority>0.7</priority>
   </url>
 
+  <!-- Terms - Legal -->
   <url>
-    <loc>https://weddlystudio.uk/wedding-guest-list-manager</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Login y Register: indexables pero baja prioridad -->
-  <url>
-    <loc>https://weddlystudio.uk/login</loc>
-    <lastmod>2026-04-20</lastmod>
+    <loc>https://weddlystudio.uk/es/terms</loc>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/terms"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/terms"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/terms"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/en/terms</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/terms"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/terms"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/terms"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/terms</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/terms"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/terms"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/terms"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/terms</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/terms"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/terms"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/terms"/>
   </url>
 
+  <!-- Privacy - Legal -->
   <url>
-    <loc>https://weddlystudio.uk/register</loc>
-    <lastmod>2026-04-20</lastmod>
+    <loc>https://weddlystudio.uk/es/privacy</loc>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/privacy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/privacy"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/en/privacy</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/privacy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/privacy"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/privacy</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/privacy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/privacy"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/privacy</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/privacy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/privacy"/>
+  </url>
+
+  <!-- FAQ - Soporte -->
+  <url>
+    <loc>https://weddlystudio.uk/es/faq</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/faq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/faq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/faq"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/faq"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/en/faq</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/faq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/faq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/faq"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/faq"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/faq</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/faq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/faq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/faq"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/faq"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/faq</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/faq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/faq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/faq"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/faq"/>
+  </url>
+
+  <!-- Support - Contacto -->
+  <url>
+    <loc>https://weddlystudio.uk/es/support</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/support"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/support"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/support"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/support"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/support"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/en/support</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/support"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/support"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/support"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/support"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/support"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/fr/support</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/support"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/support"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/support"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/support"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/support"/>
+  </url>
+  <url>
+    <loc>https://weddlystudio.uk/ca/support</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://weddlystudio.uk/es/support"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://weddlystudio.uk/en/support"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://weddlystudio.uk/fr/support"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://weddlystudio.uk/ca/support"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://weddlystudio.uk/es/support"/>
   </url>
 
 </urlset>
