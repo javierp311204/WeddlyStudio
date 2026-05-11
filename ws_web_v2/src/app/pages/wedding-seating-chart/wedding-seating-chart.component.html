@@ -1,0 +1,729 @@
+<div class="wsc-wrapper">
+
+  <!-- ── NAV ─────────────────────────────────────────────────── -->
+  <nav class="wsc-nav">
+    <div class="wsc-nav-inner">
+      <div class="wsc-nav-logo" routerLink="/home">
+        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="wsc-nav-logo-img" />
+        <span class="wsc-logo-text">Weddly Studio</span>
+      </div>
+      <ul class="wsc-nav-links">
+        <li><a href="wedding-seating-chart#plano">El plano</a></li>
+        <li><a href="wedding-seating-chart#ia">IA</a></li>
+        <li><a href="wedding-seating-chart#pdf">Exportar</a></li>
+        <li><a href="wedding-seating-chart#precios">Precios</a></li>
+      </ul>
+      <button class="wsc-nav-cta" routerLink="/register">Empezar gratis</button>
+    </div>
+  </nav>
+
+  <!-- ── HERO ────────────────────────────────────────────────── -->
+  <section class="wsc-hero">
+    <div class="wsc-hero-bg"></div>
+    <div class="wsc-hero-content">
+      <div class="wsc-hero-badge">✦ Plano interactivo del salón</div>
+      <h1 class="wsc-hero-title">
+        Sienta a cada invitado<br/>
+        <em>en su lugar perfecto</em>
+      </h1>
+      <p class="wsc-hero-subtitle">
+        Diseña el mapa de mesas de tu boda con drag & drop, deja que la IA
+        sugiera la distribución y exporta el plano en PDF para el día del evento.
+      </p>
+      <div class="wsc-hero-actions">
+        <button class="wsc-btn-primary" routerLink="/register">Crear mi plano gratis</button>
+        <button class="wsc-btn-ghost" (click)="scrollTo('plano')">Ver el plano</button>
+      </div>
+      <div class="wsc-hero-trust">
+        <div class="trust-item"><span class="trust-icon">✓</span><span>Drag & drop intuitivo</span></div>
+        <div class="trust-sep">·</div>
+        <div class="trust-item"><span class="trust-icon">✓</span><span>IA incluida</span></div>
+        <div class="trust-sep">·</div>
+        <div class="trust-item"><span class="trust-icon">✓</span><span>PDF profesional</span></div>
+      </div>
+    </div>
+
+    <!-- HERO VISUAL: mini-canvas del plano -->
+    <div class="wsc-hero-visual">
+      <div class="wsc-ring r1"></div>
+      <div class="wsc-ring r2"></div>
+
+      <!-- Canvas principal mock -->
+      <div class="wsc-float-card fc-canvas">
+        <div class="fc-canvas-topbar">
+          <div class="fc-topbar-dots">
+            <span class="td"></span><span class="td"></span><span class="td"></span>
+          </div>
+          <span class="fc-topbar-label">Weddly Studio · Plano del Salón</span>
+          <div class="fc-topbar-btns">
+            <span class="fc-tb-btn lock">🔒 Editar</span>
+            <span class="fc-tb-btn pdf">📄 PDF</span>
+            <span class="fc-tb-btn ai">✨ IA</span>
+          </div>
+        </div>
+        <div class="fc-canvas-area">
+          <!-- Grid de fondo -->
+          <div class="fc-grid"></div>
+          <!-- Mesas -->
+          <div class="fc-table round t1">
+            <div class="fc-table-body">
+              <div class="fc-table-name">Mesa 1</div>
+              <div class="fc-table-count">8/10</div>
+            </div>
+            <div class="fc-seat s1"></div>
+            <div class="fc-seat s2"></div>
+            <div class="fc-seat s3"></div>
+            <div class="fc-seat s4"></div>
+            <div class="fc-seat s5"></div>
+            <div class="fc-seat s6 occupied amber"></div>
+            <div class="fc-seat s7 occupied green"></div>
+            <div class="fc-seat s8 occupied green"></div>
+          </div>
+          <div class="fc-table round t2 selected">
+            <div class="fc-table-body gold">
+              <div class="fc-table-name">Novios 💍</div>
+              <div class="fc-table-count">6/6</div>
+            </div>
+            <div class="fc-seat s1 occupied gold-seat"></div>
+            <div class="fc-seat s2 occupied gold-seat"></div>
+            <div class="fc-seat s3 occupied gold-seat"></div>
+            <div class="fc-seat s4 occupied gold-seat"></div>
+            <div class="fc-seat s5 occupied gold-seat"></div>
+            <div class="fc-seat s6 occupied gold-seat"></div>
+          </div>
+          <div class="fc-table rect t3">
+            <div class="fc-table-name-rect">Mesa Familia · 12/14</div>
+            <div class="fc-rect-seats top">
+              <span class="fc-rs occupied green"></span>
+              <span class="fc-rs occupied green"></span>
+              <span class="fc-rs occupied amber"></span>
+              <span class="fc-rs occupied green"></span>
+              <span class="fc-rs"></span>
+              <span class="fc-rs"></span>
+            </div>
+            <div class="fc-rect-seats bottom">
+              <span class="fc-rs occupied green"></span>
+              <span class="fc-rs occupied green"></span>
+              <span class="fc-rs occupied green"></span>
+              <span class="fc-rs occupied green"></span>
+              <span class="fc-rs occupied green"></span>
+              <span class="fc-rs occupied amber"></span>
+            </div>
+          </div>
+          <div class="fc-table round t4">
+            <div class="fc-table-body">
+              <div class="fc-table-name">Amigos</div>
+              <div class="fc-table-count">5/8</div>
+            </div>
+            <div class="fc-seat s1 occupied blue"></div>
+            <div class="fc-seat s2 occupied blue"></div>
+            <div class="fc-seat s3 occupied blue"></div>
+            <div class="fc-seat s4 occupied blue"></div>
+            <div class="fc-seat s5 occupied blue"></div>
+            <div class="fc-seat s6"></div>
+            <div class="fc-seat s7"></div>
+            <div class="fc-seat s8"></div>
+          </div>
+          <!-- Handle de rotación sobre mesa seleccionada -->
+          <div class="fc-handle fc-rotate">↻</div>
+          <div class="fc-handle fc-resize">↔</div>
+        </div>
+      </div>
+
+      <!-- Panel lateral mock -->
+      <div class="wsc-float-card fc-panel">
+        <div class="fc-panel-header">
+          <span class="fc-panel-title">Mesa Novios 💍</span>
+          <span class="fc-panel-close">✕</span>
+        </div>
+        <div class="fc-panel-info">
+          <div class="fc-info-row"><span>Ocupación</span><strong>6 / 6</strong></div>
+          <div class="fc-info-row"><span>Tipo</span><span class="fc-badge-tipo">Presidencial</span></div>
+        </div>
+        <div class="fc-panel-guests">
+          <div class="fc-panel-guest">
+            <span class="fc-guest-dot" style="background:#d4a373"></span>
+            <span>Sofía Martín</span>
+          </div>
+          <div class="fc-panel-guest">
+            <span class="fc-guest-dot" style="background:#d4a373"></span>
+            <span>Miguel Torres</span>
+          </div>
+          <div class="fc-panel-guest">
+            <span class="fc-guest-dot" style="background:#5c7a4e"></span>
+            <span>Laura Gómez</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats badge -->
+      <div class="wsc-float-card fc-stats-badge">
+        <div class="fc-stat-row">
+          <span class="fc-stat-icon green">⬤</span>
+          <span>112 asignados</span>
+        </div>
+        <div class="fc-stat-row">
+          <span class="fc-stat-icon amber">⬤</span>
+          <span>36 sin mesa</span>
+        </div>
+        <div class="fc-stat-row">
+          <span class="fc-stat-icon muted">⬤</span>
+          <span>14 mesas</span>
+        </div>
+      </div>
+
+      <!-- AI suggestion badge -->
+      <div class="wsc-float-card fc-ai-badge">
+        <span class="fc-ai-spark">✨</span>
+        <div>
+          <div class="fc-ai-title">IA sugiere: sentar familia junta</div>
+          <div class="fc-ai-sub">8 asignaciones · Aplicar todas →</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MODULES STRIP ─────────────────────────────────────────── -->
+  <div class="wsc-modules-strip">
+    <div class="wsc-strip-inner">
+      <div class="wsc-strip-item"><span class="si-icon">⊞</span><span>Drag & drop de mesas</span></div>
+      <span class="si-sep">·</span>
+      <div class="wsc-strip-item"><span class="si-icon">◯</span><span>Mesas redondas, rectangulares y presidencial</span></div>
+      <span class="si-sep">·</span>
+      <div class="wsc-strip-item"><span class="si-icon">✨</span><span>Distribución con IA</span></div>
+      <span class="si-sep">·</span>
+      <div class="wsc-strip-item"><span class="si-icon">📄</span><span>Exportar PDF profesional</span></div>
+      <span class="si-sep">·</span>
+      <div class="wsc-strip-item"><span class="si-icon">🔍</span><span>Zoom interactivo</span></div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN EL PLANO ─────────────────────────────────────── -->
+  <section class="wsc-section" id="plano">
+    <div class="wsc-section-inner">
+
+      <div class="wsc-text-col">
+        <p class="wsc-eyebrow">Plano interactivo</p>
+        <h2 class="wsc-section-title">
+          Tu salón,<br/>
+          <em>diseñado a tu gusto</em>
+        </h2>
+        <p class="wsc-section-body">
+          Coloca mesas con un clic, muévelas con drag & drop, rota y redimensiona
+          con los handles visuales. Asigna invitados a cada asiento y ve en tiempo
+          real el estado de ocupación de todo el salón.
+        </p>
+
+        <div class="wsc-features-list">
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap"><span>⊞</span></div>
+            <div>
+              <div class="wfi-title">Tres tipos de mesa</div>
+              <div class="wfi-desc">Redondas, rectangulares y presidencial. Cada una con capacidad personalizable desde 1 hasta 50 asientos.</div>
+            </div>
+          </div>
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap"><span>🎯</span></div>
+            <div>
+              <div class="wfi-title">Asignación por búsqueda</div>
+              <div class="wfi-desc">Busca cualquier invitado por nombre y asígnalo a una mesa en segundos. Los asientos se colorean por grupo familiar.</div>
+            </div>
+          </div>
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap green"><span>🔍</span></div>
+            <div>
+              <div class="wfi-title">Zoom y paneo fluido</div>
+              <div class="wfi-desc">Navega por el plano con scroll, pinch-to-zoom en móvil y controles de zoom precisos para bodas con cientos de invitados.</div>
+            </div>
+          </div>
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap amber"><span>💍</span></div>
+            <div>
+              <div class="wfi-title">Clic en asiento → perfil del invitado</div>
+              <div class="wfi-desc">Toca cualquier asiento ocupado en el plano para ver nombre, grupo, RSVP, alergias y email del invitado al instante.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mock canvas detallado -->
+      <div class="wsc-visual-col">
+        <div class="wsc-mock-canvas">
+          <div class="wmc-topbar">
+            <div class="wmc-tb-left">
+              <div class="wmc-dots"><span></span><span></span><span></span></div>
+              <span class="wmc-tb-title">Plano · Salón Principal</span>
+            </div>
+            <div class="wmc-tb-right">
+              <span class="wmc-btn edit">🔒 Modo edición</span>
+              <span class="wmc-btn add">＋ Mesa</span>
+              <div class="wmc-zoom">
+                <span class="wmc-zoom-btn">−</span>
+                <span class="wmc-zoom-val">85%</span>
+                <span class="wmc-zoom-btn">＋</span>
+              </div>
+            </div>
+          </div>
+          <div class="wmc-canvas">
+            <div class="wmc-grid"></div>
+            <!-- Mesas del mock detallado -->
+            <div class="wmc-table round positioned" style="left:18%;top:20%">
+              <div class="wmc-table-inner gold-table">
+                <span class="wmc-tname">Novios</span>
+                <span class="wmc-tocc">6/6</span>
+              </div>
+              <div class="wmc-seats-ring six">
+                <span class="wmc-s filled gold-s"></span>
+                <span class="wmc-s filled gold-s"></span>
+                <span class="wmc-s filled gold-s"></span>
+                <span class="wmc-s filled gold-s"></span>
+                <span class="wmc-s filled gold-s"></span>
+                <span class="wmc-s filled gold-s"></span>
+              </div>
+            </div>
+            <div class="wmc-table round positioned" style="left:52%;top:14%">
+              <div class="wmc-table-inner">
+                <span class="wmc-tname">Mesa 1</span>
+                <span class="wmc-tocc">7/10</span>
+              </div>
+              <div class="wmc-seats-ring ten">
+                <span class="wmc-s filled green-s"></span>
+                <span class="wmc-s filled green-s"></span>
+                <span class="wmc-s filled green-s"></span>
+                <span class="wmc-s filled amber-s"></span>
+                <span class="wmc-s filled green-s"></span>
+                <span class="wmc-s filled green-s"></span>
+                <span class="wmc-s filled green-s"></span>
+                <span class="wmc-s"></span>
+                <span class="wmc-s"></span>
+                <span class="wmc-s"></span>
+              </div>
+            </div>
+            <div class="wmc-table round positioned" style="left:76%;top:28%">
+              <div class="wmc-table-inner">
+                <span class="wmc-tname">Mesa 2</span>
+                <span class="wmc-tocc">4/8</span>
+              </div>
+              <div class="wmc-seats-ring eight">
+                <span class="wmc-s filled blue-s"></span>
+                <span class="wmc-s filled blue-s"></span>
+                <span class="wmc-s filled blue-s"></span>
+                <span class="wmc-s filled blue-s"></span>
+                <span class="wmc-s"></span>
+                <span class="wmc-s"></span>
+                <span class="wmc-s"></span>
+                <span class="wmc-s"></span>
+              </div>
+            </div>
+            <div class="wmc-table rect-table positioned" style="left:30%;top:55%">
+              <div class="wmc-rect-inner">
+                <div class="wmc-rect-seats top">
+                  <span class="wmc-rs filled green-s"></span>
+                  <span class="wmc-rs filled green-s"></span>
+                  <span class="wmc-rs filled amber-s"></span>
+                  <span class="wmc-rs filled green-s"></span>
+                  <span class="wmc-rs filled green-s"></span>
+                  <span class="wmc-rs"></span>
+                </div>
+                <div class="wmc-rect-body">
+                  <span class="wmc-tname">Mesa Familia</span>
+                  <span class="wmc-tocc">11/14</span>
+                </div>
+                <div class="wmc-rect-seats bottom">
+                  <span class="wmc-rs filled green-s"></span>
+                  <span class="wmc-rs filled green-s"></span>
+                  <span class="wmc-rs filled green-s"></span>
+                  <span class="wmc-rs filled amber-s"></span>
+                  <span class="wmc-rs filled green-s"></span>
+                  <span class="wmc-rs"></span>
+                </div>
+              </div>
+            </div>
+            <div class="wmc-table round positioned" style="left:68%;top:62%">
+              <div class="wmc-table-inner">
+                <span class="wmc-tname">Mesa 3</span>
+                <span class="wmc-tocc">3/8</span>
+              </div>
+              <div class="wmc-seats-ring eight">
+                <span class="wmc-s filled green-s"></span>
+                <span class="wmc-s filled blue-s"></span>
+                <span class="wmc-s filled blue-s"></span>
+                <span class="wmc-s"></span>
+                <span class="wmc-s"></span>
+                <span class="wmc-s"></span>
+                <span class="wmc-s"></span>
+                <span class="wmc-s"></span>
+              </div>
+            </div>
+            <!-- Leyenda -->
+            <div class="wmc-legend">
+              <span class="wmc-leg-item"><span class="wmc-leg-dot" style="background:#d4a373"></span>Familia</span>
+              <span class="wmc-leg-item"><span class="wmc-leg-dot" style="background:#606c38"></span>Amigos</span>
+              <span class="wmc-leg-item"><span class="wmc-leg-dot" style="background:#3a86ff"></span>Trabajo</span>
+              <span class="wmc-leg-item"><span class="wmc-leg-dot" style="background:#e63946"></span>Pareja</span>
+            </div>
+          </div>
+          <!-- Estadísticas debajo -->
+          <div class="wmc-footer-stats">
+            <div class="wmc-stat"><span class="wmc-stat-num green">31</span><span>Asignados</span></div>
+            <div class="wmc-stat"><span class="wmc-stat-num amber">15</span><span>Pendientes</span></div>
+            <div class="wmc-stat"><span class="wmc-stat-num ink">5</span><span>Mesas</span></div>
+            <div class="wmc-stat"><span class="wmc-stat-num gold-num">67%</span><span>Ocupación</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN IA ────────────────────────────────────────────── -->
+  <section class="wsc-section wsc-section-alt" id="ia">
+    <div class="wsc-section-inner reverse">
+
+      <!-- Mock modal IA -->
+      <div class="wsc-visual-col">
+        <div class="wsc-mock-ia">
+          <div class="wmia-header">
+            <span class="wmia-spark">✨</span>
+            <div>
+              <h4 class="wmia-title">Sugerencia de distribución</h4>
+              <p class="wmia-summary">La IA ha analizado los grupos familiares y las relaciones de los invitados para optimizar la distribución.</p>
+            </div>
+          </div>
+
+          <div class="wmia-assignments">
+            <div class="wmia-row applied">
+              <div class="wmia-guest">
+                <p class="wmia-name">Ana López</p>
+                <p class="wmia-dest">→ Mesa Familia</p>
+                <p class="wmia-reason">Mismo grupo familiar · afinidad alta</p>
+              </div>
+              <div class="wmia-btns">
+                <button class="wmia-btn accept">✓ Aplicar</button>
+                <button class="wmia-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="wmia-row">
+              <div class="wmia-guest">
+                <p class="wmia-name">Marco Ruiz</p>
+                <p class="wmia-dest">→ Mesa 1</p>
+                <p class="wmia-reason">Grupo amigos · próximo a conocidos</p>
+              </div>
+              <div class="wmia-btns">
+                <button class="wmia-btn accept">✓ Aplicar</button>
+                <button class="wmia-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="wmia-row">
+              <div class="wmia-guest">
+                <p class="wmia-name">Diana &amp; Carlos Pérez</p>
+                <p class="wmia-dest">→ Mesa 2</p>
+                <p class="wmia-reason">Pareja · mesa con espacio disponible</p>
+              </div>
+              <div class="wmia-btns">
+                <button class="wmia-btn accept">✓ Aplicar</button>
+                <button class="wmia-btn reject">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="wmia-apply-all">✨ Aplicar todas las sugerencias</button>
+        </div>
+      </div>
+
+      <div class="wsc-text-col">
+        <p class="wsc-eyebrow">Inteligencia Artificial</p>
+        <h2 class="wsc-section-title">
+          La IA distribuye<br/>
+          <em>a tus invitados</em>
+        </h2>
+        <p class="wsc-section-body">
+          Con un clic, la inteligencia artificial analiza los grupos familiares,
+          amigos y relaciones de tus invitados para sugerir la distribución de
+          mesas más armoniosa. Aplica las sugerencias una a una o todas a la vez.
+        </p>
+
+        <div class="wsc-features-list">
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap"><span>🧠</span></div>
+            <div>
+              <div class="wfi-title">Analiza relaciones y grupos</div>
+              <div class="wfi-desc">La IA lee los grupos familiares, amigos y trabajo de cada invitado para proponer asignaciones coherentes.</div>
+            </div>
+          </div>
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap green"><span>✓</span></div>
+            <div>
+              <div class="wfi-title">Aplica o rechaza cada sugerencia</div>
+              <div class="wfi-desc">Tienes el control total. Acepta las que te convencen y descarta las que no. O aplica todas de golpe.</div>
+            </div>
+          </div>
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap amber"><span>⚡</span></div>
+            <div>
+              <div class="wfi-title">Distribuye cientos de invitados<span class="wfi-pro-tag">Pro</span></div>
+              <div class="wfi-desc">El plan Pro incluye sugerencias IA ilimitadas para bodas grandes. El plan gratis incluye 2 usos al mes.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN PDF ───────────────────────────────────────────── -->
+  <section class="wsc-section" id="pdf">
+    <div class="wsc-section-inner">
+
+      <div class="wsc-text-col">
+        <p class="wsc-eyebrow">Exportación profesional</p>
+        <h2 class="wsc-section-title">
+          Un PDF listo para<br/>
+          <em>el día de la boda</em>
+        </h2>
+        <p class="wsc-section-body">
+          Genera un PDF de alta calidad con el plano del salón, estadísticas de
+          ocupación por mesa y la lista completa de invitados asignados. Perfecto
+          para coordinadores de evento, catering y equipo de sala.
+        </p>
+
+        <div class="wsc-features-list">
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap"><span>🗺</span></div>
+            <div>
+              <div class="wfi-title">Imagen del plano a alta resolución</div>
+              <div class="wfi-desc">La primera página incluye el mapa completo del salón con todas las mesas y asientos visibles de un vistazo.</div>
+            </div>
+          </div>
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap green"><span>📊</span></div>
+            <div>
+              <div class="wfi-title">Resumen por mesa y ocupación</div>
+              <div class="wfi-desc">La segunda página incluye una tabla con capacidad, ocupación y lista de invitados asignados por cada mesa.</div>
+            </div>
+          </div>
+          <div class="wsc-feature-item">
+            <div class="wfi-icon-wrap amber"><span>🎨</span></div>
+            <div>
+              <div class="wfi-title">Leyenda de grupos a color</div>
+              <div class="wfi-desc">Familia, amigos, trabajo y pareja se distinguen con su color identificativo en el PDF impreso.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mock PDF -->
+      <div class="wsc-visual-col">
+        <div class="wsc-mock-pdf">
+          <!-- Página 1 -->
+          <div class="wpdf-page">
+            <div class="wpdf-header gold-bar">
+              <span class="wpdf-htitle">Plano Interactivo del Salón</span>
+              <span class="wpdf-hdate">21 jun 2025</span>
+            </div>
+            <div class="wpdf-stats-row">
+              <div class="wpdf-stat"><span class="wpdf-snum gold">14</span><span class="wpdf-slabel">Mesas</span></div>
+              <div class="wpdf-stat"><span class="wpdf-snum gold">148</span><span class="wpdf-slabel">Capacidad</span></div>
+              <div class="wpdf-stat"><span class="wpdf-snum gold">112</span><span class="wpdf-slabel">Asignados</span></div>
+              <div class="wpdf-stat"><span class="wpdf-snum gold">76%</span><span class="wpdf-slabel">Ocupación</span></div>
+            </div>
+            <div class="wpdf-divider"></div>
+            <div class="wpdf-canvas-preview">
+              <!-- Mesas miniatura en el PDF preview -->
+              <div class="wpdf-mini-table r" style="left:15%;top:20%"></div>
+              <div class="wpdf-mini-table r gold-mini" style="left:42%;top:12%"></div>
+              <div class="wpdf-mini-table r" style="left:70%;top:25%"></div>
+              <div class="wpdf-mini-table rect" style="left:25%;top:55%"></div>
+              <div class="wpdf-mini-table r" style="left:62%;top:60%"></div>
+              <div class="wpdf-mini-table r" style="left:82%;top:50%"></div>
+            </div>
+            <div class="wpdf-footer">Plano del salón generado automáticamente — 1 / 2</div>
+          </div>
+
+          <!-- Página 2 -->
+          <div class="wpdf-page wpdf-page2">
+            <div class="wpdf-header gold-bar">
+              <span class="wpdf-htitle">Resumen por mesa</span>
+              <span class="wpdf-hdate">21 jun 2025</span>
+            </div>
+            <div class="wpdf-legend-row">
+              <span class="wpdf-leg">Leyenda:</span>
+              <span class="wpdf-leg-item"><span style="background:#d4a373" class="wpdf-leg-dot"></span>Familia</span>
+              <span class="wpdf-leg-item"><span style="background:#606c38" class="wpdf-leg-dot"></span>Amigos</span>
+              <span class="wpdf-leg-item"><span style="background:#3a86ff" class="wpdf-leg-dot"></span>Trabajo</span>
+            </div>
+            <div class="wpdf-table-header">
+              <span class="wpdf-th wide">Mesa</span>
+              <span class="wpdf-th">Cap.</span>
+              <span class="wpdf-th">Ocup.</span>
+              <span class="wpdf-th">%</span>
+              <span class="wpdf-th guests">Invitados asignados</span>
+            </div>
+            <div class="wpdf-table-row even">
+              <span class="wpdf-td wide">Mesa Novios 💍</span>
+              <span class="wpdf-td">6</span><span class="wpdf-td">6</span>
+              <span class="wpdf-td green-pct">100%</span>
+              <span class="wpdf-td guests small">Sofía M., Miguel T., Laura G., Carlos R., Elena P., Ana J.</span>
+            </div>
+            <div class="wpdf-table-row">
+              <span class="wpdf-td wide">Mesa Familia</span>
+              <span class="wpdf-td">14</span><span class="wpdf-td">11</span>
+              <span class="wpdf-td muted-pct">79%</span>
+              <span class="wpdf-td guests small">Ana L., Marco R., Diana P., Carlos G., Rosa M., +6 más</span>
+            </div>
+            <div class="wpdf-table-row even">
+              <span class="wpdf-td wide">Mesa 1</span>
+              <span class="wpdf-td">10</span><span class="wpdf-td">7</span>
+              <span class="wpdf-td muted-pct">70%</span>
+              <span class="wpdf-td guests small">Javier H., Marta S., Pablo R., Isabel F., +3 más</span>
+            </div>
+            <div class="wpdf-footer">Plano del salón generado automáticamente — 2 / 2</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CÓMO FUNCIONA ─────────────────────────────────────────── -->
+  <section class="wsc-how-section">
+    <div class="wsc-how-inner">
+      <p class="wsc-eyebrow text-center">Proceso simple</p>
+      <h2 class="wsc-section-title text-center">
+        Tu salón organizado<br/><em>en cuatro pasos</em>
+      </h2>
+      <div class="wsc-steps-grid">
+        <div class="wsc-step">
+          <div class="wsc-step-num">01</div>
+          <div class="wsc-step-icon">⊞</div>
+          <h3 class="wsc-step-title">Crea las mesas</h3>
+          <p class="wsc-step-desc">Añade mesas redondas, rectangulares o presidencial. Pon nombre y capacidad y aparecen en el plano.</p>
+        </div>
+        <div class="wsc-step-connector">→</div>
+        <div class="wsc-step">
+          <div class="wsc-step-num">02</div>
+          <div class="wsc-step-icon">⤢</div>
+          <h3 class="wsc-step-title">Diseña el salón</h3>
+          <p class="wsc-step-desc">Mueve las mesas con drag & drop, rótalas y ajusta el tamaño con los handles visuales del plano.</p>
+        </div>
+        <div class="wsc-step-connector">→</div>
+        <div class="wsc-step">
+          <div class="wsc-step-num">03</div>
+          <div class="wsc-step-icon">🎯</div>
+          <h3 class="wsc-step-title">Asigna invitados</h3>
+          <p class="wsc-step-desc">Busca invitados y asígnalos a mesas. O deja que la IA lo haga por ti con un solo clic.</p>
+        </div>
+        <div class="wsc-step-connector">→</div>
+        <div class="wsc-step">
+          <div class="wsc-step-num">04</div>
+          <div class="wsc-step-icon">📄</div>
+          <h3 class="wsc-step-title">Exporta el PDF</h3>
+          <p class="wsc-step-desc">Descarga el plano completo en PDF profesional para el coordinador de sala y el servicio de catering.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRECIOS ───────────────────────────────────────────────── -->
+  <section class="wsc-pricing-section" id="precios">
+    <div class="wsc-pricing-inner">
+      <p class="wsc-eyebrow text-center">Planes</p>
+      <h2 class="wsc-section-title text-center">
+        El plano para<br/><em>cada boda</em>
+      </h2>
+
+      <div class="wsc-plans-grid">
+
+        <!-- Gratis -->
+        <div class="wsc-plan-card">
+          <div class="wsc-plan-header">
+            <span class="wsc-plan-label">Gratis para siempre</span>
+            <div class="wsc-plan-price">
+              <span class="wsc-price-num">0€</span>
+              <span class="wsc-price-per">/ mes</span>
+            </div>
+            <p class="wsc-plan-desc">Para parejas que empiezan a organizar el salón.</p>
+          </div>
+          <ul class="wsc-plan-features">
+            <li class="included"><span class="pf-icon">✓</span> Hasta 10 mesas</li>
+            <li class="included"><span class="pf-icon">✓</span> Mesas redondas y rectangulares</li>
+            <li class="included"><span class="pf-icon">✓</span> Drag & drop y zoom</li>
+            <li class="included"><span class="pf-icon">✓</span> Asignación de invitados</li>
+            <li class="included"><span class="pf-icon">✓</span> 2 sugerencias IA al mes</li>
+            <li class="not-included"><span class="pf-icon">✕</span> Exportar PDF profesional</li>
+            <li class="not-included"><span class="pf-icon">✕</span> Mesas ilimitadas</li>
+            <li class="not-included"><span class="pf-icon">✕</span> IA ilimitada</li>
+          </ul>
+          <button class="wsc-plan-cta secondary" routerLink="/register">Empezar gratis</button>
+        </div>
+
+        <!-- Pro -->
+        <div class="wsc-plan-card pro">
+          <div class="wsc-plan-popular-badge">⭐ Más popular</div>
+          <div class="wsc-plan-header">
+            <span class="wsc-plan-label">Evento Pro — Pago único</span>
+            <div class="wsc-plan-price">
+              <span class="wsc-price-num gold">49€</span>
+              <span class="wsc-price-per">/ boda</span>
+            </div>
+            <p class="wsc-plan-desc">Sin límites para el día más importante.</p>
+          </div>
+          <ul class="wsc-plan-features">
+            <li class="included"><span class="pf-icon gold">✓</span> Mesas <strong>ilimitadas</strong></li>
+            <li class="included"><span class="pf-icon gold">✓</span> Todos los tipos de mesa</li>
+            <li class="included"><span class="pf-icon gold">✓</span> Drag & drop, zoom y rotación</li>
+            <li class="included"><span class="pf-icon gold">✓</span> Asignación ilimitada</li>
+            <li class="included"><span class="pf-icon gold">✓</span> IA <strong>ilimitada</strong></li>
+            <li class="included"><span class="pf-icon gold">✓</span> <strong>PDF profesional</strong></li>
+            <li class="included"><span class="pf-icon gold">✓</span> Acceso de por vida</li>
+            <li class="included"><span class="pf-icon gold">✓</span> Soporte prioritario</li>
+          </ul>
+          <button class="wsc-plan-cta primary" routerLink="/register">Empezar con Pro — 49€</button>
+          <p class="wsc-plan-fine">Pago único · Sin suscripción · Sin renovaciones</p>
+        </div>
+
+      </div>
+
+      <div class="wsc-guarantee">
+        <span class="wsc-guarantee-icon">🛡</span>
+        <div>
+          <div class="wsc-guarantee-title">Garantía de satisfacción 30 días</div>
+          <div class="wsc-guarantee-desc">Si no estás satisfecho, te devolvemos el dinero sin preguntas.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA FINAL ────────────────────────────────────────────── -->
+  <section class="wsc-cta-section">
+    <div class="wsc-cta-inner">
+      <div class="wsc-cta-ornament">✦</div>
+      <p class="wsc-eyebrow">Empieza hoy</p>
+      <h2 class="wsc-cta-title">
+        Cada invitado,<br/>
+        <em>en su lugar exacto</em>
+      </h2>
+      <p class="wsc-cta-body">
+        Únete a más de 12.000 parejas que ya diseñan el plano de su boda con Weddly Studio.
+        Gratis para siempre en el plan básico.
+      </p>
+      <div class="wsc-cta-actions">
+        <button class="wsc-btn-primary large" routerLink="/register">Crear el plano de mi boda</button>
+        <p class="wsc-cta-fine">Sin tarjeta de crédito · Configura en 2 minutos</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ───────────────────────────────────────────────── -->
+  <footer class="wsc-footer">
+    <div class="wsc-footer-inner">
+      <div class="wsc-footer-logo">
+        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="wsc-footer-logo-img" />
+        <span class="wsc-logo-text">Weddly Studio</span>
+      </div>
+      <p class="wsc-footer-tagline">El amor merece la mejor organización</p>
+      <p class="wsc-footer-copy">© 2025 Weddly Studio · Hecho con ♥ para parejas</p>
+    </div>
+  </footer>
+
+</div>

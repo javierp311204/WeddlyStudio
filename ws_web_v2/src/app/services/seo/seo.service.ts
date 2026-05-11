@@ -75,6 +75,42 @@ export class SeoService {
     this.set(DEFAULTS);
   }
 
+  updateHreflang(currentPath: string, currentLang: string): void {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    const supportedLangs = ['es', 'en', 'fr', 'ca'];
+    const normalizedPath = currentPath.startsWith('/') ? currentPath : `/${currentPath}`;
+    const cleanedPath = normalizedPath.replace(/^\/(es|en|fr|ca)(?=\/|$)/, '') || '/';
+    const pathSuffix = cleanedPath === '/' ? '/home' : cleanedPath;
+
+    supportedLangs.forEach(lang => {
+      const href = `https://weddlystudio.uk/${lang}${pathSuffix}`;
+      const selector = `link[rel='alternate'][hreflang='${lang}']`;
+      let alternate = document.querySelector<HTMLLinkElement>(selector);
+
+      if (!alternate) {
+        alternate = document.createElement('link');
+        alternate.setAttribute('rel', 'alternate');
+        alternate.setAttribute('hreflang', lang);
+        document.head.appendChild(alternate);
+      }
+
+      alternate.setAttribute('href', href);
+    });
+
+    const xDefaultHref = cleanedPath === '/home' ? 'https://weddlystudio.uk/' : `https://weddlystudio.uk${cleanedPath}`;
+    let xDefault = document.querySelector<HTMLLinkElement>("link[rel='alternate'][hreflang='x-default']");
+    if (!xDefault) {
+      xDefault = document.createElement('link');
+      xDefault.setAttribute('rel', 'alternate');
+      xDefault.setAttribute('hreflang', 'x-default');
+      document.head.appendChild(xDefault);
+    }
+    xDefault.setAttribute('href', xDefaultHref);
+  }
+
   private updateCanonical(url: string): void {
     // Solo funciona en browser; en SSR el canonical viene del index.html base
     if (typeof document === 'undefined') return;

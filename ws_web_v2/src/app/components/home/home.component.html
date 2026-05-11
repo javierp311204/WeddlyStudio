@@ -49,18 +49,15 @@
       </h1>
 
       <!-- Subtítulo mejorado — orientado a beneficios, no features -->
-      <p class="hero-subtitle">
-        El único wedding planner digital que centraliza invitados, mesas, checklist y fotos.
-        Sin Excel, sin WhatsApps perdidos, sin caos.
-      </p>
+      <p class="hero-subtitle">{{ 'HOME.HERO_SUBTITLE' | translate }}</p>
 
       <!-- CTAs -->
       <div class="hero-ctas">
         <a routerLink="/register" class="btn-hero-primary">
-          Empezar gratis — sin tarjeta
+          {{ 'HOME.HERO_CTA_PRIMARY' | translate }}
         </a>
         <a routerLink="/pricing" class="btn-hero-secondary">
-          Ver planes →
+          {{ 'HOME.HERO_CTA_SECONDARY' | translate }}
         </a>
       </div>
 
@@ -95,29 +92,40 @@
   ═══════════════════════════════════════════ -->
   <section id="marketing-content" class="pain-section reveal">
     <div class="container-md">
-      <div class="pain-eyebrow">Sin Weddly, esto es lo que vives</div>
-      <h2 class="pain-title">El caos habitual que nadie te cuenta</h2>
+      <div class="pain-eyebrow">{{ 'HOME.PAIN_EYEBROW' | translate }}</div>
+      <h2 class="pain-title">{{ 'HOME.PAIN_TITLE' | translate }}</h2>
       <div class="pain-grid">
         <div class="pain-card">
-          <span class="pain-icon">📊</span>
-          <p>Excel con 40 versiones diferentes de la lista de invitados</p>
+          <span class="pain-icon"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-file-earmark-bar-graph-fill" viewBox="0 0 16 16">
+  <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m.5 10v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5m-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5z"/>
+</svg></span>
+          <p>{{ 'HOME.PAIN_1' | translate }}</p>
         </div>
         <div class="pain-card">
-          <span class="pain-icon">📱</span>
-          <p>Grupos de WhatsApp incontrolables con confirmaciones perdidas</p>
+          <span class="pain-icon"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-phone-vibrate" viewBox="0 0 16 16">
+  <path d="M10 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM6 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+  <path d="M8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2M1.599 4.058a.5.5 0 0 1 .208.676A7 7 0 0 0 1 8c0 1.18.292 2.292.807 3.266a.5.5 0 0 1-.884.468A8 8 0 0 1 0 8c0-1.347.334-2.619.923-3.734a.5.5 0 0 1 .676-.208m12.802 0a.5.5 0 0 1 .676.208A8 8 0 0 1 16 8a8 8 0 0 1-.923 3.734.5.5 0 0 1-.884-.468A7 7 0 0 0 15 8c0-1.18-.292-2.292-.807-3.266a.5.5 0 0 1 .208-.676M3.057 5.534a.5.5 0 0 1 .284.648A5 5 0 0 0 3 8c0 .642.12 1.255.34 1.818a.5.5 0 1 1-.93.364A6 6 0 0 1 2 8c0-.769.145-1.505.41-2.182a.5.5 0 0 1 .647-.284m9.886 0a.5.5 0 0 1 .648.284C13.855 6.495 14 7.231 14 8s-.145 1.505-.41 2.182a.5.5 0 0 1-.93-.364C12.88 9.255 13 8.642 13 8s-.12-1.255-.34-1.818a.5.5 0 0 1 .283-.648"/>
+</svg></span>
+          <p>{{ 'HOME.PAIN_2' | translate }}</p>
         </div>
         <div class="pain-card">
-          <span class="pain-icon">😰</span>
-          <p>Noche anterior reorganizando mesas porque alguien no confirmó</p>
+          <span class="pain-icon"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-emoji-tear" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="M6.831 11.43A3.1 3.1 0 0 1 8 11.196c.916 0 1.607.408 2.25.826.212.138.424-.069.282-.277-.564-.83-1.558-2.049-2.532-2.049-.53 0-1.066.361-1.536.824q.126.27.232.535.069.174.135.373ZM6 11.333C6 12.253 5.328 13 4.5 13S3 12.254 3 11.333c0-.706.882-2.29 1.294-2.99a.238.238 0 0 1 .412 0c.412.7 1.294 2.284 1.294 2.99M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5m-1.5-3A.5.5 0 0 1 10 3c1.162 0 2.35.584 2.947 1.776a.5.5 0 1 1-.894.448C11.649 4.416 10.838 4 10 4a.5.5 0 0 1-.5-.5M7 3.5a.5.5 0 0 0-.5-.5c-1.162 0-2.35.584-2.947 1.776a.5.5 0 1 0 .894.448C4.851 4.416 5.662 4 6.5 4a.5.5 0 0 0 .5-.5"/>
+</svg></span>
+          <p>{{ 'HOME.PAIN_3' | translate }}</p>
         </div>
         <div class="pain-card">
-          <span class="pain-icon">📷</span>
-          <p>Fotos del día dispersas en 30 móviles que nunca recopilaste</p>
+          <span class="pain-icon"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
+  <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z"/>
+  <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+</svg></span>
+          <p>{{ 'HOME.PAIN_4' | translate }}</p>
         </div>
       </div>
       <div class="pain-cta-wrap">
         <a routerLink="/register" class="btn-hero-primary">
-          Acabar con el caos — es gratis
+          {{ 'HOME.PAIN_CTA' | translate }}
         </a>
       </div>
     </div>
@@ -137,20 +145,20 @@
         <!-- Paso 1 -->
         <div class="step-card">
           <span class="step-num">01</span>
-          <h3 class="step-title">Crea tu boda en 2 minutos</h3>
-          <p class="step-desc">Pon el nombre y la fecha. Tu espacio privado queda listo al instante, sin formularios interminables ni tarjeta de crédito.</p>
+          <h3 class="step-title">{{ 'HOME.STEP_1_TITLE' | translate }}</h3>
+          <p class="step-desc">{{ 'HOME.STEP_1_DESC' | translate }}</p>
         </div>
         <!-- Paso 2 -->
         <div class="step-card">
           <span class="step-num">02</span>
-          <h3 class="step-title">Centraliza todo en un panel</h3>
-          <p class="step-desc">Invitados, mesas, checklist, fotos y diseño en un solo lugar. No perderás ninguna confirmación, ningún detalle.</p>
+          <h3 class="step-title">{{ 'HOME.STEP_2_TITLE' | translate }}</h3>
+          <p class="step-desc">{{ 'HOME.STEP_2_DESC' | translate }}</p>
         </div>
         <!-- Paso 3 -->
         <div class="step-card">
           <span class="step-num">03</span>
-          <h3 class="step-title">Comparte y relájate</h3>
-          <p class="step-desc">Envía el enlace a tus invitados. Ellos confirman y suben fotos. Tú ves el estado en tiempo real desde cualquier dispositivo.</p>
+          <h3 class="step-title">{{ 'HOME.STEP_3_TITLE' | translate }}</h3>
+          <p class="step-desc">{{ 'HOME.STEP_3_DESC' | translate }}</p>
         </div>
       </div>
     </div>
@@ -162,7 +170,7 @@
   ═══════════════════════════════════════════ -->
   <section class="mockup-section reveal">
     <div class="container-md">
-      <div class="mockup-badge">Así se ve por dentro</div>
+      <div class="mockup-badge">{{ 'HOME.MOCKUP_BADGE' | translate }}</div>
       <div class="mockup-wrap">
         <img
           src="assets/weddly-dashboard-cel.png"
@@ -171,9 +179,9 @@
           loading="lazy"
         >
         <div class="mockup-caption">
-          <h3>Todo bajo control, desde el móvil</h3>
-          <p>Confirma asistencias, ajusta mesas y revisa el checklist mientras estás en la prueba del vestido.</p>
-          <a routerLink="/register" class="btn-hero-primary">Probarlo gratis →</a>
+          <h3>{{ 'HOME.MOCKUP_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.MOCKUP_DESC' | translate }}</p>
+          <a routerLink="/register" class="btn-hero-primary">{{ 'HOME.MOCKUP_CTA' | translate }}</a>
         </div>
       </div>
     </div>
@@ -214,8 +222,8 @@
   <section class="testimonials-section reveal">
     <div class="container-md">
       <div class="section-header text-center">
-        <span class="section-eyebrow">LO QUE DICEN LAS PAREJAS</span>
-        <h2 class="section-title">Reales. Sin filtros.</h2>
+        <span class="section-eyebrow">{{ 'HOME.TESTIMONIALS_EYEBROW' | translate }}</span>
+        <h2 class="section-title">{{ 'HOME.TESTIMONIALS_TITLE' | translate }}</h2>
       </div>
 
       <div class="testimonials-grid">
@@ -232,27 +240,27 @@
         <!-- Testimonio 2 — añade las keys al i18n cuando tengas más reseñas -->
         <div class="testimonial-card">
           <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"El plano de mesas nos salvó la noche anterior. Movimos 8 personas en 3 minutos sin dramas."</p>
+          <p class="testimonial-text">"{{ 'HOME.TESTIMONIAL_2_TEXT' | translate }}"</p>
           <div class="testimonial-author-row">
             <div class="testimonial-avatar">M&amp;J</div>
-            <span class="testimonial-author">— Marta &amp; Javier, Junio 2025</span>
+            <span class="testimonial-author">{{ 'HOME.TESTIMONIAL_2_AUTHOR' | translate }}</span>
           </div>
         </div>
 
         <!-- Testimonio 3 -->
         <div class="testimonial-card">
           <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Compartimos el link con los invitados y en 48 horas teníamos el 80% de RSVPs confirmados. Increíble."</p>
+          <p class="testimonial-text">"{{ 'HOME.TESTIMONIAL_3_TEXT' | translate }}"</p>
           <div class="testimonial-author-row">
             <div class="testimonial-avatar">A&amp;P</div>
-            <span class="testimonial-author">— Ana &amp; Pablo, Octubre 2025</span>
+            <span class="testimonial-author">{{ 'HOME.TESTIMONIAL_3_AUTHOR' | translate }}</span>
           </div>
         </div>
       </div>
 
       <!-- Link a reseñas -->
       <div class="text-center mt-4">
-        <a routerLink="/reviews" class="reviews-link">Ver todas las reseñas →</a>
+        <a routerLink="/reviews" class="reviews-link">{{ 'HOME.TESTIMONIALS_SEE_ALL' | translate }}</a>
       </div>
     </div>
   </section>
@@ -305,7 +313,7 @@
               {{ plan.ctaKey | translate }}
             </a>
             <p class="pricing-micro" *ngIf="plan.featured">
-              Pago único · Sin mensualidades · Sin sorpresas
+              {{ 'HOME.PLAN_PRO_MICRO' | translate }}
             </p>
           </div>
         </div>
@@ -321,69 +329,30 @@
   <section class="faq-section reveal">
     <div class="container-md">
       <div class="section-header text-center">
-        <span class="section-eyebrow">PREGUNTAS FRECUENTES</span>
-        <h2 class="section-title">Todo lo que necesitas saber</h2>
+        <span class="section-eyebrow">{{ 'HOME.FAQ_EYEBROW' | translate }}</span>
+        <h2 class="section-title">{{ 'HOME.FAQ_TITLE' | translate }}</h2>
       </div>
 
       <div class="faq-list">
 
-        <div class="faq-item" [class.faq-open]="openFaqIndex === 0" (click)="toggleFaq(0)">
+        <div class="faq-item" 
+            *ngFor="let item of faqItems; let i = index"
+            [class.faq-open]="openFaqIndex === i" 
+            (click)="toggleFaq(i)">
           <div class="faq-question">
-            <span>¿Es realmente gratis? ¿Qué incluye el plan Free?</span>
-            <span class="faq-arrow">{{ openFaqIndex === 0 ? '−' : '+' }}</span>
+            <span>{{ item.q | translate }}</span>
+            <span class="faq-arrow">{{ openFaqIndex === i ? '−' : '+' }}</span>
           </div>
-          <div class="faq-answer">
-            Sí, el plan Free es gratis para siempre. Incluye 1 boda activa, hasta 50 invitados, checklist básico y álbum de hasta 20 fotos. Sin tarjeta de crédito ni fecha de caducidad.
-          </div>
-        </div>
-
-        <div class="faq-item" [class.faq-open]="openFaqIndex === 1" (click)="toggleFaq(1)">
-          <div class="faq-question">
-            <span>¿Pueden mis invitados confirmar asistencia (RSVP) sin crear una cuenta?</span>
-            <span class="faq-arrow">{{ openFaqIndex === 1 ? '−' : '+' }}</span>
-          </div>
-          <div class="faq-answer">
-            Sí. Tus invitados reciben un enlace personalizado y confirman con un clic, sin registrarse. Solo el organizador necesita cuenta.
-          </div>
-        </div>
-
-        <div class="faq-item" [class.faq-open]="openFaqIndex === 2" (click)="toggleFaq(2)">
-          <div class="faq-question">
-            <span>¿Qué diferencia hay entre Evento PRO y Premium?</span>
-            <span class="faq-arrow">{{ openFaqIndex === 2 ? '−' : '+' }}</span>
-          </div>
-          <div class="faq-answer">
-            Evento PRO (49€) es un pago único para una boda, ideal si solo organizas la tuya. Premium (14€/mes) es para wedding planners o parejas con varias bodas activas simultáneas.
-          </div>
-        </div>
-
-        <div class="faq-item" [class.faq-open]="openFaqIndex === 3" (click)="toggleFaq(3)">
-          <div class="faq-question">
-            <span>¿Puedo empezar gratis y pagar después cuando lo necesite?</span>
-            <span class="faq-arrow">{{ openFaqIndex === 3 ? '−' : '+' }}</span>
-          </div>
-          <div class="faq-answer">
-            Exacto. Empieza con el plan Free, explora la plataforma y actualiza solo cuando necesites más capacidad. Todos tus datos se mantienen al cambiar de plan.
-          </div>
-        </div>
-
-        <div class="faq-item" [class.faq-open]="openFaqIndex === 4" (click)="toggleFaq(4)">
-          <div class="faq-question">
-            <span>¿Son privados los datos de mi boda y mis invitados?</span>
-            <span class="faq-arrow">{{ openFaqIndex === 4 ? '−' : '+' }}</span>
-          </div>
-          <div class="faq-answer">
-            Totalmente. Cada boda es un entorno aislado. Solo tú y las personas que invites expresamente tienen acceso. Cumplimos RGPD y nunca compartimos tus datos con terceros.
-          </div>
+          <div class="faq-answer">{{ item.a | translate }}</div>
         </div>
 
       </div>
 
       <div class="faq-cta">
-        <p>¿No encuentras tu respuesta?</p>
-        <a routerLink="/faq" class="reviews-link">Ver todas las FAQs</a>
+        <p>{{ 'HOME.FAQ_NO_ANSWER' | translate }}</p>
+        <a routerLink="/faq" class="reviews-link">{{ 'HOME.FAQ_SEE_ALL' | translate }}</a>
         <span> · </span>
-        <a routerLink="/support" class="reviews-link">Contactar soporte</a>
+        <a routerLink="/support" class="reviews-link">{{ 'HOME.FAQ_CONTACT' | translate }}</a>
       </div>
     </div>
   </section>
@@ -447,17 +416,20 @@
             <a href="https://tiktok.com/@weddlystudio" target="_blank" rel="noopener" [attr.aria-label]="'FOOTER.ARIA_TIKTOK' | translate" class="footer-social-link">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.5a8.22 8.22 0 0 0 4.8 1.54V7.58a4.85 4.85 0 0 1-1.03-.89z"/></svg>
             </a>
+            <a href="https://es.pinterest.com/weddlystudio" target="_blank" rel="noopener" [attr.aria-label]="'FOOTER.ARIA_TIKTOK' | translate" class="footer-social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16"><path d="M8 0a8 8 0 0 0-2.915 15.452c-.07-.633-.134-1.606.027-2.297.146-.625.938-3.977.938-3.977s-.239-.479-.239-1.187c0-1.113.645-1.943 1.448-1.943.682 0 1.012.512 1.012 1.127 0 .686-.437 1.712-.663 2.663-.188.796.4 1.446 1.185 1.446 1.422 0 2.515-1.5 2.515-3.664 0-1.915-1.377-3.254-3.342-3.254-2.276 0-3.612 1.707-3.612 3.471 0 .688.265 1.425.595 1.826a.24.24 0 0 1 .056.23c-.061.252-.196.796-.222.907-.035.146-.116.177-.268.107-1-.465-1.624-1.926-1.624-3.1 0-2.523 1.834-4.84 5.286-4.84 2.775 0 4.932 1.977 4.932 4.62 0 2.757-1.739 4.976-4.151 4.976-.811 0-1.573-.421-1.834-.919l-.498 1.902c-.181.695-.669 1.566-.995 2.097A8 8 0 1 0 8 0"/></svg>
+            </a>
           </div>
         </div>
 
         <div class="footer-links-col">
-          <h4 class="footer-col-title">Producto</h4>
-          <a routerLink="/wedding-guest-list-manager" class="footer-link">Guest List Manager</a>
+          <h4 class="footer-col-title">{{ 'HOME.FOOTER_PRODUCT_TITLE' | translate }}</h4>
+          <a routerLink="/wedding-guest-list-manager" class="footer-link">{{ 'HOME.FEAT_GUESTS_TITLE' | translate }}</a>
           <a routerLink="/wedding-rsvp-tool" class="footer-link">RSVP Online</a>
-          <a routerLink="/wedding-seating-chart" class="footer-link">Plano de Mesas</a>
-          <a routerLink="/wedding-checklist" class="footer-link">Checklist de Boda</a>
-          <a routerLink="/wedding-budget-planner" class="footer-link">Presupuesto Boda</a>
-          <a routerLink="/pricing" class="footer-link">Planes y Precios</a>
+          <a routerLink="/wedding-seating-chart" class="footer-link">{{ 'HOME.FEAT_TABLES_TITLE' | translate }}</a>
+          <a routerLink="/wedding-checklist" class="footer-link">{{ 'HOME.CARD_CHECKLIST_TITLE' | translate }}</a>
+          <a routerLink="/wedding-budget-planner" class="footer-link">{{ 'HOME.FOOTER_BUDGET' | translate }}</a>
+          <a routerLink="/pricing" class="footer-link">{{ 'HOME.CARD_PRICING_TITLE' | translate }}</a>
         </div>
 
         <div class="footer-links-col">
@@ -471,14 +443,14 @@
           <h4 class="footer-col-title">Legal</h4>
           <a routerLink="/privacy" class="footer-link">{{ 'FOOTER.NAV_PRIVACY' | translate }}</a>
           <a routerLink="/terms" class="footer-link">{{ 'FOOTER.NAV_TERMS' | translate }}</a>
-          <a routerLink="/support" class="footer-link">Contacto</a>
+          <a routerLink="/support" class="footer-link">{{ 'HOME.FOOTER_CONTACT' | translate }}</a>
         </div>
         
       </div>
 
       <div class="footer-bottom">
         <p>{{ 'HOME.FOOTER_COPYRIGHT' | translate }}</p>
-        <p class="footer-bottom-right">Hecho con amor para parejas felices</p>
+        <p class="footer-bottom-right">{{ 'HOME.FOOTER_LOVE' | translate }}</p>
       </div>
     </div>
   </footer>

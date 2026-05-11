@@ -1,0 +1,411 @@
+<div class="rl-wrapper">
+
+  <!-- ── NAV ─────────────────────────────────────────────────── -->
+  <nav class="rl-nav">
+    <div class="rl-nav-inner">
+      <div class="rl-nav-logo" routerLink="/home">
+        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="rl-nav-logo-img" />
+        <span class="rl-logo-text">Weddly Studio</span>
+      </div>
+      <ul class="rl-nav-links">
+        <li><a href="wedding-rsvp-tool#como-funciona">Cómo funciona</a></li>
+        <li><a href="wedding-rsvp-tool#beneficios">Beneficios</a></li>
+        <li><a href="wedding-rsvp-tool#faq">FAQ</a></li>
+      </ul>
+      <button class="rl-nav-cta" routerLink="/register">Empezar gratis</button>
+    </div>
+  </nav>
+
+  <!-- ── HERO ────────────────────────────────────────────────── -->
+  <section class="rl-hero">
+    <div class="rl-hero-bg"></div>
+    <div class="rl-hero-content">
+      <div class="rl-hero-badge">✦ Confirmaciones sin caos</div>
+      <h1 class="rl-hero-title">
+        Gestiona invitados,<br/>
+        <em>sin dramas en WhatsApp</em>
+      </h1>
+      <p class="rl-hero-subtitle">
+        Un enlace único, confirmaciones en tiempo real y lista para
+        catering lista en segundos. Todo lo que tu boda necesita.
+      </p>
+      <div class="rl-hero-actions">
+        <button class="rl-btn-primary" routerLink="/register">Empezar gratis</button>
+        <button class="rl-btn-ghost" (click)="scrollTo('como-funciona')">Ver cómo funciona</button>
+      </div>
+      <div class="rl-hero-trust">
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          <span>Sin tarjeta de crédito</span>
+        </div>
+        <div class="trust-sep">·</div>
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          <span>Listo en 2 minutos</span>
+        </div>
+        <div class="trust-sep">·</div>
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          <span>Invitados sin registro</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero visual: RSVP mockup -->
+    <div class="rl-hero-visual">
+      <div class="rl-ring r1"></div>
+      <div class="rl-ring r2"></div>
+
+      <!-- Dashboard float card -->
+      <div class="rl-float-card fc-dashboard">
+        <div class="fc-dash-header">
+          <span class="fc-dash-dot"></span>
+          <span class="fc-dash-label">Panel de invitados</span>
+          <span class="fc-dash-badge">Live</span>
+        </div>
+        <div class="fc-dash-stats">
+          <div class="fc-stat green">
+            <div class="fc-stat-num">112</div>
+            <div class="fc-stat-label">Confirmados</div>
+          </div>
+          <div class="fc-stat amber">
+            <div class="fc-stat-num">36</div>
+            <div class="fc-stat-label">Pendientes</div>
+          </div>
+          <div class="fc-stat muted">
+            <div class="fc-stat-num">8</div>
+            <div class="fc-stat-label">Rechazos</div>
+          </div>
+        </div>
+        <div class="fc-dash-list">
+          <div class="fc-guest-row">
+            <span class="fc-guest-name">Ana López</span>
+            <span class="fc-guest-pill confirmed">Confirmada</span>
+          </div>
+          <div class="fc-guest-row">
+            <span class="fc-guest-name">Marco &amp; acompañante</span>
+            <span class="fc-guest-pill confirmed">Confirmado</span>
+          </div>
+          <div class="fc-guest-row">
+            <span class="fc-guest-name">Diana Pérez</span>
+            <span class="fc-guest-pill pending">Pendiente</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RSVP form preview card -->
+      <div class="rl-float-card fc-rsvp-form">
+        <div class="fc-brand">Weddly</div>
+        <div class="fc-form-header">
+          <div class="fc-avatar">C</div>
+          <div>
+            <div class="fc-form-label">Invitación para</div>
+            <div class="fc-form-name">Carlos Gómez</div>
+          </div>
+        </div>
+        <div class="fc-wedding-pill">
+          <span>💍</span>
+          <span>Sábado, 21 de junio de 2025</span>
+        </div>
+        <div class="fc-divider">❧</div>
+        <div class="fc-question">¿Nos acompañarás?</div>
+        <div class="fc-btns">
+          <div class="fc-rsvp-btn accept">
+            <span>✓</span>
+            <span>Asistiré</span>
+          </div>
+          <div class="fc-rsvp-btn decline">
+            <span>✕</span>
+            <span>No podré ir</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export badge -->
+      <div class="rl-float-card fc-export-badge">
+        <span class="fc-exp-icon">↗</span>
+        <div>
+          <div class="fc-exp-title">Lista exportada</div>
+          <div class="fc-exp-sub">112 confirmados · catering.csv</div>
+        </div>
+      </div>
+
+      <!-- Live badge -->
+      <div class="rl-float-card fc-live-badge">
+        <span class="fc-live-dot"></span>
+        <span>+46 RSVP hoy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MODULES STRIP ─────────────────────────────────────────── -->
+  <div class="rl-modules-strip">
+    <div class="rl-strip-inner">
+      <div class="rl-strip-item"><span class="si-icon">✉</span><span>Enlace único por invitado</span></div>
+      <span class="si-sep">·</span>
+      <div class="rl-strip-item"><span class="si-icon">◎</span><span>Confirmaciones en tiempo real</span></div>
+      <span class="si-sep">·</span>
+      <div class="rl-strip-item"><span class="si-icon">⬡</span><span>Sin registro para invitados</span></div>
+      <span class="si-sep">·</span>
+      <div class="rl-strip-item"><span class="si-icon">↗</span><span>Exportar para catering</span></div>
+      <span class="si-sep">·</span>
+      <div class="rl-strip-item"><span class="si-icon">✨</span><span>Gestión móvil</span></div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN EL DOLOR ────────────────────────────────────── -->
+  <section class="rl-section" id="como-funciona">
+    <div class="rl-section-inner">
+
+      <!-- Visual: before/after -->
+      <div class="rl-visual-col">
+        <div class="rl-contrast-card">
+          <div class="contrast-panel dark">
+            <h5>El caos actual</h5>
+            <ul>
+              <li><strong>Mensajes perdidos</strong> en WhatsApp entre chats personales.</li>
+              <li><strong>Invitados sin responder</strong> porque no tienen un recordatorio claro.</li>
+              <li><strong>Datos fragmentados</strong> que confunden al catering el día de la boda.</li>
+            </ul>
+          </div>
+          <div class="contrast-panel light">
+            <h5 class="light-title">Con Weddly Studio</h5>
+            <ul>
+              <li><strong>Un solo enlace</strong> para enviar y recordar a todos los invitados.</li>
+              <li><strong>Confirmaciones claras</strong> con estados en tiempo real en tu panel.</li>
+              <li><strong>Exporta en un clic</strong> la lista exacta para catering, sin errores.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="rl-text-col">
+        <p class="rl-eyebrow">El problema real</p>
+        <h2 class="rl-section-title">
+          Deja atrás el caos de<br/>
+          <em>respuestas perdidas</em>
+        </h2>
+        <p class="rl-section-body">
+          El proceso de confirmación es una de las partes más estresantes de organizar
+          una boda. Weddly centraliza todo en un sistema dedicado que funciona solo,
+          para que tú disfrutes el proceso.
+        </p>
+
+        <div class="rl-features-list">
+          <div class="rl-feature-item">
+            <div class="rfi-icon-wrap"><span>✉</span></div>
+            <div>
+              <div class="rfi-title">Un enlace, sin fricciones</div>
+              <div class="rfi-desc">Tus invitados confirman con un clic. Sin crear cuentas, sin formularios largos.</div>
+            </div>
+          </div>
+          <div class="rl-feature-item">
+            <div class="rfi-icon-wrap"><span>◎</span></div>
+            <div>
+              <div class="rfi-title">Panel en tiempo real</div>
+              <div class="rfi-desc">Ve confirmados, pendientes y rechazos al instante desde cualquier dispositivo.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN RSVP EN ACCIÓN ──────────────────────────────── -->
+  <section class="rl-section rl-section-alt" id="beneficios">
+    <div class="rl-section-inner reverse">
+
+      <!-- Mock del formulario RSVP completo -->
+      <div class="rl-visual-col">
+        <div class="rl-mock-rsvp">
+          <!-- Brand -->
+          <div class="lrsvp-brand">Weddly</div>
+
+          <!-- Header invitado -->
+          <div class="lrsvp-header">
+            <div class="lrsvp-avatar">A</div>
+            <div class="lrsvp-guest-info">
+              <p class="lrsvp-label">Invitación para</p>
+              <h3 class="lrsvp-name">Ana López</h3>
+            </div>
+          </div>
+
+          <!-- Datos boda -->
+          <div class="lrsvp-wedding">
+            <div class="lrsvp-wname">Boda de Sofía &amp; Miguel</div>
+            <div class="lrsvp-wdate">Sábado, 21 de junio de 2025</div>
+          </div>
+
+          <!-- Divider floral -->
+          <div class="lrsvp-divider">❧</div>
+
+          <!-- Pregunta -->
+          <p class="lrsvp-question">¿Nos acompañarás en nuestro día especial?</p>
+
+          <!-- Botones RSVP -->
+          <div class="lrsvp-btns">
+            <div class="lrsvp-btn accept selected">
+              <span class="lrsvp-btn-icon">✓</span>
+              <span class="lrsvp-btn-text">Asistiré con alegría</span>
+            </div>
+            <div class="lrsvp-btn decline">
+              <span class="lrsvp-btn-icon">✕</span>
+              <span class="lrsvp-btn-text">No podré asistir</span>
+            </div>
+          </div>
+
+          <!-- Campos extra (estado: confirmado seleccionado) -->
+          <div class="lrsvp-extra">
+            <div class="lrsvp-field">
+              <label>Alergias alimentarias</label>
+              <div class="lrsvp-input-mock">Sin alergias conocidas</div>
+            </div>
+            <div class="lrsvp-field">
+              <label>Notas adicionales</label>
+              <div class="lrsvp-input-mock textarea">¡Estoy muy emocionada!</div>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="lrsvp-submit">Confirmar asistencia</div>
+
+          <!-- Code -->
+          <div class="lrsvp-code">Código: WED-2025-ANA</div>
+        </div>
+      </div>
+
+      <!-- Texto -->
+      <div class="rl-text-col">
+        <p class="rl-eyebrow">RSVP para invitados</p>
+        <h2 class="rl-section-title">
+          Experiencia elegante<br/>
+          <em>para cada invitado</em>
+        </h2>
+        <p class="rl-section-body">
+          Cada invitado recibe un enlace personalizado con su nombre,
+          los datos de la boda y un formulario hermoso que inspira ilusión,
+          no fricción.
+        </p>
+
+        <div class="rl-features-list">
+          <div class="rl-feature-item">
+            <div class="rfi-icon-wrap green"><span>💌</span></div>
+            <div>
+              <div class="rfi-title">Personalizado por invitado</div>
+              <div class="rfi-desc">Cada enlace muestra el nombre del invitado y los detalles de la boda. Una experiencia íntima desde el primer clic.</div>
+            </div>
+          </div>
+          <div class="rl-feature-item">
+            <div class="rfi-icon-wrap amber"><span>🥗</span></div>
+            <div>
+              <div class="rfi-title">Recoge alergias y notas</div>
+              <div class="rfi-desc">Al confirmar, los invitados pueden indicar alergias o notas para el catering. Sin llamadas extra.</div>
+            </div>
+          </div>
+          <div class="rl-feature-item">
+            <div class="rfi-icon-wrap"><span>📱</span></div>
+            <div>
+              <div class="rfi-title">Perfecto en móvil</div>
+              <div class="rfi-desc">Diseño adaptado a todos los dispositivos. Funciona igual de bien en iPhone que en Android o escritorio.</div>
+            </div>
+          </div>
+          <div class="rl-feature-item">
+            <div class="rfi-icon-wrap"><span>↗</span></div>
+            <div>
+              <div class="rfi-title">Exporta para catering <span class="rfi-free-tag">Gratis</span></div>
+              <div class="rfi-desc">Descarga la lista de confirmados lista para entregar al servicio de banquete, sin errores ni retoques.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN CÓMO FUNCIONA ────────────────────────────────── -->
+  <section class="rl-how-section">
+    <div class="rl-how-inner">
+      <p class="rl-eyebrow text-center">Proceso simple</p>
+      <h2 class="rl-section-title text-center">
+        De cero a organizada<br/><em>en tres pasos</em>
+      </h2>
+      <div class="rl-steps-grid">
+        <div class="rl-step">
+          <div class="rl-step-num">01</div>
+          <div class="rl-step-icon">✉</div>
+          <h3 class="rl-step-title">Añade invitados</h3>
+          <p class="rl-step-desc">Importa tu lista o añade invitados manualmente. Weddly genera un código único para cada uno.</p>
+        </div>
+        <div class="rl-step-connector">→</div>
+        <div class="rl-step">
+          <div class="rl-step-num">02</div>
+          <div class="rl-step-icon">◎</div>
+          <h3 class="rl-step-title">Comparte el enlace</h3>
+          <p class="rl-step-desc">Envía el enlace RSVP por WhatsApp, email o donde quieras. Los invitados confirman sin registrarse.</p>
+        </div>
+        <div class="rl-step-connector">→</div>
+        <div class="rl-step">
+          <div class="rl-step-num">03</div>
+          <div class="rl-step-icon">↗</div>
+          <h3 class="rl-step-title">Exporta y relájate</h3>
+          <p class="rl-step-desc">Revisa tu panel en tiempo real y exporta la lista definitiva para catering con un clic.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ──────────────────────────────────────────────────── -->
+  <section class="rl-faq-section" id="faq">
+    <div class="rl-faq-inner">
+      <p class="rl-eyebrow text-center">Preguntas frecuentes</p>
+      <h2 class="rl-section-title text-center">
+        Todo lo que necesitas<br/><em>saber sobre el RSVP</em>
+      </h2>
+      <div class="rl-faq-list">
+        <div class="rl-faq-item" *ngFor="let item of faqs; let i = index"
+             [class.open]="openFaq === i"
+             (click)="toggleFaq(i)">
+          <div class="rl-faq-q">
+            <span>{{ item.question }}</span>
+            <span class="rl-faq-icon">{{ openFaq === i ? '−' : '+' }}</span>
+          </div>
+          <div class="rl-faq-a" *ngIf="openFaq === i">{{ item.answer }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA FINAL ────────────────────────────────────────────── -->
+  <section class="rl-cta-section">
+    <div class="rl-cta-inner">
+      <div class="rl-cta-ornament">✦</div>
+      <p class="rl-eyebrow">Empieza hoy</p>
+      <h2 class="rl-cta-title">
+        Tu boda merece<br/>
+        <em>confirmaciones perfectas</em>
+      </h2>
+      <p class="rl-cta-body">
+        Únete a más de 12.000 parejas que ya gestionan sus invitados con Weddly Studio.
+        Gratis para siempre en el plan básico.
+      </p>
+      <div class="rl-cta-actions">
+        <button class="rl-btn-primary large" routerLink="/register">Gestionar invitados gratis</button>
+        <p class="rl-cta-fine">Sin tarjeta de crédito · Configura en 2 minutos</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ───────────────────────────────────────────────── -->
+  <footer class="rl-footer">
+    <div class="rl-footer-inner">
+      <div class="rl-footer-logo">
+        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="rl-footer-logo-img" />
+        <span class="rl-logo-text">Weddly Studio</span>
+      </div>
+      <p class="rl-footer-tagline">El amor merece la mejor organización</p>
+      <p class="rl-footer-copy">© 2025 Weddly Studio · Hecho con ♥ para parejas</p>
+    </div>
+  </footer>
+
+</div>

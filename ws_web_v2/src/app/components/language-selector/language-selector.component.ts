@@ -195,7 +195,11 @@ export class LanguageSelectorComponent implements OnInit {
 
   changeLanguage(lang: string): void {
     this.currentLang = lang;
-    this.languageService.setLanguage(lang);
+    if (this.mode === 'navbar') {
+      this.languageService.navigateToLang(lang);
+    } else {
+      this.languageService.setLanguage(lang);
+    }
     this.isOpen = false;
   }
 

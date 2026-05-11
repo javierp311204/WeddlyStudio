@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Estadísticas sociales para el hero
   socialProofStats = [
-    { number: '+12.000', label: 'bodas organizadas' },
+    { number: '+100', label: 'bodas organizadas' },
     { number: '4.9★', label: 'valoración media' },
     { number: '2 min', label: 'para empezar' },
   ];
@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       titleKey: 'HOME.FEAT_TABLES_TITLE',
       descKey: 'HOME.FEAT_TABLES_DESC',
       items: ['HOME.FEAT_TABLES_LI1', 'HOME.FEAT_TABLES_LI2', 'HOME.FEAT_TABLES_LI3'],
-      route: null,
+      route: '/wedding-seating-chart',
       highlight: false,
     },
     {
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       titleKey: 'HOME.FEAT_DESIGN_TITLE',
       descKey: 'HOME.FEAT_DESIGN_DESC',
       items: ['HOME.FEAT_DESIGN_LI1', 'HOME.FEAT_DESIGN_LI2', 'HOME.FEAT_DESIGN_LI3'],
-      route: null,
+      route: '/wedding-rsvp-tool',
       highlight: false,
     },
     {
