@@ -1,0 +1,631 @@
+<!-- ============================================================
+   landing-features.component.html
+   Weddly Studio — Página de features: Checklist & Calendario
+   ============================================================ -->
+
+<div class="lf-wrapper">
+
+  <!-- ── NAV ─────────────────────────────────────────────────── -->
+  <nav class="lf-nav">
+    <div class="lf-nav-inner">
+      <div class="lf-nav-logo" routerLink="/home">
+        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="lf-nav-logo-img" />
+        <span class="lf-logo-text">Weddly Studio</span>
+      </div>
+      <ul class="lf-nav-links">
+        <li><a href="wedding-checklist#checklist">Checklist</a></li>
+        <li><a href="wedding-checklist#calendario">Calendario</a></li>
+        <li><a href="wedding-checklist#precios">Precios</a></li>
+      </ul>
+      <button class="lf-nav-cta" routerLink="/register">Empezar gratis</button>
+    </div>
+  </nav>
+
+  <!-- ── HERO ────────────────────────────────────────────────── -->
+  <section class="lf-hero">
+    <div class="lf-hero-bg"></div>
+    <div class="lf-hero-content">
+      <div class="lf-hero-badge">✦ Organización inteligente para bodas</div>
+      <h1 class="lf-hero-title">
+        De la caos al orden,<br/>
+        <em>sin perder ni un detalle</em>
+      </h1>
+      <p class="lf-hero-subtitle">
+        Checklist inteligente con IA y calendario visual con exportación —
+        todo lo que necesitas para coordinar tu boda perfecta, en un solo lugar.
+      </p>
+      <div class="lf-hero-actions">
+        <button class="lf-btn-primary" routerLink="/register">Comenzar gratis</button>
+        <button class="lf-btn-ghost" (click)="scrollTo('checklist')">Ver cómo funciona</button>
+      </div>
+      <div class="lf-hero-trust">
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          <span>Sin tarjeta de crédito</span>
+        </div>
+        <div class="trust-sep">·</div>
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          <span>Configura en 2 minutos</span>
+        </div>
+        <div class="trust-sep">·</div>
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          <span>Exporta cuando quieras</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating cards hero visual -->
+    <div class="lf-hero-visual">
+      <!-- Checklist mini-card -->
+      <div class="lf-float-card fc-checklist">
+        <div class="fc-header">
+          <span class="fc-dot completed"></span>
+          <span class="fc-label">Checklist</span>
+          <span class="fc-badge">12/18</span>
+        </div>
+        <div class="fc-task done">
+          <span class="fc-check">✓</span>
+          <span>Reservar fotógrafo</span>
+        </div>
+        <div class="fc-task done">
+          <span class="fc-check">✓</span>
+          <span>Caterer confirmado</span>
+        </div>
+        <div class="fc-task active">
+          <span class="fc-check pending">◯</span>
+          <span>Prueba de vestido</span>
+          <span class="fc-status in-progress">En curso</span>
+        </div>
+        <div class="fc-task">
+          <span class="fc-check todo">◯</span>
+          <span>Invitaciones imprimir</span>
+        </div>
+      </div>
+
+      <!-- Calendario mini-card -->
+      <div class="lf-float-card fc-calendar">
+        <div class="fc-header">
+          <span class="fc-dot calendar"></span>
+          <span class="fc-label">Junio 2025</span>
+        </div>
+        <div class="fc-mini-cal">
+          <div class="fmc-day header">L</div>
+          <div class="fmc-day header">M</div>
+          <div class="fmc-day header">X</div>
+          <div class="fmc-day header">J</div>
+          <div class="fmc-day header">V</div>
+          <div class="fmc-day header">S</div>
+          <div class="fmc-day header">D</div>
+          <div class="fmc-day">2</div>
+          <div class="fmc-day">3</div>
+          <div class="fmc-day">4</div>
+          <div class="fmc-day">5</div>
+          <div class="fmc-day">6</div>
+          <div class="fmc-day has-event">7<span class="fmc-dot"></span></div>
+          <div class="fmc-day">8</div>
+          <div class="fmc-day">9</div>
+          <div class="fmc-day">10</div>
+          <div class="fmc-day">11</div>
+          <div class="fmc-day has-event">12<span class="fmc-dot gold"></span></div>
+          <div class="fmc-day">13</div>
+          <div class="fmc-day">14</div>
+          <div class="fmc-day wedding">21</div>
+          <div class="fmc-day">22</div>
+        </div>
+      </div>
+
+      <!-- Export badge -->
+      <div class="lf-float-card fc-export">
+        <span class="fc-export-icon">↗</span>
+        <div>
+          <div class="fc-export-title">Exportado a Google Calendar</div>
+          <div class="fc-export-sub">14 eventos · hace 2 min</div>
+        </div>
+      </div>
+
+      <!-- Progress badge -->
+      <div class="lf-float-card fc-progress">
+        <div class="fcp-label">Progreso global</div>
+        <div class="fcp-num">67%</div>
+        <div class="fcp-bar">
+          <div class="fcp-fill" style="width: 67%"></div>
+        </div>
+        <div class="fcp-sub">12 de 18 tareas completadas</div>
+      </div>
+
+      <div class="lf-ring r1"></div>
+      <div class="lf-ring r2"></div>
+    </div>
+  </section>
+
+  <!-- ── STRIP DE MÓDULOS ─────────────────────────────────────── -->
+  <div class="lf-modules-strip">
+    <div class="lf-strip-inner">
+      <div class="lf-strip-item">
+        <span class="si-icon">☑</span>
+        <span>Checklist inteligente</span>
+      </div>
+      <span class="si-sep">·</span>
+      <div class="lf-strip-item">
+        <span class="si-icon">◈</span>
+        <span>Plantillas pre-configuradas</span>
+      </div>
+      <span class="si-sep">·</span>
+      <div class="lf-strip-item">
+        <span class="si-icon">⬡</span>
+        <span>Calendario visual</span>
+      </div>
+      <span class="si-sep">·</span>
+      <div class="lf-strip-item">
+        <span class="si-icon">✨</span>
+        <span>Sugerencias con IA</span>
+      </div>
+      <span class="si-sep">·</span>
+      <div class="lf-strip-item">
+        <span class="si-icon">↗</span>
+        <span>Exportar a Google Calendar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN CHECKLIST ────────────────────────────────────── -->
+  <section class="lf-section" id="checklist">
+    <div class="lf-section-inner">
+
+      <div class="lf-text-col">
+        <p class="lf-eyebrow">Checklist inteligente</p>
+        <h2 class="lf-section-title">
+          Cada tarea,<br/>
+          <em>en su momento exacto</em>
+        </h2>
+        <p class="lf-section-body">
+          Organiza toda la planificación de tu boda con un checklist dividido por fases
+          temporales. Desde 12 meses antes hasta el gran día, nunca más olvidarás nada importante.
+        </p>
+
+        <div class="lf-features-list">
+          <div class="lf-feature-item">
+            <div class="lfi-icon-wrap">
+              <span class="lfi-icon">⊞</span>
+            </div>
+            <div>
+              <div class="lfi-title">Plantillas listas para usar</div>
+              <div class="lfi-desc">Carga más de 80 tareas esenciales de boda con un solo clic. Personalizables al 100%.</div>
+            </div>
+          </div>
+          <div class="lf-feature-item">
+            <div class="lfi-icon-wrap">
+              <span class="lfi-icon">◎</span>
+            </div>
+            <div>
+              <div class="lfi-title">Estados: Pendiente, En curso, Completada</div>
+              <div class="lfi-desc">Cambia el estado de cada tarea con un clic. Ve de un vistazo qué falta por hacer.</div>
+            </div>
+          </div>
+          <div class="lf-feature-item">
+            <div class="lfi-icon-wrap">
+              <span class="lfi-icon">✨</span>
+            </div>
+            <div>
+              <div class="lfi-title">Sugerencias con Inteligencia Artificial</div>
+              <div class="lfi-desc">La IA analiza tu perfil de boda y sugiere tareas personalizadas que quizás no habías contemplado.</div>
+            </div>
+          </div>
+          <div class="lf-feature-item">
+            <div class="lfi-icon-wrap">
+              <span class="lfi-icon">⟳</span>
+            </div>
+            <div>
+              <div class="lfi-title">Asigna responsables</div>
+              <div class="lfi-desc">Delega tareas a tu pareja, wedding planner o familia. Todos saben qué les toca.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mock del checklist -->
+      <div class="lf-visual-col">
+        <div class="lf-mock-checklist">
+          <!-- Header -->
+          <div class="lmc-header">
+            <div class="lmc-title-row">
+              <span class="lmc-title">Mi Checklist de Boda</span>
+              <button class="lmc-ai-btn">✨ Sugerir con IA</button>
+            </div>
+            <div class="lmc-stats">
+              <div class="lmcs-item">
+                <span class="lmcs-num dark">18</span>
+                <span class="lmcs-label">Total</span>
+              </div>
+              <div class="lmcs-sep"></div>
+              <div class="lmcs-item">
+                <span class="lmcs-num green">12</span>
+                <span class="lmcs-label">Hechas</span>
+              </div>
+              <div class="lmcs-sep"></div>
+              <div class="lmcs-item">
+                <span class="lmcs-num amber">4</span>
+                <span class="lmcs-label">En curso</span>
+              </div>
+              <div class="lmcs-sep"></div>
+              <div class="lmcs-item">
+                <span class="lmcs-num muted">2</span>
+                <span class="lmcs-label">Pendientes</span>
+              </div>
+            </div>
+            <!-- Progress bar -->
+            <div class="lmc-progress-wrap">
+              <div class="lmc-progress-bar">
+                <div class="lmc-progress-fill" style="width: 67%"></div>
+              </div>
+              <span class="lmc-progress-pct">67%</span>
+            </div>
+          </div>
+
+          <!-- Tabs de fase -->
+          <div class="lmc-phases">
+            <button class="lmcp-btn active">6 meses</button>
+            <button class="lmcp-btn">3 meses</button>
+            <button class="lmcp-btn">1 mes</button>
+            <button class="lmcp-btn">1 semana</button>
+          </div>
+
+          <!-- Tareas -->
+          <div class="lmc-tasks">
+            <div class="lmc-task done">
+              <div class="lmct-check checked">✓</div>
+              <div class="lmct-info">
+                <span class="lmct-title">Reservar fotógrafo</span>
+                <span class="lmct-cat">Fotografía</span>
+              </div>
+              <span class="lmct-pill completed">Completada</span>
+            </div>
+            <div class="lmc-task done">
+              <div class="lmct-check checked">✓</div>
+              <div class="lmct-info">
+                <span class="lmct-title">Contratar catering</span>
+                <span class="lmct-cat">Banquete</span>
+              </div>
+              <span class="lmct-pill completed">Completada</span>
+            </div>
+            <div class="lmc-task active">
+              <div class="lmct-check"></div>
+              <div class="lmct-info">
+                <span class="lmct-title">Prueba de vestido de novia</span>
+                <span class="lmct-cat">Moda nupcial</span>
+              </div>
+              <span class="lmct-pill in-progress">En curso</span>
+            </div>
+            <div class="lmc-task active">
+              <div class="lmct-check"></div>
+              <div class="lmct-info">
+                <span class="lmct-title">Confirmar DJ / Banda</span>
+                <span class="lmct-cat">Música</span>
+              </div>
+              <span class="lmct-pill in-progress">En curso</span>
+            </div>
+            <div class="lmc-task pending">
+              <div class="lmct-check todo"></div>
+              <div class="lmct-info">
+                <span class="lmct-title">Imprimir invitaciones</span>
+                <span class="lmct-cat">Papelería</span>
+              </div>
+              <span class="lmct-pill pending">Pendiente</span>
+            </div>
+          </div>
+
+          <!-- AI suggestion banner -->
+          <div class="lmc-ai-suggestion">
+            <span class="lmc-ai-spark">✨</span>
+            <div class="lmc-ai-text">
+              <div class="lmc-ai-title">Sugerencia IA: Confirmar menú definitivo</div>
+              <div class="lmc-ai-sub">Normalmente se hace 6 semanas antes · Catering</div>
+            </div>
+            <button class="lmc-ai-add">+ Añadir</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN CALENDARIO ───────────────────────────────────── -->
+  <section class="lf-section lf-section-alt" id="calendario">
+    <div class="lf-section-inner reverse">
+
+      <!-- Mock del calendario -->
+      <div class="lf-visual-col">
+        <div class="lf-mock-calendar">
+          <!-- Header -->
+          <div class="lmcal-header">
+            <div class="lmcal-nav">
+              <button class="lmcal-nav-btn">‹</button>
+              <span class="lmcal-month">Junio 2025</span>
+              <button class="lmcal-nav-btn">›</button>
+            </div>
+            <div class="lmcal-export-btns">
+              <button class="lmcal-btn ics">
+                <span>📅</span> Google Cal
+              </button>
+              <button class="lmcal-btn pdf">
+                <span>📄</span> PDF
+                <span class="lmcal-pro-badge">Pro</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Grid calendario -->
+          <div class="lmcal-grid">
+            <div class="lmcal-dow" *ngFor="let d of ['L','M','X','J','V','S','D']">{{d}}</div>
+
+            <!-- Días previos -->
+            <div class="lmcal-day other">26</div>
+            <div class="lmcal-day other">27</div>
+            <div class="lmcal-day other">28</div>
+            <div class="lmcal-day other">29</div>
+            <div class="lmcal-day other">30</div>
+            <div class="lmcal-day other">31</div>
+            <div class="lmcal-day">1</div>
+            <div class="lmcal-day">2</div>
+            <div class="lmcal-day">3</div>
+            <div class="lmcal-day">4</div>
+            <div class="lmcal-day">5</div>
+            <div class="lmcal-day event">6 <span class="lmcal-dot purple"></span></div>
+            <div class="lmcal-day">7</div>
+            <div class="lmcal-day today">8</div>
+            <div class="lmcal-day">9</div>
+            <div class="lmcal-day">10</div>
+            <div class="lmcal-day event">11 <span class="lmcal-dot amber"></span></div>
+            <div class="lmcal-day">12</div>
+            <div class="lmcal-day">13</div>
+            <div class="lmcal-day">14</div>
+            <div class="lmcal-day event">15 <span class="lmcal-dot blue"></span></div>
+            <div class="lmcal-day">16</div>
+            <div class="lmcal-day">17</div>
+            <div class="lmcal-day">18</div>
+            <div class="lmcal-day">19</div>
+            <div class="lmcal-day">20</div>
+            <div class="lmcal-day wedding">21 💍</div>
+            <div class="lmcal-day">22</div>
+            <div class="lmcal-day">23</div>
+            <div class="lmcal-day">24</div>
+            <div class="lmcal-day">25</div>
+            <div class="lmcal-day">26</div>
+            <div class="lmcal-day">27</div>
+            <div class="lmcal-day">28</div>
+          </div>
+
+          <!-- Detalle día seleccionado -->
+          <div class="lmcal-detail">
+            <div class="lmcal-detail-header">
+              <span class="lmcal-detail-date">Sábado, 21 de junio</span>
+              <span class="lmcal-wedding-label">💍 Día de la boda</span>
+            </div>
+            <div class="lmcal-event-item purple">
+              <span class="lmcal-event-dot"></span>
+              <span>Reunión con fotógrafo</span>
+            </div>
+            <div class="lmcal-event-item amber">
+              <span class="lmcal-event-dot"></span>
+              <span>Ensayo banquete</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Texto -->
+      <div class="lf-text-col">
+        <p class="lf-eyebrow">Calendario & Exportaciones</p>
+        <h2 class="lf-section-title">
+          Cada hito,<br/>
+          <em>en su fecha</em>
+        </h2>
+        <p class="lf-section-body">
+          Visualiza todos tus plazos de boda en un calendario limpio e intuitivo.
+          Y cuando llegue el momento de reunirte con proveedores, exporta tu agenda
+          con un solo clic.
+        </p>
+
+        <div class="lf-features-list">
+          <div class="lf-feature-item">
+            <div class="lfi-icon-wrap green">
+              <span class="lfi-icon">📅</span>
+            </div>
+            <div>
+              <div class="lfi-title">Exportar a Google Calendar</div>
+              <div class="lfi-desc">Genera un archivo .ics con todas tus tareas y cárgalo en Google Calendar, Apple Calendar o Outlook en segundos.</div>
+            </div>
+          </div>
+          <div class="lf-feature-item">
+            <div class="lfi-icon-wrap amber">
+              <span class="lfi-icon">📄</span>
+            </div>
+            <div>
+              <div class="lfi-title">PDF para reuniones <span class="lfi-pro-tag">Pro</span></div>
+              <div class="lfi-desc">Exporta un PDF profesional con tu cronograma completo. Imprescindible para reuniones con floristas, caterers y DJ.</div>
+            </div>
+          </div>
+          <div class="lf-feature-item">
+            <div class="lfi-icon-wrap">
+              <span class="lfi-icon">💍</span>
+            </div>
+            <div>
+              <div class="lfi-title">Acceso rápido al Día B</div>
+              <div class="lfi-desc">Botón especial para saltar directamente al mes de tu boda. Ver todos los hitos del gran día de un vistazo.</div>
+            </div>
+          </div>
+          <div class="lf-feature-item">
+            <div class="lfi-icon-wrap">
+              <span class="lfi-icon">⊕</span>
+            </div>
+            <div>
+              <div class="lfi-title">Asigna fechas desde el calendario</div>
+              <div class="lfi-desc">Haz clic en cualquier día y asigna tareas directamente desde el calendario sin salir de la vista.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN CÓMO FUNCIONA ────────────────────────────────── -->
+  <section class="lf-how-section">
+    <div class="lf-how-inner">
+      <p class="lf-eyebrow text-center">Proceso simple</p>
+      <h2 class="lf-section-title text-center">
+        De cero a organizada<br/><em>en tres pasos</em>
+      </h2>
+      <div class="lf-steps-grid">
+        <div class="lf-step">
+          <div class="lf-step-num">01</div>
+          <div class="lf-step-icon">⊞</div>
+          <h3 class="lf-step-title">Carga tu plantilla</h3>
+          <p class="lf-step-desc">Inicializa tu checklist con más de 80 tareas esenciales organizadas por fases temporales. Personaliza lo que necesites.</p>
+        </div>
+        <div class="lf-step-connector">→</div>
+        <div class="lf-step">
+          <div class="lf-step-num">02</div>
+          <div class="lf-step-icon">◎</div>
+          <h3 class="lf-step-title">Gestiona y delega</h3>
+          <p class="lf-step-desc">Cambia estados, asigna responsables y deja que la IA te sugiera tareas que quizás habías pasado por alto.</p>
+        </div>
+        <div class="lf-step-connector">→</div>
+        <div class="lf-step">
+          <div class="lf-step-num">03</div>
+          <div class="lf-step-icon">↗</div>
+          <h3 class="lf-step-title">Exporta y comparte</h3>
+          <p class="lf-step-desc">Sincroniza con Google Calendar para recordatorios automáticos. Exporta PDF para reuniones con proveedores.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN PRECIOS ─────────────────────────────────────── -->
+  <section class="lf-pricing-section" id="precios">
+    <div class="lf-pricing-inner">
+      <p class="lf-eyebrow text-center">Planes</p>
+      <h2 class="lf-section-title text-center">
+        Elige tu plan,<br/><em>sin sorpresas</em>
+      </h2>
+
+      <!-- Toggle Free / Pro -->
+      <div class="lf-plan-toggle">
+        <button class="lf-toggle-btn"
+                [class.active]="planActivo === 'free'"
+                (click)="cambiarPlan('free')">
+          Plan Gratuito
+        </button>
+        <button class="lf-toggle-btn"
+                [class.active]="planActivo === 'pro'"
+                (click)="cambiarPlan('pro')">
+          Evento Pro
+          <span class="lf-toggle-badge">49€</span>
+        </button>
+      </div>
+
+      <!-- Cards de plan -->
+      <div class="lf-plans-grid">
+
+        <!-- Plan Free -->
+        <div class="lf-plan-card" [class.dimmed]="planActivo === 'pro'">
+          <div class="lf-plan-header">
+            <span class="lf-plan-label">Gratis para siempre</span>
+            <div class="lf-plan-price">
+              <span class="lf-price-num">0€</span>
+              <span class="lf-price-per">/ mes</span>
+            </div>
+            <p class="lf-plan-desc">Para parejas que empiezan a organizar su boda.</p>
+          </div>
+          <ul class="lf-plan-features">
+            <li class="included"><span class="pf-icon">✓</span> Checklist hasta 20 tareas</li>
+            <li class="included"><span class="pf-icon">✓</span> Plantilla básica de boda</li>
+            <li class="included"><span class="pf-icon">✓</span> 3 fases temporales</li>
+            <li class="included"><span class="pf-icon">✓</span> Calendario visual</li>
+            <li class="included"><span class="pf-icon">✓</span> Exportar a Google Calendar (.ics)</li>
+            <li class="included"><span class="pf-icon">✓</span> 2 sugerencias de IA al mes</li>
+            <li class="not-included"><span class="pf-icon">✕</span> Exportar PDF</li>
+            <li class="not-included"><span class="pf-icon">✕</span> Checklist ilimitado</li>
+            <li class="not-included"><span class="pf-icon">✕</span> Sugerencias IA ilimitadas</li>
+            <li class="not-included"><span class="pf-icon">✕</span> Colaboradores</li>
+          </ul>
+          <button class="lf-plan-cta secondary" routerLink="/register">Empezar gratis</button>
+        </div>
+
+        <!-- Plan Pro -->
+        <div class="lf-plan-card pro" [class.featured]="planActivo === 'pro'">
+          <div class="lf-plan-popular-badge">⭐ Más popular</div>
+          <div class="lf-plan-header">
+            <span class="lf-plan-label">Evento Pro — Pago único</span>
+            <div class="lf-plan-price">
+              <span class="lf-price-num gold">49€</span>
+              <span class="lf-price-per">/ boda</span>
+            </div>
+            <p class="lf-plan-desc">Todo lo que necesitas para una organización perfecta, sin límites.</p>
+          </div>
+          <ul class="lf-plan-features">
+            <li class="included"><span class="pf-icon gold">✓</span> Checklist <strong>ilimitado</strong></li>
+            <li class="included"><span class="pf-icon gold">✓</span> Plantilla completa (80+ tareas)</li>
+            <li class="included"><span class="pf-icon gold">✓</span> <strong>6 fases</strong> temporales</li>
+            <li class="included"><span class="pf-icon gold">✓</span> Calendario visual avanzado</li>
+            <li class="included"><span class="pf-icon gold">✓</span> Exportar a Google Calendar (.ics)</li>
+            <li class="included"><span class="pf-icon gold">✓</span> <strong>Exportar PDF profesional</strong></li>
+            <li class="included"><span class="pf-icon gold">✓</span> Sugerencias IA <strong>ilimitadas</strong></li>
+            <li class="included"><span class="pf-icon gold">✓</span> Hasta 5 colaboradores</li>
+            <li class="included"><span class="pf-icon gold">✓</span> Acceso de por vida</li>
+            <li class="included"><span class="pf-icon gold">✓</span> Soporte prioritario</li>
+          </ul>
+          <button class="lf-plan-cta primary" routerLink="/register">
+            Empezar con Pro — 49€
+          </button>
+          <p class="lf-plan-fine">Pago único · Sin suscripción · Sin renovaciones</p>
+        </div>
+
+      </div>
+
+      <!-- Garantía -->
+      <div class="lf-guarantee">
+        <span class="lf-guarantee-icon">🛡</span>
+        <div>
+          <div class="lf-guarantee-title">Garantía de satisfacción 30 días</div>
+          <div class="lf-guarantee-desc">Si no estás satisfecho, te devolvemos el dinero sin preguntas.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA FINAL ────────────────────────────────────────────── -->
+  <section class="lf-cta-section">
+    <div class="lf-cta-inner">
+      <div class="lf-cta-ornament">✦</div>
+      <p class="lf-eyebrow">Empieza hoy mismo</p>
+      <h2 class="lf-cta-title">
+        Tu boda merece<br/>
+        <em>la organización perfecta</em>
+      </h2>
+      <p class="lf-cta-body">
+        Únete a más de 12.000 parejas que ya organizan su boda con Weddly Studio.
+        Gratis para siempre en el plan básico.
+      </p>
+      <div class="lf-cta-actions">
+        <button class="lf-btn-primary large" routerLink="/register">Crear mi boda gratis</button>
+        <p class="lf-cta-fine">Sin tarjeta de crédito · Configura en 2 minutos</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ───────────────────────────────────────────────── -->
+  <footer class="lf-footer">
+    <div class="lf-footer-inner">
+      <div class="lf-footer-logo">
+        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="lf-footer-logo-img" />
+        <span class="lf-logo-text">Weddly Studio</span>
+      </div>
+      <p class="lf-footer-tagline">El amor merece la mejor organización</p>
+      <p class="lf-footer-copy">© 2025 Weddly Studio · Hecho con ♥ para parejas</p>
+    </div>
+  </footer>
+
+</div>

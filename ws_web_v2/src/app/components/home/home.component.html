@@ -1,33 +1,32 @@
 <div class="main-wrapper">
 
-  <!-- Navbar sticky -->
-  <nav class="navbar bg-white shadow-sm sticky-nav"
-      [class.visible]="showStickyNav">
-    <div class="container-fluid px-4" style="max-width:1200px; margin:0 auto;">
-      <span class="navbar-brand mb-0 h5 fw-bold nav-logo"
-            style="font-family:'Playfair Display',serif; color:var(--dark-charcoal);">
-        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="me-2 logo-navbar">
-        {{ 'HOME.BRAND' | translate }}
-      </span>
-      <div class="d-flex gap-2 align-items-center">
+  <!-- ═══════════════════════════════════════════
+       NAVBAR STICKY
+  ═══════════════════════════════════════════ -->
+  <nav class="navbar sticky-nav" [class.visible]="showStickyNav">
+    <div class="nav-inner">
+      <a routerLink="/" class="nav-brand">
+        <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="logo-navbar">
+        <span>{{ 'HOME.BRAND' | translate }}</span>
+      </a>
+      <div class="nav-actions">
         <app-language-selector mode="navbar" />
-        <button class="btn btn-outline-warning rounded-pill px-4 py-2 fw-semibold nav-btn-outline"
-                routerLink="/login"
-                style="border-color:var(--gold); color:var(--gold);">
+        <a routerLink="/login" class="nav-link-login">
           {{ 'HOME.ACCESS_BTN' | translate }}
-        </button>
-        <button class="btn rounded-pill px-4 py-2 fw-semibold text-white nav-btn-gold"
-                routerLink="/register"
-                style="background:var(--gold);">
+        </a>
+        <a routerLink="/register" class="btn-hero-primary nav-cta">
           {{ 'HOME.START_FREE_BTN' | translate }}
-        </button>
+        </a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero con carrusel -->
-  <section class="hero-section position-relative d-flex align-items-center justify-content-center text-center vh-100" style="margin-top: 0 !important;">
+  <!-- ═══════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════ -->
+  <section class="hero-section">
 
+    <!-- Carrusel de fondo -->
     <div class="hero-slides">
       <div class="hero-slide"
            *ngFor="let slide of heroSlides; let i = index"
@@ -35,32 +34,46 @@
         <div class="hero-slide-img" [style.background-image]="'url(' + slide + ')'"></div>
       </div>
     </div>
+    <div class="hero-overlay"></div>
 
-    <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
+    <!-- Contenido hero -->
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        {{ 'HOME.BRAND' | translate }}
+      </div>
 
-    <div class="hero-content position-relative text-white" style="z-index:1; max-width:800px; padding:20px; padding-bottom:120px;">
-      <span class="d-block text-uppercase fw-semibold mb-3"
-            style="letter-spacing:4px; font-size:0.8rem; opacity:0.9;">
-        {{ 'HOME.HERO_SUBTITLE' | translate }}
-      </span>
-      <h1 class="display-1 fw-bold mb-4"
-          style="font-family:'Playfair Display',serif; line-height:1.1;">
-        {{ 'HOME.HERO_TITLE_1' | translate }}<br />
-        <span style="color:var(--gold);">{{ 'HOME.HERO_TITLE_2' | translate }}</span>
+      <h1 class="hero-title">
+        {{ 'HOME.HERO_TITLE_1' | translate }}<br>
+        <span class="hero-title-accent">{{ 'HOME.HERO_TITLE_2' | translate }}</span>
       </h1>
-      <p class="lead mb-4">{{ 'HOME.HERO_DESCRIPTION' | translate }}</p>
-      <div class="d-flex gap-3 justify-content-center">
-        <button class="btn btn-lg rounded-pill px-5 py-3 fw-semibold text-white btn-gold"
-                routerLink="/register" style="background:var(--gold);">
-          {{ 'HOME.START_WEDDING_BTN' | translate }}
-        </button>
-        <button class="btn btn-lg btn-outline-light rounded-pill px-5 py-3 fw-semibold btn-outline"
-                routerLink="/login">
-          {{ 'HOME.USER_ACCESS_BTN' | translate }}
-        </button>
+
+      <!-- Subtítulo mejorado — orientado a beneficios, no features -->
+      <p class="hero-subtitle">
+        El único wedding planner digital que centraliza invitados, mesas, checklist y fotos.
+        Sin Excel, sin WhatsApps perdidos, sin caos.
+      </p>
+
+      <!-- CTAs -->
+      <div class="hero-ctas">
+        <a routerLink="/register" class="btn-hero-primary">
+          Empezar gratis — sin tarjeta
+        </a>
+        <a routerLink="/pricing" class="btn-hero-secondary">
+          Ver planes →
+        </a>
+      </div>
+
+      <!-- Social proof inline -->
+      <div class="hero-trust">
+        <div class="hero-trust-item" *ngFor="let stat of socialProofStats">
+          <span class="hero-trust-num">{{ stat.number }}</span>
+          <span class="hero-trust-label">{{ stat.label }}</span>
+        </div>
       </div>
     </div>
 
+    <!-- Dots carrusel -->
     <div class="hero-dots">
       <span class="hero-dot"
             *ngFor="let slide of heroSlides; let i = index"
@@ -69,340 +82,403 @@
       </span>
     </div>
 
-    <div class="scroll-indicator position-absolute text-white text-center"
-         style="bottom:30px; left:50%; transform:translateX(-50%); z-index:2; cursor:pointer;"
-         (click)="scrollToContent()">
-      <span class="d-block mb-2">{{ 'HOME.DISCOVER_MORE' | translate }}</span>
-      <div class="arrow-down mx-auto"></div>
-    </div>
+    <!-- Scroll indicator -->
+    <button class="scroll-indicator" (click)="scrollToContent()" aria-label="Ver más">
+      <span>{{ 'HOME.DISCOVER_MORE' | translate }}</span>
+      <div class="arrow-down"></div>
+    </button>
 
   </section>
 
-  <!-- Pasos -->
-  <section id="marketing-content" class="info-scroll-section reveal py-5 bg-white text-center">
-    <div class="container py-5">
-      <div class="section-header mb-5">
-        <span class="d-block text-uppercase fw-semibold mb-2"
-              style="color:var(--gold); letter-spacing:2px; font-size:0.8rem;">
-          {{ 'HOME.STEP_BY_STEP' | translate }}
-        </span>
-        <h2 class="display-4 fw-bold"
-            style="font-family:'Playfair Display',serif; color:var(--dark-charcoal);">
-          {{ 'HOME.HOW_IT_WORKS' | translate }}
-        </h2>
+  <!-- ═══════════════════════════════════════════
+       PROBLEMA / DOLOR (nuevo — antes de pasos)
+  ═══════════════════════════════════════════ -->
+  <section id="marketing-content" class="pain-section reveal">
+    <div class="container-md">
+      <div class="pain-eyebrow">Sin Weddly, esto es lo que vives</div>
+      <h2 class="pain-title">El caos habitual que nadie te cuenta</h2>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <span class="pain-icon">📊</span>
+          <p>Excel con 40 versiones diferentes de la lista de invitados</p>
+        </div>
+        <div class="pain-card">
+          <span class="pain-icon">📱</span>
+          <p>Grupos de WhatsApp incontrolables con confirmaciones perdidas</p>
+        </div>
+        <div class="pain-card">
+          <span class="pain-icon">😰</span>
+          <p>Noche anterior reorganizando mesas porque alguien no confirmó</p>
+        </div>
+        <div class="pain-card">
+          <span class="pain-icon">📷</span>
+          <p>Fotos del día dispersas en 30 móviles que nunca recopilaste</p>
+        </div>
       </div>
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col" *ngFor="let step of [1,2,3]">
-          <div class="step-card p-5 rounded-4 h-100 text-start"
-               style="background:var(--bg-soft); border:1px solid var(--accent-soft);">
-            <span class="d-block mb-3 step-num"
-                  style="font-family:'Playfair Display',serif; font-size:3rem; color:var(--gold); opacity:0.3;">
-              0{{ step }}
-            </span>
-            <h3 class="h4 fw-bold mb-3"
-                style="font-family:'Playfair Display',serif; color:var(--dark-charcoal);">
-              {{ ('HOME.STEP_' + step + '_TITLE') | translate }}
-            </h3>
-            <p style="color:#8b7e74; line-height:1.6;">
-              {{ ('HOME.STEP_' + step + '_DESC') | translate }}
+      <div class="pain-cta-wrap">
+        <a routerLink="/register" class="btn-hero-primary">
+          Acabar con el caos — es gratis
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       PASOS — cómo funciona
+  ═══════════════════════════════════════════ -->
+  <section class="steps-section reveal">
+    <div class="container-md">
+      <div class="section-header">
+        <span class="section-eyebrow">{{ 'HOME.STEP_BY_STEP' | translate }}</span>
+        <h2 class="section-title">{{ 'HOME.HOW_IT_WORKS' | translate }}</h2>
+      </div>
+
+      <div class="steps-grid">
+        <!-- Paso 1 -->
+        <div class="step-card">
+          <span class="step-num">01</span>
+          <h3 class="step-title">Crea tu boda en 2 minutos</h3>
+          <p class="step-desc">Pon el nombre y la fecha. Tu espacio privado queda listo al instante, sin formularios interminables ni tarjeta de crédito.</p>
+        </div>
+        <!-- Paso 2 -->
+        <div class="step-card">
+          <span class="step-num">02</span>
+          <h3 class="step-title">Centraliza todo en un panel</h3>
+          <p class="step-desc">Invitados, mesas, checklist, fotos y diseño en un solo lugar. No perderás ninguna confirmación, ningún detalle.</p>
+        </div>
+        <!-- Paso 3 -->
+        <div class="step-card">
+          <span class="step-num">03</span>
+          <h3 class="step-title">Comparte y relájate</h3>
+          <p class="step-desc">Envía el enlace a tus invitados. Ellos confirman y suben fotos. Tú ves el estado en tiempo real desde cualquier dispositivo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       MOCKUP / SCREENSHOT (añade tu imagen aquí)
+       ─ Descomenta y pon la ruta real de tu imagen ─
+  ═══════════════════════════════════════════ -->
+  <section class="mockup-section reveal">
+    <div class="container-md">
+      <div class="mockup-badge">Así se ve por dentro</div>
+      <div class="mockup-wrap">
+        <img
+          src="assets/weddly-dashboard-cel.png"
+          alt="Panel de control Weddly en móvil"
+          class="mockup-img"
+          loading="lazy"
+        >
+        <div class="mockup-caption">
+          <h3>Todo bajo control, desde el móvil</h3>
+          <p>Confirma asistencias, ajusta mesas y revisa el checklist mientras estás en la prueba del vestido.</p>
+          <a routerLink="/register" class="btn-hero-primary">Probarlo gratis →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       FEATURES
+  ═══════════════════════════════════════════ -->
+  <section class="features-section reveal">
+    <div class="container-lg">
+      <div class="section-header text-center">
+        <span class="section-eyebrow">{{ 'HOME.FEATURES_LABEL' | translate }}</span>
+        <h2 class="section-title">{{ 'HOME.FEATURES_TITLE' | translate }}</h2>
+        <p class="section-subtitle">{{ 'HOME.FEATURES_SUBTITLE' | translate }}</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card h-100"
+             *ngFor="let feat of features"
+             [routerLink]="feat.route"
+             [class.feature-card--clickable]="feat.route">
+          <div class="feature-icon-wrap">
+            <app-icon [name]="feat.icon" [size]="28"></app-icon>
+          </div>
+          <h3 class="feature-title">{{ feat.titleKey | translate }}</h3>
+          <p class="feature-desc">{{ feat.descKey | translate }}</p>
+          <ul class="feature-list">
+            <li *ngFor="let item of feat.items">{{ item | translate }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       TESTIMONIOS (antes de precios)
+  ═══════════════════════════════════════════ -->
+  <section class="testimonials-section reveal">
+    <div class="container-md">
+      <div class="section-header text-center">
+        <span class="section-eyebrow">LO QUE DICEN LAS PAREJAS</span>
+        <h2 class="section-title">Reales. Sin filtros.</h2>
+      </div>
+
+      <div class="testimonials-grid">
+        <!-- Testimonio 1 — real desde i18n -->
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"{{ 'HOME.TESTIMONIAL_TEXT' | translate }}"</p>
+          <div class="testimonial-author-row">
+            <div class="testimonial-avatar">L&amp;C</div>
+            <span class="testimonial-author">{{ 'HOME.TESTIMONIAL_AUTHOR' | translate }}</span>
+          </div>
+        </div>
+
+        <!-- Testimonio 2 — añade las keys al i18n cuando tengas más reseñas -->
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"El plano de mesas nos salvó la noche anterior. Movimos 8 personas en 3 minutos sin dramas."</p>
+          <div class="testimonial-author-row">
+            <div class="testimonial-avatar">M&amp;J</div>
+            <span class="testimonial-author">— Marta &amp; Javier, Junio 2025</span>
+          </div>
+        </div>
+
+        <!-- Testimonio 3 -->
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Compartimos el link con los invitados y en 48 horas teníamos el 80% de RSVPs confirmados. Increíble."</p>
+          <div class="testimonial-author-row">
+            <div class="testimonial-avatar">A&amp;P</div>
+            <span class="testimonial-author">— Ana &amp; Pablo, Octubre 2025</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Link a reseñas -->
+      <div class="text-center mt-4">
+        <a routerLink="/reviews" class="reviews-link">Ver todas las reseñas →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       PRECIOS
+  ═══════════════════════════════════════════ -->
+  <section class="pricing-section reveal">
+    <div class="container-lg">
+      <div class="section-header text-center">
+        <span class="section-eyebrow">{{ 'HOME.PRICING_LABEL' | translate }}</span>
+        <h2 class="section-title">{{ 'HOME.PRICING_TITLE' | translate }}</h2>
+        <p class="section-subtitle">{{ 'HOME.PRICING_SUBTITLE' | translate }}</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card"
+             *ngFor="let plan of pricingPlans"
+             [class.pricing-card--featured]="plan.featured">
+
+          <div class="pricing-popular-ribbon" *ngIf="plan.popularKey">
+            {{ plan.popularKey | translate }}
+          </div>
+
+          <div class="pricing-header">
+            <span class="pricing-badge">{{ plan.badgeKey | translate }}</span>
+            <div class="pricing-price">
+              <span class="pricing-amount">{{ plan.amount }}</span>
+              <span class="pricing-period">{{ plan.periodKey | translate }}</span>
+            </div>
+            <span class="pricing-annual" *ngIf="plan.annual">{{ plan.annual | translate }}</span>
+          </div>
+
+          <div class="pricing-body">
+            <p class="pricing-tagline">{{ plan.taglineKey | translate }}</p>
+            <ul class="pricing-features">
+              <li *ngFor="let feat of plan.features"
+                  [class.ok]="feat.ok"
+                  [class.no]="!feat.ok">
+                {{ feat.key | translate }}
+              </li>
+            </ul>
+          </div>
+
+          <div class="pricing-footer">
+            <a routerLink="/register"
+               class="pricing-btn w-100"
+               [class.pricing-btn--gold]="plan.ctaStyle === 'gold'"
+               [class.pricing-btn--outline]="plan.ctaStyle === 'outline'">
+              {{ plan.ctaKey | translate }}
+            </a>
+            <p class="pricing-micro" *ngIf="plan.featured">
+              Pago único · Sin mensualidades · Sin sorpresas
             </p>
           </div>
         </div>
       </div>
+
+      <p class="pricing-note">{{ 'HOME.PRICING_NOTE' | translate }}</p>
     </div>
   </section>
 
-  <!-- Features -->
-  <section class="features-section reveal py-5" style="background:var(--bg-soft);">
-    <div class="container py-5" style="max-width:1200px;">
-      <div class="text-center mb-5">
-        <span class="d-block text-uppercase fw-semibold mb-2"
-              style="color:var(--gold); letter-spacing:2px; font-size:0.8rem;">
-          {{ 'HOME.FEATURES_LABEL' | translate }}
-        </span>
-        <h2 class="display-4 fw-bold mb-3"
-            style="font-family:'Playfair Display',serif; color:var(--dark-charcoal);">
-          {{ 'HOME.FEATURES_TITLE' | translate }}
-        </h2>
-        <p class="lead mx-auto" style="max-width:600px; color:#8b7e74;">
-          {{ 'HOME.FEATURES_SUBTITLE' | translate }}
-        </p>
+  <!-- ═══════════════════════════════════════════
+       FAQ (nuevo)
+  ═══════════════════════════════════════════ -->
+  <section class="faq-section reveal">
+    <div class="container-md">
+      <div class="section-header text-center">
+        <span class="section-eyebrow">PREGUNTAS FRECUENTES</span>
+        <h2 class="section-title">Todo lo que necesitas saber</h2>
       </div>
-      <div class="row g-4">
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100" routerLink="/wedding-guest-list-manager" >
-            <div class="feature-icon-wrap"><app-icon name="invitados" [size]="32"></app-icon></div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_GUESTS_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_GUESTS_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_GUESTS_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_GUESTS_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_GUESTS_LI3' | translate }}</li>
-            </ul>
+
+      <div class="faq-list">
+
+        <div class="faq-item" [class.faq-open]="openFaqIndex === 0" (click)="toggleFaq(0)">
+          <div class="faq-question">
+            <span>¿Es realmente gratis? ¿Qué incluye el plan Free?</span>
+            <span class="faq-arrow">{{ openFaqIndex === 0 ? '−' : '+' }}</span>
+          </div>
+          <div class="faq-answer">
+            Sí, el plan Free es gratis para siempre. Incluye 1 boda activa, hasta 50 invitados, checklist básico y álbum de hasta 20 fotos. Sin tarjeta de crédito ni fecha de caducidad.
           </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
-            <div class="feature-icon-wrap"><app-icon name="plano" [size]="32"></app-icon></div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_TABLES_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_TABLES_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_TABLES_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_TABLES_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_TABLES_LI3' | translate }}</li>
-            </ul>
+
+        <div class="faq-item" [class.faq-open]="openFaqIndex === 1" (click)="toggleFaq(1)">
+          <div class="faq-question">
+            <span>¿Pueden mis invitados confirmar asistencia (RSVP) sin crear una cuenta?</span>
+            <span class="faq-arrow">{{ openFaqIndex === 1 ? '−' : '+' }}</span>
+          </div>
+          <div class="faq-answer">
+            Sí. Tus invitados reciben un enlace personalizado y confirman con un clic, sin registrarse. Solo el organizador necesita cuenta.
           </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100" routerLink="/wedding-checklist">
-            <div class="feature-icon-wrap"><app-icon name="checklist" [size]="32"></app-icon></div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_CHECKLIST_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_CHECKLIST_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_CHECKLIST_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_CHECKLIST_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_CHECKLIST_LI3' | translate }}</li>
-            </ul>
+
+        <div class="faq-item" [class.faq-open]="openFaqIndex === 2" (click)="toggleFaq(2)">
+          <div class="faq-question">
+            <span>¿Qué diferencia hay entre Evento PRO y Premium?</span>
+            <span class="faq-arrow">{{ openFaqIndex === 2 ? '−' : '+' }}</span>
+          </div>
+          <div class="faq-answer">
+            Evento PRO (49€) es un pago único para una boda, ideal si solo organizas la tuya. Premium (14€/mes) es para wedding planners o parejas con varias bodas activas simultáneas.
           </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
-            <div class="feature-icon-wrap"><app-icon name="album" [size]="32"></app-icon></div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_ALBUM_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_ALBUM_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_ALBUM_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_ALBUM_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_ALBUM_LI3' | translate }}</li>
-            </ul>
+
+        <div class="faq-item" [class.faq-open]="openFaqIndex === 3" (click)="toggleFaq(3)">
+          <div class="faq-question">
+            <span>¿Puedo empezar gratis y pagar después cuando lo necesite?</span>
+            <span class="faq-arrow">{{ openFaqIndex === 3 ? '−' : '+' }}</span>
+          </div>
+          <div class="faq-answer">
+            Exacto. Empieza con el plan Free, explora la plataforma y actualiza solo cuando necesites más capacidad. Todos tus datos se mantienen al cambiar de plan.
           </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100">
-            <div class="feature-icon-wrap"><app-icon name="diseno" [size]="32"></app-icon></div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_DESIGN_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_DESIGN_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_DESIGN_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_DESIGN_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_DESIGN_LI3' | translate }}</li>
-            </ul>
+
+        <div class="faq-item" [class.faq-open]="openFaqIndex === 4" (click)="toggleFaq(4)">
+          <div class="faq-question">
+            <span>¿Son privados los datos de mi boda y mis invitados?</span>
+            <span class="faq-arrow">{{ openFaqIndex === 4 ? '−' : '+' }}</span>
+          </div>
+          <div class="faq-answer">
+            Totalmente. Cada boda es un entorno aislado. Solo tú y las personas que invites expresamente tienen acceso. Cumplimos RGPD y nunca compartimos tus datos con terceros.
           </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="feature-card h-100" routerLink="/wedding-guest-list-manager">
-            <div class="feature-icon-wrap"><app-icon name="colaboradores" [size]="32"></app-icon></div>
-            <h3 class="feature-title">{{ 'HOME.FEAT_COLLAB_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'HOME.FEAT_COLLAB_DESC' | translate }}</p>
-            <ul class="feature-list">
-              <li>{{ 'HOME.FEAT_COLLAB_LI1' | translate }}</li>
-              <li>{{ 'HOME.FEAT_COLLAB_LI2' | translate }}</li>
-              <li>{{ 'HOME.FEAT_COLLAB_LI3' | translate }}</li>
-            </ul>
-          </div>
-        </div>
+
+      </div>
+
+      <div class="faq-cta">
+        <p>¿No encuentras tu respuesta?</p>
+        <a routerLink="/faq" class="reviews-link">Ver todas las FAQs</a>
+        <span> · </span>
+        <a routerLink="/support" class="reviews-link">Contactar soporte</a>
       </div>
     </div>
   </section>
 
-  <!-- Planes -->
-  <section class="pricing-section reveal py-5" style="background:white;">
-    <div class="container py-5" style="max-width:1200px;">
-      <div class="text-center mb-5">
-        <span class="d-block text-uppercase fw-semibold mb-2"
-              style="color:var(--gold); letter-spacing:2px; font-size:0.8rem;">
-          {{ 'HOME.PRICING_LABEL' | translate }}
-        </span>
-        <h2 class="display-4 fw-bold mb-3"
-            style="font-family:'Playfair Display',serif; color:var(--dark-charcoal);">
-          {{ 'HOME.PRICING_TITLE' | translate }}
-        </h2>
-        <p class="lead mx-auto" style="max-width:500px; color:#8b7e74;">
-          {{ 'HOME.PRICING_SUBTITLE' | translate }}
-        </p>
-      </div>
-      <div class="row g-4 justify-content-center align-items-stretch">
-        <div class="col-12 col-md-4">
-          <div class="pricing-card h-100">
-            <div class="pricing-header">
-              <app-icon name="planGratuito" [size]="40"></app-icon>
-              <span class="pricing-badge">{{ 'HOME.PLAN_FREE_BADGE' | translate }}</span>
-              <div class="pricing-price">
-                <span class="pricing-amount">0€</span>
-                <span class="pricing-period">{{ 'HOME.PLAN_FREE_PERIOD' | translate }}</span>
-              </div>
-            </div>
-            <div class="pricing-body">
-              <p class="pricing-tagline">{{ 'HOME.PLAN_FREE_TAGLINE' | translate }}</p>
-              <ul class="pricing-features">
-                <li class="ok">{{ 'HOME.PLAN_FREE_F1' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_FREE_F2' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_FREE_F3' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_FREE_F4' | translate }}</li>
-                <li class="no">{{ 'HOME.PLAN_FREE_F5' | translate }}</li>
-                <li class="no">{{ 'HOME.PLAN_FREE_F6' | translate }}</li>
-              </ul>
-            </div>
-            <div class="pricing-footer">
-              <button class="btn pricing-btn pricing-btn--outline w-100 rounded-pill py-3 fw-semibold"
-                      routerLink="/register">
-                {{ 'HOME.PLAN_FREE_CTA' | translate }}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <div class="pricing-card pricing-card--featured h-100">
-            <div class="pricing-popular-ribbon">{{ 'HOME.PLAN_PRO_POPULAR' | translate }}</div>
-            <div class="pricing-header">
-              <app-icon name="planEsencial" [size]="40"></app-icon>
-              <span class="pricing-badge">{{ 'HOME.PLAN_PRO_BADGE' | translate }}</span>
-              <div class="pricing-price">
-                <span class="pricing-amount">49€</span>
-                <span class="pricing-period">{{ 'HOME.PLAN_PRO_PERIOD' | translate }}</span>
-              </div>
-            </div>
-            <div class="pricing-body">
-              <p class="pricing-tagline">{{ 'HOME.PLAN_PRO_TAGLINE' | translate }}</p>
-              <ul class="pricing-features">
-                <li class="ok">{{ 'HOME.PLAN_PRO_F1' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F2' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F3' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F4' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F5' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PRO_F6' | translate }}</li>
-              </ul>
-            </div>
-            <div class="pricing-footer">
-              <button class="btn pricing-btn pricing-btn--gold w-100 rounded-pill py-3 fw-semibold text-white"
-                      routerLink="/register">
-                {{ 'HOME.PLAN_PRO_CTA' | translate }}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <div class="pricing-card h-100">
-            <div class="pricing-header">
-              <app-icon name="planPremium" [size]="40"></app-icon>
-              <span class="pricing-badge">{{ 'HOME.PLAN_PREMIUM_BADGE' | translate }}</span>
-              <div class="pricing-price">
-                <span class="pricing-amount">14€</span>
-                <span class="pricing-period">{{ 'HOME.PLAN_PREMIUM_PERIOD' | translate }}</span>
-                <span class="pricing-annual">{{ 'HOME.PLAN_PREMIUM_ANNUAL' | translate }}</span>
-              </div>
-            </div>
-            <div class="pricing-body">
-              <p class="pricing-tagline">{{ 'HOME.PLAN_PREMIUM_TAGLINE' | translate }}</p>
-              <ul class="pricing-features">
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F1' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F2' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F3' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F4' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F5' | translate }}</li>
-                <li class="ok">{{ 'HOME.PLAN_PREMIUM_F6' | translate }}</li>
-              </ul>
-            </div>
-            <div class="pricing-footer">
-              <button class="btn pricing-btn pricing-btn--outline w-100 rounded-pill py-3 fw-semibold"
-                      routerLink="/register">
-                {{ 'HOME.PLAN_PREMIUM_CTA' | translate }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="text-center mt-4" style="color:#8b7e74; font-size:0.85rem;">
-        {{ 'HOME.PRICING_NOTE' | translate }}
-      </p>
-    </div>
-  </section>
+  <!-- ═══════════════════════════════════════════
+       CTA FINAL
+  ═══════════════════════════════════════════ -->
+  <section class="cta-final-section reveal">
+    <div class="cta-decoration cta-decoration--tl"></div>
+    <div class="cta-decoration cta-decoration--br"></div>
+    <div class="container-sm text-center">
+      <span class="section-eyebrow cta-eyebrow">{{ 'HOME.CTA_LABEL' | translate }}</span>
+      <h2 class="cta-title">{{ 'HOME.CTA_TITLE' | translate }}</h2>
+      <p class="cta-subtitle">{{ 'HOME.CTA_SUBTITLE' | translate }}</p>
 
-  <!-- CTA Final -->
-  <section class="cta-final-section reveal py-5">
-    <div class="container py-5 text-center" style="max-width:800px;">
-      <span class="d-block text-uppercase fw-semibold mb-3 cta-label"
-            style="letter-spacing:3px; font-size:0.8rem;">
-        {{ 'HOME.CTA_LABEL' | translate }}
-      </span>
-      <h2 class="cta-title mb-4">{{ 'HOME.CTA_TITLE' | translate }}</h2>
-      <p class="cta-subtitle mb-5">{{ 'HOME.CTA_SUBTITLE' | translate }}</p>
-      <div class="d-flex gap-3 justify-content-center flex-wrap">
-        <button class="btn btn-lg rounded-pill px-5 py-3 fw-semibold text-white cta-btn-primary"
-                routerLink="/register">
+      <div class="cta-buttons">
+        <a routerLink="/register" class="btn-hero-primary btn-hero-primary--large">
           {{ 'HOME.CTA_PRIMARY_BTN' | translate }}
-        </button>
-        <button class="btn btn-lg rounded-pill px-5 py-3 fw-semibold cta-btn-secondary"
-                routerLink="/login">
+        </a>
+        <a routerLink="/login" class="btn-cta-secondary">
           {{ 'HOME.CTA_SECONDARY_BTN' | translate }}
-        </button>
+        </a>
       </div>
-      <div class="cta-trust-row mt-5">
+
+      <div class="cta-trust">
         <div class="cta-trust-item">
-          <app-icon name="perfil" [size]="20"></app-icon>
+          <app-icon name="perfil" [size]="18"></app-icon>
           <span>{{ 'HOME.CTA_TRUST_1' | translate }}</span>
         </div>
+        <div class="cta-trust-sep">·</div>
         <div class="cta-trust-item">
-          <app-icon name="planGratuito" [size]="20"></app-icon>
+          <app-icon name="planGratuito" [size]="18"></app-icon>
           <span>{{ 'HOME.CTA_TRUST_2' | translate }}</span>
         </div>
+        <div class="cta-trust-sep">·</div>
         <div class="cta-trust-item">
-          <app-icon name="planes" [size]="20"></app-icon>
+          <app-icon name="planes" [size]="18"></app-icon>
           <span>{{ 'HOME.CTA_TRUST_3' | translate }}</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Testimonios -->
-  <section class="testimonial-section reveal py-5 text-center"
-           style="background:var(--accent-soft); color:var(--dark-charcoal);">
-    <div class="container py-5">
-      <p class="display-5 fst-italic mx-auto mb-4"
-         style="font-family:'Playfair Display',serif; max-width:900px; line-height:1.4;">
-        "{{ 'HOME.TESTIMONIAL_TEXT' | translate }}"
-      </p>
-      <span class="d-block fw-semibold" style="color:var(--gold); letter-spacing:1px;">
-        {{ 'HOME.TESTIMONIAL_AUTHOR' | translate }}
-      </span>
-    </div>
-  </section>
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="main-footer">
+    <div class="container-lg">
+      <div class="footer-grid">
 
-  <!-- Footer -->
-  <footer class="main-footer py-5" style="background:#2b2724; color:#d1c7bd;">
-    <div class="container">
-      <div class="row g-5 mb-5">
-        <div class="col-md-3">
-          <h3 class="h4 mb-3 text-white" style="font-family:'Playfair Display',serif;">
-            <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="me-2 logo-navbar">
-            {{ 'HOME.BRAND' | translate }}
-          </h3>
-          <p style="color:#8b7e74;">{{ 'HOME.FOOTER_TAGLINE' | translate }}</p>
+        <div class="footer-brand-col">
+          <div class="footer-brand">
+            <img src="assets/logo/logo-icon.png" alt="Weddly Studio" class="logo-navbar">
+            <span>{{ 'HOME.BRAND' | translate }}</span>
+          </div>
+          <p class="footer-tagline">{{ 'HOME.FOOTER_TAGLINE' | translate }}</p>
+          <div class="footer-social">
+            <a href="https://instagram.com/weddlystudio" target="_blank" rel="noopener" [attr.aria-label]="'FOOTER.ARIA_INSTAGRAM' | translate" class="footer-social-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+            </a>
+            <a href="https://tiktok.com/@weddlystudio" target="_blank" rel="noopener" [attr.aria-label]="'FOOTER.ARIA_TIKTOK' | translate" class="footer-social-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.5a8.22 8.22 0 0 0 4.8 1.54V7.58a4.85 4.85 0 0 1-1.03-.89z"/></svg>
+            </a>
+          </div>
         </div>
-        <div class="footer-links col-md-3">
-          <h4 class="h6 mb-3" style="color:var(--gold);">Producto</h4>
-          <a routerLink="/wedding-guest-list-manager"     class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Guest List Manager</a>
-          <a routerLink="/wedding-rsvp-tool" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">RSVP Tracking</a>
-          <a routerLink="/wedding-budget-planner" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Budget Planner</a>
-          <a routerLink="/wedding-seating-chart" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Seating Chart</a>
-          <a routerLink="/wedding-checklist" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Task Checklist</a>
-          <a routerLink="/pricing" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">Pricing</a>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Producto</h4>
+          <a routerLink="/wedding-guest-list-manager" class="footer-link">Guest List Manager</a>
+          <a routerLink="/wedding-rsvp-tool" class="footer-link">RSVP Online</a>
+          <a routerLink="/wedding-seating-chart" class="footer-link">Plano de Mesas</a>
+          <a routerLink="/wedding-checklist" class="footer-link">Checklist de Boda</a>
+          <a routerLink="/wedding-budget-planner" class="footer-link">Presupuesto Boda</a>
+          <a routerLink="/pricing" class="footer-link">Planes y Precios</a>
         </div>
-        <div class="footer-links col-md-3">
-          <h4 class="h6 mb-3" style="color:var(--gold);">{{ 'HOME.FOOTER_HELP' | translate }}</h4>
-          <a routerLink="/faq"     class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_FAQ' | translate }}</a>
-          <a routerLink="/support" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_SUPPORT' | translate }}</a>
-          <a routerLink="/reviews" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'FOOTER.NAV_REVIEWS' | translate }}</a>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">{{ 'HOME.FOOTER_HELP' | translate }}</h4>
+          <a routerLink="/faq" class="footer-link">{{ 'HOME.FOOTER_FAQ' | translate }}</a>
+          <a routerLink="/support" class="footer-link">{{ 'HOME.FOOTER_SUPPORT' | translate }}</a>
+          <a routerLink="/reviews" class="footer-link">{{ 'FOOTER.NAV_REVIEWS' | translate }}</a>
         </div>
-        <div class="footer-links col-md-3">
-          <h4 class="h6 mb-3" style="color:var(--gold);">Legal</h4>
-          <a routerLink="/support" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'HOME.FOOTER_SUPPORT' | translate }}</a>
-          <a routerLink="/privacy" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'FOOTER.NAV_PRIVACY' | translate }}</a>
-          <a routerLink="/terms" class="d-block mb-2 text-decoration-none" style="color:#8b7e74;">{{ 'FOOTER.NAV_TERMS' | translate }}</a>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Legal</h4>
+          <a routerLink="/privacy" class="footer-link">{{ 'FOOTER.NAV_PRIVACY' | translate }}</a>
+          <a routerLink="/terms" class="footer-link">{{ 'FOOTER.NAV_TERMS' | translate }}</a>
+          <a routerLink="/support" class="footer-link">Contacto</a>
         </div>
+        
       </div>
-      <div class="border-top pt-4 text-center" style="border-color:rgba(255,255,255,0.05) !important;">
-        <p class="small mb-0" style="color:#555;">{{ 'HOME.FOOTER_COPYRIGHT' | translate }}</p>
+
+      <div class="footer-bottom">
+        <p>{{ 'HOME.FOOTER_COPYRIGHT' | translate }}</p>
+        <p class="footer-bottom-right">Hecho con amor para parejas felices</p>
       </div>
     </div>
   </footer>

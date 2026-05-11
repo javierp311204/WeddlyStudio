@@ -124,6 +124,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/lista-invitados-boda/lista-invitados-boda.component').then(m => m.ListaInvitadosBodaComponent),
   },
+  {
+    path: 'wedding-checklist',
+    loadComponent: () =>
+      import('./pages/wedding-checklist/wedding-checklist.component').then(m => m.WeddingChecklistComponent),
+  },
 
   // ── Fallback ────────────────────────────────────────────────
   {
