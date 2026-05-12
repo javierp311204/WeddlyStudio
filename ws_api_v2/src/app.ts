@@ -16,6 +16,8 @@ import subscriptionRoutes from './routes/subscription.routes';
 import webhookRoutes      from './routes/webhook.routes';
 import userRoutes from './routes/user.routes'; 
 import inviteRoutes from './routes/invite.routes';
+import budgetRoutes from './routes/budget.routes';
+import expenseRoutes from './routes/expense.routes';
 import { exportRouter } from './routes/export.routes';
 import { aiRouter } from './routes/ai.routes';
 import { reviewsRouter } from './routes/reviews.routes';
@@ -90,6 +92,8 @@ app.use('/api/reviews', reviewsRouter);
 app.use('/api/weddings', weddingRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/invites', inviteRoutes);
+app.use('/api/budgets', budgetRoutes);
+app.use('/api/expenses', expenseRoutes);
 app.use('/api/ai', aiRouter);
 
 // ─── Tasks ───────────────────────────────────────────────────────

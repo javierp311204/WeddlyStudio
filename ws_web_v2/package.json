@@ -23,10 +23,12 @@
     "@ngx-translate/http-loader": "^8.0.0",
     "@stripe/stripe-js": "^8.7.0",
     "bootstrap": "^5.3.8",
+    "chart.js": "^4.4.0",
     "driver.js": "^1.4.0",
     "fabric": "^7.1.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.0",
+    "ng2-charts": "^8.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

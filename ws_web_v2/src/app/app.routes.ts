@@ -37,6 +37,7 @@ import { TwoFactorComponent }          from './components/two-factor/two-factor.
 import { TfaResetConfirmComponent }    from './components/tfa-reset-confirm/tfa-reset-confirm.component';
 import { Perfil2faComponent }          from './components/perfil2fa/perfil2fa.component';
 import { CalendarioPageComponent }     from './pages/calendario-page/calendario-page.component';
+import { BudgetPlannerComponent }      from './pages/budget-planner/budget-planner.component';
 import { FaqComponent }                from './components/faq/faq.component';
 import { SoporteComponent }            from './components/soporte/soporte.component';
 
@@ -101,6 +102,11 @@ export const routes: Routes = [
     component: InfoBodaComponent,
     canActivate: [authGuard, minRoleGuard('guest'), PlanGuard],
     data: { blockOnReadonly: true },
+  },
+  {
+    path: 'budget',
+    component: BudgetPlannerComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'guests',

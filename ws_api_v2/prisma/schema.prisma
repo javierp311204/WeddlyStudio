@@ -175,6 +175,7 @@ model User {
   activity_logs      ActivityLog[]
   ai_usage           AiUsage[]
   reviews            Review[]
+  budgets            Budget[]
 
   @@index([email])
   @@index([deleted_at])
@@ -223,6 +224,60 @@ model Wedding {
   @@index([wedding_date])
   @@index([deleted_at])
   @@map("weddings")
+}
+
+// ─────────────────────────────────────────────
+// 4.3 BUDGETS
+// ─────────────────────────────────────────────
+
+model Budget {
+  id            String           @id @default(uuid()) @db.Uuid
+  user_id       String           @db.Uuid
+  name          String           @db.VarChar(200)
+  total_budget  Decimal          @db.Decimal(20, 2)
+  currency      String           @db.VarChar(10)
+  guests        Int              @default(0)
+  wedding_date  DateTime
+  created_at    DateTime         @default(now())
+  updated_at    DateTime         @updatedAt
+
+  user          User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  categories    BudgetCategory[]
+
+  @@index([user_id])
+  @@map("budgets")
+}
+
+model BudgetCategory {
+  id               String    @id @default(uuid()) @db.Uuid
+  budget_id        String    @db.Uuid
+  name             String    @db.VarChar(120)
+  allocated_amount Decimal   @db.Decimal(20, 2)
+  spent_amount     Decimal   @default("0.00") @db.Decimal(20, 2)
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+
+  budget           Budget    @relation(fields: [budget_id], references: [id], onDelete: Cascade)
+  expenses         Expense[]
+
+  @@index([budget_id])
+  @@map("budget_categories")
+}
+
+model Expense {
+  id                  String         @id @default(uuid()) @db.Uuid
+  budget_category_id  String         @db.Uuid
+  title               String         @db.VarChar(255)
+  amount              Decimal        @db.Decimal(20, 2)
+  notes               String?        @db.Text
+  expense_date        DateTime
+  created_at          DateTime       @default(now())
+  updated_at          DateTime       @updatedAt
+
+  category            BudgetCategory @relation(fields: [budget_category_id], references: [id], onDelete: Cascade)
+
+  @@index([budget_category_id])
+  @@map("expenses")
 }
 
 // ─────────────────────────────────────────────

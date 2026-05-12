@@ -47,27 +47,64 @@
   <!-- Navegación principal -->
   <nav class="sidebar-nav">
     <ng-container *ngFor="let item of visibleNavItems">
-      <a [routerLink]="item.route"
+
+      <!-- Item SIN hijos -->
+      <a *ngIf="!item.children"
+         [routerLink]="item.route"
          routerLinkActive="active"
          [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
          class="nav-item"
          [title]="item.title | translate">
-        <span class="nav-icon">
-          <app-icon [name]="item.icon" [size]="18"></app-icon>
-        </span>
+        <span class="nav-icon"><app-icon [name]="item.icon" [size]="18"></app-icon></span>
         <span class="nav-label">{{ item.label | translate }}</span>
         <span class="active-bar"></span>
       </a>
+
+      <!-- Item CON hijos (acordeón / popover en móvil) -->
+      <ng-container *ngIf="item.children">
+        <button class="nav-item nav-item--parent"
+                [class.open]="isOpen(item.route)"
+                (click)="toggleMenu(item.route, $event)"
+                [title]="item.title | translate"
+                [attr.aria-expanded]="isOpen(item.route)">
+          <span class="nav-icon"><app-icon [name]="item.icon" [size]="18"></app-icon></span>
+          <span class="nav-label">{{ item.label | translate }}</span>
+          <svg class="chevron" width="12" height="12" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </button>
+      </ng-container>
+
     </ng-container>
   </nav>
+
+  <!-- Panel de submenú (desktop expandido: lateral fijo; desktop colapsado + móvil: popover) -->
+  <div class="sidebar-submenu-panel"
+       *ngIf="openMenuItem"
+       [class.is-popover]="collapsed() || isMobile"
+       [style.top.px]="(collapsed() || isMobile) ? submenuTop : null">
+    <div class="submenu-header">{{ openMenuItem.label | translate }}</div>
+    <div class="submenu-list">
+      <a *ngFor="let child of openMenuItem.children"
+         [routerLink]="child.route"
+         routerLinkActive="active"
+         class="nav-subitem"
+         [title]="child.title | translate"
+         (click)="closeMenu()">
+        <span class="nav-subicon">
+          <app-icon [name]="child.icon" [size]="16"></app-icon>
+        </span>
+        <span class="nav-sublabel">{{ child.label | translate }}</span>
+      </a>
+    </div>
+  </div>
 
   <div class="sidebar-spacer"></div>
   <div class="sidebar-divider"></div>
 
   <!-- Footer -->
   <div class="sidebar-footer">
-
-    <!-- Idioma: en móvil colapsado, el ícono abre el selector directamente -->
     <div class="footer-lang nav-item" title="Idioma">
       <span class="nav-icon lang-icon-trigger">
         <app-icon name="idiomas" [size]="18"></app-icon>
@@ -78,12 +115,15 @@
     <button class="nav-item logout-btn"
             (click)="authService.logout()"
             [title]="'NAV.LOGOUT' | translate">
-      <span class="nav-icon">
-        <app-icon name="cerrarSesion" [size]="18"></app-icon>
-      </span>
+      <span class="nav-icon"><app-icon name="cerrarSesion" [size]="18"></app-icon></span>
       <span class="nav-label">{{ 'NAV.LOGOUT' | translate }}</span>
     </button>
-
   </div>
 
 </aside>
+
+<!-- Overlay invisible para cerrar el submenu al tocar fuera (móvil) -->
+<div *ngIf="openMenuItem && isMobile"
+     style="position:fixed;inset:0;z-index:1059;"
+     (click)="closeMenu()">
+</div>
